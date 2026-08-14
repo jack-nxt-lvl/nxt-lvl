@@ -490,6 +490,8 @@
       overflow: hidden;
       max-height: 220px;
       overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
 
     .custom-select.open .custom-select-menu,
@@ -791,10 +793,186 @@
       cursor: not-allowed;
     }
 
+    /* AI CHAT */
+    .ai-chat-toggle {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 4200;
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: var(--white);
+      cursor: pointer;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .ai-chat-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(124, 58, 237, 0.38);
+    }
+
+    .ai-chat-toggle svg {
+      width: 25px;
+      height: 25px;
+      stroke: currentColor;
+    }
+
+    .ai-chat-panel {
+      position: fixed;
+      right: 22px;
+      bottom: 92px;
+      z-index: 4200;
+      width: min(380px, calc(100vw - 32px));
+      height: min(540px, calc(100vh - 128px));
+      background: #100d14;
+      border: 1px solid var(--border-silver);
+      border-radius: 8px;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.65);
+      display: none;
+      overflow: hidden;
+    }
+
+    .ai-chat-panel.open {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ai-chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(124, 58, 237, 0.1);
+    }
+
+    .ai-chat-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+
+    .ai-chat-close {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      color: var(--white-dim);
+      cursor: pointer;
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+
+    .ai-chat-close:hover {
+      color: var(--white);
+    }
+
+    .ai-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overscroll-behavior: contain;
+    }
+
+    .ai-chat-message {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: var(--white);
+      white-space: pre-wrap;
+    }
+
+    .ai-chat-message.assistant {
+      align-self: flex-start;
+      background: var(--black-card);
+      border: 1px solid var(--border);
+    }
+
+    .ai-chat-message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    }
+
+    .ai-chat-form {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      background: #0b090d;
+    }
+
+    .ai-chat-input {
+      flex: 1;
+      min-width: 0;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--black);
+      color: var(--white);
+      padding: 0 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.86rem;
+      outline: none;
+    }
+
+    .ai-chat-input:focus {
+      border-color: var(--purple-light);
+    }
+
+    .ai-chat-send {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-chat-send:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .ai-chat-send svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
+
     @media (max-width:640px) {
       .cart-drawer {
         width: 100%;
         max-width: 100vw;
+      }
+
+      .ai-chat-toggle {
+        right: 16px;
+        bottom: 16px;
+      }
+
+      .ai-chat-panel {
+        right: 12px;
+        bottom: 84px;
+        width: calc(100vw - 24px);
+        height: min(520px, calc(100vh - 108px));
       }
     }
 
@@ -2807,6 +2985,31 @@
     </div>
   </div>
 
+  <!-- AI CHAT -->
+  <button class="ai-chat-toggle" id="aiChatToggle" type="button" onclick="toggleAiChat()" aria-label="Open AI chat">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M4 5.8C4 4.25 5.25 3 6.8 3h10.4C18.75 3 20 4.25 20 5.8v6.9c0 1.55-1.25 2.8-2.8 2.8H9l-4.4 4.1v-4.1C3.68 15.5 3 14.82 3 13.9V5.8Z" stroke-width="1.7" stroke-linejoin="round" />
+      <path d="M7.5 8h9M7.5 11.5h5.8" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+  </button>
+  <div class="ai-chat-panel" id="aiChatPanel" aria-live="polite">
+    <div class="ai-chat-header">
+      <div class="ai-chat-title">NXT LVL Assistant</div>
+      <button class="ai-chat-close" type="button" onclick="toggleAiChat(false)" aria-label="Close AI chat">&times;</button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="ai-chat-message assistant">Ask about product categories, pricing tiers, cart help, or ordering.</div>
+    </div>
+    <form class="ai-chat-form" onsubmit="sendAiChat(event)">
+      <input class="ai-chat-input" id="aiChatInput" type="text" placeholder="Ask a question..." autocomplete="off">
+      <button class="ai-chat-send" id="aiChatSend" type="submit" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 12L20 4L16 20L12.4 13.6L4 12Z" stroke-width="1.8" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </form>
+  </div>
+
   <!-- DATA -->
   <script src="products-data.js"></script>
 
@@ -3238,6 +3441,11 @@
       container.classList.add('open');
     }
 
+    function isDropdownInternalScroll(event) {
+      const target = event.target;
+      return target instanceof Element && !!target.closest('.custom-select-menu.menu-open');
+    }
+
     function closeDropdown(container) {
       const menu = document.getElementById(container.id + '-menu');
       if (menu) menu.classList.remove('menu-open');
@@ -3271,7 +3479,9 @@
     }
 
     document.addEventListener('click', () => closeAllDropdowns());
-    window.addEventListener('scroll', () => closeAllDropdowns(), true);
+    window.addEventListener('scroll', (event) => {
+      if (!isDropdownInternalScroll(event)) closeAllDropdowns();
+    }, true);
     window.addEventListener('resize', () => closeAllDropdowns());
 
     // =====================================================
@@ -3442,6 +3652,61 @@
       if (cart.length === 0) return;
       // TODO: replace with real payment integration (see comment above).
       alert('Checkout is not connected to a payment system yet.\n\nCart total: $' + cartSubtotal().toFixed(2) + '\n\nThis is a placeholder — wire this button to your chosen payment processor when ready.');
+    }
+
+    // =====================================================
+    // AI CHAT
+    // Uses /api/chat so the OpenAI API key stays server-side.
+    // =====================================================
+    const aiChatHistory = [];
+
+    function toggleAiChat(forceOpen) {
+      const panel = document.getElementById('aiChatPanel');
+      const input = document.getElementById('aiChatInput');
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
+      panel.classList.toggle('open', shouldOpen);
+      if (shouldOpen) setTimeout(() => input.focus(), 50);
+    }
+
+    function appendAiChatMessage(role, content) {
+      const messagesEl = document.getElementById('aiChatMessages');
+      const messageEl = document.createElement('div');
+      messageEl.className = 'ai-chat-message ' + role;
+      messageEl.textContent = content;
+      messagesEl.appendChild(messageEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return messageEl;
+    }
+
+    async function sendAiChat(event) {
+      event.preventDefault();
+      const input = document.getElementById('aiChatInput');
+      const sendBtn = document.getElementById('aiChatSend');
+      const question = input.value.trim();
+      if (!question || sendBtn.disabled) return;
+
+      input.value = '';
+      sendBtn.disabled = true;
+      appendAiChatMessage('user', question);
+      aiChatHistory.push({ role: 'user', content: question });
+      const pending = appendAiChatMessage('assistant', 'Thinking...');
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: aiChatHistory.slice(-10) }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Chat request failed.');
+        pending.textContent = data.reply;
+        aiChatHistory.push({ role: 'assistant', content: data.reply });
+      } catch (error) {
+        pending.textContent = 'Chat is not connected yet. Please try again after the OpenAI API key is added in Vercel.';
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
     }
 
     // Init
