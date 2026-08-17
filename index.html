@@ -281,23 +281,23 @@
       border-radius: 2px;
     }
 
-   /* CART TOGGLE */
-.cart-toggle {
-  display: none !important;
-  position: relative;
-  background: transparent;
-  border: 1px solid var(--border-silver);
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--silver);
-  transition: all 0.3s;
-  margin-left: 8px;
-}
+    /* CART TOGGLE */
+    .cart-toggle {
+      display: none !important;
+      position: relative;
+      background: transparent;
+      border: 1px solid var(--border-silver);
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--silver);
+      transition: all 0.3s;
+      margin-left: 8px;
+    }
 
     .cart-toggle:hover {
       border-color: var(--purple-light);
@@ -795,7 +795,7 @@
     }
 
     /* AI CHAT */
-    /* .ai-chat-toggle {
+    .ai-chat-toggle {
       position: fixed;
       right: 22px;
       bottom: 22px;
@@ -2787,19 +2787,22 @@
                 <span>Sedentary (desk job, no exercise)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
               <div class="custom-select-option" data-value="light"
                 onclick="selectDropdownOption(event,'calcActivity','light','Lightly Active (1-2 days/week)')">
                 <span>Lightly Active (1-2 days/week)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
               <div class="custom-select-option selected" data-value="moderate"
                 onclick="selectDropdownOption(event,'calcActivity','moderate','Moderately Active (3-4 days/week)')">
                 <span>Moderately Active (3-4 days/week)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
               <div class="custom-select-option" data-value="active"
                 onclick="selectDropdownOption(event,'calcActivity','active','Very Active (5-6 days/week)')"><span>Very
                   Active (5-6 days/week)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
@@ -2811,7 +2814,8 @@
                 <span>Athlete (daily intense training)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -2886,19 +2890,22 @@
                   fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
               <div class="custom-select-option" data-value="intermediate"
                 onclick="selectDropdownOption(event,'calcExperience','intermediate','Intermediate (some experience)')">
                 <span>Intermediate (some experience)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
               <div class="custom-select-option" data-value="advanced"
                 onclick="selectDropdownOption(event,'calcExperience','advanced','Advanced (experienced user)')">
                 <span>Advanced (experienced user)</span><svg class="opt-check" viewBox="0 0 14 14" fill="none">
                   <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                     stroke-linejoin="round" />
-                </svg></div>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -2989,14 +2996,17 @@
   <!-- AI CHAT -->
   <button class="ai-chat-toggle" id="aiChatToggle" type="button" onclick="toggleAiChat()" aria-label="Open AI chat">
     <svg viewBox="0 0 24 24" fill="none">
-      <path d="M4 5.8C4 4.25 5.25 3 6.8 3h10.4C18.75 3 20 4.25 20 5.8v6.9c0 1.55-1.25 2.8-2.8 2.8H9l-4.4 4.1v-4.1C3.68 15.5 3 14.82 3 13.9V5.8Z" stroke-width="1.7" stroke-linejoin="round" />
+      <path
+        d="M4 5.8C4 4.25 5.25 3 6.8 3h10.4C18.75 3 20 4.25 20 5.8v6.9c0 1.55-1.25 2.8-2.8 2.8H9l-4.4 4.1v-4.1C3.68 15.5 3 14.82 3 13.9V5.8Z"
+        stroke-width="1.7" stroke-linejoin="round" />
       <path d="M7.5 8h9M7.5 11.5h5.8" stroke-width="1.7" stroke-linecap="round" />
     </svg>
   </button>
   <div class="ai-chat-panel" id="aiChatPanel" aria-live="polite">
     <div class="ai-chat-header">
       <div class="ai-chat-title">NXT LVL Assistant</div>
-      <button class="ai-chat-close" type="button" onclick="toggleAiChat(false)" aria-label="Close AI chat">&times;</button>
+      <button class="ai-chat-close" type="button" onclick="toggleAiChat(false)"
+        aria-label="Close AI chat">&times;</button>
     </div>
     <div class="ai-chat-messages" id="aiChatMessages">
       <div class="ai-chat-message assistant">Ask about product categories, pricing tiers, cart help, or ordering.</div>
