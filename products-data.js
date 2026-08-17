@@ -32,7 +32,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or IM',
     warnings: 'Research peptide not FDA-approved. Consult a physician. Avoid if pregnant or breastfeeding.',
     suggestedCompanions: ['tb500-10', 'tb500-bpc157', 'ghk-cu-100'],
-    pricing: [ { label: '1 Vial', price: 70 }, { label: '10 Vials', price: 225 } ]
+    pricing: [ { label: '1 Vial', price: 65 }, { label: '5 Vials', price: 266.5 }, { label: '10 Vials', price: 455 } ]
   },
   {
     id: 'tb500-10',
@@ -58,7 +58,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 21 days.', administration: 'SubQ',
     warnings: 'Not FDA-approved. Avoid with active cancer due to angiogenic effects. Consult a physician.',
     suggestedCompanions: ['bpc157-10', 'tb500-bpc157', 'ghk-cu-100'],
-    pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 250 } ]
+    pricing: [ { label: '1 Vial', price: 80 }, { label: '5 Vials', price: 328 }, { label: '10 Vials', price: 560 } ]
   },
   {
     id: 'tb500-bpc157',
@@ -84,7 +84,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 21 days.', administration: 'SubQ or IM',
     warnings: 'Research compounds. Not for individuals with active cancer. Consult a physician.',
     suggestedCompanions: ['ghk-cu-100', 'nad-500', 'ipamorelin'],
-    pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 300 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'tesamorelin-10',
@@ -110,7 +110,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Research peptide. Inject on empty stomach. Consult a physician.',
     suggestedCompanions: ['ipamorelin', 'sermorelin', 'cjc1295'],
-    pricing: [ { label: '1 Vial', price: 150 }, { label: '10 Vials', price: 450 } ]
+    pricing: [ { label: '1 Vial', price: 75 }, { label: '5 Vials', price: 307.5 }, { label: '10 Vials', price: 525 } ]
   },
   {
     id: 'sermorelin',
@@ -136,7 +136,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Research peptide. Inject on empty stomach before bed. Consult a physician.',
     suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],
-    pricing: [ { label: '1 Vial', price: 140 }, { label: '10 Vials', price: 400 } ]
+    pricing: [ { label: '1 Vial', price: 65 }, { label: '5 Vials', price: 266.5 }, { label: '10 Vials', price: 455 } ]
   },
   {
     id: 'ipamorelin',
@@ -162,7 +162,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Not FDA-approved. Administer on empty stomach. Not for individuals with active malignancies.',
     suggestedCompanions: ['sermorelin', 'tesamorelin-10', 'mk677'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '10 Vials', price: 210 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'mela2-10',
@@ -188,7 +188,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ',
     warnings: 'Monitor moles closely. Not for melanoma history. Not a substitute for sunscreen.',
     suggestedCompanions: ['mela1-10', 'ghk-cu-100', 'nad-500'],
-    pricing: [ { label: '1 Vial', price: 50 }, { label: '10 Vials', price: 180 } ]
+    pricing: [ { label: '1 Vial', price: 50 }, { label: '5 Vials', price: 205 }, { label: '10 Vials', price: 350 } ]
   },
   {
     id: 'mela1-10',
@@ -214,7 +214,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ',
     warnings: 'Monitor moles. Not for melanoma history. Use sunscreen. Consult a physician.',
     suggestedCompanions: ['mela2-10', 'ghk-cu-100', 'nad-500'],
-    pricing: [ { label: '1 Vial', price: 50 }, { label: '10 Vials', price: 180 } ]
+    pricing: [ { label: '1 Vial', price: 50 }, { label: '5 Vials', price: 205 }, { label: '10 Vials', price: 350 } ]
   },
   {
     id: 'nad-500',
@@ -240,7 +240,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'SubQ or IV',
     warnings: 'IV administration should be supervised. Start low. May cause flushing/nausea.',
     suggestedCompanions: ['ghk-cu-100', 'mots-c', 'ipamorelin'],
-    pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 300 } ]
+    pricing: [ { label: '1 Vial', price: 80 }, { label: '5 Vials', price: 328 }, { label: '10 Vials', price: 560 } ]
   },
   {
     id: 'ghk-cu-50',
@@ -266,7 +266,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or Topical',
     warnings: 'Blue/green color is normal (copper complex). Consult a physician.',
     suggestedCompanions: ['ghk-cu-100', 'bpc157-10', 'mela1-10'],
-    pricing: [ { label: '1 Vial', price: 45 }, { label: '10 Vials', price: 220 } ]
+    pricing: [ { label: '1 Vial', price: 50 }, { label: '5 Vials', price: 205 }, { label: '10 Vials', price: 350 } ]
   },
   {
     id: 'ghk-cu-100',
@@ -292,7 +292,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or Topical',
     warnings: 'Blue/green color is normal. Consult a physician.',
     suggestedCompanions: ['bpc157-10', 'nad-500', 'mela1-10'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '10 Vials', price: 300 } ]
+    pricing: [ { label: '1 Vial', price: 65 }, { label: '5 Vials', price: 266.5 }, { label: '10 Vials', price: 455 } ]
   },
   {
     id: 'glow-70',
@@ -318,7 +318,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 21 days.', administration: 'SubQ',
     warnings: 'Contains copper complex. Not for active cancer. Consult a physician.',
     suggestedCompanions: ['nad-500', 'mela1-10', 'ipamorelin'],
-    pricing: [ { label: '1 Vial', price: 85 }, { label: '10 Vials', price: 450 } ]
+    pricing: [ { label: '1 Vial', price: 85 }, { label: '5 Vials', price: 348.5 }, { label: '10 Vials', price: 595 } ]
   },
   {
     id: 'mots-c',
@@ -344,7 +344,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'SubQ',
     warnings: 'Novel peptide with limited human data. Start at lower dose. Consult a physician.',
     suggestedCompanions: ['nad-500', 'slu332', 'ipamorelin'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '10 Vials', price: 235 } ]
+    pricing: [ { label: '1 Vial', price: 75 }, { label: '5 Vials', price: 307.5 }, { label: '10 Vials', price: 525 } ]
   },
   {
     id: 'hgh-10',
@@ -370,7 +370,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'SubQ',
     warnings: 'Monitor blood glucose and IGF-1 levels. Not for active cancer. Consult a physician.',
     suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'igf1-lr3'],
-    pricing: [ { label: '1 Vial', price: 40 }, { label: '10 Vials', price: 175 } ]
+    pricing: [ { label: '1 Vial', price: 70 }, { label: '5 Vials', price: 287 }, { label: '10 Vials', price: 490 } ]
   },
   {
     id: 'hcg-5000',
@@ -396,7 +396,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or IM',
     warnings: 'May affect estrogen levels. Monitor with blood work. Consult a physician.',
     suggestedCompanions: ['anastrozole', 'hcg-10000', 'test-e'],
-    pricing: [ { label: '1 Vial', price: 50 }, { label: '10 Vials', price: 225 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'hcg-10000',
@@ -422,7 +422,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or IM',
     warnings: 'Monitor estrogen with blood work. Consult a physician.',
     suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],
-    pricing: [ { label: '1 Vial', price: 70 }, { label: '10 Vials', price: 315 } ]
+    pricing: [ { label: '1 Vial', price: 70 }, { label: '5 Vials', price: 287 }, { label: '10 Vials', price: 490 } ]
   },
   {
     id: 'semaglutide',
@@ -448,7 +448,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'GI side effects common during titration. Not for pancreatitis history. Titrate slowly.',
     suggestedCompanions: ['tirzepatide', 'retatrutide-10', 'tesamorelin-10'],
-    pricing: [ { label: '1 Vial', price: 70 }, { label: '10 Vials', price: 275 } ]
+    pricing: [ { label: '1 Vial', price: 75 }, { label: '5 Vials', price: 307.5 }, { label: '10 Vials', price: 525 } ]
   },
   {
     id: 'tirzepatide',
@@ -474,7 +474,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'GI side effects common. Titrate slowly. Not for medullary thyroid carcinoma history.',
     suggestedCompanions: ['semaglutide', 'retatrutide-10', 'tesamorelin-10'],
-    pricing: [ { label: '1 Vial', price: 85 }, { label: '10 Vials', price: 400 } ]
+    pricing: [ { label: '1 Vial', price: 90 }, { label: '5 Vials', price: 369 }, { label: '10 Vials', price: 630 } ]
   },
   {
     id: 'retatrutide-10',
@@ -500,7 +500,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Research peptide. Start low, titrate slowly. Monitor for GI effects.',
     suggestedCompanions: ['retatrutide-20', 'semaglutide', 'tirzepatide'],
-    pricing: [ { label: '1 Vial', price: 110 }, { label: '10 Vials', price: 424 } ]
+    pricing: [ { label: '1 Vial', price: 110 }, { label: '5 Vials', price: 451 }, { label: '10 Vials', price: 770 } ]
   },
   {
     id: 'retatrutide-20',
@@ -526,7 +526,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Same warnings as 10mg. Titrate slowly regardless of vial size.',
     suggestedCompanions: ['retatrutide-10', 'semaglutide', 'tirzepatide'],
-    pricing: [ { label: '1 Vial', price: 160 }, { label: '10 Vials', price: 600 } ]
+    pricing: [ { label: '1 Vial', price: 160 }, { label: '5 Vials', price: 656 }, { label: '10 Vials', price: 1120 } ]
   },
   {
     id: 'selank',
@@ -552,7 +552,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'Intranasal or SubQ',
     warnings: 'Research peptide. Limited human data outside Russia. Consult a physician.',
     suggestedCompanions: ['semax', 'dsip', 'nad-500'],
-    pricing: [ { label: '1 Vial', price: 55 }, { label: '10 Vials', price: 300 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'semax',
@@ -578,7 +578,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'Intranasal or SubQ',
     warnings: 'Research peptide. Avoid evening dosing (may impair sleep). Consult a physician.',
     suggestedCompanions: ['selank', 'dsip', 'nad-500'],
-    pricing: [ { label: '1 Vial', price: 55 }, { label: '10 Vials', price: 300 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'dsip',
@@ -604,7 +604,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 14 days.', administration: 'SubQ or Intranasal',
     warnings: 'Research peptide. May cause drowsiness — take before bed only. Consult a physician.',
     suggestedCompanions: ['selank', 'ipamorelin', 'semax'],
-    pricing: [ { label: '1 Vial', price: 50 }, { label: '10 Vials', price: 275 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'aod-9604',
@@ -630,7 +630,7 @@ const compounds = [
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 28 days.', administration: 'SubQ',
     warnings: 'Research peptide. Must be taken fasted. Consult a physician.',
     suggestedCompanions: ['tesamorelin-10', 'semaglutide', 'ipamorelin'],
-    pricing: [ { label: '1 Vial', price: 70 }, { label: '10 Vials', price: 320 } ]
+    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
   },
   {
     id: 'igf1-lr3',
