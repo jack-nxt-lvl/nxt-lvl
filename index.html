@@ -3044,11 +3044,53 @@
     // `cart` already holds everything a payment integration needs:
     // productId, name, price tier label, unit price, and quantity.
     // =====================================================
-    function proceedToCheckout() {
-      if (cart.length === 0) return;
-      // TODO: replace with real payment integration (see comment above).
-      alert('Checkout is not connected to a payment system yet.\n\nCart total: $' + cartSubtotal().toFixed(2) + '\n\nThis is a placeholder — wire this button to your chosen payment processor when ready.');
+    fasync function proceedToCheckout() {
+  if (cart.length === 0) return;
+
+  const payCurrency = prompt(
+    "Enter crypto symbol: eth, btc, ltc, usdttrc20"
+  );
+
+  if (!payCurrency) return;
+
+  const orderId = "NXT-" + Date.now();
+
+  try {
+    const res = await fetch("/api/create-nowpayment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        amount: cartSubtotal(),
+        payCurrency: payCurrency.trim().toLowerCase(),
+        orderId,
+        description: "NXT LVL Research order"
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || data.error || "Unable to create payment");
+      return;
     }
+
+    alert(
+      "Send exactly " +
+      data.pay_amount +
+      " " +
+      data.pay_currency.toUpperCase() +
+      "\n\nTo:\n" +
+      data.pay_address +
+      "\n\nPayment ID: " +
+      data.payment_id
+    );
+  } catch (error) {
+    console.error(error);
+    alert("Payment setup failed. Please try again.");
+  }
+}
 
     // =====================================================
     // AI CHAT
