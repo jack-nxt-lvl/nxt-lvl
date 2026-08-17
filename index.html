@@ -3044,12 +3044,16 @@
     // `cart` already holds everything a payment integration needs:
     // productId, name, price tier label, unit price, and quantity.
     // =====================================================
-    fasync function proceedToCheckout() {
+    async function proceedToCheckout() {
   if (cart.length === 0) return;
 
-  const payCurrency = prompt(
-    "Enter crypto symbol: eth, btc, ltc, usdttrc20"
+  const payCurrency = await new Promise((resolve) => {
+  const currency = prompt(
+    "Choose your cryptocurrency:\n\n1. BTC\n2. ETH\n3. LTC\n4. USDTTRC20\n\nType the symbol:"
   );
+
+  resolve(currency);
+});
 
   if (!payCurrency) return;
 
