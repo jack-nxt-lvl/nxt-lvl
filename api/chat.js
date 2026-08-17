@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = 'gpt-5.6-luna';
+const DEFAULT_MODEL = 'gpt-5-nano';
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 900;
 

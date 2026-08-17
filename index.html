@@ -3713,7 +3713,7 @@
         pending.textContent = data.reply;
         aiChatHistory.push({ role: 'assistant', content: data.reply });
       } catch (error) {
-        pending.textContent = 'Chat is not connected yet. Please try again after the OpenAI API key is added in Vercel.';
+        pending.textContent = 'Chat setup issue: ' + error.message;
       } finally {
         sendBtn.disabled = false;
         input.focus();
