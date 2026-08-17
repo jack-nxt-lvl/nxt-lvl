@@ -35,7 +35,7 @@ the `wa.me/17542907210` links there to change the destination number.
 Hosted on Vercel. Current URLs:
 
 - Public: 
-https://nxt-lvl-navy.vercel.app
+https://nxtlvl-research.com
 - Preview URLs under
 https://nxt-lvl-seven.vercel.app & `*-parker-4210s-projects.vercel.app` are SSO-protected and
   only load for members of that Vercel account.
