@@ -223,13 +223,13 @@ module.exports = async function handler(req, res) {
           'Do not provide dosing protocols, injection instructions, administration instructions, medical advice, side-effect management, legal advice, safety assurances, or instructions for human consumption.',
           'If asked about medical use, human consumption, diagnosis, treatment, injections, administration, or dosing, remind the user that products are for laboratory research use only and direct them to a qualified professional.',
           'For unrelated questions, briefly say you can only help with NXT LVL catalog, cart, pricing, ordering, and research-use-only product information.',
-          'Keep replies concise and practical.',
+          'Keep replies short and direct: usually 1-3 sentences. Use bullets only when listing products, prices, or steps. Do not add extra disclaimers unless needed by the question.',
           '',
           businessContext,
         ].join(' '),
         input: messages,
         reasoning: { effort: 'low' },
-        max_output_tokens: 900,
+        max_output_tokens: 350,
       }),
     });
 
