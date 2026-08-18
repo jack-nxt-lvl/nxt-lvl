@@ -27,6 +27,27 @@ window.addEventListener('DOMContentLoaded', () => {
     </svg>`;
   }
 
+  // Upgrade the NXT LVL wordmark to match the sharper logo mark.
+  const navWordmark = document.querySelector('.logo');
+  if (navWordmark) {
+    navWordmark.style.fontFamily = "'Space Grotesk','Inter',sans-serif";
+    navWordmark.style.fontWeight = '800';
+    navWordmark.style.fontSize = '1.38rem';
+    navWordmark.style.letterSpacing = '2.6px';
+    navWordmark.style.textTransform = 'uppercase';
+    navWordmark.style.fontStyle = 'italic';
+    navWordmark.style.transform = 'skewX(-5deg)';
+    navWordmark.style.textShadow = '0 0 14px rgba(255,255,255,.06)';
+  }
+  const navAccent = document.querySelector('.logo .accent');
+  if (navAccent) {
+    navAccent.style.background = 'linear-gradient(135deg,#c4b5fd 0%,#8b5cf6 45%,#6d28d9 100%)';
+    navAccent.style.webkitBackgroundClip = 'text';
+    navAccent.style.backgroundClip = 'text';
+    navAccent.style.webkitTextFillColor = 'transparent';
+    navAccent.style.textShadow = 'none';
+  }
+
   const SHIPPING_FEE = 10;
   const SALES_TAX_RATE = 0.07;
 
