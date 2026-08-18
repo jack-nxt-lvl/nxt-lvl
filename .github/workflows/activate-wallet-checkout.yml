@@ -46,3 +46,5 @@ jobs:
           git add index.html
           git commit -m "Load wallet checkout enhancements"
           git push
+
+# Triggered after workflow creation so the activation job runs.
