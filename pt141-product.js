@@ -1,7 +1,9 @@
 // PT-141 10mg — freeze-dried research product
 // Added as a native catalog entry so it renders like the existing listings.
 
-if (typeof compounds !== 'undefined' && Array.isArray(compounds) && !compounds.some(p => p.id === 'pt141-10')) {
+function addPt141Product() {
+  if (typeof compounds === 'undefined' || !Array.isArray(compounds) || compounds.some(p => p.id === 'pt141-10')) return;
+
   compounds.push({
     id: 'pt141-10',
     name: 'PT-141 — 10mg',
@@ -44,4 +46,12 @@ if (typeof compounds !== 'undefined' && Array.isArray(compounds) && !compounds.s
       { label: '10 Vials', price: 315.00 }
     ]
   });
+
+  if (typeof renderGrid === 'function') renderGrid('all');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', addPt141Product, { once: true });
+} else {
+  addPt141Product();
 }
