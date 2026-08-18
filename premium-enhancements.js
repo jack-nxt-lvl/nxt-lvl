@@ -1,0 +1,32 @@
+(() => {
+  const css = document.createElement('style');
+  css.textContent = `
+  :root{--lux:#a78bfa;--lux2:#7c3aed;--panel:#0d0d14}
+  body{background:radial-gradient(circle at 50% 0,rgba(124,58,237,.08),transparent 34%),#050507}
+  .compound-card{min-height:390px;border-color:rgba(167,139,250,.13);box-shadow:0 12px 35px rgba(0,0,0,.18)}
+  .compound-card:hover{transform:translateY(-6px);box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 35px rgba(124,58,237,.09)}
+  .card-atc-btn,.btn-primary{border-radius:9px!important;box-shadow:0 8px 24px rgba(124,58,237,.18)}
+  .premium-search{max-width:720px;margin:-25px auto 28px;position:relative}.premium-search input{width:100%;padding:16px 18px 16px 48px;background:rgba(17,17,24,.9);border:1px solid rgba(167,139,250,.18);border-radius:12px;color:#fff;font:500 14px Inter;outline:none;box-shadow:0 16px 45px rgba(0,0,0,.22)}.premium-search input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(124,58,237,.1),0 16px 45px rgba(0,0,0,.3)}.premium-search:before{content:'⌕';position:absolute;left:18px;top:8px;font-size:27px;color:#a78bfa;z-index:2}
+  .checkout-steps{display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 22px;font:700 11px Inter;letter-spacing:.5px;color:#77778a}.checkout-steps span{display:flex;align-items:center;gap:7px}.checkout-steps b{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#1c1c27;border:1px solid rgba(255,255,255,.1);color:#aaa}.checkout-steps .active{color:#fff}.checkout-steps .active b{background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-color:#8b5cf6}.checkout-steps i{width:38px;height:1px;background:rgba(255,255,255,.1)}
+  .cart-drawer{background:linear-gradient(180deg,#0e0e15,#09090f)!important;box-shadow:-30px 0 80px rgba(0,0,0,.55)}.cart-item{padding:18px 0!important}.cart-item-price{color:#c4b5fd!important}.cart-drawer-footer{background:rgba(10,10,16,.96)}
+  .premium-cart-fees{font-size:12px;color:#9999aa;margin:12px 0 15px;padding:12px;border-radius:9px;background:#12121b;border:1px solid rgba(255,255,255,.05)}.premium-cart-fees div{display:flex;justify-content:space-between;margin:5px 0}.premium-cart-fees .total{padding-top:8px;margin-top:8px;border-top:1px solid rgba(255,255,255,.07);color:#fff;font-weight:800}
+  .premium-footer-links{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;margin:16px 0 4px}.premium-footer-links a{color:#9999aa;text-decoration:none;font-size:12px}.premium-footer-links a:hover{color:#a78bfa}
+  .premium-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#15151f;color:#fff;border:1px solid rgba(167,139,250,.22);padding:11px 16px;border-radius:10px;z-index:9999999;opacity:0;transition:.25s;box-shadow:0 18px 50px rgba(0,0,0,.5);font:600 12px Inter}.premium-toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:700px){nav{padding:0 18px!important}.premium-search{margin:-18px 0 22px}.compound-grid{grid-template-columns:1fr!important}.compound-card{min-height:0;padding:22px!important}.card-atc-row{flex-direction:column}.card-atc-btn{height:44px}.cart-drawer{width:100%!important;max-width:100vw!important}.ai-chat-toggle{width:50px!important;height:50px!important;right:14px!important;bottom:14px!important}.checkout-steps i{width:18px}.checkout-steps{font-size:9px}}
+  `;
+  document.head.appendChild(css);
+
+  const menu = document.querySelector('#menu .section-header');
+  if(menu){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||card.textContent.toLowerCase().includes(q)?'flex':'none';});});}
+
+  const footer=document.querySelector('footer');
+  if(footer){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
+  const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
+
+  function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}
+  const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Customer Information')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose Cryptocurrency')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Complete Your Payment')){el.dataset.premiumChecked='1';const target=el.querySelector('section');if(target)target.insertAdjacentHTML('afterbegin',steps(2));}})});observer.observe(document.body,{childList:true});
+
+  function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Shipping</span><span>$10.00</span></div><div><span>Sales tax</span><span>Calculated at checkout</span></div><div class="total"><span>Secure crypto checkout</span><span>🔒</span></div>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
+
+  const toast=document.createElement('div');toast.className='premium-toast';toast.textContent='Added to cart ✓';document.body.appendChild(toast);document.addEventListener('click',e=>{if(e.target.closest('.card-atc-btn,.modal-atc-btn')){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1400)}});
+})();
