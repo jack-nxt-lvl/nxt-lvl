@@ -3047,9 +3047,83 @@
     async function proceedToCheckout() {
   if (cart.length === 0) return;
 
-const payCurrency = prompt("Choose cryptocurrency: BTC, ETH, LTC, or USDTTRC20");
 
-if (!payCurrency) return;  
+const payCurrency = await new Promise((resolve) => {
+  const chooser = document.createElement("div");
+
+  chooser.innerHTML = `
+    <div style="
+      background:#111118;
+      color:white;
+      width:420px;
+      max-width:90vw;
+      padding:28px;
+      border-radius:18px;
+      text-align:center;
+    ">
+      <h2>Choose Cryptocurrency</h2>
+
+      <button data-crypto="btc">Bitcoin (BTC)</button>
+      <button data-crypto="eth">Ethereum (ETH)</button>
+      <button data-crypto="ltc">Litecoin (LTC)</button>
+      <button data-crypto="usdttrc20">USDT (TRC20)</button>
+
+      <button id="cancelCrypto">Cancel</button>
+    </div>
+  `;
+
+  chooser.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+  `;
+
+  chooser.querySelectorAll("[data-crypto]").forEach((button) => {
+    button.style.cssText = `
+      width:100%;
+      margin:6px 0;
+      padding:14px;
+      background:#7c3aed;
+      color:white;
+      border:0;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:16px;
+    `;
+
+    button.onclick = () => {
+      const currency = button.dataset.crypto;
+      chooser.remove();
+      resolve(currency);
+    };
+  });
+
+  const cancelButton = chooser.querySelector("#cancelCrypto");
+
+  cancelButton.style.cssText = `
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    background:#333;
+    color:white;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+  `;
+
+  cancelButton.onclick = () => {
+    chooser.remove();
+    resolve(null);
+  };
+
+  document.body.appendChild(chooser);
+});
+
+if (!payCurrency) return;
   
 
   const orderId = "NXT-" + Date.now();
