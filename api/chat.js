@@ -45,12 +45,12 @@ const WEBSITE_ONLY_EXTRAS = [
 let cachedCatalog = null;
 function loadCatalog() {
   if (cachedCatalog) return cachedCatalog;
-  const candidates = ['products-data-original.js', 'products-data.js'];
+  const candidates = ['products-data-original.js'];
   for (const file of candidates) {
     try {
       const source = fs.readFileSync(path.join(process.cwd(), file), 'utf8');
       const context = { console: { log() {}, warn() {}, error() {} } };
-      const result = vm.runInNewContext(`${source}\n({ compounds, categories, protocols, stacks });`, context);
+      const result = vm.runInNewContext(`${source}\n({ compounds, categories: (typeof categories !== 'undefined' ? categories : []), protocols: (typeof protocols !== 'undefined' ? protocols : []), stacks: (typeof stacks !== 'undefined' ? stacks : []) });`, context);
       if (result && Array.isArray(result.compounds) && result.compounds.length) {
         for (const extra of WEBSITE_ONLY_EXTRAS) {
           if (!result.compounds.some((p) => p.id === extra.id || p.name === extra.name)) result.compounds.push(extra);
@@ -58,7 +58,9 @@ function loadCatalog() {
         cachedCatalog = result;
         return cachedCatalog;
       }
-    } catch (_) {}
+    } catch (error) {
+      console.error('Catalog load error:', error && error.message ? error.message : error);
+    }
   }
   cachedCatalog = { compounds: [...WEBSITE_ONLY_EXTRAS], categories: [], protocols: [], stacks: [] };
   return cachedCatalog;
