@@ -51,7 +51,14 @@ function buildBusinessContext(messages) {
   return ['NXT LVL business and catalog context. Use only this context for business and product-specific answers.','','Business facts:',BUSINESS_FACTS,'',`Categories: ${categories.map((category)=>category.name).join(', ')}`,`Protocols: ${protocols.map((protocol)=>`${protocol.name} - ${protocol.description}`).join(' | ')}`,`Curated stacks: ${stacks.map(formatStack).join(' | ')}`,'','Catalog summary:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map((product)=>formatProductSummary(product,categories)).join('\n'),'','Detailed context for the most relevant products:',fallbackProducts.map((product)=>formatProduct(product,categories)).join('\n\n---\n\n')].join('\n');
 }
 function normalizeMessages(messages) { if (!Array.isArray(messages)) return []; return messages.slice(-MAX_MESSAGES).map((message)=>({role: message && message.role === 'assistant' ? 'assistant':'user',content:String((message&&message.content)||'').slice(0,MAX_MESSAGE_LENGTH).trim()})).filter((message)=>message.content); }
-function extractOutputText(data) { if (typeof data.output_text === 'string') return data.output_text; if (Array.isArray(data.output)) return data.output.flatMap((item)=>item.content||[]).map((part)=>part.text||'').join('').trim(); return ''; }
+function extractOutputText(data) {
+  if (typeof data.output_text === 'string' && data.output_text.trim()) return data.output_text.trim();
+  if (Array.isArray(data.output)) {
+    const text = data.output.flatMap((item)=>item.content||[]).map((part)=>part.text||part.refusal||'').join('').trim();
+    if (text) return text;
+  }
+  return '';
+}
 function formatOpenAIError(status,data) { const error=data&&data.error?data.error:{}; const code=error.code||error.type||''; const message=error.message||'OpenAI request failed.'; if(status===429){if(code.includes('spend_limit'))return 'OpenAI spend limit reached.';if(code.includes('usage_limit')||code.includes('insufficient_quota'))return 'OpenAI billing or credits are not active yet.';return 'OpenAI rate limit reached. Try again shortly.';} if(status===404||code.includes('model'))return 'OpenAI model is not available for this project.'; return message; }
 
 module.exports = async function handler(req,res) {
@@ -74,9 +81,10 @@ module.exports = async function handler(req,res) {
       'Never invent product details, prices, research findings, availability, checkout capabilities, discounts, or guarantees.',
       'Do not push contact links or phone numbers unless specifically asked. Keep the customer moving toward the website cart and checkout.',
       'Example tone: “For that research focus, I’d look at X + Y. X is studied for ___, while Y focuses on ___, so the stack covers two complementary research angles instead of overlapping. Want me to add the stack to your cart?”',
-      '',businessContext].join(' '),input:messages,reasoning:{effort:'low'},max_output_tokens:260})});
+      '',businessContext].join(' '),input:messages,reasoning:{effort:'minimal'},text:{verbosity:'low'},max_output_tokens:900})});
     const data=await response.json(); if(!response.ok)return res.status(response.status).json({error:formatOpenAIError(response.status,data)});
     const reply=extractOutputText(data); if(reply)return res.status(200).json({reply});
+    if(data && data.status==='incomplete') return res.status(500).json({error:'The AI response was cut off before text was produced. Please try again.'});
     return res.status(500).json({error:'The AI returned an empty response. Try again.'});
   } catch(error){return res.status(500).json({error:'Chat service unavailable. Please try again shortly.'});}
 };
