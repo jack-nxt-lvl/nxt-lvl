@@ -40,6 +40,7 @@ jobs:
               'payment-completion-upgrade.js',
               'payment-live-confirmation.js',
               'customer-checkout-upgrade.js',
+              'checkout-payment-handoff-fix.js',
           ]:
               html = re.sub(rf'\s*<script src="{re.escape(filename)}(?:\?v=[^"]+)?"></script>', '', html)
 
@@ -49,6 +50,7 @@ jobs:
               ('payment-completion-upgrade.js', '20260818-5'),
               ('payment-live-confirmation.js', '20260818-1'),
               ('customer-checkout-upgrade.js', '20260818-3'),
+              ('checkout-payment-handoff-fix.js', '20260818-1'),
               ('nav-cleanup.js', '20260818-1'),
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
@@ -76,7 +78,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load forced local pickup checkout"
+          git commit -m "Load direct checkout payment handoff"
           git push
 
-# Trigger forced local pickup checkout deployment.
+# Trigger direct checkout payment handoff deployment.
