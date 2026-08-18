@@ -30,6 +30,8 @@ jobs:
           wallet_pattern = r'<script src="checkout-wallet-enhancements\.js(?:\?v=[^"]+)?"></script>'
           conversion = '<script src="checkout-conversion-upgrades.js?v=20260818-1"></script>'
           conversion_pattern = r'<script src="checkout-conversion-upgrades\.js(?:\?v=[^"]+)?"></script>'
+          swaps = '<script src="swaps-checkout-enhancements.js?v=20260818-1"></script>'
+          swaps_pattern = r'<script src="swaps-checkout-enhancements\.js(?:\?v=[^"]+)?"></script>'
 
           if re.search(wallet_pattern, html):
               html = re.sub(wallet_pattern, wallet, html, count=1)
@@ -40,6 +42,11 @@ jobs:
               html = re.sub(conversion_pattern, conversion, html, count=1)
           else:
               html = html.replace('</body>', f'  {conversion}\n</body>', 1)
+
+          if re.search(swaps_pattern, html):
+              html = re.sub(swaps_pattern, swaps, html, count=1)
+          else:
+              html = html.replace('</body>', f'  {swaps}\n</body>', 1)
 
           path.write_text(html, encoding='utf-8')
 
@@ -52,7 +59,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load conversion-focused checkout upgrades"
+          git commit -m "Load Swaps checkout assistance"
           git push
 
-# Trigger conversion-focused checkout deployment.
+# Trigger Swaps checkout deployment.
