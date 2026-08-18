@@ -57,7 +57,9 @@
     </div>`;
   }
   function enhanceCards(){
-    document.querySelectorAll('.compound-card').forEach(card=>{
+    const grid=document.getElementById('compoundGrid');
+    if(!grid) return;
+    grid.querySelectorAll('.compound-card').forEach(card=>{
       if(card.querySelector('.nxt-research-card')) return;
       const title=card.querySelector('.card-name'); if(!title) return;
       const p=productByName(title.textContent); if(!p||p.category!=='freeze-dried'||p.id==='bac-water-10ml') return;
@@ -75,9 +77,26 @@
     const holder=document.createElement('div'); holder.innerHTML=modalMarkup(p);
     body.insertBefore(holder.firstElementChild,body.firstChild);
   }
-  let scheduled=false;
-  function run(){ if(scheduled) return; scheduled=true; requestAnimationFrame(()=>{scheduled=false;enhanceCards();enhanceModal();}); }
-  const observer=new MutationObserver(run);
-  observer.observe(document.documentElement,{childList:true,subtree:true});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(run,0),{once:true}); else setTimeout(run,0);
+
+  let queued=false;
+  function run(){
+    if(queued) return;
+    queued=true;
+    requestAnimationFrame(()=>{queued=false; enhanceCards(); enhanceModal();});
+  }
+
+  function start(){
+    enhanceCards();
+    enhanceModal();
+    const grid=document.getElementById('compoundGrid');
+    if(grid){
+      new MutationObserver(run).observe(grid,{childList:true,subtree:true});
+    }
+    const modal=document.getElementById('modalContent');
+    if(modal){
+      new MutationObserver(run).observe(modal,{childList:true,subtree:true});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
 })();
