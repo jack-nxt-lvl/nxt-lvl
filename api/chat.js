@@ -17,6 +17,24 @@ const BUSINESS_FACTS = [
   'The site says final pricing, payment, availability, and shipping are confirmed at checkout or direct order.',
 ].join('\n');
 
+const WEBSITE_ONLY_EXTRAS = [
+  {
+    id: 'slu-pp-332-10',
+    name: 'SLU-PP-332 — 10mg',
+    aka: 'Pan-ERR Agonist',
+    category: 'freeze-dried',
+    tags: ['Metabolic Research', 'ERR Agonist', 'Mitochondrial Research', 'Exercise Mimetic Research', 'Energy Metabolism'],
+    shortDesc: 'Pan-ERR agonist studied in preclinical metabolic, mitochondrial, and exercise-mimetic research.',
+    description: 'Synthetic small-molecule pan-agonist of ERRα, ERRβ, and ERRγ studied preclinically for ERR signaling, mitochondrial function, cellular respiration, oxidative metabolism, and exercise-mimetic pathways.',
+    benefits: ['ERR signaling research', 'Mitochondrial function research', 'Cellular respiration research', 'Oxidative metabolism research', 'Preclinical exercise-mimetic research'],
+    pricing: [
+      { label: '1 Vial', price: 85 },
+      { label: '5 Vials', price: 348.5 },
+      { label: '10 Vials', price: 595 }
+    ]
+  }
+];
+
 let cachedCatalog = null;
 function loadCatalog() {
   if (cachedCatalog) return cachedCatalog;
@@ -27,12 +45,15 @@ function loadCatalog() {
       const context = { console: { log() {}, warn() {}, error() {} } };
       const result = vm.runInNewContext(`${source}\n({ compounds, categories, protocols, stacks });`, context);
       if (result && Array.isArray(result.compounds) && result.compounds.length) {
+        for (const extra of WEBSITE_ONLY_EXTRAS) {
+          if (!result.compounds.some((p) => p.id === extra.id || p.name === extra.name)) result.compounds.push(extra);
+        }
         cachedCatalog = result;
         return cachedCatalog;
       }
     } catch (_) {}
   }
-  cachedCatalog = { compounds: [], categories: [], protocols: [], stacks: [] };
+  cachedCatalog = { compounds: [...WEBSITE_ONLY_EXTRAS], categories: [], protocols: [], stacks: [] };
   return cachedCatalog;
 }
 function normalizeText(value) { return String(value || '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim(); }
@@ -56,7 +77,7 @@ function buildBusinessContext(messages) {
   const catalog = loadCatalog(); const products = catalog.compounds || []; const categories = catalog.categories || []; const protocols = catalog.protocols || []; const stacks = catalog.stacks || [];
   const matchedProducts = products.map((product) => ({ product, score: scoreProduct(product, latestQuestion) })).filter((item) => item.score > 0).sort((a,b) => b.score-a.score).slice(0,MAX_MATCHED_PRODUCTS).map((item)=>item.product);
   const fallbackProducts = matchedProducts.length ? matchedProducts : products.slice(0,6);
-  return ['NXT LVL business and REAL catalog context. ONLY recommend exact product names that appear below.','','Business facts:',BUSINESS_FACTS,'',`Categories: ${categories.map((category)=>category.name).join(', ')}`,`Protocols: ${protocols.map((protocol)=>`${protocol.name} - ${protocol.description}`).join(' | ')}`,`Curated stacks: ${stacks.map(formatStack).join(' | ')}`,'','Catalog summary:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map((product)=>formatProductSummary(product,categories)).join('\n'),'','Most relevant products:',fallbackProducts.map((product)=>formatProduct(product,categories)).join('\n\n---\n\n')].join('\n');
+  return ['NXT LVL WEBSITE CATALOG. THIS IS THE ONLY PRODUCT SOURCE YOU MAY USE.','','Business facts:',BUSINESS_FACTS,'',`Categories: ${categories.map((category)=>category.name).join(', ')}`,`Protocols: ${protocols.map((protocol)=>`${protocol.name} - ${protocol.description}`).join(' | ')}`,`Curated stacks: ${stacks.map(formatStack).join(' | ')}`,'','Website product list:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map((product)=>formatProductSummary(product,categories)).join('\n'),'','Most relevant website products:',fallbackProducts.map((product)=>formatProduct(product,categories)).join('\n\n---\n\n')].join('\n');
 }
 function normalizeMessages(messages) { if (!Array.isArray(messages)) return []; return messages.slice(-MAX_MESSAGES).map((message)=>({role: message && message.role === 'assistant' ? 'assistant':'user',content:String((message&&message.content)||'').slice(0,MAX_MESSAGE_LENGTH).trim()})).filter((message)=>message.content); }
 function extractOutputText(data) { if (typeof data.output_text === 'string' && data.output_text.trim()) return data.output_text.trim(); if (Array.isArray(data.output)) return data.output.flatMap((item)=>item.content||[]).map((part)=>part.text||'').join('').trim(); return ''; }
@@ -70,15 +91,18 @@ module.exports = async function handler(req,res) {
   const businessContext=buildBusinessContext(messages);
   try {
     const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({model:process.env.OPENAI_MODEL||DEFAULT_MODEL,instructions:[
-      'You are NXT LVL Research’s ecommerce sales assistant. Be short, confident, natural, and useful.',
-      'CRITICAL: NEVER use placeholders like X, Y, Product A, Product B, or generic unnamed compounds. EVERY recommendation must use exact product names from the supplied catalog context.',
-      'If the catalog context is empty or does not support a recommendation, say you cannot find a matching catalog item instead of inventing one.',
-      'For a research objective, give 1-3 exact catalog product names immediately, then one short line on what each is studied for.',
-      'If two or more products complement each other, briefly explain why their research roles fit together as a stack.',
-      'End with one direct close: “Want me to add that stack to your cart?” or “Want me to add that to your cart?”',
+      'You are NXT LVL Research’s ecommerce catalog assistant. Be short, confident, natural, and useful.',
+      'ABSOLUTE RULE: Use ONLY exact products that appear in the supplied NXT LVL WEBSITE CATALOG. Do not recommend, mention, substitute, or invent any product that is not currently sold on the website.',
+      'NEVER use placeholders like X, Y, Product A, Product B, or unnamed compounds. Every product mention must be an exact website product name.',
+      'If the website catalog does not contain a relevant product, simply say there is no matching website product instead of suggesting something external.',
+      'For a broad personal goal, first ask one short clarifying question when needed, such as “Male or female?” Do not use sex to make medical or injectable treatment recommendations.',
+      'For a research objective, give 1-3 exact website product names immediately, then one short line on the listed research focus of each.',
+      'If two or more website products have complementary listed research roles, briefly explain the catalog rationale for pairing them. Do not invent synergy or personal outcomes.',
+      'For injectable-category products, provide factual website catalog information only. Do not personalize injectable recommendations based on sex, health status, or physique goals.',
+      'End relevant shopping answers with one simple close such as “Want me to add that to your cart?”',
       'Keep responses to about 2-4 short sentences.',
       'Do not give human or animal dosing, injection, administration, cycle/protocol instructions, diagnosis, treatment instructions, or personalized medical advice.',
-      'Do not claim a product will make a person lose fat, gain muscle, heal, or produce a medical result. Translate personal goals into research areas and discuss catalog products on that basis.',
+      'Do not claim a product will make a person lose fat, gain muscle, heal, or produce a medical result. Translate personal goals into research areas and discuss only website catalog information.',
       'Mention “For research use only.” at most once when relevant.',
       '',businessContext].join(' '),input:messages,reasoning:{effort:'minimal'},text:{verbosity:'low'},max_output_tokens:900})});
     const data=await response.json(); if(!response.ok)return res.status(response.status).json({error:formatOpenAIError(response.status,data)});
