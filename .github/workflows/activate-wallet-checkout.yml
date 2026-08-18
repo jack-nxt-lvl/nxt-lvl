@@ -17,7 +17,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Load single stable checkout module
+      - name: Load stable checkout and payment guide
         shell: python
         run: |
           from pathlib import Path
@@ -26,8 +26,8 @@ jobs:
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
 
-          # Remove older overlapping checkout modifiers. The restored checkout
-          # uses one module only so the payment chooser cannot enter a DOM loop.
+          # Remove older overlapping checkout modifiers. Keep the checkout to
+          # one payment module; the payment guide is display/navigation only.
           for filename in [
               'product-vial-visuals.js',
               'freeze-dried-research-info.js',
@@ -44,6 +44,7 @@ jobs:
 
           scripts = [
               ('checkout-wallet-enhancements.js', '20260818-6'),
+              ('payment-delivery-guide.js', '20260818-2'),
               ('nav-cleanup.js', '20260818-1'),
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
@@ -71,7 +72,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Restore polished stable checkout"
+          git commit -m "Restore payment guide with stable checkout"
           git push
 
-# Trigger single-module checkout restoration.
+# Trigger payment guide restoration without overlapping checkout scripts.
