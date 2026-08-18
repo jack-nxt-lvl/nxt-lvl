@@ -1,6 +1,7 @@
 // NXT LVL data loader + checkout override
 // Load the original product database synchronously so index.html can use compounds/categories/stacks immediately.
 document.write('<script src="/products-data-original.js?v=1"><\/script>');
+document.write('<script defer src="/premium-enhancements.js?v=2"><\/script>');
 
 window.addEventListener('DOMContentLoaded', () => {
   const SHIPPING_FEE = 10;
