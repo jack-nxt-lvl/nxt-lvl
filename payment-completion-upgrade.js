@@ -2,103 +2,103 @@
   const style = document.createElement('style');
   style.textContent = `
     .nxt-final-pay{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
-    .nxt-final-pay .nxt-pay-banner{margin:14px 0 16px;padding:15px 16px;border:1px solid rgba(52,211,153,.28);border-radius:12px;background:linear-gradient(135deg,rgba(16,185,129,.11),rgba(15,23,42,.72));display:flex;align-items:flex-start;gap:10px;color:#d1fae5;font-size:12px;line-height:1.55}
-    .nxt-final-pay .nxt-pay-banner b{color:#fff;display:block;font-size:13px;margin-bottom:3px}
-    .nxt-final-pay .nxt-pay-guide{margin-top:16px;padding:17px;border:1px solid rgba(167,139,250,.24);border-radius:14px;background:linear-gradient(145deg,rgba(23,23,35,.97),rgba(12,12,19,.99));box-shadow:0 18px 50px rgba(0,0,0,.22)}
+    .nxt-final-pay .nxt-pay-banner{margin:16px 0 12px;padding:16px 18px;border:1px solid rgba(52,211,153,.34);border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,.14),rgba(15,23,42,.78));display:flex;align-items:flex-start;gap:12px;color:#d1fae5;font-size:13px;line-height:1.55;box-shadow:0 12px 34px rgba(0,0,0,.18)}
+    .nxt-final-pay .nxt-pay-banner b{color:#fff;display:block;font-size:14px;margin-bottom:3px}
+    .nxt-final-pay .nxt-pay-guide{margin:0 0 14px;padding:17px;border:1px solid rgba(167,139,250,.28);border-radius:15px;background:linear-gradient(145deg,rgba(24,19,38,.98),rgba(11,12,20,.99));box-shadow:0 18px 50px rgba(0,0,0,.23)}
     .nxt-final-pay .nxt-pay-guide-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
-    .nxt-final-pay .nxt-pay-guide-title strong{font-size:14px;color:#fff}.nxt-final-pay .nxt-pay-guide-title span{font-size:9px;font-weight:900;color:#ddd6fe;border:1px solid rgba(167,139,250,.3);border-radius:999px;padding:5px 9px;background:rgba(124,58,237,.13)}
-    .nxt-final-pay .nxt-pay-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-    .nxt-final-pay .nxt-pay-step{padding:13px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:#111722;min-height:110px}
-    .nxt-final-pay .nxt-pay-step b{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;margin-bottom:8px;background:linear-gradient(135deg,#9f67ff,#6d28d9);color:#fff;font-size:10px;box-shadow:0 0 18px rgba(124,58,237,.24)}
-    .nxt-final-pay .nxt-pay-step strong{display:block;color:#fff;font-size:11px;margin-bottom:4px}.nxt-final-pay .nxt-pay-step p{margin:0;color:#abb3c0;font-size:10px;line-height:1.5}
-    .nxt-final-pay .nxt-pay-confidence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
-    .nxt-final-pay .nxt-confidence-item{padding:11px;border-radius:10px;text-align:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.028)}
-    .nxt-final-pay .nxt-confidence-item strong{display:block;color:#fff;font-size:10px;margin-bottom:3px}.nxt-final-pay .nxt-confidence-item span{display:block;color:#959ead;font-size:9px;line-height:1.45}
-    .nxt-final-pay .nxt-pay-reminder{margin-top:12px;padding:12px 13px;border-radius:10px;border:1px solid rgba(251,191,36,.2);background:rgba(120,53,15,.09);color:#fde68a;font-size:9.5px;line-height:1.55}
-    .nxt-final-pay .nxt-pay-reminder strong{color:#fff}
-    .nxt-final-pay .nxt-pay-after{margin-top:12px;padding:12px 13px;border-radius:10px;border:1px solid rgba(56,189,248,.2);background:rgba(8,47,73,.11);color:#bae6fd;font-size:9.5px;line-height:1.55}
-    .nxt-final-pay .nxt-pay-after strong{color:#fff}
-    @media(max-width:760px){.nxt-final-pay .nxt-pay-steps,.nxt-final-pay .nxt-pay-confidence{grid-template-columns:1fr}.nxt-final-pay .nxt-pay-step{min-height:0}}
+    .nxt-final-pay .nxt-pay-guide-title strong{font-size:15px;color:#fff}.nxt-final-pay .nxt-pay-guide-title span{font-size:10px;font-weight:900;color:#e9ddff;border:1px solid rgba(167,139,250,.34);border-radius:999px;padding:5px 10px;background:rgba(124,58,237,.16)}
+    .nxt-final-pay .nxt-pay-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+    .nxt-final-pay .nxt-pay-step{padding:13px 12px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:linear-gradient(145deg,#141723,#0f121b);min-height:113px}
+    .nxt-final-pay .nxt-pay-step b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin-bottom:8px;background:linear-gradient(135deg,#a66cff,#6d28d9);color:#fff;font-size:11px;box-shadow:0 0 18px rgba(124,58,237,.28)}
+    .nxt-final-pay .nxt-pay-step strong{display:block;color:#fff;font-size:11px;margin-bottom:4px}.nxt-final-pay .nxt-pay-step p{margin:0;color:#adb5c2;font-size:9.7px;line-height:1.48}
+    .nxt-final-pay .nxt-pay-confidence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:11px}
+    .nxt-final-pay .nxt-confidence-item{padding:10px;border-radius:10px;text-align:center;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.026)}
+    .nxt-final-pay .nxt-confidence-item strong{display:block;color:#fff;font-size:10px;margin-bottom:3px}.nxt-final-pay .nxt-confidence-item span{display:block;color:#949dac;font-size:9px;line-height:1.4}
+    .nxt-final-pay .nxt-pay-reminder{margin-top:11px;padding:11px 12px;border-radius:10px;border:1px solid rgba(251,191,36,.22);background:rgba(120,53,15,.09);color:#fde68a;font-size:9.5px;line-height:1.5}
+    .nxt-final-pay .nxt-highlight-payment{border-color:rgba(167,139,250,.30)!important;box-shadow:0 0 0 1px rgba(124,58,237,.06),0 18px 46px rgba(0,0,0,.19)!important;background:linear-gradient(145deg,rgba(21,21,32,.98),rgba(13,13,21,.99))!important}
+    .nxt-final-pay #copyCryptoAmount,.nxt-final-pay #copyCryptoAddress{transition:.18s ease!important}.nxt-final-pay #copyCryptoAmount:hover,.nxt-final-pay #copyCryptoAddress:hover{transform:translateY(-1px)!important;filter:brightness(1.12)}
+    .nxt-final-pay .nxt-payment-id-note{margin-top:12px!important;padding:10px 12px!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:9px!important;background:rgba(255,255,255,.025)!important;color:#8f98a7!important}
+    @media(max-width:900px){.nxt-final-pay .nxt-pay-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.nxt-final-pay .nxt-pay-steps,.nxt-final-pay .nxt-pay-confidence{grid-template-columns:1fr}.nxt-final-pay .nxt-pay-step{min-height:0}.nxt-final-pay .nxt-pay-guide-title{align-items:flex-start;flex-direction:column}}
   `;
   document.head.appendChild(style);
 
-  function findPaymentCore(root){
-    const text = root.textContent || '';
-    const amountMatch = text.match(/([0-9]+(?:\.[0-9]+)?)\s*(BTC|ETH|LTC|USDT(?:\s*\(TRC20\)|TRC20)?)/i);
-    const copyAddress = root.querySelector('#copyCryptoAddress') || [...root.querySelectorAll('button')].find(b => /copy address/i.test(b.textContent||''));
-    if (!amountMatch || !copyAddress) return null;
-    const addressBox = copyAddress.previousElementSibling;
-    const currency = amountMatch[2].replace(/\s+/g,' ').toUpperCase();
-    return { amount: amountMatch[1], currency, copyAddress, addressBox };
-  }
-
-  function findFinalPaymentRoot(){
-    const headings = [...document.querySelectorAll('h1,h2,h3')];
-    const heading = headings.find(h => /complete your payment|crypto payment/i.test(h.textContent||''));
-    if (!heading) return null;
-    let root = heading.closest('[class*="checkout"], [class*="payment"], .modal, .modal-overlay');
-    if (!root) {
-      root = heading.parentElement;
-      for (let i=0;i<4 && root?.parentElement;i++) {
-        if ((root.textContent||'').match(/payment address/i) && [...root.querySelectorAll('button')].some(b=>/copy address/i.test(b.textContent||''))) break;
-        root = root.parentElement;
-      }
+  function findRoot(){
+    const heading=[...document.querySelectorAll('h1,h2,h3')].find(h=>/complete your payment|crypto payment/i.test(h.textContent||''));
+    if(!heading) return null;
+    let root=heading.parentElement;
+    for(let i=0;i<7 && root?.parentElement;i++){
+      const t=root.textContent||'';
+      if(/payment address/i.test(t) && /payment id/i.test(t) && [...root.querySelectorAll('button')].some(b=>/copy address/i.test(b.textContent||''))) break;
+      root=root.parentElement;
     }
-    return root || heading.parentElement;
+    return root;
   }
 
-  function enhanceFinalPayment(root){
-    if (!root || root.dataset.nxtFinalPay === '1') return false;
-    const core = findPaymentCore(root);
-    if (!core) return false;
-    root.dataset.nxtFinalPay = '1';
-    root.classList.add('nxt-final-pay');
+  function getCore(root){
+    const text=root.textContent||'';
+    const m=text.match(/([0-9]+(?:\.[0-9]+)?)\s*(BTC|ETH|LTC|USDT(?:\s*\(TRC20\)|TRC20)?)/i);
+    const copyAddress=root.querySelector('#copyCryptoAddress')||[...root.querySelectorAll('button')].find(b=>/copy address/i.test(b.textContent||''));
+    if(!m||!copyAddress) return null;
+    const copyAmount=root.querySelector('#copyCryptoAmount')||[...root.querySelectorAll('button')].find(b=>/copy amount/i.test(b.textContent||''));
+    return {currency:m[2].replace(/\s+/g,' ').toUpperCase(),copyAddress,copyAmount};
+  }
 
-    const firstHeading = [...root.querySelectorAll('h1,h2,h3')].find(h => /complete your payment|crypto payment/i.test(h.textContent||''));
-    const anchor = firstHeading?.parentElement || firstHeading;
+  function hideOldConfidence(root){
+    const labels=['Secure Payment','Auto Confirmation','Fast Shipping'];
+    const hits=[...root.querySelectorAll('div')].filter(d=>labels.some(x=>(d.textContent||'').trim().startsWith(x)));
+    if(hits.length>=3){
+      let parent=hits[0].parentElement;
+      if(parent && hits.every(x=>x.parentElement===parent)) parent.style.display='none';
+    }
+    [...root.querySelectorAll('div')].forEach(d=>{
+      const t=(d.textContent||'').trim();
+      if(/Your order will be processed after payment confirmation/i.test(t) && /tracking/i.test(t) && d.children.length<4) d.style.display='none';
+    });
+  }
 
-    const banner = document.createElement('div');
-    banner.className = 'nxt-pay-banner';
-    banner.innerHTML = '<span style="font-size:19px">✓</span><div><b>Your payment details are ready</b>Use the exact amount, coin and receiving address shown below. After sending, keep this checkout open while the network confirms your payment.</div>';
-    if (anchor) anchor.insertAdjacentElement('afterend', banner); else root.prepend(banner);
+  function enhance(root){
+    if(!root||root.dataset.nxtFinalPay==='2') return false;
+    const core=getCore(root); if(!core) return false;
+    root.dataset.nxtFinalPay='2'; root.classList.add('nxt-final-pay');
+    hideOldConfidence(root);
 
-    const guide = document.createElement('div');
-    guide.className = 'nxt-pay-guide';
-    guide.innerHTML = `
-      <div class="nxt-pay-guide-title"><strong>Finish Payment in 3 Simple Steps</strong><span>${core.currency} PAYMENT</span></div>
+    const heading=[...root.querySelectorAll('h1,h2,h3')].find(h=>/complete your payment|crypto payment/i.test(h.textContent||''));
+    const headingWrap=heading?.parentElement||heading;
+
+    const banner=document.createElement('div');
+    banner.className='nxt-pay-banner';
+    banner.innerHTML='<span style="font-size:20px">✓</span><div><b>Your payment is ready to send</b>The amount and receiving address below were created specifically for this order. Follow the four steps and keep this checkout open until the network sees the transaction.</div>';
+    headingWrap?.insertAdjacentElement('afterend',banner);
+
+    const guide=document.createElement('div'); guide.className='nxt-pay-guide';
+    guide.innerHTML=`<div class="nxt-pay-guide-title"><strong>Complete Payment — 4 Quick Steps</strong><span>${core.currency} PAYMENT</span></div>
       <div class="nxt-pay-steps">
-        <div class="nxt-pay-step"><b>1</b><strong>Copy the exact details</strong><p>Copy the amount and receiving address exactly as shown on this checkout.</p></div>
-        <div class="nxt-pay-step"><b>2</b><strong>Send from your wallet or app</strong><p>Use the same cryptocurrency and network shown here. Verify the address before you send.</p></div>
-        <div class="nxt-pay-step"><b>3</b><strong>Keep this page open</strong><p>Confirmation can take a little time. The payment status can update automatically after the network and processor see the transaction.</p></div>
+        <div class="nxt-pay-step"><b>1</b><strong>Copy the amount</strong><p>Use Copy Amount so the crypto amount matches this order.</p></div>
+        <div class="nxt-pay-step"><b>2</b><strong>Copy the address</strong><p>Use Copy Address and paste it into your wallet or exchange.</p></div>
+        <div class="nxt-pay-step"><b>3</b><strong>Send the same coin/network</strong><p>Send only ${core.currency} using the network shown by checkout. Verify the address before sending.</p></div>
+        <div class="nxt-pay-step"><b>4</b><strong>Keep checkout open</strong><p>After sending, return here. Confirmation can update after the blockchain and processor detect it.</p></div>
       </div>
       <div class="nxt-pay-confidence">
-        <div class="nxt-confidence-item"><strong>Order-linked payment</strong><span>Your payment ID ties this checkout to this order.</span></div>
-        <div class="nxt-confidence-item"><strong>Automatic status check</strong><span>The checkout can detect confirmation after the transaction is seen.</span></div>
+        <div class="nxt-confidence-item"><strong>Order-specific details</strong><span>This payment address and payment ID are tied to this checkout.</span></div>
+        <div class="nxt-confidence-item"><strong>Automatic confirmation</strong><span>No receipt upload is normally needed; status updates after network confirmation.</span></div>
         <div class="nxt-confidence-item"><strong>Processing after confirmation</strong><span>Confirmed orders move into fulfillment and tracking preparation.</span></div>
       </div>
-      <div class="nxt-pay-reminder"><strong>Before sending:</strong> Confirm the coin, network and first/last characters of the receiving address. Crypto transfers are generally irreversible.</div>
-      <div class="nxt-pay-after"><strong>After payment:</strong> Keep your payment ID for reference. The current fulfillment target is for tracking to be issued within 48 hours after payment confirmation.</div>`;
+      <div class="nxt-pay-reminder"><strong>Important:</strong> Crypto transfers are generally irreversible. Confirm the coin, network, amount, and receiving address before sending.</div>`;
+    banner.insertAdjacentElement('afterend',guide);
 
-    const doneBtn = [...root.querySelectorAll('button')].find(b => /^done$/i.test((b.textContent||'').trim()));
-    if (doneBtn) doneBtn.insertAdjacentElement('beforebegin', guide); else root.appendChild(guide);
+    const amountSection=core.copyAmount?.closest('div');
+    if(amountSection){amountSection.classList.add('nxt-highlight-payment');amountSection.style.borderRadius='13px';amountSection.style.padding='20px';}
+    const addressSection=core.copyAddress?.closest('div')?.parentElement;
+    if(addressSection){addressSection.classList.add('nxt-highlight-payment');}
 
-    if (core.addressBox) {
-      core.addressBox.style.wordBreak = 'break-all';
-      core.addressBox.style.whiteSpace = 'normal';
-    }
+    const pid=[...root.querySelectorAll('div')].find(d=>/^Payment ID\s*:/i.test((d.textContent||'').trim()) && d.children.length===0);
+    if(pid) pid.classList.add('nxt-payment-id-note');
     return true;
   }
 
-  function tryEnhance(){
-    const root = findFinalPaymentRoot();
-    return enhanceFinalPayment(root);
-  }
-
-  if (!tryEnhance()) {
-    let attempts = 0;
-    const timer = setInterval(() => {
-      attempts += 1;
-      if (tryEnhance() || attempts >= 120) clearInterval(timer);
-    }, 500);
+  function run(){return enhance(findRoot());}
+  if(!run()){
+    let n=0; const timer=setInterval(()=>{n++; if(run()||n>120) clearInterval(timer);},400);
   }
 })();
