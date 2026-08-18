@@ -3,7 +3,8 @@
     btc: 'bitcoin',
     ltc: 'litecoin',
     eth: 'ethereum',
-    usdttrc20: 'tether'
+    usdttrc20: 'tether',
+    usdt: 'tether'
   };
 
   function paymentDetails(modal) {
@@ -70,7 +71,7 @@
     title.style.cssText = 'font:800 14px Inter,sans-serif;color:#fff;margin-bottom:5px;';
 
     const sub = document.createElement('div');
-    sub.textContent = 'Open your wallet, or buy the selected crypto and then send the exact amount above.';
+    sub.textContent = 'Open your wallet, or buy crypto with a card and then send the exact amount above.';
     sub.style.cssText = 'font:500 11px/1.5 Inter,sans-serif;color:#9999aa;margin-bottom:12px;';
 
     const grid = document.createElement('div');
@@ -86,15 +87,21 @@
       grid.appendChild(button('Open Cash App', 'https://cash.app/bitcoin'));
     }
 
-    grid.appendChild(button('Buy With Card', 'https://www.moonpay.com/buy'));
+    const cardTitle = document.createElement('div');
+    cardTitle.textContent = 'Buy crypto with credit/debit card';
+    cardTitle.style.cssText = 'font:800 13px Inter,sans-serif;color:#fff;margin:16px 0 8px;';
+
+    const cardGrid = document.createElement('div');
+    cardGrid.style.cssText = 'display:grid;grid-template-columns:1fr;gap:8px;';
+    cardGrid.appendChild(button('Buy Bitcoin (BTC) with Card', 'https://www.coinbase.com/price/bitcoin'));
+    cardGrid.appendChild(button('Buy Ethereum (ETH) with Card', 'https://www.coinbase.com/price/ethereum'));
+    cardGrid.appendChild(button('Buy Tether (USDT) with Card', 'https://www.coinbase.com/price/tether'));
 
     const note = document.createElement('div');
-    note.textContent = details.currency === 'ltc'
-      ? 'Cash App is not shown for Litecoin. Use Coinbase, a compatible Litecoin wallet, or the card-buy option.'
-      : 'Purchases and withdrawals may require identity verification, provider fees, or a short processing period.';
+    note.textContent = 'On Coinbase, choose Buy and select an eligible credit/debit card as the payment method. Card availability, identity verification, fees, and withdrawal timing depend on the customer and provider.';
     note.style.cssText = 'font:500 10px/1.45 Inter,sans-serif;color:#77778a;margin-top:10px;text-align:center;';
 
-    wrap.append(title, sub, grid, note);
+    wrap.append(title, sub, grid, cardTitle, cardGrid, note);
     copyButton.insertAdjacentElement('afterend', wrap);
   }
 
