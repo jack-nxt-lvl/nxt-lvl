@@ -38,7 +38,8 @@ jobs:
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
               ('glutathione-product.js', '20260818-1'),
-              ('product-vial-visuals.js', '20260818-2'),
+              ('product-vial-visuals.js', '20260818-3'),
+              ('storefront-layout-upgrade.js', '20260818-1'),
           ]
 
           for filename, version in scripts:
@@ -62,7 +63,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load product-form vial visuals"
+          git commit -m "Load storefront layout upgrade"
           git push
 
-# Trigger product-form vial visual deployment.
+# Trigger storefront layout and vial-rendering deployment.
