@@ -17,7 +17,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Load fresh checkout helpers
+      - name: Restore stable checkout build
         shell: python
         run: |
           from pathlib import Path
@@ -26,8 +26,14 @@ jobs:
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
 
-          # Remove the old product artwork helper entirely.
-          html = re.sub(r'\s*<script src="product-vial-visuals\.js(?:\?v=[^"]+)?"></script>', '', html)
+          # Remove catalog enhancement scripts from the live page so they cannot
+          # interfere with the customer information or payment flow.
+          for filename in [
+              'product-vial-visuals.js',
+              'freeze-dried-research-info.js',
+              'storefront-layout-upgrade.js',
+          ]:
+              html = re.sub(rf'\s*<script src="{re.escape(filename)}(?:\?v=[^"]+)?"></script>', '', html)
 
           scripts = [
               ('checkout-wallet-enhancements.js', '20260818-5'),
@@ -41,8 +47,6 @@ jobs:
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
               ('glutathione-product.js', '20260818-1'),
-              ('freeze-dried-research-info.js', '20260818-2'),
-              ('storefront-layout-upgrade.js', '20260818-2'),
           ]
 
           for filename, version in scripts:
@@ -66,7 +70,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load checkout responsiveness fix"
+          git commit -m "Restore stable checkout flow"
           git push
 
-# Trigger scoped catalog observers and checkout responsiveness deployment.
+# Trigger removal of catalog observers from the checkout page.
