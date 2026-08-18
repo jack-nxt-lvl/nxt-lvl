@@ -44,8 +44,10 @@
   }
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim().toLowerCase()}
   function mapCards(){
+    const grid=document.getElementById('compoundGrid');
+    if(!grid) return;
     const list=getProducts(); if(!list.length) return;
-    document.querySelectorAll('.compound-card').forEach(card=>{
+    grid.querySelectorAll('.compound-card').forEach(card=>{
       const title=card.querySelector('.card-name'); if(!title) return;
       const p=list.find(x=>clean(x.name)===clean(title.textContent));
       if(!p) return;
@@ -65,8 +67,17 @@
     const count=grid.querySelectorAll('.compound-card').length;
     const countEl=bar.querySelector('.nxt-catalog-count'); if(countEl) countEl.textContent=`${count} product${count===1?'':'s'}`;
   }
+
   let queued=false;
   function run(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;mapCards();});}
-  const observer=new MutationObserver(run); observer.observe(document.documentElement,{childList:true,subtree:true});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(run,0),{once:true}); else setTimeout(run,0);
+
+  function start(){
+    mapCards();
+    const grid=document.getElementById('compoundGrid');
+    if(grid){
+      new MutationObserver(run).observe(grid,{childList:true,subtree:true});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
 })();
