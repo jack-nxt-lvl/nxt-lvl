@@ -1,5 +1,5 @@
-// NXT LVL data loader + checkout hotfix
-// Load the original product database synchronously so the rest of index.html keeps working unchanged.
+// NXT LVL data loader + checkout override
+// Load the original product database synchronously so index.html can use compounds/categories/stacks immediately.
 document.write('<script src="/products-data-original.js?v=1"><\/script>');
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -7,15 +7,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const overlay = document.createElement('div');
     overlay.innerHTML = innerHTML;
     overlay.style.cssText = [
-      'position:fixed',
-      'inset:0',
-      'background:rgba(0,0,0,.82)',
-      'display:flex',
-      'align-items:center',
-      'justify-content:center',
-      'padding:20px',
-      'z-index:999999',
-      'overflow:auto'
+      'position:fixed','inset:0','background:rgba(0,0,0,.82)','display:flex',
+      'align-items:center','justify-content:center','padding:20px','z-index:999999','overflow:auto'
     ].join(';');
     document.body.appendChild(overlay);
     return overlay;
@@ -27,35 +20,29 @@ window.addEventListener('DOMContentLoaded', () => {
         <div style="background:#111118;color:#fff;width:560px;max-width:94vw;padding:28px;border:1px solid rgba(124,58,237,.28);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.65);font-family:Inter,-apple-system,sans-serif;margin:auto;">
           <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;margin-bottom:8px;">Checkout</div>
           <h2 style="margin:0 0 6px;font-size:24px;">Customer Information</h2>
-          <p style="margin:0 0 20px;color:#9999aa;font-size:14px;">Enter the shipping details for your order.</p>
-
+          <p style="margin:0 0 20px;color:#9999aa;font-size:14px;">Enter your contact and shipping information. Your email is used for payment confirmation.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <input id="checkoutName" autocomplete="name" placeholder="Full name" />
             <input id="checkoutPhone" autocomplete="tel" placeholder="Phone number" />
           </div>
-
           <input id="checkoutEmail" type="email" autocomplete="email" placeholder="Email address" />
           <input id="checkoutAddress" autocomplete="street-address" placeholder="Street address" />
           <input id="checkoutUnit" autocomplete="address-line2" placeholder="Apt / Unit (optional)" />
-
           <div style="display:grid;grid-template-columns:1.3fr .8fr .8fr;gap:12px;">
             <input id="checkoutCity" autocomplete="address-level2" placeholder="City" />
             <input id="checkoutState" autocomplete="address-level1" placeholder="State" />
             <input id="checkoutZip" autocomplete="postal-code" placeholder="ZIP code" />
           </div>
-
-          <div id="checkoutCustomerError" style="display:none;margin:8px 0 0;color:#fca5a5;font-size:13px;">Please complete all required fields.</div>
-
+          <div id="checkoutCustomerError" style="display:none;margin:8px 0 0;color:#fca5a5;font-size:13px;">Please complete all required fields with a valid email.</div>
           <button id="customerContinue" style="width:100%;margin-top:18px;padding:14px;background:#7c3aed;color:#fff;border:0;border-radius:10px;cursor:pointer;font-weight:700;">Continue to Payment</button>
           <button id="customerCancel" style="width:100%;margin-top:10px;padding:12px;background:#292933;color:#fff;border:0;border-radius:10px;cursor:pointer;">Cancel</button>
-        </div>
-      `);
+        </div>`);
 
       overlay.querySelectorAll('input').forEach((input) => {
         input.style.cssText = 'width:100%;margin:6px 0;padding:13px 14px;background:#1d1d27;color:#fff;border:1px solid rgba(255,255,255,.10);border-radius:10px;outline:none;font-size:14px;box-sizing:border-box;';
       });
 
-      const finish = () => {
+      overlay.querySelector('#customerContinue').onclick = () => {
         const customer = {
           name: overlay.querySelector('#checkoutName').value.trim(),
           phone: overlay.querySelector('#checkoutPhone').value.trim(),
@@ -66,29 +53,18 @@ window.addEventListener('DOMContentLoaded', () => {
           state: overlay.querySelector('#checkoutState').value.trim(),
           zip: overlay.querySelector('#checkoutZip').value.trim()
         };
-
-        if (!customer.name || !customer.phone || !customer.email || !customer.address || !customer.city || !customer.state || !customer.zip) {
+        const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email);
+        if (!customer.name || !customer.phone || !validEmail || !customer.address || !customer.city || !customer.state || !customer.zip) {
           overlay.querySelector('#checkoutCustomerError').style.display = 'block';
           return;
         }
-
         sessionStorage.setItem('nxtlvlCustomerInfo', JSON.stringify(customer));
         overlay.remove();
         resolve(customer);
       };
 
-      overlay.querySelector('#customerContinue').onclick = finish;
-      overlay.querySelector('#customerCancel').onclick = () => {
-        overlay.remove();
-        resolve(null);
-      };
-
-      overlay.onclick = (event) => {
-        if (event.target === overlay) {
-          overlay.remove();
-          resolve(null);
-        }
-      };
+      overlay.querySelector('#customerCancel').onclick = () => { overlay.remove(); resolve(null); };
+      overlay.onclick = (event) => { if (event.target === overlay) { overlay.remove(); resolve(null); } };
     });
   }
 
@@ -103,34 +79,18 @@ window.addEventListener('DOMContentLoaded', () => {
           <button data-crypto="eth">Ethereum <span>ETH</span></button>
           <button data-crypto="ltc">Litecoin <span>LTC</span></button>
           <button data-crypto="usdttrc20">Tether <span>USDT (TRC20)</span></button>
-          <button id="cancelCrypto" style="margin-top:10px;background:#25252f;">Cancel</button>
-        </div>
-      `);
+          <button id="cancelCrypto">Cancel</button>
+        </div>`);
 
       overlay.querySelectorAll('button').forEach((button) => {
-        button.style.cssText += ';width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:7px 0;padding:14px 16px;background:#7c3aed;color:#fff;border:0;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;text-align:left;';
+        button.style.cssText = 'width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:7px 0;padding:14px 16px;background:#7c3aed;color:#fff;border:0;border-radius:10px;cursor:pointer;font-size:15px;font-weight:600;text-align:left;';
       });
-
+      overlay.querySelector('#cancelCrypto').style.background = '#25252f';
       overlay.querySelectorAll('[data-crypto]').forEach((button) => {
-        button.onclick = () => {
-          const currency = button.dataset.crypto;
-          overlay.remove();
-          resolve(currency);
-        };
+        button.onclick = () => { const currency = button.dataset.crypto; overlay.remove(); resolve(currency); };
       });
-
-      const cancel = overlay.querySelector('#cancelCrypto');
-      cancel.onclick = () => {
-        overlay.remove();
-        resolve(null);
-      };
-
-      overlay.onclick = (event) => {
-        if (event.target === overlay) {
-          overlay.remove();
-          resolve(null);
-        }
-      };
+      overlay.querySelector('#cancelCrypto').onclick = () => { overlay.remove(); resolve(null); };
+      overlay.onclick = (event) => { if (event.target === overlay) { overlay.remove(); resolve(null); } };
     });
   }
 
@@ -145,68 +105,43 @@ window.addEventListener('DOMContentLoaded', () => {
         <div id="cryptoAddress" style="background:#1d1d27;border:1px solid rgba(255,255,255,.08);padding:13px;border-radius:10px;word-break:break-all;font-size:13px;margin-bottom:10px;">${data.pay_address || ''}</div>
         <button id="copyCryptoAddress" style="width:100%;padding:13px;background:#7c3aed;color:#fff;border:0;border-radius:10px;cursor:pointer;font-weight:700;">Copy Address</button>
         <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-size:13px;color:#b8b8c7;line-height:1.5;">
-          <strong style="color:#fff;">Shipping to:</strong><br>
-          ${customer.name}<br>
-          ${customer.address}${customer.unit ? ', ' + customer.unit : ''}<br>
-          ${customer.city}, ${customer.state} ${customer.zip}<br>
-          ${customer.phone}
+          <strong style="color:#fff;">Confirmation email:</strong> ${customer.email}<br><br>
+          <strong style="color:#fff;">Shipping to:</strong><br>${customer.name}<br>${customer.address}${customer.unit ? ', ' + customer.unit : ''}<br>${customer.city}, ${customer.state} ${customer.zip}<br>${customer.phone}
         </div>
         <div style="margin-top:18px;font-size:12px;color:#77778a;word-break:break-all;">Payment ID: ${data.payment_id || ''}</div>
         <button id="closePaymentBox" style="width:100%;margin-top:14px;padding:12px;background:#292933;color:#fff;border:0;border-radius:10px;cursor:pointer;">Done</button>
-      </div>
-    `);
+      </div>`);
 
     overlay.querySelector('#copyCryptoAddress').onclick = async () => {
       const button = overlay.querySelector('#copyCryptoAddress');
-      try {
-        await navigator.clipboard.writeText(String(data.pay_address || ''));
-        button.textContent = 'Copied ✓';
-      } catch (_) {
-        const address = String(data.pay_address || '');
-        window.prompt('Copy this payment address:', address);
-      }
+      try { await navigator.clipboard.writeText(String(data.pay_address || '')); button.textContent = 'Copied ✓'; }
+      catch (_) { window.prompt('Copy this payment address:', String(data.pay_address || '')); }
     };
-
     overlay.querySelector('#closePaymentBox').onclick = () => overlay.remove();
   }
 
   window.proceedToCheckout = async function proceedToCheckoutFixed() {
     try {
       if (typeof cart === 'undefined' || !Array.isArray(cart) || cart.length === 0) return;
-
       const customer = await collectCustomerInfo();
       if (!customer) return;
-
       const payCurrency = await chooseCrypto();
       if (!payCurrency) return;
 
       const orderId = 'NXT-' + Date.now();
-      const amount = typeof cartSubtotal === 'function'
-        ? cartSubtotal()
-        : cart.reduce((sum, line) => sum + Number(line.price || 0) * Number(line.qty || 0), 0);
+      const amount = typeof cartSubtotal === 'function' ? cartSubtotal() : cart.reduce((sum, line) => sum + Number(line.price || 0) * Number(line.qty || 0), 0);
+      const items = cart.map((line) => ({ name: line.name, label: line.label, price: Number(line.price || 0), qty: Number(line.qty || 0) }));
 
-      const res = await fetch('/api/create-nowpayment', {
+      const response = await fetch('/api/create-nowpayment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount,
-          payCurrency,
-          orderId,
-          description: 'NXT LVL Research order'
-        })
+        body: JSON.stringify({ amount, payCurrency, orderId, customer, items })
       });
 
       let data;
-      try {
-        data = await res.json();
-      } catch (_) {
-        throw new Error('Payment server returned an invalid response.');
-      }
-
-      if (!res.ok) {
-        throw new Error(data.message || data.error || 'Unable to create payment');
-      }
-
+      try { data = await response.json(); }
+      catch (_) { throw new Error('Payment server returned an invalid response.'); }
+      if (!response.ok) throw new Error(data.message || data.error || 'Unable to create payment');
       showPayment(data, customer);
     } catch (error) {
       console.error('Checkout error:', error);
@@ -216,9 +151,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const checkoutBtn = document.getElementById('cartCheckoutBtn');
   if (checkoutBtn) {
-    checkoutBtn.onclick = (event) => {
-      event.preventDefault();
-      window.proceedToCheckout();
-    };
+    checkoutBtn.onclick = (event) => { event.preventDefault(); window.proceedToCheckout(); };
   }
 });
