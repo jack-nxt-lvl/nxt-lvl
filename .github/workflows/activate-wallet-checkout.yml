@@ -35,6 +35,7 @@ jobs:
               ('checkout-usdt-recommended.js', '20260818-1'),
               ('payment-delivery-guide.js', '20260818-1'),
               ('nav-cleanup.js', '20260818-1'),
+              ('pt141-product.js', '20260818-2'),
           ]
 
           for filename, version in scripts:
@@ -58,7 +59,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load navigation cleanup"
+          git commit -m "Load PT-141 catalog listing"
           git push
 
-# Trigger navigation cleanup deployment.
+# Trigger PT-141 catalog deployment.
