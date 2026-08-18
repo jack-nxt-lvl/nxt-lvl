@@ -5,8 +5,8 @@ const vm = require('vm');
 const DEFAULT_MODEL = 'gpt-5-nano';
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 900;
-const MAX_MATCHED_PRODUCTS = 8;
-const MAX_CATALOG_SUMMARY_ITEMS = 100;
+const MAX_MATCHED_PRODUCTS = 16;
+const MAX_CATALOG_SUMMARY_ITEMS = 120;
 
 const BUSINESS_FACTS = [
   'Business name: NXT LVL Research.',
@@ -71,7 +71,16 @@ function normalizeText(value) { return String(value || '').toLowerCase().replace
 function scoreProduct(product, question) {
   const haystack = normalizeText([product.id, product.name, product.aka, product.category, product.shortDesc, product.description, product.benefits && product.benefits.join(' '), product.tags && product.tags.join(' '), product.protocols && product.protocols.join(' ')].join(' '));
   const terms = normalizeText(question).split(/\s+/).filter((term) => term.length >= 3);
-  return terms.reduce((score, term) => score + (haystack.includes(term) ? 2 : 0), 0) + ((product.protocols || []).some(p => terms.some(t => normalizeText(p).includes(t))) ? 3 : 0);
+  let score = terms.reduce((total, term) => total + (haystack.includes(term) ? 2 : 0), 0);
+  if ((product.protocols || []).some(p => terms.some(t => normalizeText(p).includes(t)))) score += 3;
+  const q = normalizeText(question);
+  if (/fat|weight|metabol|body composition|appetite/.test(q)) {
+    if (/retatrutide/.test(haystack)) score += 20;
+    else if (/tirzepatide/.test(haystack)) score += 14;
+    else if (/semaglutide/.test(haystack)) score += 8;
+    if (/tesamorelin|ipamorelin|aod|slu pp 332|mots c/.test(haystack)) score += 4;
+  }
+  return score;
 }
 function formatProduct(product) {
   const prices = (product.pricing || []).map((price) => `${price.label}: $${Number(price.price).toFixed(2)}`).join(', ');
@@ -86,7 +95,7 @@ function buildBusinessContext(messages) {
   const catalog = loadCatalog();
   const products = catalog.compounds || [];
   const matchedProducts = products.map((product) => ({ product, score: scoreProduct(product, latestQuestion) })).filter((item) => item.score > 0).sort((a,b) => b.score-a.score).slice(0,MAX_MATCHED_PRODUCTS).map((item)=>item.product);
-  const fallbackProducts = matchedProducts.length >= 3 ? matchedProducts : products.slice(0,12);
+  const fallbackProducts = matchedProducts.length >= 4 ? matchedProducts : products.slice(0,16);
   return ['NXT LVL WEBSITE CATALOG. THIS IS THE ONLY PRODUCT SOURCE YOU MAY USE.','','Business facts:',BUSINESS_FACTS,'','Research-reference guidance:',RESEARCH_REFERENCE,'',`Catalog product count: ${products.length}`,'','Website product list:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map(formatProductSummary).join('\n'),'','Relevant website products:',fallbackProducts.map(formatProduct).join('\n\n---\n\n')].join('\n');
 }
 function normalizeMessages(messages) { if (!Array.isArray(messages)) return []; return messages.slice(-MAX_MESSAGES).map((message)=>({role: message && message.role === 'assistant' ? 'assistant':'user',content:String((message&&message.content)||'').slice(0,MAX_MESSAGE_LENGTH).trim()})).filter((message)=>message.content); }
@@ -104,18 +113,20 @@ module.exports = async function handler(req,res) {
   const firstUserTurn = messages.filter((message)=>message.role==='user').length <= 1;
   try {
     const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({model:process.env.OPENAI_MODEL||DEFAULT_MODEL,instructions:[
-      'You are NXT LVL Research’s ecommerce catalog assistant. Be short, confident, natural, and useful.',
-      'ABSOLUTE RULE: Use ONLY exact products in the supplied NXT LVL WEBSITE CATALOG.',
+      'You are NXT LVL Research’s ecommerce catalog assistant. Be confident, natural, sales-oriented, and concise.',
+      'ABSOLUTE RULE: Use ONLY exact products in the supplied NXT LVL WEBSITE CATALOG. Never invent or mention outside products.',
       'NEVER use placeholders or unnamed compounds.',
-      'For broad questions such as “I want to lose fat,” “best for recovery,” or “best product,” ALWAYS provide 2-3 different relevant website products when the catalog contains them. Never answer with only SLU-PP-332 when other relevant website products exist.',
-      'For fat-metabolism/body-composition research questions, inspect the full catalog for products tagged or described around fat loss, body composition, metabolism, GH/GHRH, appetite, or energy metabolism and present 2-3 distinct website options.',
-      'For each option: exact product name, then one short sentence on its listed research focus and what makes it different.',
-      'Do not claim guaranteed human results. Keep preclinical findings clearly labeled where applicable.',
-      firstUserTurn ? 'FIRST TURN: Do not ask to add anything to cart. Give useful choices first.' : 'On later turns, only after the shopper shows interest in a specific item, you may offer to add that item to cart.',
-      'Keep responses compact: about 3-6 short lines.',
+      'When a shopper asks a broad question or gives a broad research goal, list EVERY website product that is reasonably relevant, not just the top 1-3. Aim for 4-10 options when that many genuinely fit. If more than 10 fit, show the 10 strongest matches and say there are additional related options.',
+      'For each option, use the exact product name followed by one very short plain-English line describing its listed research focus. Keep each item compact so the customer can scan many options quickly.',
+      'Do not hide relevant products just because another product is a stronger match. The goal is to expose the shopper to the full range of relevant products they could consider buying.',
+      'For fat-metabolism/body-composition/appetite research questions, if present in the catalog, order these first: Retatrutide, then Tirzepatide, then Semaglutide. Retatrutide must appear above Semaglutide whenever both are relevant. After those, include every other reasonably relevant website option such as Tesamorelin, Ipamorelin, AOD-related products, SLU-PP-332, MOTS-C, or other matching catalog items.',
+      'Do not say Retatrutide is universally better or FDA-approved. This is only a display/ranking preference for the website catalog response.',
+      'When multiple products cover different research angles, briefly say how their research roles differ. Do not invent synergy or guaranteed outcomes.',
+      firstUserTurn ? 'FIRST TURN: Do not ask to add anything to cart. Give the full useful product list first.' : 'On later turns, only after the shopper shows interest in a specific item or group, you may offer to add those selected items to cart.',
       'Do not give dosing, injection, administration, cycle, protocol, diagnosis, or treatment instructions.',
-      'Mention “For research use only.” at most once and do not lead with it unless necessary.',
-      '',businessContext].join(' '),input:messages,reasoning:{effort:'minimal'},text:{verbosity:'low'},max_output_tokens:900})});
+      'Do not make guaranteed human outcome claims. Clearly label preclinical findings where applicable.',
+      'Mention “For research use only.” at most once, and do not lead with it unless necessary.',
+      '',businessContext].join(' '),input:messages,reasoning:{effort:'minimal'},text:{verbosity:'low'},max_output_tokens:1400})});
     const data=await response.json(); if(!response.ok)return res.status(response.status).json({error:formatOpenAIError(response.status,data)});
     const reply=extractOutputText(data); if(reply)return res.status(200).json({reply});
     return res.status(500).json({error:'The AI returned an empty response. Try again.'});
