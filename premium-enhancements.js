@@ -1,4 +1,42 @@
 (() => {
+  // Add SLU-PP-332 to the same product database used by the storefront.
+  // SLU-PP-332 is a small-molecule ERR agonist, not technically a peptide,
+  // but is merchandised in the requested freeze-dried research category.
+  if (typeof compounds !== 'undefined' && Array.isArray(compounds) && !compounds.some(p => p.id === 'slu-pp-332-10')) {
+    compounds.push({
+      id: 'slu-pp-332-10',
+      name: 'SLU-PP-332 — 10mg',
+      aka: 'Pan-ERR Agonist',
+      category: 'freeze-dried',
+      protocols: ['fat-loss', 'energy-vitality'],
+      badge: 'NEW',
+      tags: ['Metabolic Research', 'ERR Agonist', 'Mitochondrial Research', 'Exercise Mimetic Research', 'Energy Metabolism'],
+      shortDesc: 'Pan-ERR agonist studied in preclinical metabolic, mitochondrial, and exercise-mimetic research.',
+      description: 'SLU-PP-332 is a synthetic small-molecule pan-agonist of estrogen-related receptors ERRα, ERRβ, and ERRγ. It is studied preclinically as a research tool for ERR signaling, mitochondrial function, cellular respiration, oxidative metabolism, and exercise-mimetic pathways. Human efficacy and safety have not been established.',
+      benefits: ['ERR signaling research', 'Mitochondrial function research', 'Cellular respiration research', 'Oxidative metabolism research', 'Preclinical exercise-mimetic research'],
+      sideEffects: ['Human safety profile has not been established'],
+      dosing: {},
+      amount: '10mg per vial',
+      form: 'Lyophilized / Freeze-Dried Research Compound',
+      appearance: 'Research powder',
+      purity: 'See batch COA',
+      molecularFormula: 'C18H14N2O2',
+      halfLife: 'Not established in humans',
+      reconstitution: 'Follow laboratory handling procedures and batch documentation.',
+      syringe: 'N/A — laboratory research compound',
+      injectionSite: 'Not for human or veterinary use',
+      storage: 'Store according to batch documentation and laboratory handling requirements.',
+      administration: 'Laboratory research use only',
+      warnings: 'For research use only. Not for human or veterinary use. SLU-PP-332 is preclinical and is not an FDA-approved drug.',
+      suggestedCompanions: [],
+      pricing: [
+        { label: '1 Vial', price: 85 },
+        { label: '5 Vials', price: 348.5 },
+        { label: '10 Vials', price: 595 }
+      ]
+    });
+  }
+
   const css = document.createElement('style');
   css.textContent = `
   :root{--lux:#c4b5fd;--lux2:#8b5cf6;--panel:#0d0d14}
