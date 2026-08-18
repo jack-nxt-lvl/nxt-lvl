@@ -44,7 +44,7 @@ jobs:
           scripts = [
               ('checkout-wallet-enhancements.js', '20260818-6'),
               ('payment-delivery-guide.js', '20260818-4'),
-              ('payment-completion-upgrade.js', '20260818-4'),
+              ('payment-completion-upgrade.js', '20260818-5'),
               ('nav-cleanup.js', '20260818-1'),
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
@@ -72,7 +72,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Force-load easier MoonPay handoff"
+          git commit -m "Force-load prominent Apple Pay card checkout"
           git push
 
-# Trigger MoonPay handoff cache refresh.
+# Trigger Apple Pay/card payment callout cache refresh.
