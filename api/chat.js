@@ -17,6 +17,13 @@ const BUSINESS_FACTS = [
   'The site says final pricing, payment, availability, and shipping are confirmed at checkout or direct order.',
 ].join('\n');
 
+const RESEARCH_REFERENCE = [
+  'Use established peptide/pharmacology concepts to explain mechanisms accurately, but never use outside references to invent products, benefits, or claims.',
+  'Peptide and research-compound literature commonly distinguishes receptor/signaling targets, metabolic pathways, mitochondrial function, stability, delivery, and pharmacokinetic limitations.',
+  'Clearly distinguish preclinical research from established human clinical evidence. Never present animal, cell, or early-stage findings as proven human outcomes.',
+  'Keep explanations consumer-friendly: exact product name, what pathway or research area it is studied for, and the key way it differs from the other website options.',
+].join('\n');
+
 const WEBSITE_ONLY_EXTRAS = [
   {
     id: 'slu-pp-332-10',
@@ -77,7 +84,7 @@ function buildBusinessContext(messages) {
   const catalog = loadCatalog(); const products = catalog.compounds || []; const categories = catalog.categories || []; const protocols = catalog.protocols || []; const stacks = catalog.stacks || [];
   const matchedProducts = products.map((product) => ({ product, score: scoreProduct(product, latestQuestion) })).filter((item) => item.score > 0).sort((a,b) => b.score-a.score).slice(0,MAX_MATCHED_PRODUCTS).map((item)=>item.product);
   const fallbackProducts = matchedProducts.length ? matchedProducts : products.slice(0,6);
-  return ['NXT LVL WEBSITE CATALOG. THIS IS THE ONLY PRODUCT SOURCE YOU MAY USE.','','Business facts:',BUSINESS_FACTS,'',`Categories: ${categories.map((category)=>category.name).join(', ')}`,`Protocols: ${protocols.map((protocol)=>`${protocol.name} - ${protocol.description}`).join(' | ')}`,`Curated stacks: ${stacks.map(formatStack).join(' | ')}`,'','Website product list:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map((product)=>formatProductSummary(product,categories)).join('\n'),'','Most relevant website products:',fallbackProducts.map((product)=>formatProduct(product,categories)).join('\n\n---\n\n')].join('\n');
+  return ['NXT LVL WEBSITE CATALOG. THIS IS THE ONLY PRODUCT SOURCE YOU MAY USE.','','Business facts:',BUSINESS_FACTS,'','Research-reference guidance:',RESEARCH_REFERENCE,'',`Categories: ${categories.map((category)=>category.name).join(', ')}`,`Protocols: ${protocols.map((protocol)=>`${protocol.name} - ${protocol.description}`).join(' | ')}`,`Curated stacks: ${stacks.map(formatStack).join(' | ')}`,'','Website product list:',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map((product)=>formatProductSummary(product,categories)).join('\n'),'','Most relevant website products:',fallbackProducts.map((product)=>formatProduct(product,categories)).join('\n\n---\n\n')].join('\n');
 }
 function normalizeMessages(messages) { if (!Array.isArray(messages)) return []; return messages.slice(-MAX_MESSAGES).map((message)=>({role: message && message.role === 'assistant' ? 'assistant':'user',content:String((message&&message.content)||'').slice(0,MAX_MESSAGE_LENGTH).trim()})).filter((message)=>message.content); }
 function extractOutputText(data) { if (typeof data.output_text === 'string' && data.output_text.trim()) return data.output_text.trim(); if (Array.isArray(data.output)) return data.output.flatMap((item)=>item.content||[]).map((part)=>part.text||'').join('').trim(); return ''; }
@@ -89,21 +96,23 @@ module.exports = async function handler(req,res) {
   if(!process.env.OPENAI_API_KEY)return res.status(500).json({error:'OPENAI_API_KEY is not configured.'});
   const messages=normalizeMessages(req.body&&req.body.messages); if(!messages.length)return res.status(400).json({error:'Message is required.'});
   const businessContext=buildBusinessContext(messages);
+  const firstUserTurn = messages.filter((message)=>message.role==='user').length <= 1;
   try {
     const response=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({model:process.env.OPENAI_MODEL||DEFAULT_MODEL,instructions:[
       'You are NXT LVL Research’s ecommerce catalog assistant. Be short, confident, natural, and useful.',
       'ABSOLUTE RULE: Use ONLY exact products that appear in the supplied NXT LVL WEBSITE CATALOG. Do not recommend, mention, substitute, or invent any product that is not currently sold on the website.',
       'NEVER use placeholders like X, Y, Product A, Product B, or unnamed compounds. Every product mention must be an exact website product name.',
       'If the website catalog does not contain a relevant product, simply say there is no matching website product instead of suggesting something external.',
-      'For a broad personal goal, first ask one short clarifying question when needed, such as “Male or female?” Do not use sex to make medical or injectable treatment recommendations.',
-      'For a research objective, give 1-3 exact website product names immediately, then one short line on the listed research focus of each.',
+      'When a shopper asks what is best, asks for a recommendation, or gives a broad research goal, give 2-3 relevant website options whenever at least 2 relevant catalog products exist. Do not give only one option unless only one website product genuinely matches.',
+      'For each option, use the exact product name followed by one concise plain-English sentence explaining its listed research focus or mechanism and what makes it distinct.',
+      'If clarification would materially improve the answer, ask one short question after giving useful options rather than refusing to provide options.',
       'If two or more website products have complementary listed research roles, briefly explain the catalog rationale for pairing them. Do not invent synergy or personal outcomes.',
       'For injectable-category products, provide factual website catalog information only. Do not personalize injectable recommendations based on sex, health status, or physique goals.',
-      'End relevant shopping answers with one simple close such as “Want me to add that to your cart?”',
-      'Keep responses to about 2-4 short sentences.',
+      firstUserTurn ? 'FIRST USER TURN RULE: Do NOT ask to add anything to the cart and do NOT use a checkout close on the first user message. Give useful options/information first.' : 'On later turns, after the shopper shows interest in a specific product or stack, you may use one simple cart close such as “Want me to add that to your cart?”',
+      'Keep responses compact: usually 3-6 short lines or sentences, enough to show 2-3 useful options without a long lecture.',
       'Do not give human or animal dosing, injection, administration, cycle/protocol instructions, diagnosis, treatment instructions, or personalized medical advice.',
-      'Do not claim a product will make a person lose fat, gain muscle, heal, or produce a medical result. Translate personal goals into research areas and discuss only website catalog information.',
-      'Mention “For research use only.” at most once when relevant.',
+      'Do not claim a product will make a person lose fat, gain muscle, heal, or produce a medical result. Clearly distinguish preclinical research from proven human outcomes.',
+      'Mention “For research use only.” at most once when relevant; do not lead every answer with it.',
       '',businessContext].join(' '),input:messages,reasoning:{effort:'minimal'},text:{verbosity:'low'},max_output_tokens:900})});
     const data=await response.json(); if(!response.ok)return res.status(response.status).json({error:formatOpenAIError(response.status,data)});
     const reply=extractOutputText(data); if(reply)return res.status(200).json({reply});
