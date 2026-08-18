@@ -57,7 +57,7 @@
     const shell=overlay.querySelector('.nxt-pay-shell');
     shell.innerHTML=`${steps(2)}<div class="nxt-loading"><div class="nxt-spinner"></div><h2>Creating Your Payment</h2><div class="nxt-pay-lead">Please keep this page open.</div></div>`;
     try{
-      const res=await fetch('/api/create-nowpayment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:Number(details.total),payCurrency,orderId:'NXT-'+Date.now(),description:'NXT LVL Research order'})});
+      const res=await fetch('/api/create-nowpayment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:Number(details.total),payCurrency,orderId:'NXT-'+Date.now(),customer:details.customer||{},items:items()})});
       let data={};try{data=await res.json()}catch(_){}
       if(!res.ok||!data.pay_address||!data.pay_amount) throw new Error(data.message||data.error||'Unable to create payment');
       confirmation(overlay,details,data);

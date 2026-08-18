@@ -100,7 +100,7 @@
     if(validSaved(old)&&old.payCurrency===payCurrency&&Math.abs(Number(old.orderTotal)-d.total)<0.01){overlayFor(old);return}
     const loading=document.createElement('div');loading.className='nxt-moon-assist';loading.innerHTML='<div class="nxt-moon-assist-card" style="text-align:center"><h2>Preparing secure payment…</h2><p>Creating the exact crypto amount, network, and receiving address for this order.</p></div>';document.body.appendChild(loading);
     try{
-      const res=await fetch('/api/create-nowpayment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:d.total,payCurrency,orderId:'NXT-'+Date.now(),description:'NXT LVL Research order'})});let data={};try{data=await res.json()}catch(_){}loading.remove();
+      const res=await fetch('/api/create-nowpayment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:d.total,payCurrency,orderId:'NXT-'+Date.now(),customer:d.customer,items:(typeof cart!=='undefined'&&Array.isArray(cart)?cart:[])})});let data={};try{data=await res.json()}catch(_){}loading.remove();
       if(!res.ok||!data.pay_address||!data.pay_amount){alert(data.message||data.error||'Unable to prepare payment. Please try again.');return}
       const p={savedAt:Date.now(),payCurrency,orderTotal:d.total,payAmount:data.pay_amount,payAddress:data.pay_address,paymentId:data.payment_id||'',customer:d.customer,fulfillment:d.fulfillment,shipping:d.shipping};
       save(p);await copy(p.payAddress);overlayFor(p)
