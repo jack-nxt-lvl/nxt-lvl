@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div style="background:#111118;color:#fff;width:560px;max-width:94vw;padding:28px;border:1px solid rgba(124,58,237,.28);border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.65);font-family:Inter,-apple-system,sans-serif;margin:auto;">
           <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#a78bfa;margin-bottom:8px;">Checkout</div>
           <h2 style="margin:0 0 6px;font-size:24px;">Customer Information</h2>
-          <p style="margin:0 0 20px;color:#9999aa;font-size:14px;">Enter your contact and shipping information. Your email is used for payment confirmation.</p>
+          <p style="margin:0 0 20px;color:#9999aa;font-size:14px;">Enter your contact and shipping information. Your email is used for payment confirmation. By continuing, your contact information and cart details are submitted with your checkout request.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <input id="checkoutName" autocomplete="name" placeholder="Full name" />
             <input id="checkoutPhone" autocomplete="tel" placeholder="Phone number" />
@@ -125,13 +125,22 @@ window.addEventListener('DOMContentLoaded', () => {
       if (typeof cart === 'undefined' || !Array.isArray(cart) || cart.length === 0) return;
       const customer = await collectCustomerInfo();
       if (!customer) return;
+
+      const amount = typeof cartSubtotal === 'function' ? cartSubtotal() : cart.reduce((sum, line) => sum + Number(line.price || 0) * Number(line.qty || 0), 0);
+      const items = cart.map((line) => ({ name: line.name, label: line.label, price: Number(line.price || 0), qty: Number(line.qty || 0) }));
+
+      // Email the business as soon as valid checkout information is submitted,
+      // even if the customer never completes the crypto payment.
+      fetch('/api/checkout-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer, items, amount })
+      }).catch((error) => console.error('Checkout lead notification failed:', error));
+
       const payCurrency = await chooseCrypto();
       if (!payCurrency) return;
 
       const orderId = 'NXT-' + Date.now();
-      const amount = typeof cartSubtotal === 'function' ? cartSubtotal() : cart.reduce((sum, line) => sum + Number(line.price || 0) * Number(line.qty || 0), 0);
-      const items = cart.map((line) => ({ name: line.name, label: line.label, price: Number(line.price || 0), qty: Number(line.qty || 0) }));
-
       const response = await fetch('/api/create-nowpayment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
