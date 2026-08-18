@@ -1,0 +1,48 @@
+name: Activate wallet checkout helper
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/activate-wallet-checkout.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Load wallet checkout helper
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          tag = '<script src="checkout-wallet-enhancements.js"></script>'
+
+          if tag not in html:
+              if '</body>' not in html:
+                  raise SystemExit('Could not find </body> in index.html')
+              html = html.replace('</body>', f'  {tag}\n</body>', 1)
+              path.write_text(html, encoding='utf-8')
+              print('Added wallet checkout helper to index.html')
+          else:
+              print('Wallet checkout helper is already active')
+
+      - name: Commit activation
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index.html change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Load wallet checkout enhancements"
+          git push
