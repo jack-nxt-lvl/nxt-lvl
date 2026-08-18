@@ -1,123 +1,46 @@
 (() => {
-  const style = document.createElement('style');
-  style.textContent = `
-    .nxt-vial-visual{position:relative;margin:6px 0 20px;padding:14px;border:1px solid rgba(139,92,246,.24);border-radius:18px;overflow:hidden;background:radial-gradient(circle at 18% 0%,rgba(124,58,237,.16),transparent 36%),linear-gradient(180deg,#12121a,#09090f);box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
-    .nxt-label-art{position:relative;min-height:142px;border:1px solid rgba(167,139,250,.42);border-radius:15px;overflow:hidden;background:linear-gradient(112deg,#080b12 0%,#10121c 52%,#080a11 100%);box-shadow:0 18px 42px rgba(0,0,0,.38),inset 0 0 0 1px rgba(255,255,255,.025);display:grid;grid-template-columns:1.08fr 1fr .58fr;isolation:isolate}
-    .nxt-label-art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 12% 36%,rgba(124,58,237,.16),transparent 22%),linear-gradient(90deg,transparent 0 48%,rgba(124,58,237,.04) 49% 50%,transparent 51%);pointer-events:none;z-index:-1}
-    .nxt-label-art::after{content:'';position:absolute;left:0;right:0;bottom:0;height:15px;background:linear-gradient(90deg,#43208d,#6d28d9 48%,#7c3aed 72%,#3d1b7c);box-shadow:0 -1px 0 rgba(167,139,250,.28)}
-    .nxt-label-left,.nxt-label-middle,.nxt-label-right{position:relative;padding:15px 16px 25px;min-width:0}
-    .nxt-label-middle,.nxt-label-right{border-left:1px solid rgba(139,92,246,.36)}
-    .nxt-label-brand{display:flex;align-items:center;gap:9px;margin-bottom:13px}
-    .nxt-label-logo{width:31px;height:31px;border-radius:8px;background:linear-gradient(145deg,#8b5cf6,#4c1d95);display:grid;place-items:center;color:#fff;font:900 18px/1 'Space Grotesk',Inter,sans-serif;box-shadow:0 7px 18px rgba(124,58,237,.30)}
-    .nxt-label-wordmark{font:800 13px/.95 'Space Grotesk',Inter,sans-serif;letter-spacing:1.1px;text-transform:uppercase;color:#f6f4ff}
-    .nxt-label-wordmark span{color:#8b5cf6}
-    .nxt-label-name{font:900 clamp(20px,2.2vw,31px)/.94 'Space Grotesk',Inter,sans-serif;letter-spacing:-.7px;color:#fff;text-transform:uppercase;word-break:break-word;text-shadow:0 2px 18px rgba(255,255,255,.035)}
-    .nxt-label-strength{font:900 18px/1 'Space Grotesk',Inter,sans-serif;color:#8b5cf6;margin-top:8px;text-transform:uppercase;letter-spacing:.5px}
-    .nxt-label-category{display:inline-block;max-width:100%;padding:6px 9px;border-radius:5px;background:linear-gradient(90deg,#412080,#5730aa);color:#eee9ff;font:800 8.5px/1 'Space Grotesk',Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px}
-    .nxt-label-aka{font:700 10.5px/1.2 Inter,sans-serif;color:#dad6e6;font-style:italic;min-height:25px;margin-bottom:7px;overflow:hidden}
-    .nxt-label-form{font:800 9.5px/1.1 'Space Grotesk',Inter,sans-serif;color:#8b5cf6;letter-spacing:1.35px;text-transform:uppercase;padding:7px 0;border-top:1px solid rgba(124,58,237,.35);border-bottom:1px solid rgba(124,58,237,.35);margin-bottom:8px}
-    .nxt-label-meta{display:grid;gap:6px;color:#f2f0f7;font:700 9px/1.15 Inter,sans-serif}
-    .nxt-label-meta div{display:flex;align-items:center;gap:7px}
-    .nxt-label-icon{width:19px;height:19px;border-radius:50%;border:1px solid rgba(139,92,246,.5);display:grid;place-items:center;color:#a78bfa;font-size:10px;flex:0 0 auto}
-    .nxt-label-batch{font:700 8px/1.2 'Space Grotesk',Inter,sans-serif;letter-spacing:.7px;text-transform:uppercase;color:#8e89a0;margin-bottom:4px}
-    .nxt-label-batch-value{min-height:27px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.018);padding:6px 7px;margin-bottom:7px;color:#f3f1f8;font:800 11px/1.1 'Space Grotesk',Inter,sans-serif}
-    .nxt-label-sku{margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07);font:700 6.8px/1.2 monospace;color:#8d8998;word-break:break-all;text-transform:uppercase}
-    .nxt-label-footer{position:absolute;left:0;right:0;bottom:2px;text-align:center;z-index:3;color:#e9e5f5;font:900 7.5px/1 'Space Grotesk',Inter,sans-serif;letter-spacing:2.2px;text-transform:uppercase}
-    .nxt-label-caption{margin-top:8px;text-align:right;color:#747083;font:700 7px/1 Inter,sans-serif;letter-spacing:1.1px;text-transform:uppercase}
-    .nxt-modal-vial{padding:18px;margin:0 0 26px}.nxt-modal-vial .nxt-label-art{min-height:190px}.nxt-modal-vial .nxt-label-name{font-size:35px}.nxt-modal-vial .nxt-label-strength{font-size:22px}
-    @media(max-width:900px){.nxt-label-art{grid-template-columns:1.05fr .95fr}.nxt-label-right{grid-column:1/-1;border-left:0;border-top:1px solid rgba(139,92,246,.36);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:10px}.nxt-label-right .nxt-label-sku{grid-column:1/-1;margin-top:0}.nxt-label-art::after{height:14px}}
-    @media(max-width:620px){.nxt-vial-visual{padding:10px}.nxt-label-art{grid-template-columns:1fr;min-height:0}.nxt-label-middle,.nxt-label-right{border-left:0;border-top:1px solid rgba(139,92,246,.34)}.nxt-label-right{grid-column:auto;grid-template-columns:1fr 1fr}.nxt-label-left,.nxt-label-middle,.nxt-label-right{padding:13px 13px 23px}.nxt-label-name{font-size:25px}.nxt-modal-vial .nxt-label-name{font-size:28px}.nxt-label-footer{font-size:6.5px;letter-spacing:1.5px}}
+  const style=document.createElement('style');
+  style.textContent=`
+    .nxt-vial-visual{position:relative;margin:6px 0 20px;padding:12px;border:1px solid rgba(139,92,246,.2);border-radius:18px;overflow:hidden;background:radial-gradient(circle at 50% 25%,rgba(255,255,255,.06),transparent 34%),radial-gradient(circle at 50% 64%,rgba(124,58,237,.13),transparent 38%),linear-gradient(180deg,#111219 0%,#08090d 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+    .nxt-photo-stage{position:relative;height:230px;display:flex;align-items:flex-end;justify-content:center;perspective:900px;overflow:hidden}
+    .nxt-photo-stage::before{content:'';position:absolute;left:50%;bottom:21px;width:180px;height:30px;transform:translateX(-50%);border-radius:50%;background:rgba(0,0,0,.72);filter:blur(13px)}
+    .nxt-photo-stage::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(255,255,255,.025),transparent 28%,transparent 68%,rgba(255,255,255,.02));pointer-events:none}
+    .nxt-real-vial{position:relative;width:112px;height:160px;margin-bottom:26px;border-radius:19px 19px 28px 28px;background:linear-gradient(90deg,rgba(255,255,255,.03) 0%,rgba(255,255,255,.42) 10%,rgba(229,240,247,.12) 23%,rgba(255,255,255,.05) 48%,rgba(255,255,255,.21) 70%,rgba(255,255,255,.035) 100%);border:1px solid rgba(238,246,252,.52);box-shadow:0 28px 42px rgba(0,0,0,.56),inset 8px 0 16px rgba(255,255,255,.08),inset -11px 0 17px rgba(0,0,0,.16),inset 0 -8px 15px rgba(255,255,255,.035);transform:rotateY(-4deg);z-index:2;backdrop-filter:blur(2px)}
+    .nxt-real-vial::before{content:'';position:absolute;left:12px;top:16px;width:13px;height:118px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.1));filter:blur(.2px);opacity:.78;z-index:5;pointer-events:none}
+    .nxt-real-vial::after{content:'';position:absolute;right:9px;top:22px;width:7px;height:112px;border-radius:8px;background:rgba(255,255,255,.15);filter:blur(.3px);z-index:5;pointer-events:none}
+    .nxt-real-neck{position:absolute;left:23px;right:23px;top:-18px;height:29px;border-radius:7px 7px 5px 5px;background:linear-gradient(90deg,rgba(240,247,250,.2),rgba(255,255,255,.55),rgba(216,226,232,.15));border:1px solid rgba(245,249,251,.48);box-shadow:inset 6px 0 8px rgba(255,255,255,.08),inset -5px 0 8px rgba(0,0,0,.12)}
+    .nxt-real-cap{position:absolute;left:16px;right:16px;top:-35px;height:23px;border-radius:5px 5px 4px 4px;background:repeating-linear-gradient(90deg,#cfd2d6 0 3px,#8a8e94 3px 5px,#d8dadd 5px 8px);border:1px solid #a8abb0;box-shadow:0 4px 8px rgba(0,0,0,.35),inset 0 3px 2px rgba(255,255,255,.45);z-index:4}
+    .nxt-real-stopper{position:absolute;left:27px;right:27px;top:-24px;height:8px;background:linear-gradient(#42454a,#1d1f22);border-radius:3px;z-index:3}
+    .nxt-real-fill{position:absolute;left:6px;right:6px;bottom:6px;border-radius:5px 5px 20px 20px;z-index:1;overflow:hidden}
+    .nxt-real-fill.powder{height:29px;background:linear-gradient(180deg,#fff 0%,#f3f1ef 56%,#d9d5d0 100%);box-shadow:inset 0 5px 8px rgba(255,255,255,.9),0 -2px 7px rgba(255,255,255,.32)}
+    .nxt-real-fill.powder::before{content:'';position:absolute;left:9px;right:9px;top:-5px;height:11px;border-radius:50%;background:radial-gradient(ellipse at center,#fff 0%,#eeeae5 70%,#d9d5d0 100%);box-shadow:0 2px 4px rgba(0,0,0,.16)}
+    .nxt-real-fill.water{height:83px;background:linear-gradient(180deg,rgba(223,247,255,.08),rgba(174,224,247,.17) 65%,rgba(144,207,236,.22));border-top:1px solid rgba(235,251,255,.72);box-shadow:inset 10px 0 14px rgba(255,255,255,.08)}
+    .nxt-real-fill.oil{height:84px;background:linear-gradient(180deg,rgba(246,221,164,.23),rgba(211,177,103,.44) 55%,rgba(175,132,57,.5));border-top:1px solid rgba(255,237,190,.78);box-shadow:inset 10px 0 13px rgba(255,255,255,.07)}
+    .nxt-real-fill.oil.tren{background:linear-gradient(180deg,rgba(255,224,84,.36),rgba(223,169,34,.64) 58%,rgba(181,119,11,.73));border-top-color:rgba(255,238,139,.95)}
+    .nxt-real-liquid-meniscus{position:absolute;left:9px;right:9px;top:-4px;height:8px;border-radius:50%;background:rgba(255,255,255,.12);box-shadow:0 1px 2px rgba(0,0,0,.13)}
+    .nxt-wrap-label{position:absolute;left:9px;right:9px;top:44px;height:76px;border-radius:6px 7px 7px 6px;background:linear-gradient(90deg,#0a0d14 0%,#10131d 45%,#090b11 100%);border:1px solid rgba(124,58,237,.55);box-shadow:0 5px 10px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.02);overflow:hidden;z-index:4}
+    .nxt-wrap-label::after{content:'';position:absolute;left:0;right:0;bottom:0;height:9px;background:linear-gradient(90deg,#4c1d95,#6d28d9 55%,#7c3aed)}
+    .nxt-wrap-brand{position:absolute;left:7px;top:6px;font:800 5.6px/.95 'Space Grotesk',Inter,sans-serif;letter-spacing:.55px;color:#f3f0ff;text-transform:uppercase}.nxt-wrap-brand span{color:#8b5cf6}
+    .nxt-wrap-category{position:absolute;right:6px;top:6px;max-width:56px;padding:2px 4px;border-radius:3px;background:#412080;color:#eee9ff;font:800 3.9px/1 Inter,sans-serif;letter-spacing:.45px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .nxt-wrap-name{position:absolute;left:7px;right:7px;top:24px;font:900 11px/.92 'Space Grotesk',Inter,sans-serif;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.25px}
+    .nxt-wrap-strength{position:absolute;left:7px;right:7px;top:39px;font:900 9px/1 'Space Grotesk',Inter,sans-serif;color:#8b5cf6;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .nxt-wrap-vial{position:absolute;left:7px;top:54px;font:700 4.8px/1 Inter,sans-serif;color:#ddd8e9;text-transform:uppercase;letter-spacing:.35px}
+    .nxt-wrap-ruo{position:absolute;left:0;right:0;bottom:1px;text-align:center;color:#eee9ff;font:900 3.8px/1 'Space Grotesk',Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;z-index:2}
+    .nxt-photo-details{position:absolute;right:16px;bottom:13px;text-align:right;color:#858092;font:700 7px/1.2 Inter,sans-serif;letter-spacing:.9px;text-transform:uppercase;z-index:3}
+    .nxt-modal-vial .nxt-photo-stage{height:330px}.nxt-modal-vial .nxt-real-vial{width:158px;height:226px;border-radius:25px 25px 36px 36px}.nxt-modal-vial .nxt-real-neck{left:34px;right:34px;top:-24px;height:39px}.nxt-modal-vial .nxt-real-cap{left:23px;right:23px;top:-49px;height:31px}.nxt-modal-vial .nxt-real-stopper{left:38px;right:38px;top:-34px;height:10px}.nxt-modal-vial .nxt-wrap-label{left:13px;right:13px;top:62px;height:106px}.nxt-modal-vial .nxt-wrap-brand{font-size:7px;left:9px;top:8px}.nxt-modal-vial .nxt-wrap-category{font-size:5px;right:8px;top:8px;max-width:80px}.nxt-modal-vial .nxt-wrap-name{font-size:15px;left:9px;right:9px;top:33px}.nxt-modal-vial .nxt-wrap-strength{font-size:12px;left:9px;top:53px}.nxt-modal-vial .nxt-wrap-vial{font-size:6px;left:9px;top:74px}.nxt-modal-vial .nxt-wrap-ruo{font-size:5px;bottom:2px}.nxt-modal-vial .nxt-real-fill.powder{height:40px}.nxt-modal-vial .nxt-real-fill.water,.nxt-modal-vial .nxt-real-fill.oil{height:118px}
+    @media(max-width:620px){.nxt-photo-stage{height:205px}.nxt-real-vial{transform:none}.nxt-photo-details{font-size:6px}.nxt-modal-vial .nxt-photo-stage{height:285px}}
   `;
   document.head.appendChild(style);
 
-  function getProducts(){
-    try { if (typeof compounds !== 'undefined' && Array.isArray(compounds)) return compounds; } catch (_) {}
-    return Array.isArray(window.compounds) ? window.compounds : [];
-  }
-  function esc(value){ return String(value == null ? '' : value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
-  function cleanName(name){ return String(name||'').replace(/\s*[—-]\s*/g,' — ').trim(); }
-  function splitProductName(p){
-    const raw=cleanName(p && p.name);
-    const parts=raw.split(/\s+—\s+/);
-    return {name:(parts[0]||raw).trim(),strength:(parts.slice(1).join(' — ')||amountFromProduct(p)).trim()};
-  }
-  function amountFromProduct(p){
-    if(!p) return '';
-    if(p.id==='bac-water-10ml') return '10 mL';
-    if(p.category==='injectables') return '10 mL';
-    const amount=String(p.amount||'').split(' per ')[0].trim();
-    if(amount) return amount;
-    const m=String(p.name||'').match(/(?:—|-)\s*([^—-]+)$/);
-    return m?m[1].trim():'';
-  }
-  function labelProfile(p){
-    if(!p) return null;
-    if(p.id==='bac-water-10ml'||/bacteriostatic\s+water/i.test(p.name||'')) return {category:'Laboratory Supply',form:'Bacteriostatic Water',vial:'10 mL Vial',detail:'0.9% Benzyl Alcohol',caption:'10 mL Clear Water Vial'};
-    if(p.category==='injectables'){
-      const tren=/\btren/i.test(p.name||'')||/trenbolone/i.test(p.aka||'');
-      return {category:'Injectable',form:tren?'Yellow Oil Injectable':'Oil-Based Injectable',vial:'10 mL Vial',detail:tren?'Yellow / Golden Oil':'Oil Solution',caption:tren?'10 mL Yellow Oil Vial':'10 mL Oil Vial'};
-    }
-    if(p.category==='freeze-dried') return {category:'Peptide (Freeze-Dried)',form:'Lyophilized Peptide',vial:'3 mL Vial',detail:'White Lyophilized Powder',caption:'3 mL Lyophilized Vial'};
-    return null;
-  }
-  function productByName(name){
-    const list=getProducts(),target=cleanName(name).toLowerCase();
-    return list.find(p=>cleanName(p.name).toLowerCase()===target)||null;
-  }
-  function labelMarkup(p,modal=false){
-    const profile=labelProfile(p); if(!profile) return '';
-    const split=splitProductName(p);
-    const sku=String(p.id||'product').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toUpperCase();
-    return `<div class="nxt-vial-visual${modal?' nxt-modal-vial':''}" aria-label="${esc(p.name)} professional product label preview">
-      <div class="nxt-label-art">
-        <section class="nxt-label-left">
-          <div class="nxt-label-brand"><div class="nxt-label-logo">N</div><div class="nxt-label-wordmark">NXT <span>LVL</span><br>RESEARCH</div></div>
-          <div class="nxt-label-name">${esc(split.name)}</div>
-          <div class="nxt-label-strength">${esc(split.strength)}</div>
-        </section>
-        <section class="nxt-label-middle">
-          <div class="nxt-label-category">${esc(profile.category)}</div>
-          <div class="nxt-label-aka">${esc(p.aka||'Research Compound')}</div>
-          <div class="nxt-label-form">${esc(profile.form)}</div>
-          <div class="nxt-label-meta">
-            <div><span class="nxt-label-icon">▣</span><span>${esc(profile.vial)}</span></div>
-            <div><span class="nxt-label-icon">◆</span><span>${esc(profile.detail)}</span></div>
-          </div>
-        </section>
-        <section class="nxt-label-right">
-          <div><div class="nxt-label-batch">Lot</div><div class="nxt-label-batch-value">—</div></div>
-          <div><div class="nxt-label-batch">Exp</div><div class="nxt-label-batch-value">—</div></div>
-          <div class="nxt-label-sku">SKU ${esc(sku)}</div>
-        </section>
-        <div class="nxt-label-footer">For Research Use Only</div>
-      </div>
-      <div class="nxt-label-caption">${esc(profile.caption)} · Label Preview</div>
-    </div>`;
-  }
-  function enhanceCards(){
-    const list=getProducts(); if(!list.length) return;
-    document.querySelectorAll('.compound-card').forEach(card=>{
-      const title=card.querySelector('.card-name'); if(!title) return;
-      const p=productByName(title.textContent); if(!p||!labelProfile(p)) return;
-      const old=card.querySelector('.nxt-vial-visual'); if(old) old.remove();
-      const holder=document.createElement('div'); holder.innerHTML=labelMarkup(p,false);
-      const visual=holder.firstElementChild;
-      const cardTop=card.querySelector('.card-top');
-      if(cardTop) cardTop.insertAdjacentElement('afterend',visual); else card.insertBefore(visual,title);
-    });
-  }
-  function enhanceModal(){
-    const modal=document.querySelector('#modalContent'); if(!modal) return;
-    const title=modal.querySelector('.modal-header h2'); if(!title) return;
-    const p=productByName(title.textContent); if(!p||!labelProfile(p)) return;
-    const body=modal.querySelector('.modal-body'); if(!body) return;
-    const old=modal.querySelector('.nxt-modal-vial'); if(old) old.remove();
-    const holder=document.createElement('div'); holder.innerHTML=labelMarkup(p,true);
-    body.insertBefore(holder.firstElementChild,body.firstChild);
-  }
-  let scheduled=false;
-  function run(){ if(scheduled) return; scheduled=true; requestAnimationFrame(()=>{scheduled=false;enhanceCards();enhanceModal();}); }
-  const observer=new MutationObserver(run);
-  observer.observe(document.documentElement,{childList:true,subtree:true});
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(run,0),{once:true}); else setTimeout(run,0);
+  function getProducts(){try{if(typeof compounds!=='undefined'&&Array.isArray(compounds))return compounds;}catch(_){}return Array.isArray(window.compounds)?window.compounds:[];}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+  function cleanName(v){return String(v||'').replace(/\s*[—-]\s*/g,' — ').trim();}
+  function amountFromProduct(p){if(!p)return'';if(p.id==='bac-water-10ml')return'10 mL';if(p.category==='injectables')return String(p.amount||'').split(' per ')[0].trim()||'10 mL';const a=String(p.amount||'').split(' per ')[0].trim();if(a)return a;const m=String(p.name||'').match(/(?:—|-)\s*([^—-]+)$/);return m?m[1].trim():'';}
+  function splitProductName(p){const raw=cleanName(p&&p.name),parts=raw.split(/\s+—\s+/);return{name:(parts[0]||raw).trim(),strength:(parts.slice(1).join(' — ')||amountFromProduct(p)).trim()};}
+  function profile(p){if(!p)return null;if(p.id==='bac-water-10ml'||/bacteriostatic\s+water/i.test(p.name||''))return{category:'Laboratory Supply',vial:'10 mL Vial',fill:'water',detail:'Clear Bacteriostatic Water'};if(p.category==='injectables'){const tren=/\btren/i.test(p.name||'')||/trenbolone/i.test(p.aka||'');return{category:'Injectable',vial:'10 mL Vial',fill:tren?'oil tren':'oil',detail:tren?'Yellow / Golden Oil':'Oil Solution'};}if(p.category==='freeze-dried')return{category:'Peptide (Freeze-Dried)',vial:'3 mL Vial',fill:'powder',detail:'White Lyophilized Powder'};return null;}
+  function productByName(name){const target=cleanName(name).toLowerCase();return getProducts().find(p=>cleanName(p.name).toLowerCase()===target)||null;}
+  function photoMarkup(p,modal=false){const pf=profile(p);if(!pf)return'';const s=splitProductName(p);return `<div class="nxt-vial-visual${modal?' nxt-modal-vial':''}" aria-label="${esc(p.name)} realistic product vial preview"><div class="nxt-photo-stage"><div class="nxt-real-vial"><div class="nxt-real-cap"></div><div class="nxt-real-stopper"></div><div class="nxt-real-neck"></div><div class="nxt-real-fill ${pf.fill}">${pf.fill!=='powder'?'<div class="nxt-real-liquid-meniscus"></div>':''}</div><div class="nxt-wrap-label"><div class="nxt-wrap-brand">NXT <span>LVL</span> RESEARCH</div><div class="nxt-wrap-category">${esc(pf.category)}</div><div class="nxt-wrap-name">${esc(s.name)}</div><div class="nxt-wrap-strength">${esc(s.strength)}</div><div class="nxt-wrap-vial">${esc(pf.vial)}</div><div class="nxt-wrap-ruo">For Research Use Only</div></div></div><div class="nxt-photo-details">${esc(pf.vial)}<br>${esc(pf.detail)}<br>Lot: — &nbsp; Exp: —</div></div></div>`;}
+  function enhanceCards(){if(!getProducts().length)return;document.querySelectorAll('.compound-card').forEach(card=>{const title=card.querySelector('.card-name');if(!title)return;const p=productByName(title.textContent);if(!p||!profile(p))return;const old=card.querySelector('.nxt-vial-visual');if(old)old.remove();const h=document.createElement('div');h.innerHTML=photoMarkup(p,false);const top=card.querySelector('.card-top');if(top)top.insertAdjacentElement('afterend',h.firstElementChild);});}
+  function enhanceModal(){const modal=document.querySelector('#modalContent');if(!modal)return;const title=modal.querySelector('.modal-header h2');if(!title)return;const p=productByName(title.textContent);if(!p||!profile(p))return;const body=modal.querySelector('.modal-body');if(!body)return;const old=modal.querySelector('.nxt-modal-vial');if(old)old.remove();const h=document.createElement('div');h.innerHTML=photoMarkup(p,true);body.insertBefore(h.firstElementChild,body.firstChild);}
+  let scheduled=false;function run(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;enhanceCards();enhanceModal();});}const observer=new MutationObserver(run);observer.observe(document.documentElement,{childList:true,subtree:true});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(run,0),{once:true});else setTimeout(run,0);
 })();
