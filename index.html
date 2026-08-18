@@ -3048,13 +3048,35 @@
   if (cart.length === 0) return;
 
   const payCurrency = await new Promise((resolve) => {
-  const currency = prompt(
-    "Choose your cryptocurrency:\n\n1. BTC\n2. ETH\n3. LTC\n4. USDTTRC20\n\nType the symbol:"
-  );
+  const picker = document.createElement("select");
 
-  resolve(currency);
+  picker.innerHTML = `
+    <option value="">Select cryptocurrency</option>
+    <option value="btc">Bitcoin (BTC)</option>
+    <option value="eth">Ethereum (ETH)</option>
+    <option value="ltc">Litecoin (LTC)</option>
+    <option value="usdttrc20">USDT (TRC20)</option>
+  `;
+
+  picker.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+  `;
+
+  document.body.appendChild(picker);
+
+  picker.addEventListener("change", () => {
+    const currency = picker.value;
+    picker.remove();
+    resolve(currency);
+  });
 });
-
   if (!payCurrency) return;
 
   const orderId = "NXT-" + Date.now();
