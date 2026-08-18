@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { customer, items, amount } = req.body || {};
+    const { customer, items, amount, fulfillment, shipping } = req.body || {};
     if (!customer || !customer.email || !customer.name) {
       return res.status(400).json({ error: "Customer name and email are required" });
     }
@@ -45,18 +45,24 @@ module.exports = async (req, res) => {
       return `<tr><td style="padding:8px;border-bottom:1px solid #ddd;">${escapeHtml(item.name)}${item.label ? `<br><small>${escapeHtml(item.label)}</small>` : ""}</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:center;">${qty}</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:right;">$${lineTotal.toFixed(2)}</td></tr>`;
     }).join("");
 
-    const shipping = `${escapeHtml(customer.address)}${customer.unit ? `, ${escapeHtml(customer.unit)}` : ""}<br>${escapeHtml(customer.city)}, ${escapeHtml(customer.state)} ${escapeHtml(customer.zip)}`;
+    const mode = String(fulfillment || customer.fulfillment || "shipping").toLowerCase() === "pickup" ? "pickup" : "shipping";
+    const delivery = mode === "pickup"
+      ? "LOCAL PICKUP"
+      : `${escapeHtml(customer.address)}${customer.unit ? `, ${escapeHtml(customer.unit)}` : ""}<br>${escapeHtml(customer.city)}, ${escapeHtml(customer.state)} ${escapeHtml(customer.zip)}`;
     const total = Number(amount || 0).toFixed(2);
+    const shippingAmount = Number(shipping || 0).toFixed(2);
 
     const html = `
       <div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#111;">
         <h2>Checkout started — payment not yet completed</h2>
         <p>A customer submitted their checkout information but payment has not yet been confirmed.</p>
-        <p><strong>Cart total:</strong> $${total}</p>
+        <p><strong>Fulfillment:</strong> ${mode === "pickup" ? "Local Pickup" : "Shipping"}<br>
+        <strong>Shipping fee:</strong> $${shippingAmount}<br>
+        <strong>Cart total:</strong> $${total}</p>
         <h3>Customer</h3>
         <p>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}<br>${escapeHtml(customer.phone)}</p>
-        <h3>Shipping address</h3>
-        <p>${shipping}</p>
+        <h3>${mode === "pickup" ? "Pickup" : "Shipping address"}</h3>
+        <p>${delivery}</p>
         <h3>Products in cart</h3>
         <table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:8px;border-bottom:2px solid #111;">Product</th><th style="padding:8px;border-bottom:2px solid #111;">Qty</th><th style="text-align:right;padding:8px;border-bottom:2px solid #111;">Total</th></tr></thead><tbody>${itemRows}</tbody></table>
         <p style="margin-top:18px;color:#666;font-size:12px;">This is a checkout lead notification. A separate paid-order email will be sent if NOWPayments later confirms the payment.</p>
@@ -64,7 +70,7 @@ module.exports = async (req, res) => {
 
     await sendEmail({
       to: "payment@nxtlvl-research.com",
-      subject: `CHECKOUT LEAD — ${customer.name} — $${total}`,
+      subject: `CHECKOUT LEAD — ${customer.name} — $${total} — ${mode === "pickup" ? "PICKUP" : "SHIP"}`,
       html,
     });
 
