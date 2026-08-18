@@ -3075,16 +3075,78 @@ if (!payCurrency) return;
       return;
     }
 
-    alert(
-      "Send exactly " +
-      data.pay_amount +
-      " " +
-      data.pay_currency.toUpperCase() +
-      "\n\nTo:\n" +
-      data.pay_address +
-      "\n\nPayment ID: " +
-      data.payment_id
-    );
+    const paymentBox = document.createElement("div");
+
+paymentBox.innerHTML = `
+  <div style="
+    background:#111118;
+    color:white;
+    width:420px;
+    max-width:90vw;
+    padding:28px;
+    border-radius:18px;
+    text-align:center;
+  ">
+    <h2 style="margin-bottom:20px;">Crypto Payment</h2>
+
+    <p>Send exactly</p>
+    <h2>${data.pay_amount} ${data.pay_currency.toUpperCase()}</h2>
+
+    <p style="margin-top:20px;">Payment Address</p>
+
+    <div style="
+      background:#1d1d27;
+      padding:12px;
+      border-radius:8px;
+      word-break:break-all;
+      margin:10px 0;
+    ">${data.pay_address}</div>
+
+    <button id="copyCryptoAddress" style="
+      padding:12px 20px;
+      background:#7c3aed;
+      color:white;
+      border:0;
+      border-radius:8px;
+      cursor:pointer;
+    ">COPY ADDRESS</button>
+
+    <p style="margin-top:20px;font-size:12px;">
+      Payment ID: ${data.payment_id}
+    </p>
+
+    <button id="closePaymentBox" style="
+      margin-top:20px;
+      padding:12px 20px;
+      background:#333;
+      color:white;
+      border:0;
+      border-radius:8px;
+      cursor:pointer;
+    ">DONE</button>
+  </div>
+`;
+
+paymentBox.style.cssText = `
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999999;
+`;
+
+document.body.appendChild(paymentBox);
+
+paymentBox.querySelector("#copyCryptoAddress").onclick = async () => {
+  await navigator.clipboard.writeText(data.pay_address);
+  paymentBox.querySelector("#copyCryptoAddress").textContent = "COPIED ✓";
+};
+
+paymentBox.querySelector("#closePaymentBox").onclick = () => {
+  paymentBox.remove();
+};
   } catch (error) {
     console.error(error);
     alert("Payment setup failed. Please try again.");
