@@ -38,7 +38,7 @@ jobs:
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
               ('glutathione-product.js', '20260818-1'),
-              ('product-vial-visuals.js', '20260818-3'),
+              ('product-vial-visuals.js', '20260818-4'),
               ('storefront-layout-upgrade.js', '20260818-1'),
           ]
 
@@ -63,7 +63,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load storefront layout upgrade"
+          git commit -m "Load photorealistic vial artwork"
           git push
 
-# Trigger storefront layout and vial-rendering deployment.
+# Trigger photorealistic vial artwork deployment.
