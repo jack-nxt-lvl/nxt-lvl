@@ -3,6 +3,7 @@
   window.__nxtAiCartBridgeLoaded = true;
 
   const handled = new WeakSet();
+  const handledUsers = new WeakSet();
 
   function norm(s) {
     return String(s || '').toLowerCase().replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim();
@@ -63,17 +64,55 @@
       }
     }
 
-    if (typeof window.quickAddToCart === 'function') {
-      window.quickAddToCart(productId);
-    } else {
-      best.click();
-    }
+    if (typeof window.quickAddToCart === 'function') window.quickAddToCart(productId);
+    else best.click();
 
     try {
       const cartPanel = document.getElementById('cartPanel');
       if (cartPanel && !cartPanel.classList.contains('open') && typeof window.toggleCart === 'function') window.toggleCart(true);
     } catch (_) {}
     return true;
+  }
+
+  function launchCheckout() {
+    try {
+      if (typeof window.toggleAiChat === 'function') window.toggleAiChat(false);
+    } catch (_) {}
+    setTimeout(() => {
+      try {
+        if (typeof window.proceedToCheckout === 'function') {
+          window.proceedToCheckout();
+          return;
+        }
+        const btn = document.getElementById('cartCheckoutBtn');
+        if (btn) btn.click();
+      } catch (_) {}
+    }, 80);
+  }
+
+  function isCheckoutYes(text) {
+    const t = norm(text);
+    return /^(yes|yeah|yep|yup|sure|ok|okay|checkout|check out|proceed|go ahead|do it|lets do it|let's do it)$/i.test(t);
+  }
+
+  function previousAssistantFor(userEl) {
+    let n = userEl.previousElementSibling;
+    while (n) {
+      if (n.classList && n.classList.contains('ai-chat-message') && n.classList.contains('assistant')) return n;
+      n = n.previousElementSibling;
+    }
+    return null;
+  }
+
+  function processUserMessage(el) {
+    if (!el || handledUsers.has(el) || !el.classList?.contains('user')) return;
+    handledUsers.add(el);
+    if (!isCheckoutYes(el.textContent || '')) return;
+    const prev = previousAssistantFor(el);
+    const prevText = norm(prev?.textContent || '');
+    if (!/checkout|check out|proceed to checkout|view checkout|pull up checkout/.test(prevText)) return;
+    el.dataset.checkoutAccepted = '1';
+    launchCheckout();
   }
 
   function processMessage(el) {
@@ -90,6 +129,7 @@
 
   function scan() {
     document.querySelectorAll('#aiChatMessages .ai-chat-message.assistant').forEach(processMessage);
+    document.querySelectorAll('#aiChatMessages .ai-chat-message.user').forEach(processUserMessage);
   }
 
   const observer = new MutationObserver(scan);
