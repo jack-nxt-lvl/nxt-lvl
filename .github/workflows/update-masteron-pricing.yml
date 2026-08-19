@@ -1,0 +1,53 @@
+name: Update Masteron 200 pricing
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-masteron-pricing.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-masteron-pricing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update only Masteron 200 pricing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('products-data-original.js')
+          text = path.read_text(encoding='utf-8')
+
+          anchor = "id: 'masteron'"
+          if text.count(anchor) != 1:
+              raise SystemExit('Expected exactly one Masteron product; refusing to change anything')
+
+          old = "pricing: [ { label: '1 Vial', price: 100 }, { label: '10 Vials', price: 650 } ]"
+          new = "pricing: [ { label: '1 Vial', price: 140 }, { label: '2 Vials', price: 270 }, { label: '3 Vials', price: 390 }, { label: '4 Vials', price: 500 }, { label: '5 Vials', price: 600 } ]"
+
+          start = text.index(anchor)
+          end = text.find("\n  },", start)
+          block = text[start:end]
+          if old not in block:
+              raise SystemExit('Expected Masteron pricing line not found; refusing to change anything')
+
+          block = block.replace(old, new, 1)
+          text = text[:start] + block + text[end:]
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Verify and clean up workflow
+        run: |
+          grep -A40 "id: 'masteron'" products-data-original.js | grep -q "{ label: '5 Vials', price: 600 }"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/update-masteron-pricing.yml
+          git add products-data-original.js
+          git commit -m "Set Masteron 200 1-5 vial pricing"
+          git push
