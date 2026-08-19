@@ -729,7 +729,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'DHT-derived — hair loss risk. Run with testosterone base. Not for beginners.',
     suggestedCompanions: ['test-e', 'winstrol', 'anavar-50'],
-    pricing: [ { label: '1 Vial', price: 100 }, { label: '10 Vials', price: 650 } ]
+    pricing: [ { label: '1 Vial', price: 140 }, { label: '2 Vials', price: 270 }, { label: '3 Vials', price: 390 }, { label: '4 Vials', price: 500 }, { label: '5 Vials', price: 600 } ]
   },
   {
     id: 'npp',
