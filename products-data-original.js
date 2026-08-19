@@ -677,7 +677,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'Monitor hematocrit and RBC levels. Long detection time. PCT needed.',
     suggestedCompanions: ['test-e', 'anastrozole', 'hcg-5000'],
-    pricing: [ { label: '1 Vial', price: 90 }, { label: '10 Vials', price: 525 } ]
+    pricing: [ { label: '1 Vial', price: 90 }, { label: '2 Vials', price: 175 }, { label: '3 Vials', price: 255 }, { label: '4 Vials', price: 330 }, { label: '5 Vials', price: 395 } ]
   },
   {
     id: 'deca',
@@ -703,7 +703,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'MUST run with testosterone. Very long detection time. Can cause libido issues. PCT complex.',
     suggestedCompanions: ['test-e', 'anastrozole', 'hcg-5000'],
-    pricing: [ { label: '1 Vial', price: 90 }, { label: '10 Vials', price: 550 } ]
+    pricing: [ { label: '1 Vial', price: 90 }, { label: '2 Vials', price: 175 }, { label: '3 Vials', price: 255 }, { label: '4 Vials', price: 330 }, { label: '5 Vials', price: 395 } ]
   },
   {
     id: 'masteron',
@@ -729,7 +729,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'DHT-derived — hair loss risk. Run with testosterone base. Not for beginners.',
     suggestedCompanions: ['test-e', 'winstrol', 'anavar-50'],
-    pricing: [ { label: '1 Vial', price: 140 }, { label: '2 Vials', price: 270 }, { label: '3 Vials', price: 390 }, { label: '4 Vials', price: 500 }, { label: '5 Vials', price: 600 } ]
+    pricing: [ { label: '1 Vial', price: 140 }, { label: '2 Vials', price: 270 }, { label: '3 Vials', price: 395 }, { label: '4 Vials', price: 510 }, { label: '5 Vials', price: 620 } ]
   },
   {
     id: 'npp',
@@ -755,7 +755,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'Must run with testosterone. More frequent injections than Deca. Monitor prolactin.',
     suggestedCompanions: ['test-e', 'anastrozole', 'hcg-5000'],
-    pricing: [ { label: '1 Vial', price: 90 }, { label: '10 Vials', price: 550 } ]
+    pricing: [ { label: '1 Vial', price: 90 }, { label: '2 Vials', price: 175 }, { label: '3 Vials', price: 255 }, { label: '4 Vials', price: 330 }, { label: '5 Vials', price: 395 } ]
   },
   {
     id: 'tren-ace',
@@ -781,7 +781,7 @@ const compounds = [
     storage: 'Room temperature.', administration: 'IM',
     warnings: 'ADVANCED USERS ONLY. Severe side effects possible. Run with testosterone base. Monitor cardiovascular health. Short cycles only. Not for long-term use.',
     suggestedCompanions: ['test-e', 'anastrozole', 'masteron'],
-    pricing: [ { label: '1 Vial', price: 105 }, { label: '10 Vials', price: 600 } ]
+    pricing: [ { label: '1 Vial', price: 105 }, { label: '2 Vials', price: 205 }, { label: '3 Vials', price: 295 }, { label: '4 Vials', price: 385 }, { label: '5 Vials', price: 465 } ]
   }
 ];
 
