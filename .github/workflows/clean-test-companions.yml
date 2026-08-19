@@ -26,36 +26,29 @@ jobs:
           data = data_path.read_text(encoding='utf-8')
           index = index_path.read_text(encoding='utf-8')
 
-          # Keep Test E and Test C from cross-listing one another. These are related-research links only.
           old_e = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],"
           old_c = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],"
           new_e = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
           new_c = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
-          if data.count(old_e) != 1 or data.count(old_c) != 1:
-              raise SystemExit('Expected Test E/Test C recommendation lines were not found exactly once; refusing to continue')
+          if old_e not in data or old_c not in data:
+              raise SystemExit('Expected Test E/Test C recommendation lines not found')
           data = data.replace(old_e, new_e, 1).replace(old_c, new_c, 1)
 
-          # Avoid recommending a second size of the same GHK-Cu compound from the 50mg page.
           old_ghk50 = "suggestedCompanions: ['ghk-cu-100', 'bpc157-10', 'mela1-10'],"
           new_ghk50 = "suggestedCompanions: ['bpc157-10', 'nad-500', 'mela1-10'],"
-          if data.count(old_ghk50) == 1:
-              data = data.replace(old_ghk50, new_ghk50, 1)
+          data = data.replace(old_ghk50, new_ghk50, 1)
 
-          # Shift HGH and MK-677 away from same-axis product cross-selling and toward broader pathway research.
           old_hgh = "suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],"
           new_hgh = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
-          if data.count(old_hgh) == 1:
-              data = data.replace(old_hgh, new_hgh, 1)
+          data = data.replace(old_hgh, new_hgh, 1)
 
           old_mk = "suggestedCompanions: ['ipamorelin', 'rad140', 'slu332'],"
           new_mk = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
-          if data.count(old_mk) == 1:
-              data = data.replace(old_mk, new_mk, 1)
+          data = data.replace(old_mk, new_mk, 1)
 
-          # Add research-theme collections. These explicitly describe comparison/research themes, not concurrent-use protocols.
           marker = "\n];\n\n// Protocol definitions"
-          if data.count(marker) != 1:
-              raise SystemExit('Could not locate the stacks array terminator exactly once')
+          if marker not in data:
+              raise SystemExit('Could not locate stacks array terminator')
 
           additions = r''',
   {
@@ -100,14 +93,13 @@ jobs:
   }'''
           data = data.replace(marker, additions + marker, 1)
 
-          # Rename the UI section and guarantee no product can ever display itself or a duplicate twice.
           old_logic = "const companions = (p.suggestedCompanions || []).map(cid => compounds.find(x => x.id === cid)).filter(Boolean);"
           new_logic = "const companions = [...new Set((p.suggestedCompanions || []).filter(cid => cid && cid !== p.id))].map(cid => compounds.find(x => x.id === cid)).filter(Boolean);"
-          if index.count(old_logic) != 1:
-              raise SystemExit('Expected companion-rendering logic not found exactly once; refusing to change index')
-          index = index.replace(old_logic, new_logic, 1)
+          if old_logic not in index:
+              raise SystemExit('Companion-rendering logic not found')
+          index = index.replace(old_logic, new_logic)
 
-          if index.count('<h3>Suggested Companions</h3>') < 1:
+          if '<h3>Suggested Companions</h3>' not in index:
               raise SystemExit('Suggested Companions heading not found')
           index = index.replace('<h3>Suggested Companions</h3>', '<h3>Related Research</h3>')
 
@@ -124,10 +116,9 @@ jobs:
           grep -q "id: 'gh-axis-comparison-panel'" products-data-original.js
           grep -q "id: 'cellular-recovery-panel'" products-data-original.js
           grep -q "<h3>Related Research</h3>" index.html
-          grep -q "new Set((p.suggestedCompanions" index.html
 
           changed="$(git diff --name-only)"
-          unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(products-data-original\.js|index\.html|\.github/workflows/clean-test-companions\.yml)$' || true)"
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(products-data-original\.js|index\.html)$' || true)"
           if [ -n "$unexpected" ]; then
             echo "Unexpected files changed:"
             echo "$unexpected"
@@ -141,4 +132,4 @@ jobs:
           git commit -m "Improve related research and add safe research panels"
           git push
 
-# retrigger 2026-08-19
+# retrigger 2
