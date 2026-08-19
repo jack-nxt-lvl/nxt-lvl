@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Replace only HGH catalog entry
-        shell: python
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           path = Path('products-data-original.js')
@@ -32,67 +32,69 @@ jobs:
           end = end_start + len("\n  },")
 
           replacement = r'''  {
-    id: 'hgh-10',
-    name: 'HGH — 150 IU Kit',
-    aka: 'Human Growth Hormone • 10 Vials × 15 IU',
-    category: 'freeze-dried',
-    protocols: ['energy-vitality', 'fat-loss', 'recovery-longevity'],
-    badge: 'SAVE UP TO 25%',
-    tags: ['Growth Hormone', '150 IU Kit', '10 × 15 IU Vials', 'GH / IGF-1 Research', 'Body Composition Research', 'Recovery Research'],
-    shortDesc: '150 IU HGH research kit with 10 freeze-dried vials at 15 IU each. Multi-kit savings increase with quantity — get 25% off when you get 5 kits.',
-    description: 'HGH (somatropin) is recombinant human growth hormone used in laboratory research involving GH/IGF-1 signaling, protein turnover, lipid metabolism, body-composition pathways, connective-tissue signaling, recovery biology, bone metabolism, and glucose/metabolic markers. Each kit contains 150 IU total across 10 freeze-dried vials with 15 IU per vial. Get 5% off as you move into multi-kit ordering, with the strongest tier at 5 kits for 25% off.',
-    benefits: [
-      'GH and IGF-1 signaling research',
-      'Protein synthesis and lean-tissue pathway research',
-      'Lipid metabolism and body-composition research',
-      'Recovery and tissue-repair pathway research',
-      'Connective-tissue and collagen signaling research',
-      'Bone metabolism research',
-      'Sleep and recovery physiology research',
-      'Glucose and metabolic-marker research'
-    ],
-    sideEffects: ['Research use only — effects and safety depend on study design', 'GH signaling can affect glucose regulation and fluid balance', 'Not intended for human or veterinary use'],
-    dosing: {
-      beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
-      intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
-      advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
-    },
-    amount: '150 IU total per kit — 10 vials × 15 IU each',
-    form: 'Freeze-Dried / Lyophilized Powder',
-    appearance: 'White / Off-White Powder',
-    purity: '>99% (HPLC Verified)',
-    molecularFormula: 'Somatropin (191-amino-acid recombinant human growth hormone)',
-    halfLife: 'Research context and route dependent',
-    reconstitution: 'Follow the supplied laboratory handling and reconstitution instructions for the specific research protocol.',
-    syringe: 'Laboratory research handling only',
-    injectionSite: 'Not for human or veterinary use',
-    storage: 'Store according to supplied product handling instructions. Refrigerate appropriately after laboratory reconstitution.',
-    administration: 'Laboratory research use only',
-    warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
-    suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],
-    pricing: [
-      { label: '1 Kit — 150 IU', price: 450 },
-      { label: '2 Kits — 5% OFF', price: 855 },
-      { label: '3 Kits — 10% OFF', price: 1215 },
-      { label: '4 Kits — 15% OFF', price: 1530 },
-      { label: '5 Kits — 25% OFF • BEST VALUE', price: 1687.5 }
-    ]
-  }'''
+            id: 'hgh-10',
+            name: 'HGH — 150 IU Kit',
+            aka: 'Human Growth Hormone • 10 Vials × 15 IU',
+            category: 'freeze-dried',
+            protocols: ['energy-vitality', 'fat-loss', 'recovery-longevity'],
+            badge: 'SAVE UP TO 25%',
+            tags: ['Growth Hormone', '150 IU Kit', '10 × 15 IU Vials', 'GH / IGF-1 Research', 'Body Composition Research', 'Recovery Research'],
+            shortDesc: '150 IU HGH research kit with 10 freeze-dried vials at 15 IU each. Multi-kit savings increase with quantity — get 25% off when you get 5 kits.',
+            description: 'HGH (somatropin) is recombinant human growth hormone used in laboratory research involving GH/IGF-1 signaling, protein turnover, lipid metabolism, body-composition pathways, connective-tissue signaling, recovery biology, bone metabolism, and glucose/metabolic markers. Each kit contains 150 IU total across 10 freeze-dried vials with 15 IU per vial. Multi-kit savings increase with quantity, with 5 kits priced at 25% off.',
+            benefits: [
+              'GH and IGF-1 signaling research',
+              'Protein synthesis and lean-tissue pathway research',
+              'Lipid metabolism and body-composition research',
+              'Recovery and tissue-repair pathway research',
+              'Connective-tissue and collagen signaling research',
+              'Bone metabolism research',
+              'Sleep and recovery physiology research',
+              'Glucose and metabolic-marker research'
+            ],
+            sideEffects: ['Research use only — effects and safety depend on study design', 'GH signaling can affect glucose regulation and fluid balance', 'Not intended for human or veterinary use'],
+            dosing: {
+              beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
+              intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
+              advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
+            },
+            amount: '150 IU total per kit — 10 vials × 15 IU each',
+            form: 'Freeze-Dried / Lyophilized Powder',
+            appearance: 'White / Off-White Powder',
+            purity: '>99% (HPLC Verified)',
+            molecularFormula: 'Somatropin (191-amino-acid recombinant human growth hormone)',
+            halfLife: 'Research context and route dependent',
+            reconstitution: 'Follow the supplied laboratory handling and reconstitution instructions for the specific research protocol.',
+            syringe: 'Laboratory research handling only',
+            injectionSite: 'Not for human or veterinary use',
+            storage: 'Store according to supplied product handling instructions. Refrigerate appropriately after laboratory reconstitution.',
+            administration: 'Laboratory research use only',
+            warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
+            suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],
+            pricing: [
+              { label: '1 Kit — 150 IU', price: 450 },
+              { label: '2 Kits — 5% OFF', price: 855 },
+              { label: '3 Kits — 10% OFF', price: 1215 },
+              { label: '4 Kits — 15% OFF', price: 1530 },
+              { label: '5 Kits — 25% OFF • BEST VALUE', price: 1687.5 }
+            ]
+          }'''
 
+          # Normalize indentation to match surrounding product records.
+          replacement = '\n'.join(line[10:] if line.startswith('          ') else line for line in replacement.splitlines())
           updated = text[:start] + replacement + text[end:]
 
-          # Guardrails: only one HGH record, old name removed, expected new pricing present.
           assert updated.count("id: 'hgh-10'") == 1
           assert "name: 'HGH — 10 IU'" not in updated
           assert "name: 'HGH — 150 IU Kit'" in updated
           assert "5 Kits — 25% OFF" in updated
 
           path.write_text(updated, encoding='utf-8')
+          PY
 
       - name: Commit HGH-only catalog update
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "4189824+github-actions[bot]@users.noreply.github.com"
           git add products-data-original.js
           if git diff --cached --quiet; then
             echo "No HGH change needed"
