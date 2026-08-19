@@ -1,0 +1,91 @@
+name: Normalize injectable pricing
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/normalize-injectable-pricing.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set all injectable products to 1-5 vial pricing
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('products-data-original.js')
+          text = path.read_text()
+
+          marker = '// INJECTABLES'
+          marker_pos = text.index(marker)
+          section_start = text.rfind('// ═', 0, marker_pos)
+          section_end = text.index('\n];', marker_pos)
+
+          before = text[:section_start]
+          section = text[section_start:section_end]
+          after = text[section_end:]
+
+          # Same discount progression as Test E / Test C:
+          # 1 vial = full price
+          # 2 vials = 2.94117647% off
+          # 3 vials = 5.88235294% off
+          # 4 vials = 8.82352941% off
+          # 5 vials = 11.76470588% off
+          discounts = [0, 0.0294117647, 0.0588235294, 0.0882352941, 0.1176470588]
+
+          def round_to_5(value):
+              return int(5 * round(value / 5))
+
+          pricing_re = re.compile(
+              r"pricing:\s*\[\s*\{\s*label:\s*'1 Vial',\s*price:\s*([0-9.]+)\s*\}.*?\]",
+              re.S,
+          )
+
+          def replacement(match):
+              base = float(match.group(1))
+              totals = []
+              for qty, discount in enumerate(discounts, start=1):
+                  total = round_to_5(base * qty * (1 - discount))
+                  totals.append(total)
+
+              # Preserve the exact known Test E/Test C schedule at $85 base.
+              if abs(base - 85) < 1e-9:
+                  totals = [85, 165, 240, 310, 375]
+
+              parts = []
+              for qty, total in enumerate(totals, start=1):
+                  label = '1 Vial' if qty == 1 else f'{qty} Vials'
+                  parts.append(f"{{ label: '{label}', price: {total} }}")
+              return 'pricing: [ ' + ', '.join(parts) + ' ]'
+
+          updated_section, count = pricing_re.subn(replacement, section)
+          if count == 0:
+              raise SystemExit('No injectable pricing blocks found')
+
+          updated = before + updated_section + after
+          path.write_text(updated)
+          print(f'Updated {count} injectable products')
+          PY
+
+      - name: Commit pricing update
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add products-data-original.js
+          git commit -m "Standardize injectable pricing to 1-5 vials"
+          git push origin main
