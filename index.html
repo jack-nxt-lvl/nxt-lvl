@@ -2611,6 +2611,7 @@
       <div class="card-name">${p.name}</div>
       <div class="card-aka">${p.aka}</div>
       <div class="card-desc">${p.shortDesc}</div>
+      ${['equipoise','deca','npp','tren-ace'].includes(p.id) ? `<div style="margin-top:10px;padding:8px 10px;border:1px solid rgba(167,139,250,.16);border-radius:7px;color:#c4b5fd;font-size:.72rem;font-weight:700;letter-spacing:.3px;">Available quantities: 1–5 vials</div>` : ''}
       <div class="card-tags">${p.tags.slice(0, 4).map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
       <div class="card-footer">
         <div class="card-price">$${startPrice.toFixed(2)} <span>from</span></div>
@@ -2669,6 +2670,7 @@
       <div class="modal-section">
         <h3>Overview</h3>
         <p>${p.description}</p>
+        ${['equipoise','deca','npp','tren-ace'].includes(p.id) ? `<p style="margin-top:10px;color:#c4b5fd;font-weight:700;">Available quantities: 1–5 vials</p>` : ''}
       </div>
       <div class="modal-section">
         <h3>Key Benefits</h3>
