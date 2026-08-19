@@ -708,7 +708,7 @@ const compounds = [
   {
     id: 'masteron',
     name: 'Masteron — 200mg',
-    aka: 'Drostanolone Propionate',
+    aka: 'Drostanolone Enanthate',
     category: 'injectables',
     protocols: ['energy-vitality'],
     badge: '',
