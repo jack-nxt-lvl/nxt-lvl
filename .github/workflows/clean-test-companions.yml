@@ -1,4 +1,4 @@
-name: Clean Test E and Test C companion recommendations
+name: Improve related research recommendations
 
 on:
   push:
@@ -11,39 +11,132 @@ permissions:
   contents: write
 
 jobs:
-  clean-companions:
+  improve-related-research:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Remove only Test E/Test C cross recommendations
+      - name: Update related research only
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          path = Path('products-data-original.js')
-          text = path.read_text(encoding='utf-8')
+          data_path = Path('products-data-original.js')
+          index_path = Path('index.html')
+          data = data_path.read_text(encoding='utf-8')
+          index = index_path.read_text(encoding='utf-8')
 
+          # Keep Test E and Test C from cross-listing one another. These are related-research links only.
           old_e = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],"
           old_c = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],"
-          new_e = "suggestedCompanions: [],"
-          new_c = "suggestedCompanions: [],"
+          new_e = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
+          new_c = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
+          if data.count(old_e) != 1 or data.count(old_c) != 1:
+              raise SystemExit('Expected Test E/Test C recommendation lines were not found exactly once; refusing to continue')
+          data = data.replace(old_e, new_e, 1).replace(old_c, new_c, 1)
 
-          if text.count(old_e) != 1 or text.count(old_c) != 1:
-              raise SystemExit('Expected Test E/Test C companion lines not found exactly once; refusing to change anything')
+          # Avoid recommending a second size of the same GHK-Cu compound from the 50mg page.
+          old_ghk50 = "suggestedCompanions: ['ghk-cu-100', 'bpc157-10', 'mela1-10'],"
+          new_ghk50 = "suggestedCompanions: ['bpc157-10', 'nad-500', 'mela1-10'],"
+          if data.count(old_ghk50) == 1:
+              data = data.replace(old_ghk50, new_ghk50, 1)
 
-          text = text.replace(old_e, new_e, 1)
-          text = text.replace(old_c, new_c, 1)
-          path.write_text(text, encoding='utf-8')
+          # Shift HGH and MK-677 away from same-axis product cross-selling and toward broader pathway research.
+          old_hgh = "suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],"
+          new_hgh = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
+          if data.count(old_hgh) == 1:
+              data = data.replace(old_hgh, new_hgh, 1)
+
+          old_mk = "suggestedCompanions: ['ipamorelin', 'rad140', 'slu332'],"
+          new_mk = "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
+          if data.count(old_mk) == 1:
+              data = data.replace(old_mk, new_mk, 1)
+
+          # Add research-theme collections. These explicitly describe comparison/research themes, not concurrent-use protocols.
+          marker = "\n];\n\n// Protocol definitions"
+          if data.count(marker) != 1:
+              raise SystemExit('Could not locate the stacks array terminator exactly once')
+
+          additions = r''',
+  {
+    id: 'mitochondrial-metabolic-panel', name: 'MITOCHONDRIAL & METABOLIC PANEL', goal: 'Compare cellular-energy, mitochondrial, and metabolic signaling pathways', icon: '⚡',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial signaling / AMPK research', id: 'mots-c' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox and energy-cofactor research', id: 'nad-500' },
+      { name: 'AOD-9604 10mg', role: 'Lipid-metabolism pathway research', id: 'aod-9604' }
+    ],
+    protocol: 'Research-theme collection for comparing distinct metabolic pathways in controlled study arms; not a concurrent-use protocol.',
+    pairsWith: 'Metabolic biomarkers, body-composition endpoints, and controlled nutrition variables', duration: 'Study-design dependent'
+  },
+  {
+    id: 'repair-remodeling-panel', name: 'TISSUE REPAIR & REMODELING PANEL', goal: 'Compare tissue-repair, collagen-remodeling, and cellular-recovery pathways', icon: '🧬',
+    compounds: [
+      { name: 'BPC-157 10mg', role: 'Tissue-repair pathway research', id: 'bpc157-10' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and extracellular-matrix research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular-energy and recovery research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for studying complementary repair pathways in separate or appropriately controlled study arms; not human-use guidance.',
+    pairsWith: 'Mechanical-loading models, collagen markers, wound-repair endpoints, and recovery measures', duration: 'Study-design dependent'
+  },
+  {
+    id: 'gh-axis-comparison-panel', name: 'GH-AXIS COMPARISON PANEL', goal: 'Compare different approaches to growth-hormone-axis signaling research', icon: '📈',
+    compounds: [
+      { name: 'Ipamorelin 10mg', role: 'Ghrelin-receptor / GH secretagogue research', id: 'ipamorelin' },
+      { name: 'Sermorelin 10mg', role: 'GHRH-pathway research', id: 'sermorelin' },
+      { name: 'Tesamorelin 10mg', role: 'GHRH-analog research', id: 'tesamorelin-10' }
+    ],
+    protocol: 'Comparison panel for separate research arms examining different GH-axis mechanisms; not a recommendation to combine these compounds.',
+    pairsWith: 'IGF-1 measurements, GH-response curves, sleep/recovery endpoints, and metabolic markers', duration: 'Study-design dependent'
+  },
+  {
+    id: 'cellular-recovery-panel', name: 'CELLULAR RECOVERY PANEL', goal: 'Compare mitochondrial, connective-tissue, and cellular-recovery pathways', icon: '🔬',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial stress-response research', id: 'mots-c' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and tissue-remodeling research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox / energy research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for controlled comparison of recovery-related pathways; not a concurrent-use or dosing protocol.',
+    pairsWith: 'Recovery biomarkers, oxidative-stress markers, collagen endpoints, and performance measures', duration: 'Study-design dependent'
+  }'''
+          data = data.replace(marker, additions + marker, 1)
+
+          # Rename the UI section and guarantee no product can ever display itself or a duplicate twice.
+          old_logic = "const companions = (p.suggestedCompanions || []).map(cid => compounds.find(x => x.id === cid)).filter(Boolean);"
+          new_logic = "const companions = [...new Set((p.suggestedCompanions || []).filter(cid => cid && cid !== p.id))].map(cid => compounds.find(x => x.id === cid)).filter(Boolean);"
+          if index.count(old_logic) != 1:
+              raise SystemExit('Expected companion-rendering logic not found exactly once; refusing to change index')
+          index = index.replace(old_logic, new_logic, 1)
+
+          if index.count('<h3>Suggested Companions</h3>') < 1:
+              raise SystemExit('Suggested Companions heading not found')
+          index = index.replace('<h3>Suggested Companions</h3>', '<h3>Related Research</h3>')
+
+          data_path.write_text(data, encoding='utf-8')
+          index_path.write_text(index, encoding='utf-8')
           PY
 
-      - name: Verify and clean up workflow
+      - name: Verify scope and commit
         run: |
-          grep -A40 "id: 'test-e'" products-data-original.js | grep -q "suggestedCompanions: \[\]"
-          grep -A40 "id: 'test-c'" products-data-original.js | grep -q "suggestedCompanions: \[\]"
+          grep -A40 "id: 'test-e'" products-data-original.js | grep -q "suggestedCompanions: \['mots-c', 'nad-500', 'ghk-cu-100'\]"
+          grep -A40 "id: 'test-c'" products-data-original.js | grep -q "suggestedCompanions: \['mots-c', 'nad-500', 'ghk-cu-100'\]"
+          grep -q "id: 'mitochondrial-metabolic-panel'" products-data-original.js
+          grep -q "id: 'repair-remodeling-panel'" products-data-original.js
+          grep -q "id: 'gh-axis-comparison-panel'" products-data-original.js
+          grep -q "id: 'cellular-recovery-panel'" products-data-original.js
+          grep -q "<h3>Related Research</h3>" index.html
+          grep -q "new Set((p.suggestedCompanions" index.html
+
+          changed="$(git diff --name-only)"
+          unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(products-data-original\.js|index\.html|\.github/workflows/clean-test-companions\.yml)$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected files changed:"
+            echo "$unexpected"
+            exit 1
+          fi
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/clean-test-companions.yml
-          git add products-data-original.js
-          git commit -m "Remove Test E and Test C cross recommendations"
+          git add products-data-original.js index.html
+          git commit -m "Improve related research and add safe research panels"
           git push
