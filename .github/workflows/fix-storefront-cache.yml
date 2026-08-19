@@ -1,0 +1,61 @@
+name: Fix storefront cache
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-storefront:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Force fresh product data on every page load
+        shell: python
+        run: |
+          from pathlib import Path
+
+          changed = False
+
+          # 1) The browser must never reuse an old products-data.js URL.
+          index = Path('index.html')
+          text = index.read_text()
+          old = '<script src="products-data.js?v=masteron-e-20260819-2155"></script>'
+          new = '<script>document.write(\'<script src="/products-data.js?v=\' + Date.now() + \'"><\\/script>\');</script>'
+          if old in text:
+              text = text.replace(old, new)
+              index.write_text(text)
+              changed = True
+          elif '/products-data.js?v=' + "' + Date.now() + '" not in text:
+              raise SystemExit('Expected products-data.js loader was not found in index.html')
+
+          # 2) products-data.js must also bypass cache for the actual product database.
+          loader = Path('products-data.js')
+          text = loader.read_text()
+          old = 'document.write(\'<script src="/products-data-original.js?v=injectable-1to5-20260819-1831"><\\/script>\');'
+          new = 'document.write(\'<script src="/products-data-original.js?v=\' + Date.now() + \'"><\\/script>\');'
+          if old in text:
+              text = text.replace(old, new)
+              loader.write_text(text)
+              changed = True
+          elif '/products-data-original.js?v=' + "' + Date.now() + '" not in text:
+              raise SystemExit('Expected product database loader was not found in products-data.js')
+
+          Path('.storefront-cache-patched').write_text('changed' if changed else 'unchanged')
+
+      - name: Commit cache-safe loaders
+        run: |
+          if git diff --quiet; then
+            echo "No storefront cache changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html products-data.js
+          git commit -m "Use always-fresh storefront product loaders [cache-loader-fixed]"
+          git push
