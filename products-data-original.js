@@ -625,7 +625,7 @@ const compounds = [
     storage: 'Room temperature. Protect from light.', administration: 'IM',
     warnings: 'Anabolic steroid. Aromatizes to estrogen — AI may be needed. PCT required after cycle. Regular blood work mandatory.',
     suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],
-    pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 450 } ]
+    pricing: [ { label: '1 Vial', price: 85 }, { label: '2 Vials', price: 165 }, { label: '3 Vials', price: 240 }, { label: '4 Vials', price: 310 }, { label: '5 Vials', price: 375 } ]
   },
   {
     id: 'test-c',
@@ -651,7 +651,7 @@ const compounds = [
     storage: 'Room temperature. Protect from light.', administration: 'IM',
     warnings: 'Same as Test E. Aromatizes. PCT required. Blood work mandatory.',
     suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],
-    pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 450 } ]
+    pricing: [ { label: '1 Vial', price: 85 }, { label: '2 Vials', price: 165 }, { label: '3 Vials', price: 240 }, { label: '4 Vials', price: 310 }, { label: '5 Vials', price: 375 } ]
   },
   {
     id: 'equipoise',
