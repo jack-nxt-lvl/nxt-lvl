@@ -265,7 +265,7 @@ const compounds = [
     syringe: 'Insulin syringe, 29-31 gauge', injectionSite: 'SubQ or topical near target area.',
     storage: 'Store at -4°F. Reconstituted: 36-46°F, use within 30 days.', administration: 'SubQ or Topical',
     warnings: 'Blue/green color is normal (copper complex). Consult a physician.',
-    suggestedCompanions: ['ghk-cu-100', 'bpc157-10', 'mela1-10'],
+    suggestedCompanions: ['bpc157-10', 'nad-500', 'mela1-10'],
     pricing: [ { label: '1 Vial', price: 50 }, { label: '5 Vials', price: 205 }, { label: '10 Vials', price: 350 } ]
   },
   {
@@ -384,7 +384,7 @@ const compounds = [
   storage: 'Store according to supplied product handling instructions. Refrigerate appropriately after laboratory reconstitution.',
   administration: 'Laboratory research use only',
   warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
-  suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],
+  suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],
   pricing: [
     { label: '1 Kit — 150 IU', price: 450 },
     { label: '2 Kits — 5% OFF', price: 855 },
@@ -419,7 +419,7 @@ const compounds = [
     reconstitution: 'N/A — Oral.', syringe: 'N/A', injectionSite: 'N/A — Oral',
     storage: 'Cool, dry place away from light.', administration: 'Oral',
     warnings: 'May elevate blood glucose. Can cause significant appetite increase. Consult a physician.',
-    suggestedCompanions: ['ipamorelin', 'rad140', 'slu332'],
+    suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],
     pricing: [ { label: '30 Tablets', price: 60 }, { label: '100 Tablets', price: 135 } ]
   },
   {
@@ -624,7 +624,7 @@ const compounds = [
     syringe: '25-27 gauge, 1-3 mL syringe', injectionSite: 'IM injection in glute, deltoid, or quad. Rotate sites.',
     storage: 'Room temperature. Protect from light.', administration: 'IM',
     warnings: 'Anabolic steroid. Aromatizes to estrogen — AI may be needed. PCT required after cycle. Regular blood work mandatory.',
-    suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],
+    suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],
     pricing: [ { label: '1 Vial', price: 85 }, { label: '2 Vials', price: 165 }, { label: '3 Vials', price: 240 }, { label: '4 Vials', price: 310 }, { label: '5 Vials', price: 375 } ]
   },
   {
@@ -650,7 +650,7 @@ const compounds = [
     syringe: '25-27 gauge, 1-3 mL', injectionSite: 'IM in glute, deltoid, or quad.',
     storage: 'Room temperature. Protect from light.', administration: 'IM',
     warnings: 'Same as Test E. Aromatizes. PCT required. Blood work mandatory.',
-    suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],
+    suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],
     pricing: [ { label: '1 Vial', price: 85 }, { label: '2 Vials', price: 165 }, { label: '3 Vials', price: 240 }, { label: '4 Vials', price: 310 }, { label: '5 Vials', price: 375 } ]
   },
   {
@@ -848,6 +848,46 @@ const stacks = [
     ],
     protocol: 'Test E 300-500mg/week + Anavar 50mg/day (last 6-8 weeks) + AI as needed.',
     pairsWith: 'Progressive overload, caloric surplus, regular blood work', duration: '12-16 weeks'
+  },
+  {
+    id: 'mitochondrial-metabolic-panel', name: 'MITOCHONDRIAL & METABOLIC PANEL', goal: 'Compare cellular-energy, mitochondrial, and metabolic signaling pathways', icon: '⚡',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial signaling / AMPK research', id: 'mots-c' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox and energy-cofactor research', id: 'nad-500' },
+      { name: 'AOD-9604 10mg', role: 'Lipid-metabolism pathway research', id: 'aod-9604' }
+    ],
+    protocol: 'Research-theme collection for comparing distinct metabolic pathways in controlled study arms; not a concurrent-use protocol.',
+    pairsWith: 'Metabolic biomarkers, body-composition endpoints, and controlled nutrition variables', duration: 'Study-design dependent'
+  },
+  {
+    id: 'repair-remodeling-panel', name: 'TISSUE REPAIR & REMODELING PANEL', goal: 'Compare tissue-repair, collagen-remodeling, and cellular-recovery pathways', icon: '🧬',
+    compounds: [
+      { name: 'BPC-157 10mg', role: 'Tissue-repair pathway research', id: 'bpc157-10' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and extracellular-matrix research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular-energy and recovery research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for studying complementary repair pathways in separate or appropriately controlled study arms; not human-use guidance.',
+    pairsWith: 'Mechanical-loading models, collagen markers, wound-repair endpoints, and recovery measures', duration: 'Study-design dependent'
+  },
+  {
+    id: 'gh-axis-comparison-panel', name: 'GH-AXIS COMPARISON PANEL', goal: 'Compare different approaches to growth-hormone-axis signaling research', icon: '📈',
+    compounds: [
+      { name: 'Ipamorelin 10mg', role: 'Ghrelin-receptor / GH secretagogue research', id: 'ipamorelin' },
+      { name: 'Sermorelin 10mg', role: 'GHRH-pathway research', id: 'sermorelin' },
+      { name: 'Tesamorelin 10mg', role: 'GHRH-analog research', id: 'tesamorelin-10' }
+    ],
+    protocol: 'Comparison panel for separate research arms examining different GH-axis mechanisms; not a recommendation to combine these compounds.',
+    pairsWith: 'IGF-1 measurements, GH-response curves, sleep/recovery endpoints, and metabolic markers', duration: 'Study-design dependent'
+  },
+  {
+    id: 'cellular-recovery-panel', name: 'CELLULAR RECOVERY PANEL', goal: 'Compare mitochondrial, connective-tissue, and cellular-recovery pathways', icon: '🔬',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial stress-response research', id: 'mots-c' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and tissue-remodeling research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox / energy research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for controlled comparison of recovery-related pathways; not a concurrent-use or dosing protocol.',
+    pairsWith: 'Recovery biomarkers, oxidative-stress markers, collagen endpoints, and performance measures', duration: 'Study-design dependent'
   }
 ];
 
