@@ -1,0 +1,44 @@
+name: Update Test E and Test C pricing
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-test-pricing.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-pricing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update only Test E and Test C pricing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('products-data-original.js')
+          text = path.read_text(encoding='utf-8')
+          old = "pricing: [ { label: '1 Vial', price: 80 }, { label: '10 Vials', price: 450 } ]"
+          new = "pricing: [ { label: '1 Vial', price: 85 }, { label: '2 Vials', price: 165 }, { label: '3 Vials', price: 240 }, { label: '4 Vials', price: 310 }, { label: '5 Vials', price: 375 } ]"
+          count = text.count(old)
+          if count != 2:
+              raise SystemExit(f'Expected exactly 2 Test E/Test C pricing entries, found {count}; refusing to change anything')
+          text = text.replace(old, new, 2)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Verify only intended products and clean up workflow
+        run: |
+          grep -A35 "id: 'test-e'" products-data-original.js | grep -q "{ label: '5 Vials', price: 375 }"
+          grep -A35 "id: 'test-c'" products-data-original.js | grep -q "{ label: '5 Vials', price: 375 }"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/update-test-pricing.yml
+          git add products-data-original.js
+          git commit -m "Set Test E and Test C 1-5 vial pricing"
+          git push
