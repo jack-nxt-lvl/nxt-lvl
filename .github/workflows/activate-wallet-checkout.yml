@@ -43,6 +43,7 @@ jobs:
               'checkout-payment-handoff-fix.js',
               'applepay-card-emphasis.js',
               'moonpay-assisted-handoff.js',
+              'ai-cart-bridge.js',
           ]:
               html = re.sub(rf'\s*<script src="{re.escape(filename)}(?:\?v=[^"]+)?"></script>', '', html)
 
@@ -55,6 +56,7 @@ jobs:
               ('checkout-payment-handoff-fix.js', '20260818-2'),
               ('applepay-card-emphasis.js', '20260818-2'),
               ('moonpay-assisted-handoff.js', '20260818-2'),
+              ('ai-cart-bridge.js', '20260818-1'),
               ('nav-cleanup.js', '20260818-1'),
               ('pt141-product.js', '20260818-2'),
               ('bac-water-product.js', '20260818-1'),
@@ -82,7 +84,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Load polished MoonPay handoff"
+          git commit -m "Load AI cart bridge"
           git push
 
-# Trigger polished MoonPay handoff deployment.
+# Trigger AI cart bridge deployment.
