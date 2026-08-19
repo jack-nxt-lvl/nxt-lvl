@@ -392,7 +392,7 @@ const compounds = [
     { label: '4 Kits — 15% OFF', price: 1530 },
     { label: '5 Kits — 25% OFF • BEST VALUE', price: 1687.5 }
   ]
-}
+},
 
   // ═══════════════════════════════════════
   // CAPSULES / ORAL
