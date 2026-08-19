@@ -1,0 +1,99 @@
+name: Improve related research data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/improve-related-research.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update product research relationships only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('products-data-original.js')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = {
+            "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],": "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],",
+            "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],": "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],",
+            "suggestedCompanions: ['ghk-cu-100', 'bpc157-10', 'mela1-10'],": "suggestedCompanions: ['bpc157-10', 'nad-500', 'mela1-10'],",
+            "suggestedCompanions: ['ipamorelin', 'tesamorelin-10', 'mk677'],": "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],",
+            "suggestedCompanions: ['ipamorelin', 'rad140', 'slu332'],": "suggestedCompanions: ['mots-c', 'nad-500', 'ghk-cu-100'],"
+          }
+          for old, new in replacements.items():
+            if old in s:
+              s = s.replace(old, new, 1)
+
+          marker = "\n];\n\n// Protocol definitions"
+          if marker not in s:
+            raise SystemExit('Stacks marker missing')
+
+          add = r''',
+  {
+    id: 'mitochondrial-metabolic-panel', name: 'MITOCHONDRIAL & METABOLIC PANEL', goal: 'Compare mitochondrial, cellular-energy, and metabolic signaling pathways', icon: '⚡',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial signaling / AMPK research', id: 'mots-c' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox and energy-cofactor research', id: 'nad-500' },
+      { name: 'AOD-9604 10mg', role: 'Lipid-metabolism pathway research', id: 'aod-9604' }
+    ],
+    protocol: 'Research-theme collection for controlled comparison of distinct pathways; not a concurrent-use protocol.',
+    pairsWith: 'Metabolic biomarkers, body-composition endpoints, and controlled nutrition variables', duration: 'Study-design dependent'
+  },
+  {
+    id: 'repair-remodeling-panel', name: 'TISSUE REPAIR & REMODELING PANEL', goal: 'Compare tissue-repair, collagen-remodeling, and cellular-recovery pathways', icon: '🧬',
+    compounds: [
+      { name: 'BPC-157 10mg', role: 'Tissue-repair pathway research', id: 'bpc157-10' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and extracellular-matrix research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular-energy and recovery research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for studying complementary repair pathways in controlled study arms; not human-use guidance.',
+    pairsWith: 'Collagen markers, wound-repair endpoints, and recovery measures', duration: 'Study-design dependent'
+  },
+  {
+    id: 'gh-axis-comparison-panel', name: 'GH-AXIS COMPARISON PANEL', goal: 'Compare different growth-hormone-axis signaling mechanisms', icon: '📈',
+    compounds: [
+      { name: 'Ipamorelin 10mg', role: 'Ghrelin-receptor / GH secretagogue research', id: 'ipamorelin' },
+      { name: 'Sermorelin 10mg', role: 'GHRH-pathway research', id: 'sermorelin' },
+      { name: 'Tesamorelin 10mg', role: 'GHRH-analog research', id: 'tesamorelin-10' }
+    ],
+    protocol: 'Comparison panel for separate research arms; not a recommendation to combine these compounds.',
+    pairsWith: 'IGF-1 measurements, GH-response curves, sleep/recovery endpoints, and metabolic markers', duration: 'Study-design dependent'
+  },
+  {
+    id: 'cellular-recovery-panel', name: 'CELLULAR RECOVERY PANEL', goal: 'Compare mitochondrial, connective-tissue, and cellular-recovery pathways', icon: '🔬',
+    compounds: [
+      { name: 'MOTS-c 10mg', role: 'Mitochondrial stress-response research', id: 'mots-c' },
+      { name: 'GHK-Cu 100mg', role: 'Collagen and tissue-remodeling research', id: 'ghk-cu-100' },
+      { name: 'NAD+ 500mg', role: 'Cellular redox / energy research', id: 'nad-500' }
+    ],
+    protocol: 'Research-theme collection for controlled comparison of recovery-related pathways; not a concurrent-use or dosing protocol.',
+    pairsWith: 'Recovery biomarkers, oxidative-stress markers, collagen endpoints, and performance measures', duration: 'Study-design dependent'
+  }'''
+          if "id: 'mitochondrial-metabolic-panel'" not in s:
+            s = s.replace(marker, add + marker, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Verify and commit only product data
+        run: |
+          grep -A40 "id: 'test-e'" products-data-original.js | grep -q "'mots-c', 'nad-500', 'ghk-cu-100'"
+          grep -A40 "id: 'test-c'" products-data-original.js | grep -q "'mots-c', 'nad-500', 'ghk-cu-100'"
+          grep -q "id: 'mitochondrial-metabolic-panel'" products-data-original.js
+          grep -q "id: 'repair-remodeling-panel'" products-data-original.js
+          grep -q "id: 'gh-axis-comparison-panel'" products-data-original.js
+          grep -q "id: 'cellular-recovery-panel'" products-data-original.js
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/improve-related-research.yml
+          git add products-data-original.js
+          git commit -m "Improve related research recommendations and panels"
+          git push
