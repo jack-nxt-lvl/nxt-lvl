@@ -1,0 +1,49 @@
+name: Clean Test E and Test C companion recommendations
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/clean-test-companions.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  clean-companions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove only Test E/Test C cross recommendations
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('products-data-original.js')
+          text = path.read_text(encoding='utf-8')
+
+          old_e = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-c'],"
+          old_c = "suggestedCompanions: ['anastrozole', 'hcg-5000', 'test-e'],"
+          new_e = "suggestedCompanions: [],"
+          new_c = "suggestedCompanions: [],"
+
+          if text.count(old_e) != 1 or text.count(old_c) != 1:
+              raise SystemExit('Expected Test E/Test C companion lines not found exactly once; refusing to change anything')
+
+          text = text.replace(old_e, new_e, 1)
+          text = text.replace(old_c, new_c, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Verify and clean up workflow
+        run: |
+          grep -A40 "id: 'test-e'" products-data-original.js | grep -q "suggestedCompanions: \[\]"
+          grep -A40 "id: 'test-c'" products-data-original.js | grep -q "suggestedCompanions: \[\]"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/clean-test-companions.yml
+          git add products-data-original.js
+          git commit -m "Remove Test E and Test C cross recommendations"
+          git push
