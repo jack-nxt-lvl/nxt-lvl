@@ -1,5 +1,5 @@
 const { escapeHtml, sendEmail } = require('../lib/email');
-const { applyCors, cleanCustomer, json, normalizeOrder } = require('../lib/direct-payment');
+const { ASSETS, applyCors, cleanCustomer, customerDigest, json, normalizeOrder, verifyQuote } = require('../lib/direct-payment');
 
 module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') {
@@ -12,8 +12,15 @@ module.exports = async (req, res) => {
   if (!applyCors(req, res)) return json(res, 403, { error: 'Origin not allowed.' });
 
   try {
+    const quote = verifyQuote(req.body && req.body.quoteToken);
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
+    if (order.itemDigest !== quote.itemDigest || order.totalCents !== quote.totalCents || order.mode !== quote.fulfillment) {
+      return json(res, 400, { error: 'The checkout details no longer match this payment quote.' });
+    }
+    if (customerDigest(customer) !== quote.customerDigest) {
+      return json(res, 400, { error: 'The customer information no longer matches this payment quote.' });
+    }
     const itemRows = order.normalizedItems.map((item) => {
       return `<tr><td style="padding:8px;border-bottom:1px solid #ddd;">${escapeHtml(item.name)}<br><small>${escapeHtml(item.label)}</small></td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:center;">${item.quantity}</td><td style="padding:8px;border-bottom:1px solid #ddd;text-align:right;">$${(item.lineCents / 100).toFixed(2)}</td></tr>`;
     }).join("");
@@ -29,7 +36,9 @@ module.exports = async (req, res) => {
       <div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#111;">
         <h2>Checkout started — payment not yet completed</h2>
         <p>A customer submitted their checkout information but payment has not yet been confirmed.</p>
-        <p><strong>Fulfillment:</strong> ${mode === "pickup" ? "Local Pickup" : "Shipping"}<br>
+        <p><strong>Order:</strong> ${escapeHtml(quote.orderId)}<br>
+        <strong>Selected payment:</strong> ${escapeHtml(quote.asset)} on ${escapeHtml(ASSETS[quote.asset].network)}<br>
+        <strong>Fulfillment:</strong> ${mode === "pickup" ? "Local Pickup" : "Shipping"}<br>
         <strong>Shipping fee:</strong> $${shippingAmount}<br>
         <strong>Cart total:</strong> $${total}</p>
         <h3>Customer</h3>
@@ -43,11 +52,12 @@ module.exports = async (req, res) => {
 
     await sendEmail({
       to: "payment@nxtlvl-research.com",
-      subject: `CHECKOUT LEAD — ${customer.name} — $${total} — ${mode === "pickup" ? "PICKUP" : "SHIP"}`,
+      subject: `CHECKOUT STARTED — ${quote.orderId} — ${quote.asset} — $${total}`,
       html,
+      idempotencyKey: `nxt-lead-${quote.orderId}`,
     });
 
-    return json(res, 200, { sent: true });
+    return json(res, 200, { sent: true, orderId: quote.orderId });
   } catch (error) {
     console.error("Checkout lead email error:", error);
     return json(res, 500, { error: "Unable to send checkout lead email" });

@@ -3,6 +3,20 @@
   window.__nxtCustomerCheckoutDirectWallet = true;
 
   const SHIPPING_FEE = 10;
+  const CHECKOUT_DRAFT_KEY = 'nxtCheckoutDraftV1';
+  const CART_STORAGE_KEY = 'nxtCartV1';
+
+  function readCheckoutDraft(){
+    try{return JSON.parse(sessionStorage.getItem(CHECKOUT_DRAFT_KEY)||'null')||{};}catch(_){return {};}
+  }
+
+  function writeCheckoutDraft(value){
+    try{sessionStorage.setItem(CHECKOUT_DRAFT_KEY,JSON.stringify(value));}catch(_){}
+  }
+
+  window.addEventListener('nxt:payment-confirmed',()=>{
+    try{sessionStorage.removeItem(CHECKOUT_DRAFT_KEY);}catch(_){}
+  });
 
   const style = document.createElement('style');
   style.textContent = `
@@ -28,6 +42,34 @@
     return cartItems().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),0);
   }
 
+  function persistCart(){
+    try{
+      const compact=cartItems().map(item=>({productId:item.productId,pricingIndex:Number(String(item.key).split('::').pop()),qty:item.qty}));
+      localStorage.setItem(CART_STORAGE_KEY,JSON.stringify(compact));
+    }catch(_){}
+  }
+
+  function setupCartPersistence(){
+    try{
+      const target=cartItems();
+      if(!target.length){
+        const saved=JSON.parse(localStorage.getItem(CART_STORAGE_KEY)||'[]');
+        const catalog=typeof compounds!=='undefined'&&Array.isArray(compounds)?compounds:[];
+        if(Array.isArray(saved))saved.slice(0,50).forEach(item=>{
+          const product=catalog.find(entry=>entry.id===String(item.productId||''));
+          const pricingIndex=Number(item.pricingIndex);
+          const option=product&&Number.isInteger(pricingIndex)?product.pricing[pricingIndex]:null;
+          const qty=Math.min(20,Math.max(1,Number(item.qty)||1));
+          if(product&&option)target.push({key:product.id+'::'+pricingIndex,productId:product.id,name:product.name,label:option.label,price:option.price,qty});
+        });
+        if(target.length&&typeof renderCart==='function')renderCart();
+      }
+      const items=document.getElementById('cartItems');
+      if(items)new MutationObserver(persistCart).observe(items,{childList:true,subtree:true});
+      persistCart();
+    }catch(_){}
+  }
+
   function ensureDirectWallet(){
     return new Promise((resolve,reject)=>{
       if (typeof window.startDirectWalletCheckout === 'function') return resolve();
@@ -38,7 +80,7 @@
         return;
       }
       const script=document.createElement('script');
-      script.src='/direct-wallet-checkout.js?v=20260820-direct-1';
+      script.src='/direct-wallet-checkout.js?v=20260820-direct-2';
       script.async=false;
       script.dataset.nxtDirectWallet='1';
       script.onload=()=>typeof window.startDirectWalletCheckout==='function'?resolve():reject(new Error('Direct-wallet checkout failed to initialize.'));
@@ -49,7 +91,8 @@
 
   function collectCheckoutDetails(){
     return new Promise(resolve=>{
-      let fulfillment='shipping';
+      const draft=readCheckoutDraft();
+      let fulfillment=draft.fulfillment==='pickup'?'pickup':'shipping';
       const base=subtotal();
       const overlay=document.createElement('div');
       overlay.className='nxt-checkout-overlay';
@@ -75,13 +118,20 @@
       const shippingEl=overlay.querySelector('#nxtShipping');
       const totalEl=overlay.querySelector('#nxtTotal');
       const errorEl=overlay.querySelector('.nxt-checkout-error');
+      const fieldMap={name:'#nxtName',email:'#nxtEmail',phone:'#nxtPhone',address:'#nxtAddress',unit:'#nxtUnit',city:'#nxtCity',state:'#nxtState',zip:'#nxtZip'};
+      Object.entries(fieldMap).forEach(([key,selector])=>{const input=overlay.querySelector(selector);if(input&&draft.customer&&draft.customer[key])input.value=draft.customer[key];});
+      const saveDraft=()=>{
+        const val=s=>(overlay.querySelector(s)?.value||'').trim();
+        writeCheckoutDraft({fulfillment,customer:{name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')}});
+      };
       const refresh=()=>{
         const fee=fulfillment==='pickup'?0:SHIPPING_FEE;
         addressWrap.classList.toggle('hidden',fulfillment==='pickup');pickupNote.classList.toggle('show',fulfillment==='pickup');
         shippingLabel.textContent=fulfillment==='pickup'?'Local pickup':'Shipping';shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(base+fee).toFixed(2);
         overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.classList.toggle('active',btn.dataset.mode===fulfillment));
       };
-      overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.onclick=()=>{fulfillment=btn.dataset.mode;refresh();});
+      overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.onclick=()=>{fulfillment=btn.dataset.mode;refresh();saveDraft();});
+      overlay.querySelectorAll('input').forEach(input=>input.addEventListener('input',saveDraft));
       overlay.querySelector('.nxt-checkout-cancel').onclick=()=>{overlay.remove();resolve(null);};
       overlay.querySelector('.nxt-checkout-continue').onclick=()=>{
         const val=s=>(overlay.querySelector(s)?.value||'').trim();
@@ -89,8 +139,8 @@
         const required=[customer.name,customer.email,customer.phone];if(fulfillment==='shipping')required.push(customer.address,customer.city,customer.state,customer.zip);
         if(required.some(v=>!v)){errorEl.textContent=fulfillment==='shipping'?'Please complete your contact and shipping information.':'Please enter your name, email and phone number.';errorEl.classList.add('show');return;}
         if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)){errorEl.textContent='Please enter a valid email address.';errorEl.classList.add('show');return;}
-        if(fulfillment==='pickup')Object.assign(customer,{address:'LOCAL PICKUP',unit:'',city:'',state:'',zip:''});
         const shipping=fulfillment==='pickup'?0:SHIPPING_FEE;
+        writeCheckoutDraft({fulfillment,customer});
         overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer});
       };
       document.body.appendChild(overlay);refresh();
@@ -103,7 +153,6 @@
     try{if(typeof closeCart==='function')closeCart();}catch(_){}
     const details=await collectCheckoutDetails();if(!details)return;
     window.nxtCheckoutDetails=details;
-    fetch('/api/checkout-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customer:{...details.customer,fulfillment:details.fulfillment},items:cartItems(),amount:details.total,fulfillment:details.fulfillment,shipping:details.shipping})}).catch(()=>{});
     try{await ensureDirectWallet();await window.startDirectWalletCheckout();}
     catch(err){alert(err.message||'Unable to open direct-wallet checkout. Please try again.');}
   }
@@ -114,5 +163,5 @@
     const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtDirectWallet==='1')return;
     btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
   }
-  bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
+  setupCartPersistence();bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();

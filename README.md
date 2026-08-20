@@ -11,6 +11,7 @@ Static single-page catalog site — "NXT LVL | Premium Research Compounds".
 | `nxt-lvl-qr.png` | QR code image (1024×1024) |
 | `direct-wallet-checkout.js` | BTC, ETH, and ERC-20 USDT direct-wallet checkout UI |
 | `api/create-direct-payment-quote.js` | Trusted cart calculation, live quote, signed order token, and QR code |
+| `api/find-direct-payment.js` | Automatic BTC and ERC-20 USDT payment discovery |
 | `api/verify-direct-payment.js` | Bitcoin/Ethereum transaction and confirmation verification |
 | `package.json` | Runtime dependencies for QR generation and Ethereum address handling |
 
@@ -68,7 +69,12 @@ The server recalculates totals from `products-data-original.js`; browser prices
 are never trusted. Signed quotes are also bound to the normalized customer,
 cart, fulfillment method, exact amount, and expiration time. BTC is checked
 through the public mempool.space API. ETH and ERC-20 USDT are checked through
-Ethereum JSON-RPC. Network/RPC services can be temporarily unavailable even
-though funds remain in the receiving wallet.
+Ethereum JSON-RPC. BTC and ERC-20 USDT are discovered automatically by exact
+amount, so customers normally do not need to copy a transaction hash. ETH
+browser-wallet payments fill the hash automatically; manual paste remains as a
+fallback for every asset. The cart persists in the browser, and an active quote
+can be resumed after an accidental refresh in the same tab. Network/RPC
+services can be temporarily unavailable even though funds remain in the
+receiving wallet.
 
 Run the automated chain-verification tests with `npm test` before deployment.

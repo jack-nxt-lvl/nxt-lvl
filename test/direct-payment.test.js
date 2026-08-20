@@ -15,6 +15,8 @@ const {
 } = require('../lib/direct-payment');
 const {
   TRANSFER_TOPIC,
+  findBitcoinCandidate,
+  findUsdtLogCandidate,
   inspectBitcoinTransaction,
   inspectEthereumTransaction,
 } = require('../lib/chain-verification');
@@ -77,6 +79,13 @@ test('verifies an exact Bitcoin output and confirmation', () => {
   assert.equal(result.confirmations, 1);
 });
 
+test('automatically finds the exact Bitcoin payment and ignores other amounts', () => {
+  const quote = { amountUnits: '25000' };
+  const wrong = { txid: '1'.repeat(64), vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 24999 }] };
+  const exact = { txid: '2'.repeat(64), vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 25000 }] };
+  assert.equal(findBitcoinCandidate([wrong, exact], quote), exact);
+});
+
 test('rejects Bitcoin underpayments and overpayments for safe order matching', () => {
   const quote = { asset: 'BTC', amountUnits: '25000', confirmations: 1, createdAt: Date.now() };
   const under = inspectBitcoinTransaction({ vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 24999 }], status: { confirmed: false } }, 0, quote);
@@ -110,4 +119,22 @@ test('verifies an exact ERC-20 USDT Transfer log to the receiving wallet', () =>
   const result = inspectEthereumTransaction(tx, receipt, block, '0xd3', quote);
   assert.equal(result.ok, true);
   assert.equal(result.status, 'paid');
+});
+
+test('automatically finds the exact official ERC-20 USDT transfer log', () => {
+  const amount = 65_003_479n;
+  const receiverTopic = `0x${ASSETS.USDT.address.toLowerCase().slice(2).padStart(64, '0')}`;
+  const wrong = {
+    address: ASSETS.USDT.contract,
+    transactionHash: `0x${'3'.repeat(64)}`,
+    topics: [TRANSFER_TOPIC, `0x${'1'.padStart(64, '0')}`, receiverTopic],
+    data: `0x${(amount - 1n).toString(16)}`,
+  };
+  const exact = {
+    address: ASSETS.USDT.contract,
+    transactionHash: `0x${'4'.repeat(64)}`,
+    topics: [TRANSFER_TOPIC, `0x${'2'.padStart(64, '0')}`, receiverTopic],
+    data: `0x${amount.toString(16)}`,
+  };
+  assert.equal(findUsdtLogCandidate([wrong, exact], { amountUnits: amount.toString() }), exact);
 });
