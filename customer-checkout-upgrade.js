@@ -1,7 +1,8 @@
 (() => {
+  if (window.__nxtCustomerCheckoutTransakOnly) return;
+  window.__nxtCustomerCheckoutTransakOnly = true;
+
   const SHIPPING_FEE = 10;
-  const originalProceed = window.proceedToCheckout;
-  if (typeof originalProceed !== 'function') return;
 
   const style = document.createElement('style');
   style.textContent = `
@@ -18,132 +19,100 @@
   `;
   document.head.appendChild(style);
 
-  function subtotal() {
-    try { return Number(window.cartSubtotal ? window.cartSubtotal() : cartSubtotal()) || 0; }
-    catch (_) { return 0; }
+  function cartItems(){
+    try { return Array.isArray(window.cart) ? window.cart : (typeof cart !== 'undefined' && Array.isArray(cart) ? cart : []); }
+    catch (_) { return []; }
   }
 
-  function collectCheckoutDetails() {
-    return new Promise(resolve => {
-      let fulfillment = 'shipping';
-      const base = subtotal();
-      const overlay = document.createElement('div');
-      overlay.className = 'nxt-checkout-overlay';
-      overlay.innerHTML = `
-        <div class="nxt-checkout-card">
-          <div class="nxt-checkout-kicker">🔒 Secure Checkout</div>
-          <h2>Shipping or Local Pickup</h2>
-          <div class="nxt-checkout-intro">Choose how you want to receive your order. Local pickup removes the $10 shipping fee.</div>
-          <div class="nxt-fulfillment-grid">
-            <button type="button" class="nxt-fulfillment active" data-mode="shipping"><strong>📦 Ship My Order</strong><span>Standard delivery</span><span class="price">$10 shipping</span></button>
-            <button type="button" class="nxt-fulfillment" data-mode="pickup"><strong>📍 Local Pickup</strong><span>For local customers</span><span class="price">FREE — $0 shipping</span></button>
-          </div>
-          <div class="nxt-field-grid">
-            <input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *">
-            <input id="nxtEmail" autocomplete="email" placeholder="Email *">
-            <input id="nxtPhone" autocomplete="tel" placeholder="Phone number *">
-          </div>
-          <div class="nxt-address-fields">
-            <div class="nxt-field-grid" style="margin-top:8px">
-              <input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *">
-              <input id="nxtUnit" placeholder="Apt / Unit">
-              <input id="nxtCity" placeholder="City *">
-              <input id="nxtState" placeholder="State *">
-              <input id="nxtZip" placeholder="ZIP code *">
-            </div>
-          </div>
-          <div class="nxt-pickup-note">Local pickup selected — shipping is $0. Pickup details will be coordinated after the order is confirmed.</div>
-          <div class="nxt-order-summary">
-            <div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div>
-            <div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$10.00</span></div>
-            <div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base + SHIPPING_FEE).toFixed(2)}</span></div>
-            <div class="nxt-no-tax">Sales tax: $0.00</div>
-          </div>
-          <div class="nxt-checkout-error"></div>
-          <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Payment →</button></div>
-        </div>`;
+  function subtotal(){
+    return cartItems().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),0);
+  }
 
-      const addressWrap = overlay.querySelector('.nxt-address-fields');
-      const pickupNote = overlay.querySelector('.nxt-pickup-note');
-      const shippingLabel = overlay.querySelector('#nxtShippingLabel');
-      const shippingEl = overlay.querySelector('#nxtShipping');
-      const totalEl = overlay.querySelector('#nxtTotal');
-      const errorEl = overlay.querySelector('.nxt-checkout-error');
-
-      const refresh = () => {
-        const fee = fulfillment === 'pickup' ? 0 : SHIPPING_FEE;
-        addressWrap.classList.toggle('hidden', fulfillment === 'pickup');
-        pickupNote.classList.toggle('show', fulfillment === 'pickup');
-        shippingLabel.textContent = fulfillment === 'pickup' ? 'Local pickup' : 'Shipping';
-        shippingEl.textContent = '$' + fee.toFixed(2);
-        totalEl.textContent = '$' + (base + fee).toFixed(2);
-        overlay.querySelectorAll('.nxt-fulfillment').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === fulfillment));
-      };
-
-      overlay.querySelectorAll('.nxt-fulfillment').forEach(btn => btn.addEventListener('click', () => { fulfillment = btn.dataset.mode; refresh(); }));
-      overlay.querySelector('.nxt-checkout-cancel').addEventListener('click', () => { overlay.remove(); resolve(null); });
-      overlay.querySelector('.nxt-checkout-continue').addEventListener('click', () => {
-        const val = sel => (overlay.querySelector(sel)?.value || '').trim();
-        const customer = { name:val('#nxtName'), email:val('#nxtEmail'), phone:val('#nxtPhone'), address:val('#nxtAddress'), unit:val('#nxtUnit'), city:val('#nxtCity'), state:val('#nxtState'), zip:val('#nxtZip') };
-        const required = [customer.name, customer.email, customer.phone];
-        if (fulfillment === 'shipping') required.push(customer.address, customer.city, customer.state, customer.zip);
-        if (required.some(v => !v)) {
-          errorEl.textContent = fulfillment === 'shipping' ? 'Please complete your contact and shipping information.' : 'Please enter your name, email and phone number.';
-          errorEl.classList.add('show');
-          return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
-          errorEl.textContent = 'Please enter a valid email address.';
-          errorEl.classList.add('show');
-          return;
-        }
-        if (fulfillment === 'pickup') Object.assign(customer, { address:'LOCAL PICKUP', unit:'', city:'', state:'', zip:'' });
-        const shipping = fulfillment === 'pickup' ? 0 : SHIPPING_FEE;
-        overlay.remove();
-        resolve({ fulfillment, shipping, total:base + shipping, customer });
-      });
-
-      document.body.appendChild(overlay);
-      refresh();
+  function ensureTransak(){
+    return new Promise((resolve,reject)=>{
+      if (typeof window.startTransakCheckout === 'function') return resolve();
+      const existing = document.querySelector('script[data-nxt-transak-direct]');
+      if (existing) {
+        const timer=setInterval(()=>{if(typeof window.startTransakCheckout==='function'){clearInterval(timer);resolve();}},50);
+        setTimeout(()=>{clearInterval(timer);if(typeof window.startTransakCheckout==='function')resolve();else reject(new Error('Transak checkout failed to load.'));},5000);
+        return;
+      }
+      const script=document.createElement('script');
+      script.src='/transak-checkout.js?v=20260820-transak-only-final';
+      script.async=false;
+      script.dataset.nxtTransakDirect='1';
+      script.onload=()=>typeof window.startTransakCheckout==='function'?resolve():reject(new Error('Transak checkout failed to initialize.'));
+      script.onerror=()=>reject(new Error('Transak checkout failed to load.'));
+      document.body.appendChild(script);
     });
   }
 
-  async function runUpgradedCheckout(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-    }
-    try { if (typeof cart !== 'undefined' && cart.length === 0) return; } catch (_) {}
+  function collectCheckoutDetails(){
+    return new Promise(resolve=>{
+      let fulfillment='shipping';
+      const base=subtotal();
+      const overlay=document.createElement('div');
+      overlay.className='nxt-checkout-overlay';
+      overlay.innerHTML=`<div class="nxt-checkout-card">
+        <div class="nxt-checkout-kicker">🔒 Secure Checkout</div>
+        <h2>Shipping or Local Pickup</h2>
+        <div class="nxt-checkout-intro">Enter your order information, then continue directly to Transak for BTC, ETH, or USDT payment by eligible Apple Pay, debit card, or credit card.</div>
+        <div class="nxt-fulfillment-grid">
+          <button type="button" class="nxt-fulfillment active" data-mode="shipping"><strong>📦 Ship My Order</strong><span>Standard delivery</span><span class="price">$10 shipping</span></button>
+          <button type="button" class="nxt-fulfillment" data-mode="pickup"><strong>📍 Local Pickup</strong><span>For local customers</span><span class="price">FREE — $0 shipping</span></button>
+        </div>
+        <div class="nxt-field-grid"><input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *"><input id="nxtEmail" autocomplete="email" placeholder="Email *"><input id="nxtPhone" autocomplete="tel" placeholder="Phone number *"></div>
+        <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" placeholder="Apt / Unit"><input id="nxtCity" placeholder="City *"><input id="nxtState" placeholder="State *"><input id="nxtZip" placeholder="ZIP code *"></div></div>
+        <div class="nxt-pickup-note">Local pickup selected — shipping is $0. Pickup details will be coordinated after the order is confirmed.</div>
+        <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$10.00</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+SHIPPING_FEE).toFixed(2)}</span></div><div class="nxt-no-tax">Sales tax: $0.00</div></div>
+        <div class="nxt-checkout-error"></div>
+        <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Transak →</button></div>
+      </div>`;
 
-    try { if (typeof closeCart === 'function') closeCart(); } catch (_) {}
-    const details = await collectCheckoutDetails();
-    if (!details) return;
-    window.nxtCheckoutDetails = details;
-
-    fetch('/api/checkout-lead', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ customer:{...details.customer, fulfillment:details.fulfillment}, items:typeof cart !== 'undefined' ? cart : [], amount:details.total, fulfillment:details.fulfillment, shipping:details.shipping })
-    }).catch(() => {});
-
-    const oldSubtotal = window.cartSubtotal;
-    window.cartSubtotal = () => details.total;
-    try { await originalProceed(); }
-    finally { window.cartSubtotal = oldSubtotal; }
+      const addressWrap=overlay.querySelector('.nxt-address-fields');
+      const pickupNote=overlay.querySelector('.nxt-pickup-note');
+      const shippingLabel=overlay.querySelector('#nxtShippingLabel');
+      const shippingEl=overlay.querySelector('#nxtShipping');
+      const totalEl=overlay.querySelector('#nxtTotal');
+      const errorEl=overlay.querySelector('.nxt-checkout-error');
+      const refresh=()=>{
+        const fee=fulfillment==='pickup'?0:SHIPPING_FEE;
+        addressWrap.classList.toggle('hidden',fulfillment==='pickup');pickupNote.classList.toggle('show',fulfillment==='pickup');
+        shippingLabel.textContent=fulfillment==='pickup'?'Local pickup':'Shipping';shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(base+fee).toFixed(2);
+        overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.classList.toggle('active',btn.dataset.mode===fulfillment));
+      };
+      overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.onclick=()=>{fulfillment=btn.dataset.mode;refresh();});
+      overlay.querySelector('.nxt-checkout-cancel').onclick=()=>{overlay.remove();resolve(null);};
+      overlay.querySelector('.nxt-checkout-continue').onclick=()=>{
+        const val=s=>(overlay.querySelector(s)?.value||'').trim();
+        const customer={name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')};
+        const required=[customer.name,customer.email,customer.phone];if(fulfillment==='shipping')required.push(customer.address,customer.city,customer.state,customer.zip);
+        if(required.some(v=>!v)){errorEl.textContent=fulfillment==='shipping'?'Please complete your contact and shipping information.':'Please enter your name, email and phone number.';errorEl.classList.add('show');return;}
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)){errorEl.textContent='Please enter a valid email address.';errorEl.classList.add('show');return;}
+        if(fulfillment==='pickup')Object.assign(customer,{address:'LOCAL PICKUP',unit:'',city:'',state:'',zip:''});
+        const shipping=fulfillment==='pickup'?0:SHIPPING_FEE;
+        overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer});
+      };
+      document.body.appendChild(overlay);refresh();
+    });
   }
 
-  window.proceedToCheckout = runUpgradedCheckout;
-
-  function bindCheckoutButton() {
-    const btn = document.getElementById('cartCheckoutBtn');
-    if (!btn || btn.dataset.nxtPickupBound === '1') return;
-    btn.dataset.nxtPickupBound = '1';
-    btn.removeAttribute('onclick');
-    btn.onclick = null;
-    btn.addEventListener('click', runUpgradedCheckout, true);
+  async function runCheckout(event){
+    if(event){event.preventDefault();event.stopPropagation();event.stopImmediatePropagation?.();}
+    if(!cartItems().length)return;
+    try{if(typeof closeCart==='function')closeCart();}catch(_){}
+    const details=await collectCheckoutDetails();if(!details)return;
+    window.nxtCheckoutDetails=details;
+    fetch('/api/checkout-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customer:{...details.customer,fulfillment:details.fulfillment},items:cartItems(),amount:details.total,fulfillment:details.fulfillment,shipping:details.shipping})}).catch(()=>{});
+    try{await ensureTransak();await window.startTransakCheckout();}
+    catch(err){alert(err.message||'Unable to open Transak checkout. Please try again.');}
   }
 
-  bindCheckoutButton();
-  const observer = new MutationObserver(bindCheckoutButton);
-  observer.observe(document.body, { childList:true, subtree:true });
+  window.proceedToCheckout=runCheckout;
+
+  function bind(){
+    const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtTransakOnly==='1')return;
+    btn.dataset.nxtTransakOnly='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
+  }
+  bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();
