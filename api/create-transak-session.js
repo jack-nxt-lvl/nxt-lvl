@@ -2,11 +2,12 @@
 // Required Vercel env vars:
 //   TRANSAK_API_KEY
 //   TRANSAK_API_SECRET
-//   TRANSAK_WALLET_ADDRESS
+//   TRANSAK_BTC_WALLET
+//   TRANSAK_ETH_WALLET
+//   TRANSAK_USDT_WALLET
 // Optional:
 //   TRANSAK_ENV=staging|production (default: staging)
-//   TRANSAK_CRYPTO_CODE=USDT (default: USDT)
-//   TRANSAK_NETWORK=ethereum (default: ethereum)
+//   TRANSAK_USDT_NETWORK=ethereum (default: ethereum / ERC-20)
 //   TRANSAK_REFERRER_DOMAIN=nxtlvl-research.com
 
 const ACCESS_CACHE = { token: null, expiresAt: 0 };
@@ -31,7 +32,7 @@ async function getAccessToken({ apiKey, apiSecret, env }) {
   const response = await fetch(`${authBase}/partners/api/v2/refresh-token`, {
     method: 'POST',
     headers: {
-      'accept': 'application/json',
+      accept: 'application/json',
       'api-secret': apiSecret,
       'content-type': 'application/json'
     },
@@ -40,8 +41,7 @@ async function getAccessToken({ apiKey, apiSecret, env }) {
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok || !data?.data?.accessToken) {
-    const message = data?.message || data?.error || 'Unable to authenticate with Transak.';
-    throw new Error(message);
+    throw new Error(data?.message || data?.error || 'Unable to authenticate with Transak.');
   }
 
   ACCESS_CACHE.token = data.data.accessToken;
@@ -49,22 +49,55 @@ async function getAccessToken({ apiKey, apiSecret, env }) {
   return ACCESS_CACHE.token;
 }
 
+function getCryptoConfig(code) {
+  const crypto = String(code || '').toUpperCase();
+  if (crypto === 'BTC') {
+    return {
+      cryptoCurrencyCode: 'BTC',
+      network: 'bitcoin',
+      walletAddress: process.env.TRANSAK_BTC_WALLET,
+      walletEnv: 'TRANSAK_BTC_WALLET'
+    };
+  }
+  if (crypto === 'ETH') {
+    return {
+      cryptoCurrencyCode: 'ETH',
+      network: 'ethereum',
+      walletAddress: process.env.TRANSAK_ETH_WALLET,
+      walletEnv: 'TRANSAK_ETH_WALLET'
+    };
+  }
+  if (crypto === 'USDT') {
+    return {
+      cryptoCurrencyCode: 'USDT',
+      network: String(process.env.TRANSAK_USDT_NETWORK || 'ethereum').toLowerCase(),
+      walletAddress: process.env.TRANSAK_USDT_WALLET,
+      walletEnv: 'TRANSAK_USDT_WALLET'
+    };
+  }
+  return null;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
 
   const apiKey = process.env.TRANSAK_API_KEY;
   const apiSecret = process.env.TRANSAK_API_SECRET;
-  const walletAddress = process.env.TRANSAK_WALLET_ADDRESS;
   const env = String(process.env.TRANSAK_ENV || 'staging').toLowerCase() === 'production' ? 'production' : 'staging';
+  const cryptoConfig = getCryptoConfig(req.body?.crypto);
 
-  if (!apiKey || !apiSecret || !walletAddress) {
+  if (!cryptoConfig) {
+    return json(res, 400, { error: 'Choose BTC, ETH, or USDT.' });
+  }
+
+  if (!apiKey || !apiSecret || !cryptoConfig.walletAddress) {
     return json(res, 503, {
-      error: 'Transak is not configured yet.',
+      error: 'Transak is not fully configured yet.',
       setupRequired: true,
       missing: [
         !apiKey && 'TRANSAK_API_KEY',
         !apiSecret && 'TRANSAK_API_SECRET',
-        !walletAddress && 'TRANSAK_WALLET_ADDRESS'
+        !cryptoConfig.walletAddress && cryptoConfig.walletEnv
       ].filter(Boolean)
     });
   }
@@ -76,8 +109,6 @@ module.exports = async function handler(req, res) {
 
   const orderId = String(req.body?.orderId || `NXT-${Date.now()}`).slice(0, 100);
   const email = typeof req.body?.email === 'string' ? req.body.email.trim().slice(0, 180) : '';
-  const cryptoCurrencyCode = String(process.env.TRANSAK_CRYPTO_CODE || 'USDT').toUpperCase();
-  const network = String(process.env.TRANSAK_NETWORK || 'ethereum').toLowerCase();
   const referrerDomain = String(process.env.TRANSAK_REFERRER_DOMAIN || req.headers.host || 'nxtlvl-research.com').replace(/^https?:\/\//, '').split('/')[0];
 
   try {
@@ -90,12 +121,12 @@ module.exports = async function handler(req, res) {
       productsAvailed: 'BUY',
       fiatAmount: Number(amount.toFixed(2)),
       fiatCurrency: 'USD',
-      cryptoCurrencyCode,
-      network,
-      walletAddress,
+      cryptoCurrencyCode: cryptoConfig.cryptoCurrencyCode,
+      network: cryptoConfig.network,
+      walletAddress: cryptoConfig.walletAddress,
       disableWalletAddressForm: true,
       partnerOrderId: orderId,
-      hideExchangeScreen: false,
+      hideExchangeScreen: true,
       themeColor: '7C3AED'
     };
     if (email) widgetParams.email = email;
@@ -103,7 +134,7 @@ module.exports = async function handler(req, res) {
     const response = await fetch(`${gatewayBase}/api/v2/auth/session`, {
       method: 'POST',
       headers: {
-        'accept': 'application/json',
+        accept: 'application/json',
         'access-token': accessToken,
         'x-api-key': apiKey,
         'x-user-ip': clientIp(req),
@@ -120,7 +151,13 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    return json(res, 200, { widgetUrl, orderId, environment: env });
+    return json(res, 200, {
+      widgetUrl,
+      orderId,
+      environment: env,
+      crypto: cryptoConfig.cryptoCurrencyCode,
+      network: cryptoConfig.network
+    });
   } catch (error) {
     console.error('Transak session error:', error);
     return json(res, 502, { error: error.message || 'Unable to start Transak checkout.' });
