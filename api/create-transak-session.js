@@ -27,8 +27,10 @@ module.exports=async function handler(req,res){
     const gateway=env==='staging'?'https://api-gateway-stg.transak.com':'https://api-gateway.transak.com';
     const widgetParams={apiKey,referrerDomain:host,productsAvailed:'BUY',fiatAmount:Number(amount.toFixed(2)),fiatCurrency:'USD',cryptoCurrencyCode:cfg.cryptoCurrencyCode,network:cfg.network,walletAddress:cfg.walletAddress,disableWalletAddressForm:true,partnerOrderId:orderId,hideExchangeScreen:true,themeColor:'7C3AED'};
     if(email)widgetParams.email=email;
-    const r=await fetch(`${gateway}/api/v2/auth/session`,{method:'POST',headers:{accept:'application/json','access-token':accessToken,'x-api-key':apiKey,'x-user-ip':ip(req),'content-type':'application/json'},body:JSON.stringify({widgetParams})});
-    const d=await r.json().catch(()=>({}));const widgetUrl=d?.data?.widgetUrl;
+    const createSession=formattedToken=>fetch(`${gateway}/api/v2/auth/session`,{method:'POST',headers:{accept:'application/json','access-token':formattedToken,'x-api-key':apiKey,'x-user-ip':ip(req),'content-type':'application/json'},body:JSON.stringify({widgetParams})});
+    let r=await createSession(accessToken);let d=await r.json().catch(()=>({}));
+    if(r.status===401){r=await createSession(`Bearer ${accessToken}`);d=await r.json().catch(()=>({}));}
+    const widgetUrl=d?.data?.widgetUrl;
     if(!r.ok||!widgetUrl)return json(res,r.status||502,{error:errorMessage(d,'Unable to start Transak checkout.')});
     return json(res,200,{widgetUrl,orderId,environment:env,crypto:cfg.cryptoCurrencyCode,network:cfg.network});
   }catch(e){console.error('Transak session error:',e);return json(res,502,{error:e.message||'Unable to start Transak checkout.'})}
