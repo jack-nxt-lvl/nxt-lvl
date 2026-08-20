@@ -104,7 +104,7 @@
     if (!hero.querySelector('.crypto-assurance')) {
       const assurance = document.createElement('div');
       assurance.className = 'crypto-assurance';
-      assurance.innerHTML = '<span>🔒</span><div><b>Secure crypto payments</b> · Payment confirmation handled through encrypted checkout.</div>';
+      assurance.innerHTML = '<span>🔒</span><div><b>Direct crypto payments</b> · BTC, ETH, and USDT are verified independently on-chain.</div>';
       hero.querySelector('.hero-buttons')?.insertAdjacentElement('afterend', assurance);
     }
   }
@@ -116,7 +116,7 @@
       <div class="trust-item"><div class="num">◇</div><div class="label">Premium Quality</div><div class="trust-sub">Carefully sourced research compounds.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
       <div class="trust-item"><div class="num">↗</div><div class="label">Fast USA Shipping</div><div class="trust-sub">Domestic fulfillment and discreet packaging.</div></div>
-      <div class="trust-item"><div class="num">🔒</div><div class="label">Secure Crypto Payments</div><div class="trust-sub">BTC, ETH, LTC and USDT checkout support.</div></div>`;
+      <div class="trust-item"><div class="num">🔒</div><div class="label">Direct Crypto Payments</div><div class="trust-sub">BTC, ETH and ERC-20 USDT checkout support.</div></div>`;
   }
 
   const heroAi=document.querySelector('.hero .btn-secondary[onclick*="toggleAiChat"]');if(heroAi){heroAi.classList.add('hero-ai-cta');heroAi.textContent='Ask NXT LVL AI';}
@@ -128,7 +128,7 @@
   const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
 
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}
-  const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Customer Information')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose Cryptocurrency')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Complete Your Payment')){el.dataset.premiumChecked='1';const target=el.querySelector('section');if(target)target.insertAdjacentHTML('afterbegin',steps(2));}})});observer.observe(document.body,{childList:true});
+  const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Shipping or Local Pickup')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose your payment asset')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Pay directly with')){el.dataset.premiumChecked='1';const target=el.querySelector('.nxt-wallet-head');if(target)target.insertAdjacentHTML('afterend',steps(2));}})});observer.observe(document.body,{childList:true});
 
   function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Shipping</span><span>$10.00</span></div><div><span>Sales tax</span><span>Calculated at checkout</span></div><div class="total"><span>Secure crypto checkout</span><span>🔒</span></div>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
 

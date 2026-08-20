@@ -49,6 +49,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // Checkout is owned exclusively by customer-checkout-upgrade.js and
-  // transak-checkout.js. Product presentation code must not attach a payment
-  // handler or call a payment-provider endpoint.
+  // direct-wallet-checkout.js. Product presentation code must not attach a
+  // second payment handler or call a custodial payment-provider endpoint.
 });

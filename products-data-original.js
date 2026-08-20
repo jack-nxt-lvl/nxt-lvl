@@ -906,3 +906,9 @@ const categories = [
   { id: 'capsules', name: 'Orals & Tablets' },
   { id: 'injectables', name: 'Injectables' }
 ];
+
+// The direct-payment API imports the same catalog so checkout totals are
+// calculated from trusted product data instead of browser-supplied prices.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { compounds, stacks, protocols, categories };
+}

@@ -1,5 +1,9 @@
 {
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
   "dependencies": {
+    "ethers": "^6.17.0",
     "qrcode": "^1.5.4"
   }
 }

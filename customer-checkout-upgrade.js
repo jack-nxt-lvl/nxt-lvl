@@ -1,6 +1,6 @@
 (() => {
-  if (window.__nxtCustomerCheckoutTransakOnly) return;
-  window.__nxtCustomerCheckoutTransakOnly = true;
+  if (window.__nxtCustomerCheckoutDirectWallet) return;
+  window.__nxtCustomerCheckoutDirectWallet = true;
 
   const SHIPPING_FEE = 10;
 
@@ -28,21 +28,21 @@
     return cartItems().reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),0);
   }
 
-  function ensureTransak(){
+  function ensureDirectWallet(){
     return new Promise((resolve,reject)=>{
-      if (typeof window.startTransakCheckout === 'function') return resolve();
-      const existing = document.querySelector('script[data-nxt-transak-direct]');
+      if (typeof window.startDirectWalletCheckout === 'function') return resolve();
+      const existing = document.querySelector('script[data-nxt-direct-wallet]');
       if (existing) {
-        const timer=setInterval(()=>{if(typeof window.startTransakCheckout==='function'){clearInterval(timer);resolve();}},50);
-        setTimeout(()=>{clearInterval(timer);if(typeof window.startTransakCheckout==='function')resolve();else reject(new Error('Transak checkout failed to load.'));},5000);
+        const timer=setInterval(()=>{if(typeof window.startDirectWalletCheckout==='function'){clearInterval(timer);resolve();}},50);
+        setTimeout(()=>{clearInterval(timer);if(typeof window.startDirectWalletCheckout==='function')resolve();else reject(new Error('Direct-wallet checkout failed to load.'));},5000);
         return;
       }
       const script=document.createElement('script');
-      script.src='/transak-checkout.js?v=20260820-transak-only-final';
+      script.src='/direct-wallet-checkout.js?v=20260820-direct-1';
       script.async=false;
-      script.dataset.nxtTransakDirect='1';
-      script.onload=()=>typeof window.startTransakCheckout==='function'?resolve():reject(new Error('Transak checkout failed to initialize.'));
-      script.onerror=()=>reject(new Error('Transak checkout failed to load.'));
+      script.dataset.nxtDirectWallet='1';
+      script.onload=()=>typeof window.startDirectWalletCheckout==='function'?resolve():reject(new Error('Direct-wallet checkout failed to initialize.'));
+      script.onerror=()=>reject(new Error('Direct-wallet checkout failed to load.'));
       document.body.appendChild(script);
     });
   }
@@ -56,7 +56,7 @@
       overlay.innerHTML=`<div class="nxt-checkout-card">
         <div class="nxt-checkout-kicker">🔒 Secure Checkout</div>
         <h2>Shipping or Local Pickup</h2>
-        <div class="nxt-checkout-intro">Enter your order information, then continue directly to Transak for BTC, ETH, or USDT payment by eligible Apple Pay, debit card, or credit card.</div>
+        <div class="nxt-checkout-intro">Enter your order information, then pay BTC, ETH, or USDT directly from your crypto wallet. The site verifies the payment on the blockchain before confirming the order.</div>
         <div class="nxt-fulfillment-grid">
           <button type="button" class="nxt-fulfillment active" data-mode="shipping"><strong>📦 Ship My Order</strong><span>Standard delivery</span><span class="price">$10 shipping</span></button>
           <button type="button" class="nxt-fulfillment" data-mode="pickup"><strong>📍 Local Pickup</strong><span>For local customers</span><span class="price">FREE — $0 shipping</span></button>
@@ -66,7 +66,7 @@
         <div class="nxt-pickup-note">Local pickup selected — shipping is $0. Pickup details will be coordinated after the order is confirmed.</div>
         <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$10.00</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+SHIPPING_FEE).toFixed(2)}</span></div><div class="nxt-no-tax">Sales tax: $0.00</div></div>
         <div class="nxt-checkout-error"></div>
-        <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Transak →</button></div>
+        <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Wallet Payment →</button></div>
       </div>`;
 
       const addressWrap=overlay.querySelector('.nxt-address-fields');
@@ -104,15 +104,15 @@
     const details=await collectCheckoutDetails();if(!details)return;
     window.nxtCheckoutDetails=details;
     fetch('/api/checkout-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customer:{...details.customer,fulfillment:details.fulfillment},items:cartItems(),amount:details.total,fulfillment:details.fulfillment,shipping:details.shipping})}).catch(()=>{});
-    try{await ensureTransak();await window.startTransakCheckout();}
-    catch(err){alert(err.message||'Unable to open Transak checkout. Please try again.');}
+    try{await ensureDirectWallet();await window.startDirectWalletCheckout();}
+    catch(err){alert(err.message||'Unable to open direct-wallet checkout. Please try again.');}
   }
 
   window.proceedToCheckout=runCheckout;
 
   function bind(){
-    const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtTransakOnly==='1')return;
-    btn.dataset.nxtTransakOnly='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
+    const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtDirectWallet==='1')return;
+    btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
   }
   bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();

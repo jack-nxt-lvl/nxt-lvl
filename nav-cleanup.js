@@ -29,7 +29,7 @@
     const title = notice.querySelector('.crypto-text strong');
     const copy = notice.querySelector('.crypto-text span');
     if (title) title.textContent = 'Crypto Payments Accepted';
-    if (copy) copy.textContent = 'Pay with crypto. If you need to buy crypto first, you may be able to use Apple Pay, Cash App, or a debit card through a supported crypto provider.';
+    if (copy) copy.textContent = 'Pay BTC, ETH, or USDT directly from your wallet. Each payment is independently verified on the blockchain.';
   }
 
   function applyUpdates() {
