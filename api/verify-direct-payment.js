@@ -7,41 +7,28 @@ const {
   explorerUrl,
   json,
   normalizeOrder,
+  requiredConfirmations,
   verifyQuote,
 } = require('../lib/direct-payment');
 const { verifyOnChain } = require('../lib/chain-verification');
 const { escapeHtml, sendEmail } = require('../lib/email');
+const {
+  PaymentLedgerError,
+  acquirePaymentLock,
+  claimPayment,
+  releasePaymentLock,
+} = require('../lib/payment-ledger');
 
 function formatMoney(cents) { return `$${(Number(cents) / 100).toFixed(2)}`; }
-
-async function claimTransaction(txid, orderId) {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return { claimed: true, durable: false };
-
-  const key = `nxt:payment-tx:${txid}`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(['SET', key, orderId, 'NX', 'EX', '31536000']),
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error('The payment ledger is temporarily unavailable.');
-  if (data.result === 'OK') return { claimed: true, durable: true };
-
-  const existingResponse = await fetch(url, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(['GET', key]),
-  });
-  const existing = await existingResponse.json().catch(() => ({}));
-  return { claimed: existing.result === orderId, durable: true, duplicateOrderId: existing.result || null };
-}
 
 function statusMessage(result) {
   switch (result.status) {
     case 'not_found': return 'Transaction not found yet. Confirm the transaction ID and try again in a moment.';
-    case 'confirming': return `Payment found. Waiting for confirmations (${result.confirmations}/${result.requiredConfirmations}).`;
+    case 'confirming': return result.replaceable && !result.confirmations
+      ? `Payment found in the Bitcoin mempool, but it can still be replaced. Waiting for confirmations (0/${result.requiredConfirmations}).`
+      : `Payment found. Waiting for secure confirmations (${result.confirmations}/${result.requiredConfirmations}).`;
+    case 'provider_disagreement': return 'Blockchain providers have not reached the same confirmed view yet. Verification will retry automatically.';
+    case 'reorged': return 'The transaction moved during a blockchain reorganization. Waiting for it to settle on the canonical chain.';
     case 'underpaid': return 'The transaction amount is lower than the exact checkout amount. Contact support before sending anything else.';
     case 'overpaid': return 'The transaction amount is higher than the exact checkout amount. It requires manual review.';
     case 'wrong_address': return 'This transaction was not sent to the checkout wallet.';
@@ -92,6 +79,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed.' });
   if (!applyCors(req, res)) return json(res, 403, { error: 'Origin not allowed.' });
 
+  let paymentLease = null;
   try {
     const quote = verifyQuote(req.body && req.body.quoteToken);
     const txid = cleanTxid(req.body && req.body.txid, quote.asset);
@@ -103,20 +91,26 @@ module.exports = async function handler(req, res) {
     if (customerDigest(customer) !== quote.customerDigest) {
       return json(res, 400, { error: 'The customer information no longer matches this payment quote. Start checkout again.' });
     }
+
+    paymentLease = await acquirePaymentLock(quote.asset, txid, quote.orderId);
     const result = await verifyOnChain(txid, quote);
     if (!result.ok) {
-      const code = result.status === 'confirming' || result.status === 'not_found' ? 202 : 400;
+      const pending = ['confirming', 'not_found', 'provider_disagreement', 'reorged'].includes(result.status);
+      const code = pending ? 202 : 400;
       return json(res, code, {
         status: result.status,
         message: statusMessage(result),
         confirmations: result.confirmations || 0,
-        confirmationsRequired: result.requiredConfirmations || quote.confirmations,
+        confirmationsRequired: result.requiredConfirmations || requiredConfirmations(quote.asset),
       });
     }
 
-    const ledger = await claimTransaction(txid, quote.orderId);
-    if (!ledger.claimed) {
+    const ledger = await claimPayment(quote.asset, txid, quote.orderId);
+    if (ledger.status === 'TX_USED') {
       return json(res, 409, { error: 'This transaction has already been used for another order.' });
+    }
+    if (ledger.status === 'ORDER_ALREADY_PAID') {
+      return json(res, 409, { error: 'This order already has a different confirmed payment. Contact support before sending anything else.' });
     }
 
     const transactionUrl = explorerUrl(quote.asset, txid);
@@ -133,13 +127,24 @@ module.exports = async function handler(req, res) {
       asset: quote.asset,
       amount: quote.amountDisplay,
       confirmations: result.confirmations,
-      confirmationsRequired: quote.confirmations,
+      confirmationsRequired: requiredConfirmations(quote.asset),
       transactionUrl,
-      durableDuplicateProtection: ledger.durable,
+      durableDuplicateProtection: true,
+      idempotent: ledger.status === 'IDEMPOTENT',
       confirmationEmailSent,
     });
   } catch (error) {
     console.error('Direct payment verification error:', error);
-    return json(res, 400, { error: error.message || 'Unable to verify this payment.' });
+    const blockchainTemporary = /blockchain|bitcoin|ethereum|rpc|provider|fetch|network|timeout|height/i.test(String(error && error.message));
+    const status = error instanceof PaymentLedgerError ? error.httpStatus : (blockchainTemporary ? 503 : 400);
+    if (error instanceof PaymentLedgerError && error.code === 'verification_busy') {
+      return json(res, status, { status: error.code, message: error.message });
+    }
+    return json(res, status, { error: error.message || 'Unable to verify this payment.' });
+  } finally {
+    if (paymentLease) {
+      try { await releasePaymentLock(paymentLease); }
+      catch (releaseError) { console.error('Payment verification lock release failed:', releaseError); }
+    }
   }
 };

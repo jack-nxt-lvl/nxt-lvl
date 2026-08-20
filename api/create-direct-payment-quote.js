@@ -1,6 +1,7 @@
 const QRCode = require('qrcode');
 const {
   ASSETS,
+  QUOTE_RESERVATION_TTL_MS,
   QUOTE_TTL_MS,
   amountForQuote,
   applyCors,
@@ -13,6 +14,7 @@ const {
   randomOrderId,
   signQuote,
 } = require('../lib/direct-payment');
+const { PaymentLedgerError, reserveQuoteAmount } = require('../lib/payment-ledger');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
@@ -30,10 +32,18 @@ module.exports = async function handler(req, res) {
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
     const usdPrice = await fetchUsdPrice(asset);
-    const amount = amountForQuote(asset, order.totalCents, usdPrice);
     const createdAt = Date.now();
     const expiresAt = createdAt + QUOTE_TTL_MS;
     const orderId = randomOrderId();
+    let amount = null;
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      const candidate = amountForQuote(asset, order.totalCents, usdPrice);
+      if (await reserveQuoteAmount(asset, candidate.amountUnits, orderId, QUOTE_RESERVATION_TTL_MS)) {
+        amount = candidate;
+        break;
+      }
+    }
+    if (!amount) throw new PaymentLedgerError('Unable to reserve a unique payment amount. Please retry checkout.');
     const payload = {
       v: 1,
       orderId,
@@ -75,7 +85,8 @@ module.exports = async function handler(req, res) {
   } catch (error) {
     console.error('Direct payment quote error:', error);
     const setupRequired = /CRYPTO_QUOTE_SECRET/.test(String(error && error.message));
-    return json(res, setupRequired ? 503 : 400, {
+    const temporary = error instanceof PaymentLedgerError || /price|coinbase|coingecko|fetch|network|timeout/i.test(String(error && error.message));
+    return json(res, setupRequired || temporary ? 503 : 400, {
       error: setupRequired ? 'Direct checkout is missing its internal quote-signing secret.' : (error.message || 'Unable to create a payment quote.'),
       setupRequired,
       missing: setupRequired ? ['CRYPTO_QUOTE_SECRET'] : undefined,

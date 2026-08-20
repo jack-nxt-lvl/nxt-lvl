@@ -15,6 +15,7 @@ const {
 } = require('../lib/direct-payment');
 const {
   TRANSFER_TOPIC,
+  bitcoinSignalsRbf,
   findBitcoinCandidate,
   findUsdtLogCandidate,
   inspectBitcoinTransaction,
@@ -26,6 +27,9 @@ test('uses the validated production receiving addresses', () => {
   assert.equal(ASSETS.ETH.address, '0xcAB4A4f03D32dA598EfdAba944753415f4915281');
   assert.equal(ASSETS.USDT.address, ASSETS.ETH.address);
   assert.equal(ASSETS.USDT.contract, '0xdAC17F958D2ee523a2206206994597C13D831ec7');
+  assert.equal(ASSETS.BTC.confirmations, 6);
+  assert.equal(ASSETS.ETH.confirmations, 64);
+  assert.equal(ASSETS.USDT.confirmations, 64);
 });
 
 test('recalculates cart prices from the trusted catalog', () => {
@@ -45,7 +49,9 @@ test('signs temporary quotes and rejects tampering', () => {
   };
   const token = signQuote(payload);
   assert.deepEqual(verifyQuote(token), payload);
-  assert.throws(() => verifyQuote(`${token.slice(0, -1)}x`), /authenticate|invalid/i);
+  const [body, signature] = token.split('.');
+  const replacement = signature[0] === 'a' ? 'b' : 'a';
+  assert.throws(() => verifyQuote(`${body}.${replacement}${signature.slice(1)}`), /authenticate|invalid/i);
 });
 
 test('binds a quote to normalized customer details and normalizes hashes by chain', () => {
@@ -66,17 +72,45 @@ test('adds a sub-cent USDT order fingerprint', () => {
   assert.match(result.amountDisplay, /^12\.50\d{4}$/);
 });
 
-test('verifies an exact Bitcoin output and confirmation', () => {
+test('requires the server Bitcoin policy even when an old quote requests one confirmation', () => {
   const now = Date.now();
   const quote = { asset: 'BTC', amountUnits: '25000', confirmations: 1, createdAt: now };
+  const blockHash = 'a'.repeat(64);
   const tx = {
+    vin: [{ sequence: 0xffffffff }],
     vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 25000 }],
-    status: { confirmed: true, block_height: 100, block_time: Math.floor(now / 1000) },
+    status: { confirmed: true, block_height: 100, block_hash: blockHash, block_time: Math.floor(now / 1000) },
   };
-  const result = inspectBitcoinTransaction(tx, 100, quote);
+  const result = inspectBitcoinTransaction(tx, 105, quote, blockHash);
   assert.equal(result.ok, true);
   assert.equal(result.status, 'paid');
-  assert.equal(result.confirmations, 1);
+  assert.equal(result.confirmations, 6);
+  assert.equal(result.requiredConfirmations, 6);
+});
+
+test('never accepts a zero-confirmation RBF Bitcoin transaction', () => {
+  const quote = { asset: 'BTC', amountUnits: '25000', confirmations: 1, createdAt: Date.now() };
+  const tx = {
+    vin: [{ sequence: 0xfffffffd }],
+    vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 25000 }],
+    status: { confirmed: false },
+  };
+  const result = inspectBitcoinTransaction(tx, 0, quote);
+  assert.equal(bitcoinSignalsRbf(tx), true);
+  assert.equal(result.ok, false);
+  assert.equal(result.status, 'confirming');
+  assert.equal(result.replaceable, true);
+});
+
+test('rejects a Bitcoin transaction whose block is no longer canonical', () => {
+  const tx = {
+    vin: [{ sequence: 0xffffffff }],
+    vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 25000 }],
+    status: { confirmed: true, block_height: 100, block_hash: 'a'.repeat(64) },
+  };
+  const result = inspectBitcoinTransaction(tx, 110, { asset: 'BTC', amountUnits: '25000', createdAt: Date.now() }, 'b'.repeat(64));
+  assert.equal(result.ok, false);
+  assert.equal(result.status, 'reorged');
 });
 
 test('automatically finds the exact Bitcoin payment and ignores other amounts', () => {
@@ -97,26 +131,42 @@ test('rejects Bitcoin underpayments and overpayments for safe order matching', (
 test('verifies an exact native ETH transfer', () => {
   const now = Date.now();
   const quote = { asset: 'ETH', amountUnits: '123000000000000000', confirmations: 12, createdAt: now };
-  const tx = { to: ASSETS.ETH.address, value: '0x1b4fbd92b5f8000' };
-  const receipt = { status: '0x1', blockNumber: '0x64', logs: [] };
-  const block = { timestamp: `0x${Math.floor(now / 1000).toString(16)}` };
-  const result = inspectEthereumTransaction(tx, receipt, block, '0x6f', quote);
+  const blockHash = `0x${'a'.repeat(64)}`;
+  const tx = { to: ASSETS.ETH.address, value: '0x1b4fbd92b5f8000', blockHash };
+  const receipt = { status: '0x1', blockNumber: '0x64', blockHash, logs: [] };
+  const block = { hash: blockHash, timestamp: `0x${Math.floor(now / 1000).toString(16)}` };
+  const result = inspectEthereumTransaction(tx, receipt, block, '0xa3', quote, '0x64');
   assert.equal(result.ok, true);
-  assert.equal(result.confirmations, 12);
+  assert.equal(result.confirmations, 64);
+  assert.equal(result.finalized, true);
+});
+
+test('does not accept an Ethereum transaction before its block is finalized', () => {
+  const blockHash = `0x${'b'.repeat(64)}`;
+  const quote = { asset: 'ETH', amountUnits: '1', confirmations: 1, createdAt: Date.now() };
+  const tx = { to: ASSETS.ETH.address, value: '0x1', blockHash };
+  const receipt = { status: '0x1', blockNumber: '0x64', blockHash, logs: [] };
+  const block = { hash: blockHash, timestamp: `0x${Math.floor(Date.now() / 1000).toString(16)}` };
+  const result = inspectEthereumTransaction(tx, receipt, block, '0xc8', quote, '0x63');
+  assert.equal(result.ok, false);
+  assert.equal(result.status, 'confirming');
+  assert.equal(result.finalized, false);
+  assert.equal(result.requiredConfirmations, 64);
 });
 
 test('verifies an exact ERC-20 USDT Transfer log to the receiving wallet', () => {
   const now = Date.now();
   const amount = 125_000_123n;
+  const blockHash = `0x${'c'.repeat(64)}`;
   const receiverTopic = `0x${ASSETS.USDT.address.toLowerCase().slice(2).padStart(64, '0')}`;
   const quote = { asset: 'USDT', amountUnits: amount.toString(), confirmations: 12, createdAt: now };
-  const tx = { to: ASSETS.USDT.contract };
+  const tx = { to: ASSETS.USDT.contract, blockHash };
   const receipt = {
-    status: '0x1', blockNumber: '0xc8',
-    logs: [{ address: ASSETS.USDT.contract, topics: [TRANSFER_TOPIC, `0x${'1'.padStart(64, '0')}`, receiverTopic], data: `0x${amount.toString(16)}` }],
+    status: '0x1', blockNumber: '0xc8', blockHash,
+    logs: [{ address: ASSETS.USDT.contract, blockHash, topics: [TRANSFER_TOPIC, `0x${'1'.padStart(64, '0')}`, receiverTopic], data: `0x${amount.toString(16)}` }],
   };
-  const block = { timestamp: `0x${Math.floor(now / 1000).toString(16)}` };
-  const result = inspectEthereumTransaction(tx, receipt, block, '0xd3', quote);
+  const block = { hash: blockHash, timestamp: `0x${Math.floor(now / 1000).toString(16)}` };
+  const result = inspectEthereumTransaction(tx, receipt, block, '0x107', quote, '0xc8');
   assert.equal(result.ok, true);
   assert.equal(result.status, 'paid');
 });

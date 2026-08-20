@@ -4,6 +4,7 @@ const {
   customerDigest,
   json,
   normalizeOrder,
+  requiredConfirmations,
   verifyQuote,
 } = require('../lib/direct-payment');
 const { findOnChainPayment } = require('../lib/chain-verification');
@@ -45,7 +46,7 @@ module.exports = async function handler(req, res) {
       txid: result.txid,
       paymentStatus: result.verification && result.verification.status,
       confirmations: result.verification && result.verification.confirmations || 0,
-      confirmationsRequired: quote.confirmations,
+      confirmationsRequired: requiredConfirmations(quote.asset),
     });
   } catch (error) {
     console.error('Direct payment discovery error:', error);
