@@ -8,6 +8,10 @@
           "value": "no-store, no-cache, must-revalidate, max-age=0"
         },
         {
+          "key": "Clear-Site-Data",
+          "value": "\"cache\""
+        },
+        {
           "key": "X-Robots-Tag",
           "value": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         },
