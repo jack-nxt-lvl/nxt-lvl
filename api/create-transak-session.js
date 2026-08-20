@@ -29,7 +29,7 @@ module.exports=async function handler(req,res){
     if(email)widgetParams.email=email;
     const createSession=formattedToken=>fetch(`${gateway}/api/v2/auth/session`,{method:'POST',headers:{accept:'application/json','access-token':formattedToken,'x-api-key':apiKey,'x-user-ip':ip(req),'content-type':'application/json'},body:JSON.stringify({widgetParams})});
     let r=await createSession(accessToken);let d=await r.json().catch(()=>({}));
-    if(r.status===401){r=await createSession(`Bearer ${accessToken}`);d=await r.json().catch(()=>({}));}
+    if(!r.ok&&!String(accessToken).startsWith('Bearer ')){r=await createSession(`Bearer ${accessToken}`);d=await r.json().catch(()=>({}));}
     const widgetUrl=d?.data?.widgetUrl;
     if(!r.ok||!widgetUrl)return json(res,r.status||502,{error:errorMessage(d,'Unable to start Transak checkout.')});
     return json(res,200,{widgetUrl,orderId,environment:env,crypto:cfg.cryptoCurrencyCode,network:cfg.network});
