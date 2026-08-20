@@ -2529,7 +2529,7 @@
           <span id="cartSubtotal">$0.00</span>
         </div>
         <p class="cart-note">Final pricing &amp; payment confirmed at checkout.</p>
-        <button class="btn-primary cart-checkout-btn" id="cartCheckoutBtn" onclick="proceedToCheckout()">Proceed to
+        <button class="btn-primary cart-checkout-btn" id="cartCheckoutBtn">Proceed to
           Checkout</button>
       </div>
     </div>
@@ -3029,207 +3029,6 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
     // =====================================================
-    // CHECKOUT — placeholder, ready for payment wiring
-    // -----------------------------------------------------
-    // This function is intentionally NOT connected to a real
-    // payment processor yet. When the payment system is chosen,
-    // replace the body of this function with something like:
-    //
-    //   const res = await fetch('/api/create-checkout-session', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ items: cart })
-    //   });
-    //   const { url } = await res.json();
-    //   window.location.href = url; // redirect to hosted checkout
-    //
-    // `cart` already holds everything a payment integration needs:
-    // productId, name, price tier label, unit price, and quantity.
-    // =====================================================
-    async function proceedToCheckout() {
-  if (cart.length === 0) return;
-
-
-const payCurrency = await new Promise((resolve) => {
-  const chooser = document.createElement("div");
-
-  chooser.innerHTML = `
-    <div style="
-      background:#111118;
-      color:white;
-      width:420px;
-      max-width:90vw;
-      padding:28px;
-      border-radius:18px;
-      text-align:center;
-    ">
-      <h2>Choose Cryptocurrency</h2>
-
-      <button data-crypto="btc">Bitcoin (BTC)</button>
-      <button data-crypto="eth">Ethereum (ETH)</button>
-      <button data-crypto="ltc">Litecoin (LTC)</button>
-      <button data-crypto="usdttrc20">USDT (TRC20)</button>
-
-      <button id="cancelCrypto">Cancel</button>
-    </div>
-  `;
-
-  chooser.style.cssText = `
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:999999;
-  `;
-
-  chooser.querySelectorAll("[data-crypto]").forEach((button) => {
-    button.style.cssText = `
-      width:100%;
-      margin:6px 0;
-      padding:14px;
-      background:#7c3aed;
-      color:white;
-      border:0;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:16px;
-    `;
-
-    button.onclick = () => {
-      const currency = button.dataset.crypto;
-      chooser.remove();
-      resolve(currency);
-    };
-  });
-
-  const cancelButton = chooser.querySelector("#cancelCrypto");
-
-  cancelButton.style.cssText = `
-    width:100%;
-    margin-top:12px;
-    padding:12px;
-    background:#333;
-    color:white;
-    border:0;
-    border-radius:8px;
-    cursor:pointer;
-  `;
-
-  cancelButton.onclick = () => {
-    chooser.remove();
-    resolve(null);
-  };
-
-  document.body.appendChild(chooser);
-});
-
-if (!payCurrency) return;
-  
-
-  const orderId = "NXT-" + Date.now();
-
-  try {
-    const res = await fetch("/api/create-nowpayment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        amount: cartSubtotal(),
-        payCurrency: payCurrency.trim().toLowerCase(),
-        orderId,
-        description: "NXT LVL Research order"
-      })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.message || data.error || "Unable to create payment");
-      return;
-    }
-
-    const paymentBox = document.createElement("div");
-
-paymentBox.innerHTML = `
-  <div style="
-    background:#111118;
-    color:white;
-    width:420px;
-    max-width:90vw;
-    padding:28px;
-    border-radius:18px;
-    text-align:center;
-  ">
-    <h2 style="margin-bottom:20px;">Crypto Payment</h2>
-
-    <p>Send exactly</p>
-    <h2>${data.pay_amount} ${data.pay_currency.toUpperCase()}</h2>
-
-    <p style="margin-top:20px;">Payment Address</p>
-
-    <div style="
-      background:#1d1d27;
-      padding:12px;
-      border-radius:8px;
-      word-break:break-all;
-      margin:10px 0;
-    ">${data.pay_address}</div>
-
-    <button id="copyCryptoAddress" style="
-      padding:12px 20px;
-      background:#7c3aed;
-      color:white;
-      border:0;
-      border-radius:8px;
-      cursor:pointer;
-    ">COPY ADDRESS</button>
-
-    <p style="margin-top:20px;font-size:12px;">
-      Payment ID: ${data.payment_id}
-    </p>
-
-    <button id="closePaymentBox" style="
-      margin-top:20px;
-      padding:12px 20px;
-      background:#333;
-      color:white;
-      border:0;
-      border-radius:8px;
-      cursor:pointer;
-    ">DONE</button>
-  </div>
-`;
-
-paymentBox.style.cssText = `
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.8);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999999;
-`;
-
-document.body.appendChild(paymentBox);
-
-paymentBox.querySelector("#copyCryptoAddress").onclick = async () => {
-  await navigator.clipboard.writeText(data.pay_address);
-  paymentBox.querySelector("#copyCryptoAddress").textContent = "COPIED ✓";
-};
-
-paymentBox.querySelector("#closePaymentBox").onclick = () => {
-  paymentBox.remove();
-};
-  } catch (error) {
-    console.error(error);
-    alert("Payment setup failed. Please try again.");
-  }
-}
-
-    // =====================================================
     // AI CHAT
     // Uses /api/chat so the OpenAI API key stays server-side.
     // =====================================================
@@ -3587,14 +3386,8 @@ paymentBox.querySelector("#closePaymentBox").onclick = () => {
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
-  <script src="checkout-wallet-enhancements.js?v=20260818-6"></script>
-  <script src="payment-delivery-guide.js?v=20260818-4"></script>
-  <script src="payment-completion-upgrade.js?v=20260818-5"></script>
-  <script src="payment-live-confirmation.js?v=20260818-1"></script>
-  <script src="customer-checkout-upgrade.js?v=20260818-3"></script>
-  <script src="checkout-payment-handoff-fix.js?v=20260818-2"></script>
-  <script src="applepay-card-emphasis.js?v=20260818-2"></script>
-  <script src="moonpay-assisted-handoff.js?v=20260818-2"></script>
+  <script src="transak-checkout.js?v=20260820-transak-only"></script>
+  <script src="customer-checkout-upgrade.js?v=20260820-transak-only"></script>
   <script src="ai-cart-bridge.js?v=20260818-2"></script>
 </body>
 

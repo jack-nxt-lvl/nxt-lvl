@@ -65,7 +65,7 @@ module.exports = async (req, res) => {
         <p>${delivery}</p>
         <h3>Products in cart</h3>
         <table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:8px;border-bottom:2px solid #111;">Product</th><th style="padding:8px;border-bottom:2px solid #111;">Qty</th><th style="text-align:right;padding:8px;border-bottom:2px solid #111;">Total</th></tr></thead><tbody>${itemRows}</tbody></table>
-        <p style="margin-top:18px;color:#666;font-size:12px;">This is a checkout lead notification. A separate paid-order email will be sent if NOWPayments later confirms the payment.</p>
+        <p style="margin-top:18px;color:#666;font-size:12px;">This is a checkout lead notification. Payment is completed separately through Transak.</p>
       </div>`;
 
     await sendEmail({
