@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { verifyOnChain } = require('../lib/chain-verification');
+const { findOnChainPayment, verifyOnChain } = require('../lib/chain-verification');
 
 test('retries a temporary Ethereum provider response before failing closed', async () => {
   const originalFetch = global.fetch;
@@ -35,5 +35,47 @@ test('retries a temporary Ethereum provider response before failing closed', asy
     assert.equal(calls.filter((call) => call.target.includes('publicnode.com') && call.method === 'eth_chainId').length, 2);
   } finally {
     global.fetch = originalFetch;
+  }
+});
+
+test('fails over to a second Ethereum log provider for USDT discovery', async () => {
+  const originalFetch = global.fetch;
+  const originalLogsRpc = process.env.ETHEREUM_LOGS_RPC_URL;
+  const originalBackupRpc = process.env.ETHEREUM_BACKUP_RPC_URL;
+  process.env.ETHEREUM_LOGS_RPC_URL = 'https://logs-primary.example.test';
+  process.env.ETHEREUM_BACKUP_RPC_URL = 'https://logs-backup.example.test';
+  const calls = [];
+
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    const request = JSON.parse(options.body);
+    calls.push({ target, method: request.method });
+    if (target === process.env.ETHEREUM_LOGS_RPC_URL) {
+      return { ok: false, status: 403, json: async () => ({ error: { message: 'Archive access denied' } }) };
+    }
+
+    let result = null;
+    if (request.method === 'eth_chainId') result = '0x1';
+    if (request.method === 'eth_getBlockByNumber') {
+      result = { number: '0x100', hash: `0x${'a'.repeat(64)}` };
+    }
+    if (request.method === 'eth_getLogs') result = [];
+    return { ok: true, status: 200, json: async () => ({ jsonrpc: '2.0', id: request.id, result }) };
+  };
+
+  try {
+    const result = await findOnChainPayment({
+      asset: 'USDT', amountUnits: '65000123', createdAt: Date.now(),
+    });
+    assert.equal(result.found, false);
+    assert.equal(result.status, 'not_found');
+    assert.ok(calls.some((call) => call.target === process.env.ETHEREUM_LOGS_RPC_URL));
+    assert.ok(calls.some((call) => call.target === process.env.ETHEREUM_BACKUP_RPC_URL && call.method === 'eth_getLogs'));
+  } finally {
+    global.fetch = originalFetch;
+    if (originalLogsRpc === undefined) delete process.env.ETHEREUM_LOGS_RPC_URL;
+    else process.env.ETHEREUM_LOGS_RPC_URL = originalLogsRpc;
+    if (originalBackupRpc === undefined) delete process.env.ETHEREUM_BACKUP_RPC_URL;
+    else process.env.ETHEREUM_BACKUP_RPC_URL = originalBackupRpc;
   }
 });
