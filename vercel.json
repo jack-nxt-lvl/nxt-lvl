@@ -5,11 +5,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-store, max-age=0, must-revalidate"
-        },
-        {
-          "key": "Clear-Site-Data",
-          "value": "\"cache\""
+          "value": "public, max-age=0, s-maxage=60, stale-while-revalidate=300"
         },
         {
           "key": "X-Robots-Tag",
@@ -26,7 +22,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-store, max-age=0, must-revalidate"
+          "value": "public, max-age=0, s-maxage=60, stale-while-revalidate=300"
         }
       ]
     },
@@ -35,7 +31,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "no-store, max-age=0, must-revalidate"
+          "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000"
         }
       ]
     },
@@ -54,6 +50,42 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=604800, s-maxage=2592000, stale-while-revalidate=2592000"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).webp",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).jpg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).jpeg",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).png",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     }
