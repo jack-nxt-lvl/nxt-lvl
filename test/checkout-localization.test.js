@@ -57,6 +57,12 @@ test('keeps USD local display dependency-free and caps long polling', async () =
     assert.deepEqual(fundingGuidance('US').methods.slice(0, 2), ['Apple Pay', 'debit or credit card']);
     assert.equal(findHandler.requestedWaitMs({ waitMs: 60_000 }), findHandler.MAX_LONG_POLL_MS);
     assert.equal(findHandler.requestedWaitMs({ waitMs: -1 }), 0);
+    assert.equal(findHandler.temporaryDiscoveryError(new Error('The operation was aborted due to timeout')), true);
+    assert.equal(await findHandler.withDiscoveryTimeout(() => Promise.resolve('ok'), 20), 'ok');
+    await assert.rejects(
+      findHandler.withDiscoveryTimeout(() => new Promise(() => {}), 5),
+      /discovery timed out/i,
+    );
   } finally {
     global.fetch = originalFetch;
   }
