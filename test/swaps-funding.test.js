@@ -6,6 +6,7 @@ const { join } = require('node:path');
 const {
   CHECKOUT_ORIGIN,
   buildCheckoutUrl,
+  popupFeatures,
 } = require('../lib/swaps-funding');
 
 test('builds a Swaps receive-amount buy link with only supported parameters', () => {
@@ -40,6 +41,19 @@ test('rejects unsupported assets and malformed amounts', () => {
   assert.throws(() => buildCheckoutUrl({ asset: 'USDT', amount: '1&address=evil' }), /invalid/i);
 });
 
+test('requests a compact resizable window against the right side of the screen', () => {
+  const features = popupFeatures(
+    { availWidth: 1440, availHeight: 900, availLeft: 0, availTop: 0 },
+    { outerWidth: 1200, outerHeight: 800, screenX: 0, screenY: 0 },
+  );
+  assert.match(features, /popup=yes/);
+  assert.match(features, /resizable=yes/);
+  assert.match(features, /width=540/);
+  assert.match(features, /height=872/);
+  assert.match(features, /left=890/);
+  assert.match(features, /top=14/);
+});
+
 test('keeps beginner guidance and recovery controls in the direct checkout', () => {
   const source = readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8');
   assert.match(source, /Paying by card or Apple Pay\?/);
@@ -53,9 +67,10 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /Keep this checkout open for confirmation/);
   assert.match(source, /data-swaps-fallback/);
   assert.match(source, /nxt-swaps-drawer/);
-  assert.match(source, /data-swaps-frame/);
+  assert.match(source, /data-swaps-launch/);
   assert.match(source, /right-side Swaps panel/);
-  assert.doesNotMatch(source, /window\.open\(/);
+  assert.match(source, /window\.open\(url, 'nxtSwapsBuy'/);
+  assert.doesNotMatch(source, /window\.open\([^,]+,\s*['_"]_blank/);
   assert.match(source, /detect the incoming payment automatically/i);
   assert.match(source, /transaction ID from Swaps/i);
 });

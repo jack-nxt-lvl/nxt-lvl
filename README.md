@@ -99,12 +99,14 @@ remain USD-denominated. The regional Apple Pay/card/bank wording is informationa
 guidance for compatible third-party wallet apps only. NXT LVL does not process
 cards or use a hosted fiat-payment provider.
 
-The checkout also offers an optional "Buy crypto" funding button that embeds the
-legitimate `https://www.swaps.app/` public buy flow in an in-page right-side
-drawer while the NXT LVL checkout remains open. A clearly labeled separate-tab
-fallback remains available if the third-party frame cannot load. The verified
-public parameters prefill the selected asset and put the requested crypto amount
-in Swaps' receive field.
+The checkout also offers an optional "Buy crypto" funding button that opens an
+in-page right-side instruction drawer while the NXT LVL checkout remains open.
+Swaps blocks its ordinary public page from being framed by third-party sites, so
+the drawer requests a named, compact Swaps purchase window instead of displaying
+a broken iframe. Browsers may still force that window into a tab; a clearly
+labeled separate-tab fallback remains available. The verified public parameters
+prefill the selected asset and put the requested crypto amount in Swaps' receive
+field.
 Swaps does not document a public
 wallet-address parameter, so the checkout copies the signed quote's receiving
 address for the customer to paste and verify. The Swaps flow is not treated as
