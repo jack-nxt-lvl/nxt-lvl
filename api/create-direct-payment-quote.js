@@ -15,6 +15,7 @@ const {
   signQuote,
 } = require('../lib/direct-payment');
 const { PaymentLedgerError, reserveQuoteAmount } = require('../lib/payment-ledger');
+const { localizeOrderTotal } = require('../lib/checkout-localization');
 
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
@@ -31,7 +32,10 @@ module.exports = async function handler(req, res) {
 
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
-    const usdPrice = await fetchUsdPrice(asset);
+    const [usdPrice, localization] = await Promise.all([
+      fetchUsdPrice(asset),
+      localizeOrderTotal(req, order.totalCents, req.body && req.body.locale),
+    ]);
     const createdAt = Date.now();
     const expiresAt = createdAt + QUOTE_TTL_MS;
     const orderId = randomOrderId();
@@ -79,7 +83,9 @@ module.exports = async function handler(req, res) {
       confirmationsRequired: config.confirmations,
       expiresAt,
       paymentUri: uri,
+      uriStandard: asset === 'BTC' ? 'BIP-21' : 'EIP-681',
       qrDataUrl,
+      localization,
       note: 'Send the exact amount on the exact network. The small fractional amount identifies this order.',
     });
   } catch (error) {

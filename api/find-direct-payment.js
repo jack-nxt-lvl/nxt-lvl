@@ -9,6 +9,16 @@ const {
 } = require('../lib/direct-payment');
 const { findOnChainPayment } = require('../lib/chain-verification');
 
+const MAX_LONG_POLL_MS = 12_000;
+
+function requestedWaitMs(body) {
+  const value = Number(body && body.waitMs || 0);
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  return Math.min(MAX_LONG_POLL_MS, Math.floor(value));
+}
+
+function wait(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     if (!applyCors(req, res)) return json(res, 403, { error: 'Origin not allowed.' });
@@ -28,26 +38,37 @@ module.exports = async function handler(req, res) {
       return json(res, 400, { error: 'The customer information no longer matches this payment quote. Start checkout again.' });
     }
 
-    const result = await findOnChainPayment(quote);
-    if (result.status === 'txid_required') {
-      return json(res, 422, {
-        status: 'txid_required',
-        message: 'For ETH, use the browser-wallet button or paste the transaction ID after sending.',
-      });
+    const waitMs = requestedWaitMs(req.body);
+    const startedAt = Date.now();
+    const intervalMs = quote.asset === 'BTC' ? 2_500 : 5_000;
+    while (true) {
+      const result = await findOnChainPayment(quote);
+      if (result.status === 'txid_required') {
+        return json(res, 422, {
+          status: 'txid_required',
+          message: 'For ETH, use the browser-wallet button or paste the transaction ID after sending.',
+        });
+      }
+      if (result.found) {
+        return json(res, 200, {
+          status: 'found',
+          txid: result.txid,
+          paymentStatus: result.verification && result.verification.status,
+          confirmations: result.verification && result.verification.confirmations || 0,
+          confirmationsRequired: requiredConfirmations(quote.asset),
+          detectedBeforeFinality: !(result.verification && result.verification.ok),
+        });
+      }
+      const elapsed = Date.now() - startedAt;
+      if (!waitMs || elapsed >= waitMs || elapsed + intervalMs > waitMs) {
+        return json(res, 202, {
+          status: 'not_found',
+          message: `Watching ${quote.asset} for the exact payment amount…`,
+          retryAfterMs: 500,
+        });
+      }
+      await wait(intervalMs);
     }
-    if (!result.found) {
-      return json(res, 202, {
-        status: 'not_found',
-        message: `Watching ${quote.asset} for the exact payment amount…`,
-      });
-    }
-    return json(res, 200, {
-      status: 'found',
-      txid: result.txid,
-      paymentStatus: result.verification && result.verification.status,
-      confirmations: result.verification && result.verification.confirmations || 0,
-      confirmationsRequired: requiredConfirmations(quote.asset),
-    });
   } catch (error) {
     console.error('Direct payment discovery error:', error);
     const message = String(error && error.message || 'Unable to look for this payment.');
@@ -57,3 +78,6 @@ module.exports = async function handler(req, res) {
     });
   }
 };
+
+module.exports.MAX_LONG_POLL_MS = MAX_LONG_POLL_MS;
+module.exports.requestedWaitMs = requestedWaitMs;

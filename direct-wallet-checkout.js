@@ -11,7 +11,10 @@
     .nxt-wallet-coins{display:grid;gap:10px}.nxt-wallet-coin{position:relative;width:100%;display:flex;align-items:center;gap:13px;padding:14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:linear-gradient(145deg,#1a1a24,#12121a);color:#fff;text-align:left;cursor:pointer;transition:.18s}.nxt-wallet-coin:hover{transform:translateY(-1px);border-color:#8b5cf6;background:rgba(124,58,237,.12)}.nxt-wallet-icon{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;font-size:19px;font-weight:900}.nxt-wallet-icon.btc{background:#f7931a}.nxt-wallet-icon.eth{background:#627eea}.nxt-wallet-icon.usdt{background:#26a17b}.nxt-wallet-coin strong{display:block;font-size:13px}.nxt-wallet-coin small{display:block;margin-top:2px;color:#9ca3af;font-size:9px}.nxt-wallet-arrow{margin-left:auto;color:#c4b5fd;font-size:20px}.nxt-wallet-badge{position:absolute;right:38px;top:11px;padding:3px 6px;border-radius:999px;border:1px solid rgba(52,211,153,.25);background:rgba(16,185,129,.08);color:#6ee7b7;font-size:7px;font-weight:900;letter-spacing:.5px}
     .nxt-wallet-cancel{width:100%;margin-top:13px;min-height:44px;border:1px solid rgba(255,255,255,.08);border-radius:11px;background:#20202a;color:#aaa;font-weight:800;cursor:pointer}.nxt-wallet-note{margin-top:12px!important;text-align:center;font-size:9px!important;color:#777b88!important}
     .nxt-wallet-loading{z-index:1000017}.nxt-wallet-loadbox{width:min(420px,92vw);padding:30px;border-radius:20px;border:1px solid rgba(167,139,250,.25);background:#111118;color:#fff;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.7)}.nxt-wallet-spin{width:44px;height:44px;margin:0 auto 15px;border-radius:50%;border:3px solid rgba(255,255,255,.12);border-top-color:#a78bfa;animation:nxtWalletSpin .75s linear infinite}@keyframes nxtWalletSpin{to{transform:rotate(360deg)}}.nxt-wallet-loadbox h3{margin:0 0 6px}.nxt-wallet-loadbox p{color:#9ca3af;font-size:10px;margin:0}
-    .nxt-wallet-pay{width:min(800px,97vw)}.nxt-wallet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(100deg,#15151f,#101018)}.nxt-wallet-head strong{display:block;font-size:14px}.nxt-wallet-head span{display:block;color:#9ca3af;font-size:9px;margin-top:3px}.nxt-wallet-close{width:38px;height:38px;flex:0 0 38px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:#23232e;color:#fff;font-size:21px;cursor:pointer}.nxt-wallet-body{padding:20px;display:grid;grid-template-columns:260px 1fr;gap:20px}.nxt-wallet-qr{background:#fff;border-radius:16px;padding:12px;align-self:start;text-align:center}.nxt-wallet-qr img{display:block;width:100%;height:auto}.nxt-wallet-qr small{display:block;color:#5b5b66;font-size:9px;font-weight:800;margin-top:7px}.nxt-wallet-order{display:grid;gap:12px}.nxt-wallet-summary{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025);font-size:10px;color:#aaa}.nxt-wallet-summary b{color:#fff}.nxt-wallet-field{padding:13px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:#14141d}.nxt-wallet-label{font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#8f8fa1;margin-bottom:7px}.nxt-wallet-copyline{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.nxt-wallet-value{min-width:0;color:#fff;font:800 14px ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}.nxt-wallet-value.amount{font-size:20px;color:#c4b5fd}.nxt-wallet-copy{border:1px solid rgba(167,139,250,.28);border-radius:8px;background:rgba(124,58,237,.12);color:#d8ccff;font-size:9px;font-weight:850;padding:9px;cursor:pointer}
+    .nxt-wallet-pay{width:min(800px,97vw)}.nxt-wallet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(100deg,#15151f,#101018)}.nxt-wallet-head strong{display:block;font-size:14px}.nxt-wallet-head span{display:block;color:#9ca3af;font-size:9px;margin-top:3px}.nxt-wallet-close{width:38px;height:38px;flex:0 0 38px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:#23232e;color:#fff;font-size:21px;cursor:pointer}.nxt-wallet-body{padding:20px;display:grid;grid-template-columns:260px 1fr;gap:20px}.nxt-wallet-qr{background:#fff;border-radius:16px;padding:12px;align-self:start;text-align:center}.nxt-wallet-qr img{display:block;width:100%;height:auto}.nxt-wallet-qr small{display:block;color:#5b5b66;font-size:9px;font-weight:800;margin-top:7px}.nxt-wallet-order{display:grid;gap:12px}.nxt-wallet-summary{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025);font-size:10px;color:#aaa}.nxt-wallet-summary b{color:#fff}.nxt-wallet-field{padding:13px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:#14141d}.nxt-wallet-label{font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#8f8fa1;margin-bottom:7px}.nxt-wallet-copyline{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.nxt-wallet-value{min-width:0;color:#fff;font:800 14px ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}.nxt-wallet-value.amount{font-size:20px;color:#c4b5fd}.nxt-wallet-copy{border:1px solid rgba(167,139,250,.28);border-radius:8px;background:rgba(124,58,237,.12);color:#d8ccff;font-size:9px;font-weight:850;padding:9px;cursor:pointer;transition:.18s}.nxt-wallet-copy.copied{border-color:rgba(52,211,153,.55);background:rgba(16,185,129,.16);color:#86efac}
+    .nxt-wallet-local{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(167,139,250,.16);border-radius:10px;background:rgba(124,58,237,.055);font-size:9px;color:#a9a9b8}.nxt-wallet-local b{display:block;color:#fff;font-size:11px}.nxt-wallet-local span:last-child{text-align:right;color:#c4b5fd;font-weight:850}
+    .nxt-wallet-funding{padding:11px 12px;border:1px solid rgba(96,165,250,.20);border-radius:10px;background:rgba(37,99,235,.07);color:#bfdbfe;font-size:9px;line-height:1.45}.nxt-wallet-funding b{display:block;color:#dbeafe;margin-bottom:3px}.nxt-wallet-funding small{display:block;color:#8391aa;font-size:8px;line-height:1.45}
+    .nxt-wallet-progress{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nxt-wallet-step{padding:7px 4px;border:1px solid rgba(255,255,255,.07);border-radius:8px;background:rgba(255,255,255,.025);color:#666879;text-align:center;font-size:7px;font-weight:850;letter-spacing:.25px}.nxt-wallet-step.active{border-color:rgba(167,139,250,.35);background:rgba(124,58,237,.12);color:#ddd6fe}.nxt-wallet-step.complete{border-color:rgba(52,211,153,.28);background:rgba(16,185,129,.09);color:#86efac}
     .nxt-wallet-warning{padding:11px 12px;border:1px solid rgba(251,191,36,.26);border-radius:10px;background:rgba(245,158,11,.07);color:#fde68a;font-size:9.5px;line-height:1.5}.nxt-wallet-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.nxt-wallet-actions a,.nxt-wallet-actions button{min-height:45px;border-radius:10px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;background:#222231;color:#fff;font:850 10px Inter,sans-serif;cursor:pointer;padding:9px}.nxt-wallet-actions .primary{border:0;background:linear-gradient(100deg,#7c3aed,#9f55ff 55%,#6d28d9)}.nxt-wallet-actions [hidden]{display:none}.nxt-wallet-actions [disabled],.nxt-wallet-actions [aria-disabled="true"]{opacity:.45;cursor:not-allowed;pointer-events:none}
     .nxt-wallet-verify{padding:13px;border:1px solid rgba(52,211,153,.18);border-radius:12px;background:rgba(16,185,129,.045)}.nxt-wallet-verify label{display:block;color:#d1fae5;font-size:9px;font-weight:850;margin-bottom:7px}.nxt-wallet-verifyrow{display:grid;grid-template-columns:1fr auto;gap:8px}.nxt-wallet-verify input{min-width:0;height:43px;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:#0d0d14;color:#fff;padding:0 11px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}.nxt-wallet-verify button{border:0;border-radius:9px;background:#059669;color:#fff;font-size:9px;font-weight:900;padding:0 13px;cursor:pointer}.nxt-wallet-status{display:none;margin-top:9px;padding:9px 10px;border-radius:8px;background:rgba(255,255,255,.04);color:#c7c7d1;font-size:9.5px;line-height:1.45}.nxt-wallet-status.show{display:block}.nxt-wallet-status.good{color:#a7f3d0;background:rgba(16,185,129,.09)}.nxt-wallet-status.bad{color:#fecaca;background:rgba(239,68,68,.08)}.nxt-wallet-fine{font-size:8.5px!important;color:#747487!important;text-align:center}.nxt-wallet-success{padding:32px;text-align:center}.nxt-wallet-success .check{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(16,185,129,.15);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;font-size:30px}.nxt-wallet-success h2{margin-bottom:8px}.nxt-wallet-success a{display:inline-flex;margin-top:16px;color:#c4b5fd;font-size:10px}.nxt-wallet-success button{display:block;margin:18px auto 0;min-width:180px;min-height:44px;border:0;border-radius:10px;background:linear-gradient(100deg,#7c3aed,#6d28d9);color:#fff;font-weight:850;cursor:pointer}.nxt-wallet-resume{position:fixed;right:18px;bottom:18px;z-index:1000008;display:flex;align-items:center;gap:10px;max-width:min(420px,calc(100vw - 36px));padding:12px 14px;border:1px solid rgba(167,139,250,.35);border-radius:13px;background:#171722;color:#fff;box-shadow:0 16px 50px rgba(0,0,0,.55);font:800 10px Inter,sans-serif}.nxt-wallet-resume button{border:0;border-radius:8px;background:#7c3aed;color:#fff;padding:9px 12px;font-weight:850;cursor:pointer}.nxt-wallet-resume .dismiss{background:transparent;color:#9ca3af;padding:5px}
     @media(max-width:700px){.nxt-wallet-pad{padding:22px 16px}.nxt-wallet-card h2{font-size:23px}.nxt-wallet-trust{grid-template-columns:1fr}.nxt-wallet-pay{height:96vh}.nxt-wallet-body{grid-template-columns:1fr;padding:16px}.nxt-wallet-qr{width:210px;margin:auto}.nxt-wallet-actions{grid-template-columns:1fr}.nxt-wallet-verifyrow{grid-template-columns:1fr}.nxt-wallet-verify button{min-height:42px}}
@@ -23,11 +26,14 @@
   let activePoll = null;
   let activeDetectionPoll = null;
   let activeDetectionDelay = null;
+  let activeDetectionController = null;
   let activeTimer = null;
   let activeContext = null;
   let detectionWorking = false;
-  const ACTIVE_PAYMENT_KEY = 'nxtActiveDirectPaymentV2';
+  const ACTIVE_PAYMENT_KEY = 'nxtActiveDirectPaymentV3';
   const QUOTE_RECOVERY_MS = 2 * 60 * 60 * 1000;
+
+  try { sessionStorage.removeItem('nxtActiveDirectPaymentV2'); } catch (_) {}
 
   function escapeHtml(value) {
     return String(value == null ? '' : value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
@@ -73,12 +79,14 @@
 
   function stopTimers() {
     if (activePoll) clearInterval(activePoll);
-    if (activeDetectionPoll) clearInterval(activeDetectionPoll);
+    if (activeDetectionPoll) clearTimeout(activeDetectionPoll);
     if (activeDetectionDelay) clearTimeout(activeDetectionDelay);
+    if (activeDetectionController) activeDetectionController.abort();
     if (activeTimer) clearInterval(activeTimer);
     activePoll = null;
     activeDetectionPoll = null;
     activeDetectionDelay = null;
+    activeDetectionController = null;
     activeTimer = null;
     detectionWorking = false;
   }
@@ -146,7 +154,13 @@
     const response = await fetch('/api/create-direct-payment-quote', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ asset, fulfillment: details.fulfillment, customer: details.customer, items: context.items }),
+      body: JSON.stringify({
+        asset,
+        fulfillment: details.fulfillment,
+        customer: details.customer,
+        items: context.items,
+        locale: (navigator.languages && navigator.languages[0]) || navigator.language || 'en-US',
+      }),
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
@@ -174,19 +188,35 @@
     const finish = () => {
       if (!button) return;
       const original = button.textContent;
-      button.textContent = 'Copied ✓';
-      setTimeout(() => { button.textContent = original; }, 1500);
+      button.textContent = 'Copied! ✓';
+      button.classList.add('copied');
+      setTimeout(() => { button.textContent = original; button.classList.remove('copied'); }, 1700);
     };
-    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(finish);
-    const area = document.createElement('textarea');
-    area.value = text; area.style.position = 'fixed'; area.style.opacity = '0'; document.body.appendChild(area); area.select();
-    try { document.execCommand('copy'); } catch (_) {}
-    area.remove(); finish(); return Promise.resolve();
+    const fallback = () => {
+      const area = document.createElement('textarea');
+      area.value = text; area.style.position = 'fixed'; area.style.opacity = '0'; document.body.appendChild(area); area.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      area.remove(); finish();
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(finish).catch(fallback);
+    }
+    fallback(); return Promise.resolve();
   }
 
   function setStatus(node, message, type) {
     node.className = `nxt-wallet-status show${type ? ` ${type}` : ''}`;
     node.textContent = message;
+  }
+
+  function setPaymentStage(stage) {
+    if (!activeOverlay) return;
+    const stages = ['awaiting', 'detected', 'confirming', 'confirmed'];
+    const current = Math.max(0, stages.indexOf(stage));
+    activeOverlay.querySelectorAll('[data-payment-stage]').forEach((node, index) => {
+      node.classList.toggle('complete', index < current || stage === 'confirmed');
+      node.classList.toggle('active', index === current && stage !== 'confirmed');
+    });
   }
 
   function ethereumTransferData(address, amountUnits) {
@@ -234,10 +264,12 @@
       });
       const data = await response.json().catch(() => ({}));
       if (response.status === 202) {
+        setPaymentStage(['confirming', 'provider_disagreement', 'reorged'].includes(data.status) ? 'confirming' : 'awaiting');
         setStatus(status, data.message || 'Payment found and waiting for confirmations.');
         return 'pending';
       }
       if (!response.ok || data.status !== 'paid') throw new Error(data.error || data.message || 'Payment could not be verified.');
+      setPaymentStage('confirmed');
       showSuccess(data);
       return 'paid';
     } catch (error) {
@@ -284,9 +316,37 @@
     const txidLabel = automaticDetection
       ? 'Automatic detection is on — transaction ID is optional'
       : 'Transaction ID (filled automatically with a browser wallet)';
+    const localization = quote.localization || {};
+    const localTotal = localization.approximate
+      ? `≈ ${localization.formattedTotal || `$${quote.totalUsd}`} ${localization.currency || ''}`
+      : `${localization.usdFormattedTotal || `$${quote.totalUsd}`} USD`;
+    const localCaption = localization.approximate ? `Based on $${quote.totalUsd} USD` : 'Order total';
+    const funding = localization.funding || {
+      title: 'Need crypto first? Card or bank purchase may be available inside a compatible wallet app.',
+      detail: 'Availability and identity checks are controlled by the wallet or exchange. NXT LVL accepts crypto only.',
+    };
+    const walletButtonLabel = quote.asset === 'BTC' ? 'Open in Bitcoin wallet' : 'Open in crypto wallet';
+    const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const overlay = document.createElement('div');
     overlay.className = 'nxt-wallet-overlay';
-    overlay.innerHTML = `<div class="nxt-wallet-card nxt-wallet-pay" role="dialog" aria-modal="true" aria-label="Direct ${escapeHtml(quote.asset)} payment"><div class="nxt-wallet-head"><div><strong>Pay directly with ${escapeHtml(quote.asset)}</strong><span>${escapeHtml(quote.network)} · Order ${escapeHtml(quote.orderId)}</span></div><button type="button" class="nxt-wallet-close" aria-label="Close checkout">×</button></div><div class="nxt-wallet-body"><div class="nxt-wallet-qr"><img src="${escapeHtml(quote.qrDataUrl)}" alt="${escapeHtml(quote.asset)} payment QR code"><small>SCAN WITH YOUR WALLET</small></div><div class="nxt-wallet-order"><div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)}</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div><div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy</button></div></div><div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy</button></div></div><div class="nxt-wallet-warning"><b>${escapeHtml(quote.network)} only.</b> Send the exact amount shown. ${escapeHtml(networkWarning)}</div><div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">Open in wallet</a><button type="button" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Pay with browser wallet</button><button type="button" data-copy-all>Copy payment details</button></div><div class="nxt-wallet-verify"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div><div class="nxt-wallet-status"></div></div><p class="nxt-wallet-fine">${escapeHtml(quote.note)} Never share your recovery phrase or private key. If you do not own crypto yet, fund your own wallet through a lawful provider, then return here to pay.</p></div></div></div>`;
+    overlay.innerHTML = `<div class="nxt-wallet-card nxt-wallet-pay" role="dialog" aria-modal="true" aria-label="Direct ${escapeHtml(quote.asset)} payment">
+      <div class="nxt-wallet-head"><div><strong>Pay directly with ${escapeHtml(quote.asset)}</strong><span>${escapeHtml(quote.network)} · Order ${escapeHtml(quote.orderId)}</span></div><button type="button" class="nxt-wallet-close" aria-label="Close checkout">×</button></div>
+      <div class="nxt-wallet-body">
+        <div class="nxt-wallet-qr"><img src="${escapeHtml(quote.qrDataUrl)}" alt="${escapeHtml(quote.asset)} payment QR code"><small>${escapeHtml(qrLabel)}</small></div>
+        <div class="nxt-wallet-order">
+          <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
+          <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
+          <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
+          <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
+          <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
+          <div class="nxt-wallet-warning"><b>${escapeHtml(quote.network)} only.</b> Send the exact amount shown. ${escapeHtml(networkWarning)}</div>
+          <div class="nxt-wallet-funding"><b>${escapeHtml(funding.title)}</b><small>${escapeHtml(funding.detail)}</small></div>
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${escapeHtml(walletButtonLabel)}</a><button type="button" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Pay with browser wallet</button><button type="button" data-copy-all>Copy payment details</button></div>
+          <div class="nxt-wallet-verify"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div><div class="nxt-wallet-status"></div></div>
+          <p class="nxt-wallet-fine">${escapeHtml(quote.note)} Never share your recovery phrase or private key.</p>
+        </div>
+      </div>
+    </div>`;
     document.body.appendChild(overlay);
     activeOverlay = overlay;
 
@@ -298,6 +358,7 @@
     const openWallet = overlay.querySelector('[data-open-wallet]');
     const copyAll = overlay.querySelector('[data-copy-all]');
     input.value = initialTxid || '';
+    setPaymentStage(initialTxid ? 'detected' : 'awaiting');
 
     overlay.querySelector('[data-copy-amount]').onclick = (event) => copyText(quote.amount, event.currentTarget);
     overlay.querySelector('[data-copy-address]').onclick = (event) => copyText(quote.address, event.currentTarget);
@@ -324,36 +385,55 @@
     const detect = async () => {
       if (detectionWorking || !activeOverlay || input.value.trim()) return;
       detectionWorking = true;
+      let nextDelay = 500;
+      activeDetectionController = new AbortController();
       try {
         const response = await fetch('/api/find-direct-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: activeDetectionController.signal,
           body: JSON.stringify({
             quoteToken: quote.quoteToken,
             fulfillment: context.details.fulfillment,
             customer: context.details.customer,
             items: context.items,
+            waitMs: 12000,
           }),
         });
         const data = await response.json().catch(() => ({}));
         if (response.status === 202) {
+          nextDelay = Math.max(250, Math.min(2_000, Number(data.retryAfterMs) || 500));
+          setPaymentStage('awaiting');
           setStatus(status, data.message || `Watching ${quote.asset} for your exact payment…`);
+          return;
+        }
+        if (response.status === 400 && /quote|authenticate|too old/i.test(String(data.error || ''))) {
+          nextDelay = -1;
+          clearActivePayment();
+          setStatus(status, 'This checkout session expired. Close it and create a new payment quote.', 'bad');
           return;
         }
         if (!response.ok || data.status !== 'found' || !data.txid) {
           setStatus(status, data.error || data.message || 'Automatic detection is unavailable. Paste the transaction ID after sending.');
           return;
         }
-        if (activeDetectionPoll) clearInterval(activeDetectionPoll);
+        if (activeDetectionPoll) clearTimeout(activeDetectionPoll);
         activeDetectionPoll = null;
         input.value = data.txid;
         saveActivePayment(quote, context, data.txid);
-        setStatus(status, 'Payment found automatically. Checking confirmations…', 'good');
+        setPaymentStage('detected');
+        setStatus(status, 'Payment detected! Securing blockchain confirmations for your order…', 'good');
+        await new Promise((resolve) => setTimeout(resolve, 500));
         await check();
-      } catch (_) {
+      } catch (error) {
+        if (error && error.name === 'AbortError') return;
         setStatus(status, 'Automatic detection paused. Your payment is safe; paste the transaction ID or try Verify payment.');
       } finally {
+        activeDetectionController = null;
         detectionWorking = false;
+        if (nextDelay >= 0 && activeOverlay && !input.value.trim() && Date.now() < Number(quote.expiresAt)) {
+          activeDetectionPoll = setTimeout(detect, nextDelay);
+        }
       }
     };
 
@@ -361,6 +441,8 @@
       try {
         const txid = await payWithBrowserWallet(quote, input, status);
         saveActivePayment(quote, context, txid);
+        setPaymentStage('detected');
+        setStatus(status, 'Payment submitted! Waiting for the network to detect it…', 'good');
         await check();
       } catch (error) { setStatus(status, error.message || 'Wallet payment could not start.', 'bad'); }
     };
@@ -369,7 +451,6 @@
       setStatus(status, `Automatic detection is on. Send the exact ${quote.asset} amount; this screen will find it for you.`, 'good');
       activeDetectionDelay = setTimeout(() => {
         detect();
-        activeDetectionPoll = setInterval(detect, 15000);
       }, 1500);
     } else if (!initialTxid) {
       setStatus(status, 'Use Pay with browser wallet to fill the transaction ID automatically, or paste it after sending.');
@@ -390,7 +471,12 @@
         openWallet.textContent = 'Quote expired';
         if (browserPay) browserPay.disabled = true;
         copyAll.textContent = 'Create new quote';
-        if (!input.value.trim()) setStatus(status, 'Do not send on an expired quote. Create a new quote, or keep this open only if you already sent the payment.', 'bad');
+        if (!input.value.trim()) {
+          if (activeDetectionPoll) clearTimeout(activeDetectionPoll);
+          if (activeDetectionController) activeDetectionController.abort();
+          activeDetectionPoll = null;
+          setStatus(status, 'Do not send on an expired quote. Create a new quote, or keep this open only if you already sent the payment.', 'bad');
+        }
       }
     };
     updateTimer();

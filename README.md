@@ -14,6 +14,7 @@ Static single-page catalog site — "NXT LVL | Premium Research Compounds".
 | `api/find-direct-payment.js` | Automatic BTC and ERC-20 USDT payment discovery |
 | `api/verify-direct-payment.js` | Mature-chain verification and fulfillment release |
 | `lib/payment-ledger.js` | Atomic Redis locks, quote reservations, and permanent payment claims |
+| `lib/checkout-localization.js` | Geo/locale currency display and region-aware wallet-funding guidance |
 | `package.json` | Runtime dependencies for QR generation and Ethereum address handling |
 
 ## Running it locally
@@ -74,11 +75,23 @@ amounts are reserved atomically so active orders cannot share a fingerprint.
 BTC requires six canonical confirmations agreed by two independent providers.
 ETH and ERC-20 USDT require 64-block depth, finalized canonical inclusion, and
 agreement from two independent RPC providers. BTC and ERC-20 USDT are
-discovered automatically by exact amount, so customers normally do not need to copy a transaction hash. ETH
-browser-wallet payments fill the hash automatically; manual paste remains as a
-fallback for every asset. The cart persists in the browser, and an active quote
-can be resumed after an accidental refresh in the same tab. Network/RPC
-services can be temporarily unavailable even though funds remain in the
-receiving wallet.
+discovered automatically by exact amount. The customer UI uses held-request
+long polling to show Bitcoin mempool detection or an ERC-20 transfer in the
+latest Ethereum block quickly, but order fulfillment never runs until the
+confirmation rules above pass. ETH browser-wallet payments fill the hash
+automatically; manual paste remains as a fallback for every asset.
+
+Bitcoin QR codes and wallet buttons use BIP-21 to prefill the receiving address
+and exact BTC amount. ETH and USDT use EIP-681-style wallet links. Customer
+country metadata from Vercel and browser locale preferences are used for an
+approximate local-currency display; the signed order and exact crypto amount
+remain USD-denominated. The regional Apple Pay/card/bank wording is informational
+guidance for compatible third-party wallet apps only. NXT LVL does not process
+cards or use a hosted fiat-payment provider.
+
+Copy controls provide visible success feedback. The cart persists in the
+browser, and an active quote can be resumed after an accidental refresh in the
+same tab. Network/RPC services can be temporarily unavailable even though funds
+remain in the receiving wallet.
 
 Run the automated chain-verification tests with `npm test` before deployment.

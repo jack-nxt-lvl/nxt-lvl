@@ -80,7 +80,7 @@
         return;
       }
       const script=document.createElement('script');
-      script.src='/direct-wallet-checkout.js?v=20260820-direct-2';
+      script.src='/direct-wallet-checkout.js?v=20260820-frictionless-1';
       script.async=false;
       script.dataset.nxtDirectWallet='1';
       script.onload=()=>typeof window.startDirectWalletCheckout==='function'?resolve():reject(new Error('Direct-wallet checkout failed to initialize.'));

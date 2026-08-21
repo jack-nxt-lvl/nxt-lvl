@@ -11,7 +11,7 @@ test('retries a temporary Ethereum provider response before failing closed', asy
   global.fetch = async (url, options = {}) => {
     const target = String(url);
     const request = JSON.parse(options.body);
-    calls.push({ target, method: request.method });
+    calls.push({ target, method: request.method, params: request.params });
 
     const firstPublicNodeChainCheck = target.includes('publicnode.com')
       && request.method === 'eth_chainId'
@@ -49,7 +49,7 @@ test('fails over to a second Ethereum log provider for USDT discovery', async ()
   global.fetch = async (url, options = {}) => {
     const target = String(url);
     const request = JSON.parse(options.body);
-    calls.push({ target, method: request.method });
+    calls.push({ target, method: request.method, params: request.params });
     if (target === process.env.ETHEREUM_LOGS_RPC_URL) {
       return { ok: false, status: 403, json: async () => ({ error: { message: 'Archive access denied' } }) };
     }
@@ -71,6 +71,10 @@ test('fails over to a second Ethereum log provider for USDT discovery', async ()
     assert.equal(result.status, 'not_found');
     assert.ok(calls.some((call) => call.target === process.env.ETHEREUM_LOGS_RPC_URL));
     assert.ok(calls.some((call) => call.target === process.env.ETHEREUM_BACKUP_RPC_URL && call.method === 'eth_getLogs'));
+    assert.ok(calls.some((call) => call.target === process.env.ETHEREUM_BACKUP_RPC_URL
+      && call.method === 'eth_getBlockByNumber' && call.params[0] === 'latest'));
+    assert.equal(calls.some((call) => call.target === process.env.ETHEREUM_BACKUP_RPC_URL
+      && call.method === 'eth_getBlockByNumber' && call.params[0] === 'finalized'), false);
   } finally {
     global.fetch = originalFetch;
     if (originalLogsRpc === undefined) delete process.env.ETHEREUM_LOGS_RPC_URL;

@@ -10,6 +10,7 @@ const {
   cleanTxid,
   customerDigest,
   normalizeOrder,
+  paymentUri,
   signQuote,
   verifyQuote,
 } = require('../lib/direct-payment');
@@ -30,6 +31,14 @@ test('uses the validated production receiving addresses', () => {
   assert.equal(ASSETS.BTC.confirmations, 6);
   assert.equal(ASSETS.ETH.confirmations, 64);
   assert.equal(ASSETS.USDT.confirmations, 64);
+});
+
+test('generates an exact BIP-21 Bitcoin wallet URI', () => {
+  const uri = paymentUri('BTC', '109879', '0.00109879', 'NXT-BIP21-TEST');
+  assert.equal(
+    uri,
+    `bitcoin:${ASSETS.BTC.address}?amount=0.00109879&label=NXT%20LVL&message=NXT-BIP21-TEST`,
+  );
 });
 
 test('recalculates cart prices from the trusted catalog', () => {
