@@ -2351,6 +2351,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="/nxt-responsive-redesign.css?v=20260821-1">
 </head>
 
 <body>
@@ -2364,8 +2365,8 @@
       <a href="#" class="logo">
         <div class="logo-icon">N</div>NXT <span class="accent">LVL</span>
       </a>
-      <button class="nav-toggle"
-        onclick="document.querySelector('nav ul').classList.toggle('open')"><span></span><span></span><span></span></button>
+      <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+        onclick="const menu=document.querySelector('nav ul');const open=menu.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')"><span></span><span></span><span></span></button>
       <ul>
         <li><a href="#menu">Compounds</a></li>
         <li><a href="#stacks">Stacks</a></li>
@@ -2393,11 +2394,10 @@
     <div class="hero-content">
       <div class="hero-badge"><span class="hero-badge-dot"></span>Premium Research Compounds</div>
       <h1><span class="purple">NXT LVL</span><br><span class="silver">Research</span></h1>
-      <p>Ultra-pure, HPLC-verified peptides and research compounds. 26 products, 6 curated stacks, and fast assistant
-        support. No compromises.</p>
+      <p>Premium research compounds with verified quality, fast U.S. fulfillment, and expert support when you need it.</p>
       <div class="hero-buttons">
-        <a href="#menu" class="btn-primary">Explore Compounds</a>
-        <button type="button" class="btn-secondary" onclick="toggleAiChat(true)">AI Assistant</button>
+        <a href="#menu" class="btn-primary">Shop Compounds</a>
+        <button type="button" class="btn-secondary" onclick="toggleAiChat(true)">Ask NXT LVL AI</button>
       </div>
     </div>
     <div class="scroll-indicator">
