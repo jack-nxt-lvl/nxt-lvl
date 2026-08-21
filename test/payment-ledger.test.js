@@ -5,6 +5,7 @@ const {
   PaymentLedgerError,
   acquirePaymentLock,
   claimPayment,
+  flagPaymentForReview,
   ledgerCredentials,
   releasePaymentLock,
   reserveQuoteAmount,
@@ -76,10 +77,29 @@ test('permanently binds one transaction to one order with no expiry', withLedger
   assert.equal(result.status, 'CLAIMED');
   assert.equal(result.durable, true);
   assert.equal(command[0], 'EVAL');
-  assert.equal(command[2], '2');
+  assert.equal(command[2], '3');
   assert.doesNotMatch(command.join(' '), /\bEX\b|\bPX\b/);
   assert.match(command[3], /\{claims\}:tx:eth-mainnet/);
   assert.match(command[4], /\{claims\}:order:NXT-TEST-456/);
+}));
+
+test('durably binds a severe underpayment to one manual-review order', withLedgerEnvironment(async () => {
+  process.env.UPSTASH_REDIS_REST_URL = 'https://redis.example.test';
+  process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token';
+  let command;
+  global.fetch = async (_url, options) => {
+    command = JSON.parse(options.body);
+    return { ok: true, json: async () => ({ result: ['FLAGGED', 'NXT-REVIEW-123'] }) };
+  };
+
+  const result = await flagPaymentForReview('BTC', 'c'.repeat(64), 'NXT-REVIEW-123');
+  assert.equal(result.status, 'FLAGGED');
+  assert.equal(result.durable, true);
+  assert.equal(command[0], 'EVAL');
+  assert.equal(command[2], '4');
+  assert.match(command[5], /\{claims\}:review:tx:btc-mainnet/);
+  assert.match(command[6], /\{claims\}:review:order:NXT-REVIEW-123/);
+  assert.doesNotMatch(command.join(' '), /\bEX\b|\bPX\b/);
 }));
 
 test('reserves an exact quote amount with NX and a bounded expiry', withLedgerEnvironment(async () => {

@@ -81,6 +81,16 @@ latest Ethereum block quickly, but order fulfillment never runs until the
 confirmation rules above pass. ETH browser-wallet payments fill the hash
 automatically; manual paste remains as a fallback for every asset.
 
+Once a transaction hash is bound to its signed order, the amount policy accepts
+all overpayments and any payment at or above exactly 90% of the invoice amount.
+Those payments follow the normal confirmation rules and auto-complete without
+an amount warning. A payment below 90% is not flagged until it has reached the
+same safe confirmation/finality depth; it is then durably bound to that order
+and sent to manual review. Automatic address discovery remains exact-match only
+because the receiving addresses are shared and the fractional quote amount is
+the safe order identifier. Customers who intentionally send a different amount
+must supply the transaction hash (browser-wallet payments do this automatically).
+
 Bitcoin QR codes and wallet buttons use BIP-21 to prefill the receiving address
 and exact BTC amount. ETH and USDT use EIP-681-style wallet links. Customer
 country metadata from Vercel and browser locale preferences are used for an
@@ -88,6 +98,18 @@ approximate local-currency display; the signed order and exact crypto amount
 remain USD-denominated. The regional Apple Pay/card/bank wording is informational
 guidance for compatible third-party wallet apps only. NXT LVL does not process
 cards or use a hosted fiat-payment provider.
+
+The checkout also offers an optional "Buy crypto" funding button that opens the
+legitimate `https://www.swaps.app/` public buy flow in a narrow side popup while
+the NXT LVL checkout remains open. The verified public parameters prefill the
+selected asset and put the requested crypto amount in Swaps' receive field.
+Swaps does not document a public
+wallet-address parameter, so the checkout copies the signed quote's receiving
+address for the customer to paste and verify. The Swaps flow is not treated as
+payment confirmation; fulfillment still requires the normal on-chain checks.
+The funding card is written for first-time crypto buyers with four numbered
+steps, automatic address copying, a visible copy-again control, network-specific
+USDT guidance, and a clear return-to-checkout instruction.
 
 Copy controls provide visible success feedback. The cart persists in the
 browser, and an active quote can be resumed after an accidental refresh in the

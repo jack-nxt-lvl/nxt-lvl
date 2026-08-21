@@ -5,6 +5,7 @@ const {
   cleanTxid,
   customerDigest,
   explorerUrl,
+  formatAtomic,
   json,
   normalizeOrder,
   requiredConfirmations,
@@ -16,6 +17,7 @@ const {
   PaymentLedgerError,
   acquirePaymentLock,
   claimPayment,
+  flagPaymentForReview,
   releasePaymentLock,
 } = require('../lib/payment-ledger');
 
@@ -29,13 +31,17 @@ function statusMessage(result) {
       : `Payment found. Waiting for secure confirmations (${result.confirmations}/${result.requiredConfirmations}).`;
     case 'provider_disagreement': return 'Blockchain providers have not reached the same confirmed view yet. Verification will retry automatically.';
     case 'reorged': return 'The transaction moved during a blockchain reorganization. Waiting for it to settle on the canonical chain.';
-    case 'underpaid': return 'The transaction amount is lower than the exact checkout amount. Contact support before sending anything else.';
-    case 'overpaid': return 'The transaction amount is higher than the exact checkout amount. It requires manual review.';
+    case 'underpaid': return 'Payment was received, but it is more than 10% below the invoice amount. The order has been sent for manual review.';
     case 'wrong_address': return 'This transaction was not sent to the checkout wallet.';
     case 'transaction_before_quote': return 'This transaction predates the current checkout quote and cannot be used for this order.';
     case 'failed': return 'The blockchain transaction failed.';
     default: return 'Payment has not been confirmed yet.';
   }
+}
+
+function formatCryptoUnits(asset, units) {
+  const value = formatAtomic(units, ASSETS[asset].decimals);
+  return value.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
 }
 
 function itemRows(items) {
@@ -71,6 +77,28 @@ async function sendConfirmationEmails({ quote, txid, customer, order, transactio
   ]);
 }
 
+async function sendManualReviewEmail({ quote, txid, customer, order, result, transactionUrl }) {
+  const requested = `${quote.amountDisplay} ${quote.asset}`;
+  const received = `${formatCryptoUnits(quote.asset, result.receivedUnits)} ${quote.asset}`;
+  const html = `<div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#111;">
+    <h2>Payment requires manual review</h2>
+    <p>This confirmed transaction is more than 10% below the signed invoice amount. Do not fulfill it automatically.</p>
+    <p><strong>Order:</strong> ${escapeHtml(quote.orderId)}<br>
+    <strong>Invoice:</strong> ${escapeHtml(requested)}<br>
+    <strong>Received:</strong> ${escapeHtml(received)}<br>
+    <strong>Order total:</strong> ${formatMoney(order.totalCents)}<br>
+    <strong>Transaction:</strong> <a href="${escapeHtml(transactionUrl)}">${escapeHtml(txid)}</a></p>
+    <h3>Customer</h3><p>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}<br>${escapeHtml(customer.phone)}</p>
+    <p style="margin-top:18px;color:#a11;font-size:12px;"><strong>RED FLAG:</strong> Manual decision required. The transaction has been durably bound to this order and cannot be used for another order.</p>
+  </div>`;
+  return sendEmail({
+    to: 'payment@nxtlvl-research.com',
+    subject: `PAYMENT REVIEW — ${quote.orderId} — ${quote.asset} — MORE THAN 10% SHORT`,
+    html,
+    idempotencyKey: `nxt-review-${quote.asset}-${txid}`,
+  });
+}
+
 module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     if (!applyCors(req, res)) return json(res, 403, { error: 'Origin not allowed.' });
@@ -95,6 +123,31 @@ module.exports = async function handler(req, res) {
     paymentLease = await acquirePaymentLock(quote.asset, txid, quote.orderId);
     const result = await verifyOnChain(txid, quote);
     if (!result.ok) {
+      if (result.status === 'underpaid' && result.reviewRequired) {
+        const review = await flagPaymentForReview(quote.asset, txid, quote.orderId);
+        if (review.status === 'TX_USED') {
+          return json(res, 409, { error: 'This transaction has already been used for another order.' });
+        }
+        if (review.status === 'ORDER_ALREADY_PAID') {
+          return json(res, 409, { error: 'This order already has a confirmed payment.' });
+        }
+        const transactionUrl = explorerUrl(quote.asset, txid);
+        let reviewNotificationSent = true;
+        try {
+          await sendManualReviewEmail({ quote, txid, customer, order, result, transactionUrl });
+        } catch (emailError) {
+          reviewNotificationSent = false;
+          console.error('Payment review was recorded, but the review email failed:', emailError);
+        }
+        return json(res, 202, {
+          status: 'manual_review',
+          message: statusMessage(result),
+          confirmations: result.confirmations || 0,
+          confirmationsRequired: result.requiredConfirmations || requiredConfirmations(quote.asset),
+          durableManualReview: true,
+          reviewNotificationSent,
+        });
+      }
       const pending = ['confirming', 'not_found', 'provider_disagreement', 'reorged'].includes(result.status);
       const code = pending ? 202 : 400;
       return json(res, code, {
@@ -132,6 +185,7 @@ module.exports = async function handler(req, res) {
       durableDuplicateProtection: true,
       idempotent: ledger.status === 'IDEMPOTENT',
       confirmationEmailSent,
+      amountPolicy: result.amountPolicy || 'exact',
     });
   } catch (error) {
     console.error('Direct payment verification error:', error);

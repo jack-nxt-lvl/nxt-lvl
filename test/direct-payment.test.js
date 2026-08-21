@@ -17,6 +17,7 @@ const {
 const {
   TRANSFER_TOPIC,
   bitcoinSignalsRbf,
+  compareAmount,
   findBitcoinCandidate,
   findUsdtLogCandidate,
   inspectBitcoinTransaction,
@@ -129,12 +130,44 @@ test('automatically finds the exact Bitcoin payment and ignores other amounts', 
   assert.equal(findBitcoinCandidate([wrong, exact], quote), exact);
 });
 
-test('rejects Bitcoin underpayments and overpayments for safe order matching', () => {
-  const quote = { asset: 'BTC', amountUnits: '25000', confirmations: 1, createdAt: Date.now() };
-  const under = inspectBitcoinTransaction({ vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 24999 }], status: { confirmed: false } }, 0, quote);
-  const over = inspectBitcoinTransaction({ vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 25001 }], status: { confirmed: false } }, 0, quote);
-  assert.equal(under.status, 'underpaid');
-  assert.equal(over.status, 'overpaid');
+test('accepts all overpayments and underpayments down to the exact 90% boundary', () => {
+  const exactBoundary = compareAmount('22500', '25000');
+  const belowBoundary = compareAmount('22499', '25000');
+  const overpayment = compareAmount('25001', '25000');
+  assert.equal(exactBoundary.ok, true);
+  assert.equal(exactBoundary.amountPolicy, 'underpayment_within_10_percent');
+  assert.equal(belowBoundary.ok, false);
+  assert.equal(belowBoundary.status, 'underpaid');
+  assert.equal(belowBoundary.reviewRequired, true);
+  assert.equal(overpayment.ok, true);
+  assert.equal(overpayment.amountPolicy, 'overpayment_accepted');
+});
+
+test('applies the 90% policy only after six canonical Bitcoin confirmations', () => {
+  const now = Date.now();
+  const blockHash = '9'.repeat(64);
+  const quote = { asset: 'BTC', amountUnits: '25000', createdAt: now };
+  const transaction = (value) => ({
+    vin: [{ sequence: 0xffffffff }],
+    vout: [{ scriptpubkey_address: ASSETS.BTC.address, value }],
+    status: { confirmed: true, block_height: 100, block_hash: blockHash, block_time: Math.floor(now / 1000) },
+  });
+  const acceptedUnder = inspectBitcoinTransaction(transaction(22500), 105, quote, blockHash);
+  const acceptedOver = inspectBitcoinTransaction(transaction(30000), 105, quote, blockHash);
+  const manualReview = inspectBitcoinTransaction(transaction(22499), 105, quote, blockHash);
+  const unconfirmedReview = inspectBitcoinTransaction({
+    vin: [{ sequence: 0xfffffffd }],
+    vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: 22499 }],
+    status: { confirmed: false },
+  }, 0, quote);
+  assert.equal(acceptedUnder.status, 'paid');
+  assert.equal(acceptedUnder.amountPolicy, 'underpayment_within_10_percent');
+  assert.equal(acceptedOver.status, 'paid');
+  assert.equal(acceptedOver.amountPolicy, 'overpayment_accepted');
+  assert.equal(manualReview.status, 'underpaid');
+  assert.equal(manualReview.reviewRequired, true);
+  assert.equal(unconfirmedReview.status, 'confirming');
+  assert.equal(unconfirmedReview.amountReviewPending, true);
 });
 
 test('verifies an exact native ETH transfer', () => {
@@ -178,6 +211,39 @@ test('verifies an exact ERC-20 USDT Transfer log to the receiving wallet', () =>
   const result = inspectEthereumTransaction(tx, receipt, block, '0x107', quote, '0xc8');
   assert.equal(result.ok, true);
   assert.equal(result.status, 'paid');
+});
+
+test('applies the same 90% acceptance boundary to finalized ERC-20 USDT', () => {
+  const now = Date.now();
+  const expected = 100_000_000n;
+  const blockHash = `0x${'d'.repeat(64)}`;
+  const receiverTopic = `0x${ASSETS.USDT.address.toLowerCase().slice(2).padStart(64, '0')}`;
+  const quote = { asset: 'USDT', amountUnits: expected.toString(), createdAt: now };
+  const inspect = (received) => inspectEthereumTransaction(
+    { to: ASSETS.USDT.contract, blockHash },
+    {
+      status: '0x1', blockNumber: '0x64', blockHash,
+      logs: [{
+        address: ASSETS.USDT.contract,
+        blockHash,
+        topics: [TRANSFER_TOPIC, `0x${'1'.padStart(64, '0')}`, receiverTopic],
+        data: `0x${received.toString(16)}`,
+      }],
+    },
+    { hash: blockHash, timestamp: `0x${Math.floor(now / 1000).toString(16)}` },
+    '0xa3',
+    quote,
+    '0x64',
+  );
+  const acceptedUnder = inspect(90_000_000n);
+  const acceptedOver = inspect(120_000_000n);
+  const manualReview = inspect(89_999_999n);
+  assert.equal(acceptedUnder.status, 'paid');
+  assert.equal(acceptedUnder.amountPolicy, 'underpayment_within_10_percent');
+  assert.equal(acceptedOver.status, 'paid');
+  assert.equal(acceptedOver.amountPolicy, 'overpayment_accepted');
+  assert.equal(manualReview.status, 'underpaid');
+  assert.equal(manualReview.reviewRequired, true);
 });
 
 test('automatically finds the exact official ERC-20 USDT transfer log', () => {

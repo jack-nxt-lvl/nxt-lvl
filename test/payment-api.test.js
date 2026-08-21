@@ -27,7 +27,7 @@ function responseRecorder() {
   };
 }
 
-test('verifies, claims, and confirms a six-block canonical Bitcoin payment end to end', async () => {
+test('auto-approves and claims a confirmed Bitcoin overpayment end to end', async () => {
   const originalFetch = global.fetch;
   const txid = 'd'.repeat(64);
   const blockHash = 'e'.repeat(64);
@@ -81,7 +81,7 @@ test('verifies, claims, and confirms a six-block canonical Bitcoin payment end t
           json: async () => ({
             txid,
             vin: [{ sequence: 0xffffffff }],
-            vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: Number(amountUnits) }],
+            vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: Number(amountUnits) + 1000 }],
             status: { confirmed: true, block_height: 100, block_hash: blockHash, block_time: Math.floor(now / 1000) },
           }),
         };
@@ -106,11 +106,100 @@ test('verifies, claims, and confirms a six-block canonical Bitcoin payment end t
     assert.equal(res.body.orderId, orderId);
     assert.equal(res.body.confirmations, 6);
     assert.equal(res.body.confirmationsRequired, 6);
+    assert.equal(res.body.amountPolicy, 'overpayment_accepted');
     assert.equal(res.body.durableDuplicateProtection, true);
     assert.equal(blockchainUrls.filter((url) => url.endsWith(`/tx/${txid}`)).length, 2);
     assert.equal(emailRequests.length, 2);
     assert.equal(redisCommands.filter((command) => String(command[3] || '').includes('{claims}')).length, 1);
     assert.equal(redisCommands.filter((command) => String(command[3] || '').includes('{verification}')).length, 2);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('durably flags only a confirmed Bitcoin payment below 90% for manual review', async () => {
+  const originalFetch = global.fetch;
+  const txid = '7'.repeat(64);
+  const blockHash = '8'.repeat(64);
+  const orderId = 'NXT-TEST-REVIEW-789';
+  const items = [{ key: 'bpc157-10::0', qty: 1 }];
+  const order = normalizeOrder(items, 'pickup');
+  const customer = cleanCustomer({
+    name: 'Checkout Review Test', email: 'buyer@example.com', phone: '555-555-0100',
+  }, 'pickup');
+  const amountUnits = '25000';
+  const receivedUnits = 20000;
+  const now = Date.now();
+  const quoteToken = signQuote({
+    v: 1,
+    orderId,
+    asset: 'BTC',
+    address: ASSETS.BTC.address,
+    amountUnits,
+    amountDisplay: '0.00025000',
+    confirmations: 6,
+    totalCents: order.totalCents,
+    itemDigest: order.itemDigest,
+    customerDigest: customerDigest(customer),
+    fulfillment: 'pickup',
+    createdAt: now,
+    expiresAt: now + 60_000,
+  });
+
+  const redisCommands = [];
+  const emailRequests = [];
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    if (target === process.env.UPSTASH_REDIS_REST_URL) {
+      const command = JSON.parse(options.body);
+      redisCommands.push(command);
+      if (command[2] === '4') return { ok: true, json: async () => ({ result: ['FLAGGED', orderId] }) };
+      if (String(command[1]).includes("return {1, '', ''}")) {
+        return { ok: true, json: async () => ({ result: [1, '', ''] }) };
+      }
+      return { ok: true, json: async () => ({ result: 1 }) };
+    }
+    if (target === 'https://api.resend.com/emails') {
+      emailRequests.push(JSON.parse(options.body));
+      return { ok: true, json: async () => ({ id: 'review-email' }) };
+    }
+    if (target.includes('mempool.space') || target.includes('blockstream.info')) {
+      if (target.endsWith(`/tx/${txid}`)) {
+        return {
+          ok: true,
+          json: async () => ({
+            txid,
+            vin: [{ sequence: 0xffffffff }],
+            vout: [{ scriptpubkey_address: ASSETS.BTC.address, value: receivedUnits }],
+            status: { confirmed: true, block_height: 100, block_hash: blockHash, block_time: Math.floor(now / 1000) },
+          }),
+        };
+      }
+      if (target.endsWith('/blocks/tip/height')) return { ok: true, text: async () => '105' };
+      if (target.endsWith('/block-height/100')) return { ok: true, text: async () => blockHash };
+    }
+    throw new Error(`Unexpected test request: ${target}`);
+  };
+
+  try {
+    const req = {
+      method: 'POST',
+      headers: { origin: 'https://www.nxtlvl-research.com' },
+      body: { quoteToken, txid, items, fulfillment: 'pickup', customer },
+    };
+    const res = responseRecorder();
+    await verifyHandler(req, res);
+
+    assert.equal(res.statusCode, 202);
+    assert.equal(res.body.status, 'manual_review');
+    assert.equal(res.body.confirmations, 6);
+    assert.equal(res.body.durableManualReview, true);
+    assert.equal(res.body.reviewNotificationSent, true);
+    assert.match(res.body.message, /more than 10% below/i);
+    assert.equal(redisCommands.filter((command) => command[2] === '4').length, 1);
+    assert.equal(redisCommands.filter((command) => command[2] === '3').length, 0);
+    assert.equal(emailRequests.length, 1);
+    assert.match(emailRequests[0].subject, /PAYMENT REVIEW/);
   } finally {
     global.fetch = originalFetch;
   }
