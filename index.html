@@ -2365,8 +2365,8 @@
       <a href="#" class="logo">
         <div class="logo-icon">N</div>NXT <span class="accent">LVL</span>
       </a>
-      <button class="nav-toggle"
-        onclick="document.querySelector('nav ul').classList.toggle('open')"><span></span><span></span><span></span></button>
+      <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+        onclick="const menu=document.querySelector('nav ul');const open=menu.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')"><span></span><span></span><span></span></button>
       <ul>
         <li><a href="#menu">Compounds</a></li>
         <li><a href="#stacks">Stacks</a></li>
