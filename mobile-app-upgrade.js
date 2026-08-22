@@ -31,6 +31,9 @@
         overscroll-behavior-x:none;
       }
       body.nxt-mobile-layer-open{overflow:hidden!important}
+      body.nxt-mobile-layer-open #molBg,
+      body.nxt-mobile-layer-open nav#mainNav,
+      body.nxt-mobile-layer-open #filterBar{visibility:hidden!important}
       button,a,input{touch-action:manipulation}
       button,a{-webkit-tap-highlight-color:transparent}
       input,textarea,select{font-size:16px!important}
@@ -157,7 +160,7 @@
       .nxt-mobile-tabbar a.active:before,.nxt-mobile-tabbar button.active:before{content:'';position:absolute;top:2px;width:22px;height:2px;border-radius:9px;background:#a78bfa;box-shadow:0 0 10px #8b5cf6}
       .nxt-mobile-cart-badge{position:absolute;top:3px;left:calc(50% + 7px);display:grid;place-items:center;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#8b5cf6;color:#fff;font-size:8px;box-shadow:0 4px 12px rgba(124,58,237,.45)}
       .nxt-mobile-cart-badge[hidden]{display:none}
-      body.nxt-mobile-layer-open .nxt-mobile-tabbar{transform:translateY(calc(100% + 24px));opacity:0;pointer-events:none}
+      body.nxt-mobile-layer-open .nxt-mobile-tabbar{transform:translateY(calc(100% + 24px));opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 
       .ai-chat-toggle{display:none!important}
       .ai-chat-panel{
@@ -168,10 +171,13 @@
         max-height:none!important;
         border-radius:22px!important;
         overscroll-behavior:none;
+        contain:strict;
+        transform:translateZ(0);
       }
       .ai-chat-header{flex:0 0 auto;min-height:68px;padding:12px 16px!important}
       .ai-chat-close{width:42px!important;height:42px!important}
       .ai-chat-messages{min-height:0;padding:14px!important;scroll-padding-bottom:12px}
+      .ai-chat-suggestion{min-height:36px;padding:0 12px!important;font-size:11px!important;touch-action:manipulation}
       .ai-chat-form{
         flex:0 0 auto;
         align-items:center;
@@ -401,6 +407,11 @@
   const aiChatMessages = document.getElementById('aiChatMessages');
   let mobileViewportCeiling = window.visualViewport?.height || window.innerHeight;
   let mobileViewportFrame = 0;
+  let layerStateFrame = 0;
+  let lastViewportTop = -1;
+  let lastViewportHeight = -1;
+  let lastKeyboardOpen = false;
+  let lastMessageScrollHeight = -1;
 
   function syncMobileVisualViewport() {
     mobileViewportFrame = 0;
@@ -410,6 +421,9 @@
       root.style.removeProperty('--nxt-mobile-viewport-top');
       root.style.removeProperty('--nxt-mobile-viewport-height');
       document.body.classList.remove('nxt-ai-keyboard-open');
+      lastViewportTop = -1;
+      lastViewportHeight = -1;
+      lastKeyboardOpen = false;
       return;
     }
 
@@ -419,8 +433,14 @@
     const chatOpen = Boolean(aiChatPanel?.classList.contains('open'));
     const inputFocused = document.activeElement === aiChatInput;
 
-    root.style.setProperty('--nxt-mobile-viewport-top', `${viewportTop.toFixed(2)}px`);
-    root.style.setProperty('--nxt-mobile-viewport-height', `${viewportHeight.toFixed(2)}px`);
+    if (Math.abs(viewportTop - lastViewportTop) > .5) {
+      root.style.setProperty('--nxt-mobile-viewport-top', `${viewportTop.toFixed(2)}px`);
+      lastViewportTop = viewportTop;
+    }
+    if (Math.abs(viewportHeight - lastViewportHeight) > .5) {
+      root.style.setProperty('--nxt-mobile-viewport-height', `${viewportHeight.toFixed(2)}px`);
+      lastViewportHeight = viewportHeight;
+    }
 
     if (!chatOpen) {
       mobileViewportCeiling = viewportHeight;
@@ -431,10 +451,15 @@
     const keyboardOpen = chatOpen && (
       inputFocused || viewportHeight < mobileViewportCeiling - 80
     );
-    document.body.classList.toggle('nxt-ai-keyboard-open', keyboardOpen);
+    if (keyboardOpen !== lastKeyboardOpen) {
+      document.body.classList.toggle('nxt-ai-keyboard-open', keyboardOpen);
+      lastKeyboardOpen = keyboardOpen;
+    }
 
-    if (chatOpen && keyboardOpen && aiChatMessages) {
+    const messageScrollHeight = aiChatMessages?.scrollHeight || 0;
+    if (chatOpen && keyboardOpen && aiChatMessages && messageScrollHeight !== lastMessageScrollHeight) {
       aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+      lastMessageScrollHeight = messageScrollHeight;
     }
   }
 
@@ -450,6 +475,7 @@
   }
 
   function syncLayerState() {
+    layerStateFrame = 0;
     const layerOpen = Boolean(document.querySelector(
       '.cart-overlay.active,.modal-overlay.active,.ai-chat-panel.open,.nxt-checkout-overlay,.nxt-wallet-overlay,.nxt-wallet-chooser,.nxt-wallet-loading,.nxt-swaps-layer.open'
     ));
@@ -458,6 +484,11 @@
       document.body.classList.remove('nxt-ai-keyboard-open');
     }
     scheduleMobileViewportSync();
+  }
+
+  function scheduleLayerStateSync() {
+    if (layerStateFrame) return;
+    layerStateFrame = requestAnimationFrame(syncLayerState);
   }
 
   function setActiveTab(id) {
@@ -498,15 +529,15 @@
   }
   aiChatInput?.addEventListener('focus', scheduleMobileViewportSync);
   aiChatInput?.addEventListener('blur', () => setTimeout(scheduleMobileViewportSync, 0));
-  window.visualViewport?.addEventListener('resize', scheduleMobileViewportSync);
-  window.visualViewport?.addEventListener('scroll', scheduleMobileViewportSync);
-  window.addEventListener('resize', scheduleMobileViewportSync);
+  window.visualViewport?.addEventListener('resize', scheduleMobileViewportSync, { passive: true });
+  window.visualViewport?.addEventListener('scroll', scheduleMobileViewportSync, { passive: true });
+  window.addEventListener('resize', scheduleMobileViewportSync, { passive: true });
   window.addEventListener('orientationchange', () => {
     mobileViewportCeiling = 0;
     scheduleMobileViewportSync();
   });
-  new MutationObserver(syncLayerState).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-  document.addEventListener('click', () => requestAnimationFrame(syncLayerState), true);
+  new MutationObserver(scheduleLayerStateSync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('click', scheduleLayerStateSync, true);
   syncCartBadge();
   syncLayerState();
   syncMobileVisualViewport();

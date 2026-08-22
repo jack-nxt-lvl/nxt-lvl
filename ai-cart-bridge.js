@@ -37,7 +37,7 @@
 
     for (const btn of buttons) {
       const card = btn.closest('.compound-card, .product-card, .compound-item, article, .card') || btn.parentElement?.parentElement;
-      const text = norm(card?.innerText || '');
+      const text = norm(card?.textContent || '');
       if (!text) continue;
       let score = 0;
       const words = name.split(' ').filter(w => w.length > 2);
@@ -117,6 +117,7 @@
 
   function processMessage(el) {
     if (!el || handled.has(el) || !el.classList?.contains('assistant')) return;
+    if (el.dataset.aiPending === '1') return;
     const text = el.textContent || '';
     if (/thinking\.\.\./i.test(text)) return;
     const action = parseAdded(text);
@@ -133,6 +134,9 @@
   }
 
   const observer = new MutationObserver(scan);
-  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  const messagesRoot = document.getElementById('aiChatMessages');
+  if (messagesRoot) {
+    observer.observe(messagesRoot, { childList: true, subtree: true, characterData: true });
+  }
   scan();
 })();

@@ -814,6 +814,7 @@
       box-shadow: 0 22px 60px rgba(0, 0, 0, 0.65);
       display: none;
       overflow: hidden;
+      contain: layout paint;
     }
 
     .ai-chat-panel.open {
@@ -836,6 +837,31 @@
       font-weight: 700;
       color: var(--white);
       font-size: 0.95rem;
+    }
+
+    .ai-chat-heading {
+      min-width: 0;
+    }
+
+    .ai-chat-research-note {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 3px;
+      color: var(--silver-dim);
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .ai-chat-research-note::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #8b5cf6;
+      box-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
     }
 
     .ai-chat-close {
@@ -861,6 +887,8 @@
       flex-direction: column;
       gap: 10px;
       overscroll-behavior: contain;
+      overflow-anchor: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     .ai-chat-message {
@@ -882,6 +910,36 @@
     .ai-chat-message.user {
       align-self: flex-end;
       background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    }
+
+    .ai-chat-suggestions {
+      align-self: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      max-width: 100%;
+    }
+
+    .ai-chat-suggestions[hidden] {
+      display: none;
+    }
+
+    .ai-chat-suggestion {
+      min-height: 32px;
+      padding: 0 11px;
+      border: 1px solid rgba(167, 139, 250, 0.24);
+      border-radius: 999px;
+      background: rgba(124, 58, 237, 0.09);
+      color: #ddd6fe;
+      font: 700 0.67rem/1 'Inter', sans-serif;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .ai-chat-suggestion:hover {
+      border-color: rgba(167, 139, 250, 0.55);
+      background: rgba(124, 58, 237, 0.18);
+      transform: translateY(-1px);
     }
 
     .ai-chat-form {
@@ -932,6 +990,11 @@
       width: 18px;
       height: 18px;
       stroke: currentColor;
+    }
+
+    body.nxt-ai-chat-open .hero-orb,
+    body.nxt-ai-chat-open .hero-badge-dot {
+      animation-play-state: paused !important;
     }
 
     @media (max-width:640px) {
@@ -2547,14 +2610,22 @@
       <path d="M7.5 8h9M7.5 11.5h5.8" stroke-width="1.7" stroke-linecap="round" />
     </svg>
   </button>
-  <div class="ai-chat-panel" id="aiChatPanel" aria-live="polite">
+  <div class="ai-chat-panel" id="aiChatPanel" aria-live="polite" aria-hidden="true" aria-busy="false">
     <div class="ai-chat-header">
-      <div class="ai-chat-title">NXT LVL Assistant</div>
+      <div class="ai-chat-heading">
+        <div class="ai-chat-title">NXT LVL Assistant</div>
+        <div class="ai-chat-research-note" title="Products are not for human consumption">For research use only</div>
+      </div>
       <button class="ai-chat-close" type="button" onclick="toggleAiChat(false)"
         aria-label="Close AI chat">&times;</button>
     </div>
     <div class="ai-chat-messages" id="aiChatMessages">
-      <div class="ai-chat-message assistant">Ask about product categories, pricing tiers, cart help, or ordering.</div>
+      <div class="ai-chat-message assistant">Hey — what are you researching today? I can compare products, show exact prices, or build your cart.</div>
+      <div class="ai-chat-suggestions" id="aiChatSuggestions" aria-label="Popular chat options">
+        <button class="ai-chat-suggestion" type="button" onclick="chooseAiStarter('Help me find a research product')">Find a product</button>
+        <button class="ai-chat-suggestion" type="button" onclick="chooseAiStarter('Help me compare product pricing')">Compare prices</button>
+        <button class="ai-chat-suggestion" type="button" onclick="chooseAiStarter('Help me build a cart')">Build my cart</button>
+      </div>
     </div>
     <form class="ai-chat-form" onsubmit="sendAiChat(event)">
       <input class="ai-chat-input" id="aiChatInput" name="ai-message" type="text" placeholder="Ask a question..."
@@ -3038,13 +3109,22 @@
     // Uses /api/chat so the OpenAI API key stays server-side.
     // =====================================================
     const aiChatHistory = [];
+    const AI_CHAT_TIMEOUT_MS = 18000;
+    let aiChatController = null;
 
     function toggleAiChat(forceOpen) {
       const panel = document.getElementById('aiChatPanel');
       const input = document.getElementById('aiChatInput');
       const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
       panel.classList.toggle('open', shouldOpen);
-      if (shouldOpen) setTimeout(() => input.focus(), 50);
+      panel.setAttribute('aria-hidden', String(!shouldOpen));
+      document.body.classList.toggle('nxt-ai-chat-open', shouldOpen);
+      document.dispatchEvent(new CustomEvent('nxt:ai-chat-visibility', { detail: { open: shouldOpen } }));
+      if (!shouldOpen) {
+        input.blur();
+      } else if (window.innerWidth > 768) {
+        setTimeout(() => input.focus({ preventScroll: true }), 50);
+      }
     }
 
     function appendAiChatMessage(role, content) {
@@ -3053,38 +3133,72 @@
       messageEl.className = 'ai-chat-message ' + role;
       messageEl.textContent = content;
       messagesEl.appendChild(messageEl);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+      requestAnimationFrame(() => {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      });
       return messageEl;
+    }
+
+    function hideAiStarters() {
+      const suggestions = document.getElementById('aiChatSuggestions');
+      if (suggestions) suggestions.hidden = true;
+    }
+
+    function chooseAiStarter(prompt) {
+      const input = document.getElementById('aiChatInput');
+      const form = document.querySelector('.ai-chat-form');
+      if (!input || !form) return;
+      input.value = prompt;
+      hideAiStarters();
+      form.requestSubmit();
     }
 
     async function sendAiChat(event) {
       event.preventDefault();
       const input = document.getElementById('aiChatInput');
       const sendBtn = document.getElementById('aiChatSend');
+      const panel = document.getElementById('aiChatPanel');
       const question = input.value.trim();
       if (!question || sendBtn.disabled) return;
 
+      hideAiStarters();
       input.value = '';
       sendBtn.disabled = true;
       appendAiChatMessage('user', question);
       aiChatHistory.push({ role: 'user', content: question });
-      const pending = appendAiChatMessage('assistant', 'Thinking...');
+      const pending = appendAiChatMessage('assistant', 'One sec…');
+      pending.dataset.aiPending = '1';
+      const controller = new AbortController();
+      aiChatController = controller;
+      const timeoutId = setTimeout(() => controller.abort(), AI_CHAT_TIMEOUT_MS);
+      panel.setAttribute('aria-busy', 'true');
 
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: aiChatHistory.slice(-10) }),
+          signal: controller.signal,
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Chat request failed.');
+        delete pending.dataset.aiPending;
         pending.textContent = data.reply;
         aiChatHistory.push({ role: 'assistant', content: data.reply });
       } catch (error) {
-        pending.textContent = 'Chat setup issue: ' + error.message;
+        delete pending.dataset.aiPending;
+        pending.textContent = error.name === 'AbortError'
+          ? 'That took too long. Tap send to try again.'
+          : 'Sorry — I had trouble with that. Try again in a second.';
       } finally {
+        clearTimeout(timeoutId);
+        if (aiChatController === controller) aiChatController = null;
+        panel.setAttribute('aria-busy', 'false');
         sendBtn.disabled = false;
-        input.focus();
+        requestAnimationFrame(() => {
+          const messagesEl = document.getElementById('aiChatMessages');
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        });
       }
     }
 
@@ -3100,9 +3214,15 @@
   <script>
     (function () {
       const canvas = document.getElementById('molBg');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let W, H, mouseX = -9999, mouseY = -9999, scrollY = 0;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const mobileCanvas = window.matchMedia('(max-width: 768px)').matches;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const dpr = mobileCanvas ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+      const frameInterval = 1000 / (mobileCanvas ? 18 : 30);
+      let animationFrameId = 0;
+      let lastFrameAt = 0;
 
       function resize() {
         W = window.innerWidth;
@@ -3112,12 +3232,14 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
       resize();
-      window.addEventListener('resize', resize);
+      window.addEventListener('resize', resize, { passive: true });
 
       // Track mouse
-      document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
-      document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
-      window.addEventListener('scroll', () => { scrollY = window.pageYOffset; });
+      if (!mobileCanvas) {
+        document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+        document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; }, { passive: true });
+      }
+      window.addEventListener('scroll', () => { scrollY = window.pageYOffset; }, { passive: true });
 
       // ── Molecular structures ──
       // Each "molecule" is a collection of atoms + bonds that drifts slowly
@@ -3219,7 +3341,7 @@
       // ── Generate molecules scattered across the page ──
       const molecules = [];
       const pageH = document.documentElement.scrollHeight;
-      const density = Math.max(8, Math.floor((pageH / H) * 4));
+      const density = Math.max(mobileCanvas ? 5 : 8, Math.floor((pageH / H) * (mobileCanvas ? 2 : 3)));
 
       for (let i = 0; i < density; i++) {
         const x = Math.random() * W;
@@ -3238,7 +3360,7 @@
 
       // ── Floating lone particles (like stray atoms) ──
       const particles = [];
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < (mobileCanvas ? 18 : 30); i++) {
         particles.push({
           x: Math.random() * W,
           y: Math.random() * pageH,
@@ -3253,8 +3375,38 @@
 
       // ── Draw ──
       let time = 0;
-      function draw() {
-        time += 0.016;
+      function shouldAnimate() {
+        return !reduceMotion
+          && !document.hidden
+          && !document.body.classList.contains('nxt-ai-chat-open')
+          && !document.body.classList.contains('nxt-mobile-layer-open');
+      }
+
+      function scheduleDraw() {
+        if (!animationFrameId && shouldAnimate()) {
+          animationFrameId = requestAnimationFrame(draw);
+        }
+      }
+
+      function syncCanvasAnimation() {
+        if (!shouldAnimate()) {
+          if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          animationFrameId = 0;
+          return;
+        }
+        scheduleDraw();
+      }
+
+      function draw(frameAt) {
+        animationFrameId = 0;
+        if (!shouldAnimate()) return;
+        if (frameAt - lastFrameAt < frameInterval) {
+          scheduleDraw();
+          return;
+        }
+        const elapsed = lastFrameAt ? Math.min(50, frameAt - lastFrameAt) : frameInterval;
+        lastFrameAt = frameAt;
+        time += elapsed / 1000;
         ctx.clearRect(0, 0, W, H);
 
         // Draw molecules
@@ -3382,9 +3534,12 @@
           }
         }
 
-        requestAnimationFrame(draw);
+        scheduleDraw();
       }
-      draw();
+      document.addEventListener('visibilitychange', syncCanvasAnimation);
+      document.addEventListener('nxt:ai-chat-visibility', syncCanvasAnimation);
+      new MutationObserver(syncCanvasAnimation).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      scheduleDraw();
     })();
   </script>
   <script src="nav-cleanup.js?v=20260818-1"></script>
@@ -3394,8 +3549,8 @@
   <script src="lib/swaps-funding.js?v=20260821-swaps-drawer-4"></script>
   <script src="direct-wallet-checkout.js?v=20260821-swaps-drawer-4"></script>
   <script src="customer-checkout-upgrade.js?v=20260820-tolerance-1"></script>
-  <script src="ai-cart-bridge.js?v=20260818-2"></script>
-  <script src="mobile-app-upgrade.js?v=20260822-2"></script>
+  <script src="ai-cart-bridge.js?v=20260822-4"></script>
+  <script src="mobile-app-upgrade.js?v=20260822-4"></script>
 </body>
 
 </html>

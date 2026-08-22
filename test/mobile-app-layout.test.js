@@ -28,5 +28,15 @@ test('keeps the AI chat attached to the visible iPhone viewport while typing', (
   assert.match(mobile, /window\.visualViewport\?\.addEventListener\('resize'/);
   assert.match(mobile, /viewport\?\.offsetTop/);
   assert.match(index, /enterkeyhint="send"/);
-  assert.match(index, /mobile-app-upgrade\.js\?v=20260822-2/);
+  assert.match(index, /mobile-app-upgrade\.js\?v=20260822-4/);
+});
+
+test('pauses expensive page effects while the mobile chat is open', () => {
+  assert.match(index, /nxt-ai-chat-open/);
+  assert.match(index, /AI_CHAT_TIMEOUT_MS = 18000/);
+  assert.match(index, /signal: controller\.signal/);
+  assert.match(index, /function shouldAnimate\(\)/);
+  assert.match(index, /nxt:ai-chat-visibility/);
+  assert.match(mobile, /body\.nxt-mobile-layer-open #molBg/);
+  assert.match(mobile, /function scheduleLayerStateSync\(\)/);
 });
