@@ -90,7 +90,9 @@ This option stays hidden in production until every safety dependency is ready:
 Configure the Stripe webhook to send `checkout.session.completed`. The handler
 checks the raw-body signature, timestamp, event replay state, payment status,
 and integration metadata before sending a `CARD PAYMENT CONFIRMED` notice.
-Customers must explicitly consent before a one-time transactional SMS is sent.
+Customers can choose email, text, or both; when both delivery services are
+configured, both is the recommended default. Customers must explicitly consent
+before any one-time transactional SMS is sent.
 Use only a processor account that has reviewed and approved the actual business
 and catalog; the integration does not bypass provider underwriting or rules.
 

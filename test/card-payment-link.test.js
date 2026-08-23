@@ -71,7 +71,7 @@ test('builds an order-specific card-only hosted checkout from trusted catalog to
 
 test('shows email delivery only when the hosted provider, webhook, ledger, and sender are configured', () => {
   const capabilities = cardLinkCapabilities();
-  assert.deepEqual(capabilities, { available: true, email: true, sms: false, hosted: true });
+  assert.deepEqual(capabilities, { available: true, email: true, sms: false, both: false, hosted: true });
 
   const previous = process.env.STRIPE_WEBHOOK_SECRET;
   delete process.env.STRIPE_WEBHOOK_SECRET;
@@ -83,9 +83,80 @@ test('keeps card details off-site and exposes only delivery choices in the custo
   const source = require('fs').readFileSync(require('path').join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
   assert.match(source, /Pay with crypto now/);
   assert.match(source, /Send me a card link/);
+  assert.match(source, /data-channel="both"/);
+  assert.match(source, /email, text, or both/i);
   assert.match(source, /card information is never entered or processed on NXT LVL/i);
   assert.match(source, /one transactional payment-link text/i);
   assert.doesNotMatch(source, /cardNumber|cvc|expiryMonth|payment-element/i);
+});
+
+test('sends the same private hosted link by both email and text when the customer chooses both', async () => {
+  const originalFetch = global.fetch;
+  const previous = {
+    sid: process.env.TWILIO_ACCOUNT_SID,
+    token: process.env.TWILIO_AUTH_TOKEN,
+    from: process.env.TWILIO_FROM_NUMBER,
+  };
+  process.env.TWILIO_ACCOUNT_SID = `AC${'1'.repeat(32)}`;
+  process.env.TWILIO_AUTH_TOKEN = 'test-token';
+  process.env.TWILIO_FROM_NUMBER = '+17542907210';
+  const emailRequests = [];
+  const smsRequests = [];
+
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    if (target === process.env.UPSTASH_REDIS_REST_URL) {
+      const command = JSON.parse(options.body);
+      if (command[0] === 'EVAL' && String(command[1]).includes("redis.call('INCR'")) {
+        return { ok: true, json: async () => ({ result: 1 }) };
+      }
+      return { ok: true, json: async () => ({ result: 'OK' }) };
+    }
+    if (target === 'https://api.stripe.com/v1/checkout/sessions') {
+      return { ok: true, json: async () => ({ id: 'cs_test_both', url: 'https://checkout.stripe.com/c/pay/cs_test_both', expires_at: 123456 }) };
+    }
+    if (target === 'https://api.resend.com/emails') {
+      emailRequests.push(JSON.parse(options.body));
+      return { ok: true, json: async () => ({ id: `email-${emailRequests.length}` }) };
+    }
+    if (/^https:\/\/api\.twilio\.com\//.test(target)) {
+      smsRequests.push(String(options.body));
+      return { ok: true, json: async () => ({ sid: 'SM_test_both', to: '+15555550100' }) };
+    }
+    throw new Error(`Unexpected request: ${target}`);
+  };
+
+  try {
+    const req = {
+      method: 'POST',
+      headers: { origin: 'https://www.nxtlvl-research.com', 'x-forwarded-for': '203.0.113.26' },
+      body: {
+        requestId: '123e4567-e89b-12d3-a456-426614174002',
+        items: [{ key: 'bpc157-10::0', qty: 1 }],
+        fulfillment: 'shipping',
+        customer: sampleOrder().customer,
+        channel: 'both',
+        smsConsent: true,
+      },
+    };
+    const res = responseRecorder();
+    await createCardLinkHandler(req, res);
+
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.sent, true);
+    assert.equal(res.body.channel, 'both');
+    assert.match(res.body.destination, /buyer@example\.com and .*0100/);
+    assert.equal(Object.hasOwn(res.body, 'url'), false);
+    assert.equal(emailRequests.length, 2);
+    assert.match(emailRequests[0].html, /checkout\.stripe\.com/);
+    assert.equal(smsRequests.length, 1);
+    assert.match(smsRequests[0], /checkout\.stripe\.com%2Fc%2Fpay%2Fcs_test_both/);
+  } finally {
+    global.fetch = originalFetch;
+    if (previous.sid === undefined) delete process.env.TWILIO_ACCOUNT_SID; else process.env.TWILIO_ACCOUNT_SID = previous.sid;
+    if (previous.token === undefined) delete process.env.TWILIO_AUTH_TOKEN; else process.env.TWILIO_AUTH_TOKEN = previous.token;
+    if (previous.from === undefined) delete process.env.TWILIO_FROM_NUMBER; else process.env.TWILIO_FROM_NUMBER = previous.from;
+  }
 });
 
 test('creates and emails a hosted link without returning the private checkout URL to the browser', async () => {

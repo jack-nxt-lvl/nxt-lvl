@@ -25,15 +25,20 @@ module.exports = async function handler(req, res) {
   try {
     const capabilities = cardLinkCapabilities();
     const channel = String(req.body && req.body.channel || '').toLowerCase();
-    if (channel !== 'email' && channel !== 'sms') return json(res, 400, { error: 'Choose email or text delivery.' });
-    if (!capabilities[channel]) return json(res, 503, { error: `${channel === 'sms' ? 'Text' : 'Email'} payment-link delivery is not configured.` });
-    if (channel === 'sms' && req.body && req.body.smsConsent !== true) {
+    if (channel !== 'email' && channel !== 'sms' && channel !== 'both') {
+      return json(res, 400, { error: 'Choose email, text, or both delivery methods.' });
+    }
+    if (!capabilities[channel]) {
+      const method = channel === 'both' ? 'Email and text' : channel === 'sms' ? 'Text' : 'Email';
+      return json(res, 503, { error: `${method} payment-link delivery is not configured.` });
+    }
+    if ((channel === 'sms' || channel === 'both') && req.body && req.body.smsConsent !== true) {
       return json(res, 400, { error: 'Consent is required before sending a payment link by text.' });
     }
 
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
-    if (channel === 'sms') customer.phone = normalizePhone(customer.phone);
+    if (channel === 'sms' || channel === 'both') customer.phone = normalizePhone(customer.phone);
     const requestId = String(req.body && req.body.requestId || '');
     digest = requestDigest({ requestId, order, customer, channel });
     await enforceRateLimit(req, customer);
@@ -54,13 +59,20 @@ module.exports = async function handler(req, res) {
     });
     await finishRequest(lease.key, digest);
 
+    const maskedPhone = customer.phone.replace(/.(?=.{4})/g, '•');
+    const destination = channel === 'email'
+      ? customer.email
+      : channel === 'sms'
+        ? maskedPhone
+        : `${customer.email} and ${maskedPhone}`;
+    const deliveryLabel = channel === 'both' ? 'email and text' : channel === 'email' ? 'email' : 'text';
     return json(res, 200, {
       sent: true,
       orderId,
       channel,
-      destination: channel === 'email' ? customer.email : customer.phone.replace(/.(?=.{4})/g, '•'),
+      destination,
       expiresAt: session.expiresAt,
-      message: `Secure payment link sent by ${channel === 'email' ? 'email' : 'text'}.`,
+      message: `Secure payment link sent by ${deliveryLabel}.`,
     });
   } catch (error) {
     if (lease && lease.key && digest) await abandonRequest(lease.key, digest);
