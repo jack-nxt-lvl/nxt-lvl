@@ -12,6 +12,8 @@
         --nxt-mobile-safe-top:env(safe-area-inset-top,0px);
         --nxt-mobile-safe-bottom:env(safe-area-inset-bottom,0px);
         --nxt-mobile-tab-height:68px;
+        --nxt-mobile-viewport-top:0px;
+        --nxt-mobile-viewport-height:100dvh;
       }
 
       html{
@@ -29,6 +31,9 @@
         overscroll-behavior-x:none;
       }
       body.nxt-mobile-layer-open{overflow:hidden!important}
+      body.nxt-mobile-layer-open #molBg,
+      body.nxt-mobile-layer-open nav#mainNav,
+      body.nxt-mobile-layer-open #filterBar{visibility:hidden!important}
       button,a,input{touch-action:manipulation}
       button,a{-webkit-tap-highlight-color:transparent}
       input,textarea,select{font-size:16px!important}
@@ -155,20 +160,55 @@
       .nxt-mobile-tabbar a.active:before,.nxt-mobile-tabbar button.active:before{content:'';position:absolute;top:2px;width:22px;height:2px;border-radius:9px;background:#a78bfa;box-shadow:0 0 10px #8b5cf6}
       .nxt-mobile-cart-badge{position:absolute;top:3px;left:calc(50% + 7px);display:grid;place-items:center;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#8b5cf6;color:#fff;font-size:8px;box-shadow:0 4px 12px rgba(124,58,237,.45)}
       .nxt-mobile-cart-badge[hidden]{display:none}
-      body.nxt-mobile-layer-open .nxt-mobile-tabbar{transform:translateY(calc(100% + 24px));opacity:0;pointer-events:none}
+      body.nxt-mobile-layer-open .nxt-mobile-tabbar{transform:translateY(calc(100% + 24px));opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 
       .ai-chat-toggle{display:none!important}
       .ai-chat-panel{
-        inset:calc(8px + var(--nxt-mobile-safe-top)) 8px calc(8px + var(--nxt-mobile-safe-bottom)) 8px!important;
+        inset:auto 8px auto 8px!important;
+        top:calc(var(--nxt-mobile-viewport-top) + 8px + var(--nxt-mobile-safe-top))!important;
         width:auto!important;
-        height:auto!important;
+        height:calc(var(--nxt-mobile-viewport-height) - 16px - var(--nxt-mobile-safe-top) - var(--nxt-mobile-safe-bottom))!important;
         max-height:none!important;
         border-radius:22px!important;
+        overscroll-behavior:none;
+        contain:strict;
+        transform:translateZ(0);
       }
-      .ai-chat-header{padding:16px!important}
+      .ai-chat-header{flex:0 0 auto;min-height:68px;padding:12px 16px!important}
       .ai-chat-close{width:42px!important;height:42px!important}
-      .ai-chat-form{padding:10px 10px calc(10px + var(--nxt-mobile-safe-bottom))!important}
-      .ai-chat-input,.ai-chat-send{height:48px!important;border-radius:12px!important}
+      .ai-chat-messages{min-height:0;padding:14px!important;scroll-padding-bottom:12px}
+      .ai-chat-suggestion{min-height:36px;padding:0 12px!important;font-size:11px!important;touch-action:manipulation}
+      .ai-chat-form{
+        flex:0 0 auto;
+        align-items:center;
+        padding:10px 10px calc(10px + var(--nxt-mobile-safe-bottom))!important;
+        background:rgba(10,8,13,.98)!important;
+        box-shadow:0 -12px 32px rgba(0,0,0,.28);
+      }
+      .ai-chat-input{
+        height:48px!important;
+        border-radius:14px!important;
+        padding:0 15px!important;
+        background:#07060a!important;
+      }
+      .ai-chat-send{flex:0 0 48px;width:48px!important;height:48px!important;border-radius:14px!important}
+
+      body.nxt-ai-keyboard-open .ai-chat-panel.open{
+        left:0!important;
+        right:0!important;
+        top:calc(var(--nxt-mobile-viewport-top) + var(--nxt-mobile-safe-top))!important;
+        height:calc(var(--nxt-mobile-viewport-height) - var(--nxt-mobile-safe-top))!important;
+        border-left:0!important;
+        border-right:0!important;
+        border-radius:0!important;
+      }
+      body.nxt-ai-keyboard-open .ai-chat-header{min-height:54px;padding:6px 12px!important}
+      body.nxt-ai-keyboard-open .ai-chat-close{width:40px!important;height:40px!important}
+      body.nxt-ai-keyboard-open .ai-chat-messages{padding:10px 12px!important}
+      body.nxt-ai-keyboard-open .ai-chat-form{padding:8px 10px!important}
+      body.nxt-ai-keyboard-open .ai-chat-input,
+      body.nxt-ai-keyboard-open .ai-chat-send{height:46px!important}
+      body.nxt-ai-keyboard-open .ai-chat-send{flex-basis:46px;width:46px!important}
 
       .premium-toast{bottom:calc(var(--nxt-mobile-tab-height) + 22px + var(--nxt-mobile-safe-bottom))!important;max-width:calc(100% - 28px)!important;text-align:center!important}
 
@@ -362,6 +402,71 @@
 
   const cartBadge = tabbar.querySelector('.nxt-mobile-cart-badge');
   const sourceCartBadge = document.getElementById('cartCount');
+  const aiChatPanel = document.getElementById('aiChatPanel');
+  const aiChatInput = document.getElementById('aiChatInput');
+  const aiChatMessages = document.getElementById('aiChatMessages');
+  let mobileViewportCeiling = window.visualViewport?.height || window.innerHeight;
+  let mobileViewportFrame = 0;
+  let layerStateFrame = 0;
+  let lastViewportTop = -1;
+  let lastViewportHeight = -1;
+  let lastKeyboardOpen = false;
+  let lastMessageScrollHeight = -1;
+
+  function syncMobileVisualViewport() {
+    mobileViewportFrame = 0;
+    const root = document.documentElement;
+
+    if (window.innerWidth > 768) {
+      root.style.removeProperty('--nxt-mobile-viewport-top');
+      root.style.removeProperty('--nxt-mobile-viewport-height');
+      document.body.classList.remove('nxt-ai-keyboard-open');
+      lastViewportTop = -1;
+      lastViewportHeight = -1;
+      lastKeyboardOpen = false;
+      return;
+    }
+
+    const viewport = window.visualViewport;
+    const viewportTop = Math.max(0, viewport?.offsetTop || 0);
+    const viewportHeight = Math.max(1, viewport?.height || window.innerHeight);
+    const chatOpen = Boolean(aiChatPanel?.classList.contains('open'));
+    const inputFocused = document.activeElement === aiChatInput;
+
+    if (Math.abs(viewportTop - lastViewportTop) > .5) {
+      root.style.setProperty('--nxt-mobile-viewport-top', `${viewportTop.toFixed(2)}px`);
+      lastViewportTop = viewportTop;
+    }
+    if (Math.abs(viewportHeight - lastViewportHeight) > .5) {
+      root.style.setProperty('--nxt-mobile-viewport-height', `${viewportHeight.toFixed(2)}px`);
+      lastViewportHeight = viewportHeight;
+    }
+
+    if (!chatOpen) {
+      mobileViewportCeiling = viewportHeight;
+    } else if (!inputFocused) {
+      mobileViewportCeiling = Math.max(mobileViewportCeiling, viewportHeight);
+    }
+
+    const keyboardOpen = chatOpen && (
+      inputFocused || viewportHeight < mobileViewportCeiling - 80
+    );
+    if (keyboardOpen !== lastKeyboardOpen) {
+      document.body.classList.toggle('nxt-ai-keyboard-open', keyboardOpen);
+      lastKeyboardOpen = keyboardOpen;
+    }
+
+    const messageScrollHeight = aiChatMessages?.scrollHeight || 0;
+    if (chatOpen && keyboardOpen && aiChatMessages && messageScrollHeight !== lastMessageScrollHeight) {
+      aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+      lastMessageScrollHeight = messageScrollHeight;
+    }
+  }
+
+  function scheduleMobileViewportSync() {
+    if (mobileViewportFrame) return;
+    mobileViewportFrame = requestAnimationFrame(syncMobileVisualViewport);
+  }
 
   function syncCartBadge() {
     const count = Math.max(0, Number.parseInt(sourceCartBadge?.textContent || '0', 10) || 0);
@@ -370,10 +475,20 @@
   }
 
   function syncLayerState() {
+    layerStateFrame = 0;
     const layerOpen = Boolean(document.querySelector(
       '.cart-overlay.active,.modal-overlay.active,.ai-chat-panel.open,.nxt-checkout-overlay,.nxt-wallet-overlay,.nxt-wallet-chooser,.nxt-wallet-loading,.nxt-swaps-layer.open'
     ));
     document.body.classList.toggle('nxt-mobile-layer-open', layerOpen);
+    if (!aiChatPanel?.classList.contains('open')) {
+      document.body.classList.remove('nxt-ai-keyboard-open');
+    }
+    scheduleMobileViewportSync();
+  }
+
+  function scheduleLayerStateSync() {
+    if (layerStateFrame) return;
+    layerStateFrame = requestAnimationFrame(syncLayerState);
   }
 
   function setActiveTab(id) {
@@ -412,8 +527,18 @@
   if (sourceCartBadge) {
     new MutationObserver(syncCartBadge).observe(sourceCartBadge, { childList: true, characterData: true, subtree: true, attributes: true });
   }
-  new MutationObserver(syncLayerState).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-  document.addEventListener('click', () => requestAnimationFrame(syncLayerState), true);
+  aiChatInput?.addEventListener('focus', scheduleMobileViewportSync);
+  aiChatInput?.addEventListener('blur', () => setTimeout(scheduleMobileViewportSync, 0));
+  window.visualViewport?.addEventListener('resize', scheduleMobileViewportSync, { passive: true });
+  window.visualViewport?.addEventListener('scroll', scheduleMobileViewportSync, { passive: true });
+  window.addEventListener('resize', scheduleMobileViewportSync, { passive: true });
+  window.addEventListener('orientationchange', () => {
+    mobileViewportCeiling = 0;
+    scheduleMobileViewportSync();
+  });
+  new MutationObserver(scheduleLayerStateSync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('click', scheduleLayerStateSync, true);
   syncCartBadge();
   syncLayerState();
+  syncMobileVisualViewport();
 })();

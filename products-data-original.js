@@ -393,6 +393,58 @@ const compounds = [
     { label: '5 Kits — 25% OFF • BEST VALUE', price: 1687.5 }
   ]
 },
+  {
+    id: 'retatrutide-10',
+    name: 'Retatrutide — 10mg',
+    aka: 'Tri-Agonist (GLP-1/GIP/Glucagon)',
+    category: 'freeze-dried',
+    protocols: ['fat-loss'],
+    badge: 'Best Seller',
+    tags: ['GLP-1', 'GIP', 'Glucagon', 'Tri-Agonist', 'Metabolic'],
+    shortDesc: 'Triple receptor agonist for advanced metabolic and body-composition research.',
+    description: 'Retatrutide is an investigational tri-agonist targeting GLP-1, GIP, and glucagon receptors simultaneously. It is studied in controlled research settings for metabolic signaling, appetite pathways, and body-composition outcomes.',
+    benefits: ['Triple receptor agonist (GLP-1/GIP/Glucagon)', 'Metabolic signaling research', 'Body-composition pathway research', 'Appetite-regulation research', 'Sustained weekly activity'],
+    sideEffects: ['Research use only — effects and safety depend on study design', 'Investigational compound with no approved consumer use', 'Not intended for human or veterinary use'],
+    dosing: {
+      beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
+      intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
+      advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
+    },
+    amount: '10mg per vial', form: 'Lyophilized Powder', appearance: 'White / Off-White Powder',
+    purity: '>99% (HPLC Verified)', molecularFormula: 'C₁₉₀H₂₈₂N₄₈O₆₀', halfLife: 'Research context dependent',
+    reconstitution: 'Follow the supplied laboratory handling and reconstitution instructions for the specific research protocol.',
+    syringe: 'Laboratory research handling only', injectionSite: 'Not for human or veterinary use',
+    storage: 'Store according to supplied product handling instructions. Refrigerate appropriately after laboratory reconstitution.', administration: 'Laboratory research use only',
+    warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
+    suggestedCompanions: ['retatrutide-20', 'tesamorelin-10', 'mots-c'],
+    pricing: [ { label: '1 Vial', price: 110 }, { label: '5 Vials', price: 451 }, { label: '10 Vials', price: 770 } ]
+  },
+  {
+    id: 'retatrutide-20',
+    name: 'Retatrutide — 20mg',
+    aka: 'Tri-Agonist (GLP-1/GIP/Glucagon)',
+    category: 'freeze-dried',
+    protocols: ['fat-loss'],
+    badge: '',
+    tags: ['GLP-1', 'GIP', 'Glucagon', 'Tri-Agonist', '20mg Vial'],
+    shortDesc: 'Higher-concentration Retatrutide vial for advanced metabolic research protocols.',
+    description: 'Retatrutide is an investigational tri-agonist targeting GLP-1, GIP, and glucagon receptors simultaneously. This 20mg format supports controlled laboratory studies requiring a higher quantity per vial.',
+    benefits: ['Triple receptor agonist (GLP-1/GIP/Glucagon)', '20mg quantity per vial', 'Metabolic signaling research', 'Body-composition pathway research', 'Sustained weekly activity'],
+    sideEffects: ['Research use only — effects and safety depend on study design', 'Investigational compound with no approved consumer use', 'Not intended for human or veterinary use'],
+    dosing: {
+      beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
+      intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
+      advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
+    },
+    amount: '20mg per vial', form: 'Lyophilized Powder', appearance: 'White / Off-White Powder',
+    purity: '>99% (HPLC Verified)', molecularFormula: 'C₁₉₀H₂₈₂N₄₈O₆₀', halfLife: 'Research context dependent',
+    reconstitution: 'Follow the supplied laboratory handling and reconstitution instructions for the specific research protocol.',
+    syringe: 'Laboratory research handling only', injectionSite: 'Not for human or veterinary use',
+    storage: 'Store according to supplied product handling instructions. Refrigerate appropriately after laboratory reconstitution.', administration: 'Laboratory research use only',
+    warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
+    suggestedCompanions: ['retatrutide-10', 'tesamorelin-10', 'mots-c'],
+    pricing: [ { label: '1 Vial', price: 160 }, { label: '5 Vials', price: 656 }, { label: '10 Vials', price: 1120 } ]
+  },
 
   // ═══════════════════════════════════════
   // CAPSULES / ORAL
