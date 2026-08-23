@@ -60,13 +60,39 @@ application never receives or stores wallet private keys. The checkout requires:
 - `CRYPTO_QUOTE_SECRET`: a long random value used only to sign temporary quotes.
 - `RESEND_API_KEY`: sends checkout-lead and blockchain-confirmed order emails.
 - `ORDER_EMAIL_FROM`: optional verified sender address for Resend.
+- `ORDER_NOTIFICATION_EMAIL`: merchant inbox for checkout and payment notices.
 - `ETHEREUM_RPC_URL`: optional dedicated Ethereum Mainnet JSON-RPC endpoint.
 - `ETHEREUM_BACKUP_RPC_URL`: optional independent backup Mainnet endpoint.
 - `BITCOIN_API_URL` and `BITCOIN_BACKUP_API_URL`: optional Esplora-compatible
   endpoints. The defaults are mempool.space and Blockstream.
 - `KV_REST_API_URL` and `KV_REST_API_TOKEN` (or the equivalent
   `UPSTASH_REDIS_REST_*` names): required. Checkout fails closed without the
-  durable ledger.
+durable ledger.
+
+## Separate hosted card-payment links
+
+The customer-information screen can also offer **Send me a card link**. This
+does not embed a card form and never accepts card data on NXT LVL. The server
+recalculates the cart from the trusted catalog, creates an order-specific Stripe
+Checkout Session, and sends the `checkout.stripe.com` URL by email or SMS. The
+browser only receives a sent/not-sent result; it never receives the hosted URL.
+
+This option stays hidden in production until every safety dependency is ready:
+
+- `STRIPE_SECRET_KEY`: a live Stripe server key (`sk_live_...`).
+- `STRIPE_WEBHOOK_SECRET`: signing secret for
+  `https://www.nxtlvl-research.com/api/stripe-card-webhook`.
+- Upstash/KV credentials listed above, for idempotency and rate limiting.
+- Email delivery: `RESEND_API_KEY` and a verified `ORDER_EMAIL_FROM`.
+- Text delivery: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and either
+  `TWILIO_MESSAGING_SERVICE_SID` or `TWILIO_FROM_NUMBER`.
+
+Configure the Stripe webhook to send `checkout.session.completed`. The handler
+checks the raw-body signature, timestamp, event replay state, payment status,
+and integration metadata before sending a `CARD PAYMENT CONFIRMED` notice.
+Customers must explicitly consent before a one-time transactional SMS is sent.
+Use only a processor account that has reviewed and approved the actual business
+and catalog; the integration does not bypass provider underwriting or rules.
 
 The server recalculates totals from `products-data-original.js`; browser prices
 are never trusted. Signed quotes are also bound to the normalized customer,
