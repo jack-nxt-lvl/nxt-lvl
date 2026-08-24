@@ -84,7 +84,7 @@
         return;
       }
       const script=document.createElement('script');
-      script.src='/direct-wallet-checkout.js?v=20260821-swaps-drawer-4';
+      script.src='/direct-wallet-checkout.js?v=20260824-easy-pay-1';
       script.async=false;
       script.dataset.nxtDirectWallet='1';
       script.onload=()=>typeof window.startDirectWalletCheckout==='function'?resolve():reject(new Error('Direct-wallet checkout failed to initialize.'));
