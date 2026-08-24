@@ -21,7 +21,7 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-easy-pay-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-same-tab-1/);
 });
 
 test('instructions list only researched immediate-send purchase routes', () => {
@@ -37,7 +37,8 @@ test('instructions list only researched immediate-send purchase routes', () => {
   }
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
   assert.match(guide, /Why Swaps\.app stays first/);
-  assert.match(checkout, /secure Swaps purchase panel/i);
+  assert.match(checkout, /open Swaps in this same browser tab/i);
+  assert.match(checkout, /window\.location\.assign\(url\)/);
   assert.match(homepage, /shipping-and-payments\.html/);
 });
 
@@ -54,7 +55,7 @@ test('checkout keeps the decision point to two primary paths', () => {
   assert.match(checkout, /data-pay-path="buy"/);
   assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
   assert.match(checkout, /We set up USDT on Ethereum ERC-20 automatically/);
-  assert.match(checkout, /Continue with Card \/ Apple Pay/);
+  assert.match(checkout, /Continue to Swaps in this tab/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
   assert.match(checkout, /Ethereum Mainnet \/ ERC-20 only/);
