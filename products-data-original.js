@@ -573,33 +573,33 @@ const compounds = [
     storage: 'Store according to supplied product handling instructions.', administration: 'Laboratory research use only',
     warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
     suggestedCompanions: ['semax', 'dsip'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
+    pricing: [ { label: '1 Vial', price: 49.99 }, { label: '5 Vials', price: 204.96 }, { label: '10 Vials', price: 349.93 } ]
   },
   {
     id: 'semax',
-    name: 'Semax — 10mg',
+    name: 'Semax — 11mg',
     aka: 'ACTH Fragment Analog Research Peptide',
     category: 'freeze-dried',
     protocols: ['recovery-longevity'],
     badge: '',
-    tags: ['Peptide Research', 'ACTH Analog', 'Signaling Research', '10mg Vial'],
+    tags: ['Peptide Research', 'ACTH Analog', 'Signaling Research', '11mg Vial'],
     shortDesc: 'Lyophilized peptide reference material for controlled ACTH-fragment analog and signaling research.',
-    description: 'Semax is a synthetic ACTH-fragment analog used in controlled laboratory research involving peptide signaling and related pathways. This listing is the 10mg lyophilized vial format.',
-    benefits: ['ACTH-fragment analog research', 'Peptide-signaling research', '10mg vial format', 'Lyophilized laboratory material'],
+    description: 'Semax is a synthetic ACTH-fragment analog used in controlled laboratory research involving peptide signaling and related pathways. This listing is the 11mg lyophilized vial format.',
+    benefits: ['ACTH-fragment analog research', 'Peptide-signaling research', '11mg vial format', 'Lyophilized laboratory material'],
     sideEffects: ['Research use only — effects and safety depend on study design', 'Not intended for human or veterinary use'],
     dosing: {
       beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
       intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
       advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
     },
-    amount: '10mg per vial', form: 'Lyophilized Powder', appearance: 'White Powder',
+    amount: '11mg per vial', form: 'Lyophilized Powder', appearance: 'White Powder',
     purity: '>99% (HPLC Verified)', molecularFormula: 'C₃₉H₅₃N₉O₁₀S', halfLife: 'Research context dependent',
     reconstitution: 'Follow the supplied laboratory handling instructions for the specific research protocol.',
     syringe: 'Laboratory research handling only', injectionSite: 'Not for human or veterinary use',
     storage: 'Store according to supplied product handling instructions.', administration: 'Laboratory research use only',
     warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
     suggestedCompanions: ['selank', 'dsip'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
+    pricing: [ { label: '1 Vial', price: 76.50 }, { label: '5 Vials', price: 313.65 }, { label: '10 Vials', price: 535.50 } ]
   },
   {
     id: 'dsip',
@@ -625,7 +625,7 @@ const compounds = [
     storage: 'Store according to supplied product handling instructions.', administration: 'Laboratory research use only',
     warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
     suggestedCompanions: ['selank', 'semax'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
+    pricing: [ { label: '1 Vial', price: 49 }, { label: '5 Vials', price: 200.90 }, { label: '10 Vials', price: 343 } ]
   },
   {
     id: 'aod-9604',
@@ -1118,7 +1118,7 @@ const stacks = [
   {
     id: 'brain-stack', name: 'BRAIN STACK', goal: 'Focus, memory, mood & neuroprotection', icon: '🧠',
     compounds: [
-      { name: 'Semax 10mg', role: 'BDNF & focus (morning)', id: 'semax' },
+      { name: 'Semax 11mg', role: 'BDNF & focus (morning)', id: 'semax' },
       { name: 'Selank 11mg', role: 'Anxiety reduction & mood', id: 'selank' },
       { name: 'DSIP 10mg', role: 'Deep sleep & cortisol control', id: 'dsip' }
     ],
