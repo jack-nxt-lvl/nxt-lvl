@@ -21,23 +21,23 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-keep-site-open-2/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-exact-card-total-3/);
 });
 
 test('instructions list only researched immediate-send purchase routes', () => {
   for (const source of [homepage, guide]) {
+    assert.match(source, /Transak/);
     assert.match(source, /Swaps\.app/);
     assert.match(source, /BitPay/);
     assert.match(source, /Paybis/);
-    assert.match(source, /direct.to.wallet|wallet-first|external wallet/i);
-    assert.match(source, /9\+ providers/);
-    assert.match(source, /lower.verification/i);
-    assert.match(source, /around \$1,000|purchase around \$1,000/i);
+    assert.match(source, /direct.to.wallet|wallet-first|external[- ]wallet/i);
+    assert.match(source, /exact (?:crypto )?(?:receive )?amount|exact crypto amount/i);
+    assert.match(source, /provider fees/i);
     assert.match(source, /Avoid scams/i);
   }
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
-  assert.match(guide, /Why Swaps\.app stays first/);
-  assert.match(checkout, /Swaps opens separately so this NXT LVL payment screen stays open/i);
+  assert.match(guide, /Why the exact receive amount matters/);
+  assert.match(checkout, /Transak calculates the card charge needed to deliver the full crypto invoice amount/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
   assert.match(homepage, /shipping-and-payments\.html/);
 });
@@ -55,10 +55,12 @@ test('checkout keeps the decision point to two primary paths', () => {
   assert.match(checkout, /data-pay-path="buy"/);
   assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
   assert.match(checkout, /We set up USDT on Ethereum ERC-20 automatically/);
-  assert.match(checkout, /Open Swaps — keep checkout open/);
+  assert.match(checkout, /Buy exact amount with Card \/ Apple Pay/);
+  assert.match(checkout, /\/api\/create-transak-session/);
+  assert.match(checkout, /data-swaps-fallback/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
-  assert.match(checkout, /Ethereum Mainnet \/ ERC-20 only/);
+  assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
   assert.match(checkout, /Payment sent but not detected\? Verify manually/);
 });
 
@@ -73,10 +75,10 @@ test('guide links to official apps for customers with existing crypto', () => {
 });
 
 test('guide separates speed from fees without promising guaranteed delivery', () => {
-  assert.match(guide, /Why Swaps\.app stays first/);
-  assert.match(guide, /final crypto received/i);
-  assert.match(guide, /form starts with a fiat spend amount/i);
-  assert.match(guide, /Never rely on a verification-free promise/i);
+  assert.match(guide, /Why the exact receive amount matters/);
+  assert.match(guide, /exact crypto target/i);
+  assert.match(guide, /fiat-spend link can subtract fees/i);
+  assert.match(guide, /No legitimate card service can guarantee no verification/i);
   assert.match(guide, /No legitimate provider can guarantee approval or instant delivery/i);
   assert.match(guide, /official provider documentation/i);
 });

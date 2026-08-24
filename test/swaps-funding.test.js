@@ -7,26 +7,32 @@ const swapsFunding = require('../lib/swaps-funding');
 const {
   CHECKOUT_ORIGIN,
   buildCheckoutUrl,
+  fundingAmountForInvoice,
 } = swapsFunding;
 
-test('builds a Swaps receive-amount buy link with only supported parameters', () => {
-  const url = new URL(buildCheckoutUrl({ asset: 'btc', amount: '0.00109879' }));
+test('builds a buffered Swaps backup link with only supported public parameters', () => {
+  const url = new URL(buildCheckoutUrl({ asset: 'usdt', invoiceUsd: '20.00' }));
   assert.equal(CHECKOUT_ORIGIN, 'https://www.swaps.app/buy');
   assert.equal(url.protocol, 'https:');
   assert.equal(url.hostname, 'www.swaps.app');
   assert.equal(url.pathname, '/buy');
-  assert.deepEqual([...url.searchParams.keys()], ['side', 'to', 'amount', 'input']);
+  assert.deepEqual([...url.searchParams.keys()], ['side', 'to', 'amount']);
   assert.equal(url.searchParams.get('side'), 'buy');
-  assert.equal(url.searchParams.get('to'), 'BTC');
-  assert.equal(url.searchParams.get('amount'), '0.00109879');
-  assert.equal(url.searchParams.get('input'), 'receive');
+  assert.equal(url.searchParams.get('to'), 'USDT');
+  assert.equal(url.searchParams.get('amount'), '25.00');
+});
+
+test('grosses up the fallback card spend for percentage and fixed provider fees', () => {
+  assert.equal(fundingAmountForInvoice('20.00'), '25.00');
+  assert.equal(fundingAmountForInvoice('100.00'), '110.11');
+  assert.equal(fundingAmountForInvoice('1000.00'), '1067.56');
 });
 
 test('never puts the receiving wallet, customer data, or unsupported payment flags in the public URL', () => {
   const address = 'bc1qqlvxgtn7rt4mchdwxmpldefauzfag28925jnrz';
   const url = buildCheckoutUrl({
     asset: 'USDT',
-    amount: '1000.123456',
+    invoiceUsd: '1000.12',
     address,
     customerEmail: 'buyer@example.com',
     applePay: true,
@@ -36,10 +42,10 @@ test('never puts the receiving wallet, customer data, or unsupported payment fla
 });
 
 test('rejects unsupported assets and malformed amounts', () => {
-  assert.throws(() => buildCheckoutUrl({ asset: 'SOL', amount: '1' }), /unsupported/i);
-  assert.throws(() => buildCheckoutUrl({ asset: 'BTC', amount: '-1' }), /invalid/i);
-  assert.throws(() => buildCheckoutUrl({ asset: 'ETH', amount: '1e3' }), /invalid/i);
-  assert.throws(() => buildCheckoutUrl({ asset: 'USDT', amount: '1&address=evil' }), /invalid/i);
+  assert.throws(() => buildCheckoutUrl({ asset: 'SOL', invoiceUsd: '1' }), /unsupported/i);
+  assert.throws(() => buildCheckoutUrl({ asset: 'BTC', invoiceUsd: '-1' }), /invalid/i);
+  assert.throws(() => buildCheckoutUrl({ asset: 'ETH', invoiceUsd: '1e3' }), /invalid/i);
+  assert.throws(() => buildCheckoutUrl({ asset: 'USDT', invoiceUsd: '1&address=evil' }), /invalid/i);
 });
 
 test('does not expose or configure a popup window flow', () => {
@@ -52,26 +58,26 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /No crypto experience needed/);
   assert.match(source, /Choose the easiest way for you/);
   assert.match(source, /Pay with Card \/ Apple Pay/);
-  assert.match(source, /Open Swaps — keep checkout open/);
+  assert.match(source, /Buy exact amount with Card \/ Apple Pay/);
   assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
-  assert.match(source, /It copies automatically/);
+  assert.match(source, /provider fees are added to the card total/i);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
   assert.match(source, /target="_blank" rel="noopener noreferrer"/);
-  assert.match(source, /href="\$\{escapeHtml\(swapsUrl\)\}" target="_blank"/);
+  assert.match(source, /data-swaps-fallback href="\$\{escapeHtml\(swapsUrl\)\}" target="_blank"/);
   assert.doesNotMatch(source, /window\.location\.assign\(url\)/);
-  assert.match(source, /SWAPS_RETURN_KEY/);
-  assert.match(source, /resumeAfterSwapsReturn/);
   assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
   assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
-  assert.match(source, /copyForSwapsWithoutBlocking/);
-  assert.match(source, /if \(link\.href !== url\) link\.href = url;[\s\S]{0,320}copyForSwapsWithoutBlocking\(quote\.address\)/);
-  assert.match(source, /closeActive\(\);[\s\S]{0,180}renderPayment\(saved\.quote/);
-  assert.match(source, /this NXT LVL checkout and automatic payment detection stay open/);
+  assert.match(source, /fetch\('\/api\/create-transak-session'/);
+  assert.match(source, /targetCryptoAmount/);
+  assert.match(source, /feesIncludedInCardTotal/);
+  assert.match(source, /showTransakFunding\(data\.widgetUrl, quote\)/);
+  assert.match(source, /iframe class="nxt-transak-frame"/);
+  assert.match(source, /incoming payment is detected automatically behind the secure card window/i);
   assert.doesNotMatch(source, /window\.open\(/);
-  assert.doesNotMatch(source, /data-swaps-fallback|nxtSwapsBuy/);
+  assert.doesNotMatch(source, /nxtSwapsBuy/);
   assert.doesNotMatch(source, /pageshow[^\n]+once:\s*true/);
-  assert.match(source, /Keep this checkout open.we detect the incoming payment automatically/i);
-  assert.match(source, /transaction ID from Swaps/i);
+  assert.match(source, /fees are included in the card total/i);
+  assert.match(source, /transaction ID from Transak/i);
 });

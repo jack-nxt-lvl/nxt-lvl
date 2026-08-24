@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/create-direct-payment-quote.js": { "maxDuration": 30 },
+    "api/create-transak-session.js": { "maxDuration": 30 },
     "api/create-card-payment-link.js": { "maxDuration": 30 },
     "api/find-direct-payment.js": { "maxDuration": 60 },
     "api/verify-direct-payment.js": { "maxDuration": 60 },

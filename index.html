@@ -2574,11 +2574,11 @@
           <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with card or Apple Pay</h3></div></div>
           <ol>
             <li><span>1</span><div><strong>Start checkout and choose a coin</strong><small>USDT ERC-20 is the clearest beginner option when the provider supports it.</small></div></li>
-            <li><span>2</span><div><strong>Open secure Swaps checkout</strong><small>Your order stays open on NXT LVL while Swaps opens separately with the amount prepared.</small></div></li>
-            <li><span>3</span><div><strong>Review the provider's offer</strong><small>Availability, fees, limits, and identity checks depend on the provider and your location.</small></div></li>
-            <li><span>4</span><div><strong>Buy enough for the invoice and fees</strong><small>Make sure the amount arriving in your wallet covers the exact crypto total shown.</small></div></li>
-            <li><span>5</span><div><strong>Send to the checkout address</strong><small>Paste the address if needed and select the exact network shown by NXT LVL.</small></div></li>
-            <li><span>6</span><div><strong>Return and wait for confirmation</strong><small>Do not send a second payment after the first one is detected.</small></div></li>
+            <li><span>2</span><div><strong>Open exact-amount Transak checkout</strong><small>The full crypto invoice amount and NXT LVL receiving address are prepared automatically.</small></div></li>
+            <li><span>3</span><div><strong>Check “You receive” first</strong><small>It must show at least the exact crypto amount displayed by NXT LVL.</small></div></li>
+            <li><span>4</span><div><strong>Review the higher card total</strong><small>Transak calculates the USD card charge needed after provider and network fees.</small></div></li>
+            <li><span>5</span><div><strong>Complete the secure provider checkout</strong><small>The receiving address is locked to this order; identity checks and availability depend on Transak.</small></div></li>
+            <li><span>6</span><div><strong>Keep NXT LVL open for confirmation</strong><small>Do not send a second payment after the first one is detected.</small></div></li>
           </ol>
         </article>
       </div>
@@ -2586,52 +2586,52 @@
       <div class="crypto-guide-options" id="crypto-options">
         <div class="crypto-guide-options-head">
           <div>
-            <div class="section-tag">Best Direct-to-Wallet Routes</div>
-            <h3>Use Swaps.app first. BitPay and Paybis are backups.</h3>
+            <div class="section-tag">Exact-Amount Card Checkout</div>
+            <h3>Use Transak first. Swaps.app, BitPay, and Paybis are backups.</h3>
           </div>
-          <p>All three can deliver crypto to the final receiving wallet. Checkout uses Swaps.app first because it
-            compares live routes and carries the <strong>exact crypto amount</strong> into its receive flow.</p>
+          <p>NXT LVL sends Transak the <strong>exact crypto amount that must arrive</strong>, so Transak calculates a
+            higher card total that includes its fees instead of subtracting fees from the invoice.</p>
         </div>
         <div class="crypto-guide-research-picks" aria-label="Recommended ways to buy sendable crypto">
           <article class="crypto-guide-research-pick best">
-            <span>Recommended · best overall</span>
-            <strong>Swaps.app from checkout</strong>
-            <p>Compares 9+ providers, shows the all-in amount before payment, and settles to the receiving wallet. A lower-verification route may appear when the customer and order qualify.</p>
+            <span>Recommended · exact receive target</span>
+            <strong>Transak from checkout</strong>
+            <p>Starts with the exact BTC, ETH, or USDT amount the order requires and calculates the card charge after provider fees. The NXT LVL receiving address is loaded and locked.</p>
           </article>
           <article class="crypto-guide-research-pick">
-            <span>Backup · address field</span>
-            <strong>BitPay web Buy screen</strong>
-            <p>Supports BTC, ETH, and USDT purchases to a final wallet address and compares partner offers. The recipient address can be filled directly on the Buy screen.</p>
+            <span>Backup · buffered card spend</span>
+            <strong>Swaps.app</strong>
+            <p>The backup link uses a higher fiat amount to leave room for provider fees. Always confirm the final “You receive” amount still covers the NXT LVL invoice.</p>
           </article>
           <article class="crypto-guide-research-pick">
-            <span>Backup · direct wallet</span>
-            <strong>Paybis</strong>
-            <p>Offers card and Apple Pay purchases to an external wallet, including USDT on Ethereum. Paybis may also appear as one of the provider choices inside Swaps.app.</p>
+            <span>Additional direct-wallet backups</span>
+            <strong>BitPay or Paybis</strong>
+            <p>Both can support purchases to an external wallet in eligible locations. Enter the NXT LVL address and verify the crypto received after fees before paying.</p>
           </article>
         </div>
-        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> Swaps.app can show a lower-friction provider, but no legitimate card service can promise no verification. A purchase around $1,000 may still require ID, bank approval, or a security review.</div>
+        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> No legitimate card service can promise no verification. Transak or a backup provider may require ID, bank approval, or a security review based on the customer and transaction.</div>
         <div class="crypto-guide-option-grid">
           <article class="crypto-guide-option featured">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon">💳</span><span
                 class="crypto-guide-pill">Use this first</span></div>
-            <h4>Swaps.app—keep NXT LVL checkout open</h4>
-            <p>Choose your coin first, then use the blue Buy button. Swaps opens separately so the NXT LVL payment
-              screen and automatic blockchain detection remain open for your order.</p>
-            <small>The exact crypto amount is carried over and the receiving address is copied for you. Choose only a route that shows wallet-first delivery and review the final amount after fees.</small>
+            <h4>Transak—fees added above the invoice</h4>
+            <p>Use the blue Buy button to open secure Transak checkout inside NXT LVL. The provider starts from the
+              exact crypto receive target, then calculates what the card must be charged.</p>
+            <small>Confirm “You receive” shows at least the NXT LVL amount. The receiving address is locked to the order and automatic blockchain detection remains active behind the provider window.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon bitpay">B</span><span
                 class="crypto-guide-label">BTC · ETH · USDT</span></div>
-            <h4>BitPay—prefilled-address backup</h4>
-            <p>Use BitPay’s web Buy screen, choose the matching coin and network, and send the purchase directly to the NXT LVL receiving address.</p>
-            <small>BitPay compares partner offers. Verify the final crypto received is at least the exact checkout amount; fees and partner verification can vary.</small>
+            <h4>Swaps.app—buffered backup</h4>
+            <p>If exact-amount Transak checkout is unavailable, the backup opens Swaps with a larger fiat spend to help cover provider fees.</p>
+            <small>The buffer is not a provider guarantee. Verify the final crypto received is at least the exact checkout amount before paying.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon paybis">P</span><span
                 class="crypto-guide-label">Direct-wallet backup</span></div>
-            <h4>Paybis—use if its quote is better</h4>
-            <p>Choose BTC, ETH, or USDT, select your own external wallet, and paste the receiving address from checkout.</p>
-            <small>For USDT select <strong>Ethereum / ERC-20</strong>. Paybis advertises fast card processing, but approval, price, and delivery time still depend on the customer and transaction.</small>
+            <h4>BitPay or Paybis—manual backup</h4>
+            <p>Choose the matching asset and network, enter the NXT LVL receiving address, and compare the final crypto received after fees.</p>
+            <small>For USDT select <strong>Ethereum / ERC-20</strong>. Approval, price, and delivery time depend on the provider, customer, and transaction.</small>
           </article>
         </div>
         <div class="crypto-guide-option-warning"><strong>Avoid scams:</strong> use the official app or website, ignore
@@ -3717,8 +3717,8 @@
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
-  <script src="lib/swaps-funding.js?v=20260824-direct-buy-1"></script>
-  <script src="direct-wallet-checkout.js?v=20260824-keep-site-open-2"></script>
+  <script src="lib/swaps-funding.js?v=20260824-fee-buffer-2"></script>
+  <script src="direct-wallet-checkout.js?v=20260824-exact-card-total-3"></script>
   <script src="customer-checkout-upgrade.js?v=20260823-hosted-card-link-2"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
