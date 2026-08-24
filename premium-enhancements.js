@@ -1,4 +1,13 @@
-(() => {
+function normalizeProductSearch(value) {
+  return String(value || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/gi, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+if (typeof document !== 'undefined') (() => {
   // Add SLU-PP-332 to the same product database used by the storefront.
   if (typeof compounds !== 'undefined' && Array.isArray(compounds) && !compounds.some(p => p.id === 'slu-pp-332-10')) {
     compounds.push({
@@ -121,7 +130,7 @@
 
   const heroAi=document.querySelector('.hero .btn-secondary[onclick*="toggleAiChat"]');if(heroAi){heroAi.classList.add('hero-ai-cta');heroAi.textContent='Ask NXT LVL AI';}
   const menu = document.querySelector('#menu .section-header');
-  if(menu&&!document.querySelector('.premium-search')){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||card.textContent.toLowerCase().includes(q)?'flex':'none';});});}
+  if(menu&&!document.querySelector('.premium-search')){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=normalizeProductSearch(e.target.value);document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||normalizeProductSearch(card.textContent).includes(q)?'flex':'none';});});}
 
   const footer=document.querySelector('footer');
   if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
@@ -134,3 +143,7 @@
 
   if(!document.querySelector('.premium-toast')){const toast=document.createElement('div');toast.className='premium-toast';toast.textContent='Added to cart ✓';document.body.appendChild(toast);document.addEventListener('click',e=>{if(e.target.closest('.card-atc-btn,.modal-atc-btn')){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1400)}});}
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { normalizeProductSearch };
+}
