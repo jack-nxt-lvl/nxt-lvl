@@ -56,10 +56,12 @@ test('requests a compact resizable window against the right side of the screen',
 
 test('keeps beginner guidance and recovery controls in the direct checkout', () => {
   const source = readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8');
-  assert.match(source, /Need to buy crypto first\?/);
-  assert.match(source, /Choose a coin above/);
+  assert.match(source, /How would you like to pay\?/);
+  assert.match(source, /No crypto experience needed/);
   assert.match(source, /Choose the easiest way for you/);
-  assert.match(source, /I need crypto — Card \/ Apple Pay/);
+  assert.match(source, /Pay with Card \/ Apple Pay/);
+  assert.match(source, /Continue with Card \/ Apple Pay/);
+  assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
   assert.match(source, /It copies automatically/);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
