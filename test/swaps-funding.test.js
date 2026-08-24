@@ -11,9 +11,10 @@ const {
 
 test('builds a Swaps receive-amount buy link with only supported parameters', () => {
   const url = new URL(buildCheckoutUrl({ asset: 'btc', amount: '0.00109879' }));
-  assert.equal(CHECKOUT_ORIGIN, 'https://www.swaps.app/');
+  assert.equal(CHECKOUT_ORIGIN, 'https://www.swaps.app/buy');
   assert.equal(url.protocol, 'https:');
   assert.equal(url.hostname, 'www.swaps.app');
+  assert.equal(url.pathname, '/buy');
   assert.deepEqual([...url.searchParams.keys()], ['side', 'to', 'amount', 'input']);
   assert.equal(url.searchParams.get('side'), 'buy');
   assert.equal(url.searchParams.get('to'), 'BTC');
