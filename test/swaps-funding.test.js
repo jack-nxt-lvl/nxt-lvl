@@ -56,9 +56,9 @@ test('requests a compact resizable window against the right side of the screen',
 
 test('keeps beginner guidance and recovery controls in the direct checkout', () => {
   const source = readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8');
-  assert.match(source, /Paying by card or Apple Pay\?/);
-  assert.match(source, /Choose BTC, ETH, or USDT below/);
-  assert.match(source, /No crypto yet\? Buy it here/);
+  assert.match(source, /Need to buy crypto first\?/);
+  assert.match(source, /Choose a coin above/);
+  assert.match(source, /Need crypto\? Buy it here/);
   assert.match(source, /Buy .* with Card \/ Apple Pay/);
   assert.match(source, /It copies automatically/);
   assert.match(source, /nxt-wallet-headcoin/);
@@ -67,9 +67,9 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /Keep this checkout open for confirmation/);
   assert.match(source, /data-swaps-fallback/);
   assert.match(source, /nxt-swaps-drawer/);
-  assert.match(source, /data-swaps-launch/);
-  assert.match(source, /right-side Swaps panel/);
-  assert.match(source, /window\.open\(url, 'nxtSwapsBuy'/);
+  assert.match(source, /Swaps opened beside your checkout/);
+  assert.match(source, /compact Swaps window|Swaps opened beside your checkout/);
+  assert.match(source, /window\.open\('', 'nxtSwapsBuy'/);
   assert.doesNotMatch(source, /window\.open\([^,]+,\s*['_"]_blank/);
   assert.match(source, /detect the incoming payment automatically/i);
   assert.match(source, /transaction ID from Swaps/i);

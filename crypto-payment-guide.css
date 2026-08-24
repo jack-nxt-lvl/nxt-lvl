@@ -352,6 +352,68 @@
   line-height: 1.65;
 }
 
+.crypto-guide-options-head p strong { color: #e5e7f0; }
+
+.crypto-guide-research-picks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.crypto-guide-research-pick {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(52, 211, 153, 0.16);
+  border-radius: 14px;
+  background: rgba(5, 16, 16, 0.4);
+}
+
+.crypto-guide-research-pick.best {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.13), rgba(5, 150, 105, 0.055));
+  box-shadow: inset 0 0 24px rgba(16, 185, 129, 0.035);
+}
+
+.crypto-guide-research-pick > span,
+.crypto-guide-research-pick > strong,
+.crypto-guide-research-pick > p { display: block; }
+
+.crypto-guide-research-pick > span {
+  color: #6ee7b7;
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+}
+
+.crypto-guide-research-pick > strong {
+  margin-top: 7px;
+  color: #f3faf7;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.crypto-guide-research-pick > p {
+  margin: 7px 0 0;
+  color: #8f9c9a;
+  font-size: 0.64rem;
+  line-height: 1.55;
+}
+
+.crypto-guide-sendable-rule {
+  margin-top: 11px;
+  padding: 12px 14px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 11px;
+  background: rgba(245, 158, 11, 0.055);
+  color: #a9a29a;
+  font-size: 0.69rem;
+  line-height: 1.55;
+}
+
+.crypto-guide-sendable-rule strong { color: #fde68a; }
+
 .crypto-guide-option-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -367,9 +429,6 @@
   border-radius: 16px;
   background: rgba(7, 9, 17, 0.48);
 }
-
-.crypto-guide-option:nth-child(4),
-.crypto-guide-option:nth-child(5) { grid-column: span 3; }
 
 .crypto-guide-option.featured {
   border-color: rgba(96, 165, 250, 0.27);
@@ -399,6 +458,9 @@
 
 .crypto-guide-option-icon.cash { background: #00d64f; color: #041408; }
 .crypto-guide-option-icon.coinbase { background: #0052ff; }
+.crypto-guide-option-icon.strike { background: #705cf6; }
+.crypto-guide-option-icon.bitpay { background: linear-gradient(145deg, #2f74b5, #1f4d79); }
+.crypto-guide-option-icon.paybis { background: linear-gradient(145deg, #36d59d, #12a67b); color: #06261d; }
 .crypto-guide-option-icon.wallet { background: linear-gradient(145deg, #f6851b, #e2761b); }
 .crypto-guide-option-icon.exchange { background: linear-gradient(145deg, #6842ff, #4f2dbb); }
 
@@ -566,6 +628,7 @@
   .crypto-guide-header,
   .crypto-guide-paths,
   .crypto-guide-options-head { grid-template-columns: 1fr; }
+  .crypto-guide-research-picks { grid-template-columns: 1fr; }
   .crypto-guide-assets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .crypto-guide-asset.recommended { grid-column: 1 / -1; }
 }
@@ -617,9 +680,7 @@
   .crypto-guide-path li { padding: 11px 9px; }
   .crypto-guide-options { padding: 20px 13px; }
   .crypto-guide-option-grid { grid-template-columns: 1fr; }
-  .crypto-guide-option,
-  .crypto-guide-option:nth-child(4),
-  .crypto-guide-option:nth-child(5) { grid-column: auto; }
+  .crypto-guide-option { grid-column: auto; }
   .crypto-guide-option { padding: 17px; }
   .crypto-guide-safety { padding: 18px 14px; }
   .crypto-guide-safety ul { grid-template-columns: 1fr; }

@@ -95,14 +95,25 @@
     .obtain-head { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: end; }
     .obtain-head h2 { margin-bottom: 0; }
     .obtain-head p { margin: 0; font-size: .85rem; }
+    .research-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+    .research-pick { min-width: 0; padding: 17px; border: 1px solid rgba(52, 211, 153, .16); border-radius: 14px; background: rgba(5, 16, 16, .4); }
+    .research-pick.best { border-color: rgba(52, 211, 153, .35); background: linear-gradient(145deg, rgba(16, 185, 129, .13), rgba(5, 150, 105, .055)); }
+    .research-pick span, .research-pick strong, .research-pick p { display: block; }
+    .research-pick span { color: #6ee7b7; font-size: .58rem; font-weight: 950; letter-spacing: .75px; text-transform: uppercase; }
+    .research-pick strong { margin-top: 7px; color: #f3faf7; font-size: .86rem; line-height: 1.35; }
+    .research-pick p { margin: 7px 0 0; color: #8f9c9a; font-size: .67rem; line-height: 1.55; }
+    .sendable-rule { margin-top: 11px; padding: 13px 15px; border: 1px solid rgba(251, 191, 36, .2); border-radius: 11px; background: rgba(245, 158, 11, .055); color: #aaa197; font-size: .72rem; line-height: 1.55; }
+    .sendable-rule strong { color: #fde68a; }
     .obtain-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
     .obtain-card { grid-column: span 2; min-width: 0; padding: 19px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 16px; background: rgba(7, 9, 17, .5); }
-    .obtain-card:nth-child(4), .obtain-card:nth-child(5) { grid-column: span 3; }
     .obtain-card.featured { border-color: rgba(96, 165, 250, .27); background: linear-gradient(145deg, rgba(37, 99, 235, .13), rgba(124, 58, 237, .08)); }
     .obtain-top { display: flex; min-height: 38px; align-items: center; justify-content: space-between; gap: 9px; }
     .obtain-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: linear-gradient(145deg, #2563eb, #7c3aed); font-weight: 950; }
     .obtain-icon.cash { background: #00d64f; color: #041408; }
     .obtain-icon.coinbase { background: #0052ff; }
+    .obtain-icon.strike { background: #705cf6; }
+    .obtain-icon.bitpay { background: linear-gradient(145deg, #2f74b5, #1f4d79); }
+    .obtain-icon.paybis { background: linear-gradient(145deg, #36d59d, #12a67b); color: #06261d; }
     .obtain-icon.wallet { background: linear-gradient(145deg, #f6851b, #e2761b); }
     .obtain-icon.exchange { background: linear-gradient(145deg, #6842ff, #4f2dbb); }
     .obtain-card h3 { margin: 14px 0 7px; font-size: .94rem; }
@@ -110,8 +121,32 @@
     .obtain-card small { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .055); color: #7f8492; font-size: .65rem; }
     .obtain-card small strong { color: #ccd2df; }
     .obtain-link { display: inline-flex; margin-top: 11px; color: #c9e8ff; font-size: .67rem; font-weight: 850; text-underline-offset: 3px; }
+    .cost-summary { margin-top: 18px; padding: 18px; border: 1px solid rgba(255, 255, 255, .075); border-radius: 15px; background: rgba(3, 5, 11, .4); }
+    .cost-summary h3 { margin: 0; font-size: .98rem; }
+    .cost-summary > p { margin: 5px 0 13px; font-size: .68rem; }
+    .cost-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .cost-row { padding: 12px; border: 1px solid rgba(255, 255, 255, .055); border-radius: 11px; background: rgba(255, 255, 255, .018); }
+    .cost-row strong, .cost-row span, .cost-row small { display: block; }
+    .cost-row strong { color: #ececf4; font-size: .75rem; }
+    .cost-row span { margin-top: 4px; color: #b9c4d6; font-size: .68rem; line-height: 1.45; }
+    .cost-row small { margin-top: 4px; color: #777b88; font-size: .61rem; line-height: 1.45; }
+    .research-date { margin-top: 11px; color: #696d79; font-size: .61rem; line-height: 1.5; }
     .obtain-warning { margin-top: 13px; padding: 13px 15px; border: 1px solid rgba(248, 113, 113, .14); border-radius: 11px; background: rgba(127, 29, 29, .065); color: #b9a5a9; font-size: .72rem; }
     .obtain-warning strong { color: #ffc8cf; }
+    .wallet-directory { margin-top: 22px; padding: 30px; border: 1px solid var(--border); border-radius: 20px; background: linear-gradient(145deg, rgba(18, 17, 26, .95), rgba(9, 9, 14, .96)); box-shadow: 0 20px 55px rgba(0, 0, 0, .24); }
+    .wallet-directory-head { display: grid; grid-template-columns: .85fr 1.15fr; gap: 28px; align-items: end; }
+    .wallet-directory-head h2 { margin-bottom: 0; }
+    .wallet-directory-head p { margin: 0; font-size: .84rem; }
+    .wallet-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+    .wallet-link { display: grid; grid-template-columns: auto 1fr; gap: 11px; min-width: 0; padding: 14px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 13px; background: rgba(255, 255, 255, .024); color: #f1eef8; text-decoration: none; transition: border-color .18s, background .18s, transform .18s; }
+    .wallet-link:hover { transform: translateY(-1px); border-color: rgba(167, 139, 250, .3); background: rgba(124, 58, 237, .075); }
+    .wallet-mark { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; background: linear-gradient(145deg, #6d28d9, #2563eb); color: #fff; font-size: .72rem; font-weight: 950; }
+    .wallet-link strong, .wallet-link small { display: block; }
+    .wallet-link strong { font-size: .78rem; line-height: 1.3; }
+    .wallet-link small { margin-top: 3px; color: #858694; font-size: .61rem; line-height: 1.45; }
+    .wallet-rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 13px; }
+    .wallet-rule { padding: 12px 13px; border: 1px solid rgba(251, 191, 36, .12); border-radius: 11px; background: rgba(245, 158, 11, .045); color: #a69e90; font-size: .66rem; line-height: 1.5; }
+    .wallet-rule strong { color: #fde9aa; }
     .two-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 36px; }
     .path { padding: 27px; }
     .path-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
@@ -153,13 +188,13 @@
       h1 { letter-spacing: -1.8px; }
       .lead { font-size: .95rem; }
       .hero-actions { flex-direction: column; }
-      .why, .recommendation, .networks, .two-paths, .shipping, .obtain-head { grid-template-columns: 1fr; }
-      .why, .recommendation, .path, .safety, .shipping, .obtain { padding: 20px 16px; }
+      .why, .recommendation, .networks, .two-paths, .shipping, .obtain-head, .research-picks, .cost-grid, .wallet-directory-head, .wallet-grid, .wallet-rules { grid-template-columns: 1fr; }
+      .why, .recommendation, .path, .safety, .shipping, .obtain, .wallet-directory { padding: 20px 16px; }
       .recommendation { gap: 15px; }
       .coin { width: 55px; height: 55px; border-radius: 17px; font-size: 1.55rem; }
       .safety-grid { grid-template-columns: 1fr; }
       .obtain-grid { grid-template-columns: 1fr; }
-      .obtain-card, .obtain-card:nth-child(4), .obtain-card:nth-child(5) { grid-column: auto; }
+      .obtain-card { grid-column: auto; }
       .status { grid-template-columns: repeat(2, 1fr); }
       .button { width: 100%; }
     }
@@ -171,6 +206,7 @@
       <a class="brand" href="/">NXT LVL</a>
       <a href="#choose">Which coin?</a>
       <a href="#obtain">Get crypto</a>
+      <a href="#existing-wallets">Wallet apps</a>
       <a href="#steps">Step by step</a>
       <a href="#safety">Safety</a>
       <a class="nav-cta" href="/#menu">Shop catalog</a>
@@ -200,15 +236,49 @@
       </div>
     </section>
     <section class="obtain" id="obtain" aria-labelledby="obtainHeading">
-      <div class="obtain-head"><div><div class="section-label">Five ways to obtain crypto</div><h2 id="obtainHeading">Use the option that feels most familiar.</h2></div><p>You never need to buy from a stranger. Use the secure funding option in checkout or an established app you already trust. Every method still requires you to match the asset, network, amount, and address shown by NXT LVL.</p></div>
-      <div class="obtain-grid">
-        <article class="obtain-card featured"><div class="obtain-top"><span class="obtain-icon">💳</span><span class="pill">Quickest when available</span></div><h3>1. Buy inside NXT LVL checkout</h3><p>Choose the coin, then click “Buy with Card / Apple Pay.” Swaps opens a provider offer while your payment screen stays open.</p><small>Best when you need crypto now. Availability, fees, limits, and identity checks depend on the provider and your location.</small></article>
-        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon cash">$</span><span class="pill">BTC only</span></div><h3>2. Cash App</h3><p>Open Cash App → Bitcoin → Buy. Then choose Send and scan the NXT LVL Bitcoin QR code or paste the address.</p><small>Choose an <strong>on-chain Bitcoin Mainnet</strong> send—not Lightning. Identity checks, fees, limits, or a temporary transfer hold may apply.</small><a class="obtain-link" href="https://cash.app/bitcoin" target="_blank" rel="noopener noreferrer">Open official Cash App Bitcoin information ↗</a></article>
-        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon coinbase">C</span><span class="pill">BTC · ETH · USDT</span></div><h3>3. Coinbase</h3><p>Buy the coin selected in checkout, tap Send crypto, paste the order address, and choose the exact matching network.</p><small>Only continue when the balance is available to send. New deposits or purchases can sometimes have a temporary hold.</small><a class="obtain-link" href="https://www.coinbase.com/" target="_blank" rel="noopener noreferrer">Open the official Coinbase website ↗</a></article>
-        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon wallet">◆</span><span class="pill">ETH · USDT</span></div><h3>4. MetaMask or another wallet’s Buy feature</h3><p>In the wallet, tap Buy, select Ethereum Mainnet, compare provider quotes, and purchase ETH or ERC-20 USDT.</p><small>If you buy USDT, keep a small amount of ETH in that same self-custody wallet for the network fee required to send the USDT.</small><a class="obtain-link" href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Open the official MetaMask website ↗</a></article>
-        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon exchange">K</span><span class="pill">Exchange route</span></div><h3>5. Kraken or another established exchange</h3><p>Buy with an available bank, debit-card, or digital-wallet method, then withdraw the crypto to the NXT LVL checkout address.</p><small>Check the withdrawal screen before buying. Some funding methods can create a 72-hour or longer hold, so this route may not work for a payment due today.</small><a class="obtain-link" href="https://www.kraken.com/" target="_blank" rel="noopener noreferrer">Open the official Kraken website ↗</a></article>
+      <div class="obtain-head"><div><div class="section-label">Three direct-to-wallet routes</div><h2 id="obtainHeading">Start with Swaps.app.</h2></div><p>Swaps.app is the strongest fit because it compares live provider routes, carries the exact crypto amount, and uses wallet-first delivery. BitPay and Paybis are available only as backups if Swaps does not show a usable offer.</p></div>
+      <div class="research-picks" aria-label="Recommended immediate-send crypto routes">
+        <article class="research-pick best"><span>Recommended · best overall</span><strong>Swaps.app inside checkout</strong><p>Compares 9+ providers and their all-in receive amounts. The selected amount is carried into the buy flow and the receiving address is copied for the customer.</p></article>
+        <article class="research-pick"><span>Backup · address field</span><strong>BitPay web Buy screen</strong><p>Supports direct delivery to any wallet and compares partner offers. Its Buy form supports BTC, ETH, and USDT with a final recipient-address field.</p></article>
+        <article class="research-pick"><span>Backup · direct wallet</span><strong>Paybis</strong><p>Supports card and Apple Pay purchases to an external wallet, including USDT on Ethereum. Paybis may also appear inside Swaps.app as a provider choice.</p></article>
       </div>
-      <div class="obtain-warning"><strong>Avoid scams:</strong> only use official apps and websites. Ignore unsolicited “support” messages and never share your recovery phrase, password, verification code, or remote access to your device. These services are independent companies; NXT LVL does not control their availability, pricing, reviews, or transfer holds.</div>
+      <div class="sendable-rule"><strong>About verification:</strong> Swaps.app can surface a lower-verification provider when one is available, but no legitimate card service can guarantee no verification. A purchase around $1,000 may still trigger ID, bank approval, or a security review.</div>
+      <div class="obtain-grid">
+        <article class="obtain-card featured"><div class="obtain-top"><span class="obtain-icon">💳</span><span class="pill">Use this first</span></div><h3>1. Swaps.app inside NXT LVL checkout</h3><p>Choose the coin, then click “Buy with Card / Apple Pay.” Swaps compares provider routes while the NXT LVL payment screen stays open.</p><small>The exact crypto amount is carried over and the wallet address is copied. Choose a route that clearly shows wallet-first delivery and review the all-in amount before paying.</small><a class="obtain-link" href="https://www.swaps.app/" target="_blank" rel="noopener noreferrer">Open official Swaps information ↗</a></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon bitpay">B</span><span class="pill">BTC · ETH · USDT</span></div><h3>2. BitPay direct-to-wallet backup</h3><p>Open BitPay’s web Buy screen, choose the same coin and network shown in checkout, and enter the NXT LVL receiving address as the final recipient.</p><small>BitPay compares partner offers and supports a final wallet-address field. Make sure the crypto received after fees is at least the exact checkout amount before paying.</small><a class="obtain-link" href="https://bitpay.com/crypto-widget/buy?crypto_currency=USDT" target="_blank" rel="noopener noreferrer">Open the official BitPay Buy screen ↗</a></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon paybis">P</span><span class="pill">Direct wallet</span></div><h3>3. Paybis external-wallet backup</h3><p>Choose BTC, ETH, or USDT, select an external wallet, and paste the receiving address from the NXT LVL checkout.</p><small>Paybis advertises fast verification and external-wallet delivery. For USDT, choose <strong>Ethereum / ERC-20</strong> only. Eligibility, fees, and review time still vary.</small><a class="obtain-link" href="https://paybis.com/buy-tether/" target="_blank" rel="noopener noreferrer">Open the official Paybis USDT page ↗</a></article>
+      </div>
+      <div class="cost-summary">
+        <h3>Why Swaps.app stays first for an order around $1,000</h3>
+        <p>The cheapest approved route changes by customer, location, payment method, and time. Compare the final crypto received for the same card charge—not only an advertised percentage.</p>
+        <div class="cost-grid">
+          <div class="cost-row"><strong>Swaps.app · recommended</strong><span>Compares 9+ providers, payment methods, fees, and settlement paths.</span><small>Best overall because the exact receive amount and wallet-first route matter more than a headline fee.</small></div>
+          <div class="cost-row"><strong>BitPay · backup</strong><span>Compares partner offers and can send directly to any wallet.</span><small>Its form starts with a fiat spend amount, so confirm the crypto received covers the complete invoice after fees.</small></div>
+          <div class="cost-row"><strong>Paybis · backup</strong><span>Direct external-wallet delivery with quick processing advertised.</span><small>Use it when the final Paybis quote is better or when it is the approved provider shown inside Swaps.</small></div>
+          <div class="cost-row"><strong>Never rely on a verification-free promise</strong><span>All card routes can require identity, bank, or fraud checks.</span><small>If one route declines or delays the purchase, return to Swaps and compare another available provider.</small></div>
+        </div>
+        <div class="research-date">Research checked August 24, 2026 using official provider documentation. Fees, eligibility, verification, and security reviews can change. No legitimate provider can guarantee approval or instant delivery for every customer.</div>
+      </div>
+      <div class="obtain-warning"><strong>Avoid scams:</strong> only use official apps and websites. Ignore unsolicited “support” messages and never share your recovery phrase, password, verification code, or remote access to your device. These services are independent companies; NXT LVL does not control their availability, pricing, reviews, or security decisions.</div>
+    </section>
+    <section class="wallet-directory" id="existing-wallets" aria-labelledby="existingWalletsHeading">
+      <div class="wallet-directory-head"><div><div class="section-label">Already have crypto?</div><h2 id="existingWalletsHeading">Open the app you already use.</h2></div><p>You do not need a new account. Open the official app below, choose Send or Withdraw, then use the QR code or exact address and amount from checkout. These shortcuts are for crypto that is already available to send.</p></div>
+      <div class="wallet-grid" aria-label="Official crypto wallet and exchange app links">
+        <a class="wallet-link" href="https://www.coinbase.com/mobile" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">C</span><span><strong>Coinbase</strong><small>BTC · ETH · supported USDT routes</small></span></a>
+        <a class="wallet-link" href="https://cash.app/bitcoin" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">$</span><span><strong>Cash App</strong><small>BTC only · Bitcoin Mainnet, not Lightning</small></span></a>
+        <a class="wallet-link" href="https://robinhood.com/us/en/support/articles/crypto-transfers/" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">R</span><span><strong>Robinhood</strong><small>Use an existing transfer-enabled account</small></span></a>
+        <a class="wallet-link" href="https://crypto.com/us/app" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">C</span><span><strong>Crypto.com</strong><small>Choose the exact checkout network</small></span></a>
+        <a class="wallet-link" href="https://www.kraken.com/features/cryptocurrency-apps" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">K</span><span><strong>Kraken</strong><small>Withdraw only an available balance</small></span></a>
+        <a class="wallet-link" href="https://trustwallet.com/" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">T</span><span><strong>Trust Wallet</strong><small>BTC · ETH · ERC-20 assets</small></span></a>
+        <a class="wallet-link" href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">M</span><span><strong>MetaMask</strong><small>ETH or USDT ERC-20 · not native BTC</small></span></a>
+        <a class="wallet-link" href="https://www.exodus.com/download" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">E</span><span><strong>Exodus</strong><small>Match the selected asset and network</small></span></a>
+        <a class="wallet-link" href="https://bitpay.com/wallet" target="_blank" rel="noopener noreferrer"><span class="wallet-mark">B</span><span><strong>BitPay Wallet</strong><small>Send from an existing wallet balance</small></span></a>
+      </div>
+      <div class="wallet-rules">
+        <div class="wallet-rule"><strong>Use an available balance.</strong> A brand-new purchase or deposit at an exchange can be held before withdrawals are allowed.</div>
+        <div class="wallet-rule"><strong>Match the network exactly.</strong> Cash App must use Bitcoin Mainnet; MetaMask is for Ethereum and ERC-20 in this checkout.</div>
+        <div class="wallet-rule"><strong>Return to the checkout.</strong> Keep it open after sending so automatic detection can match and confirm the order.</div>
+      </div>
     </section>
     <section class="two-paths" id="steps" aria-label="Crypto payment instructions">
       <article class="path">
