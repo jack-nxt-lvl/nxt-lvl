@@ -651,7 +651,7 @@ const compounds = [
     storage: 'Store according to supplied product handling instructions.', administration: 'Laboratory research use only',
     warnings: 'For laboratory research use only. Not for human consumption, medical, veterinary, or diagnostic use.',
     suggestedCompanions: ['tesamorelin-10', 'mots-c'],
-    pricing: [ { label: '1 Vial', price: 60 }, { label: '5 Vials', price: 246 }, { label: '10 Vials', price: 420 } ]
+    pricing: [ { label: '1 Vial', price: 73 }, { label: '5 Vials', price: 299.30 }, { label: '10 Vials', price: 511 } ]
   },
   {
     id: 'igf1-lr3',

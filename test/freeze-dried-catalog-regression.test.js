@@ -12,7 +12,7 @@ const restoredProducts = [
   { id: 'selank', name: 'Selank — 11mg', prices: [60, 246, 420] },
   { id: 'semax', name: 'Semax — 10mg', prices: [60, 246, 420] },
   { id: 'dsip', name: 'DSIP — 10mg', prices: [60, 246, 420] },
-  { id: 'aod-9604', name: 'AOD-9604 — 10mg', prices: [60, 246, 420] },
+  { id: 'aod-9604', name: 'AOD-9604 — 10mg', prices: [73, 299.30, 511] },
   { id: 'igf1-lr3', name: 'IGF-1 LR3 — 1mg', prices: [65, 270] }
 ];
 
