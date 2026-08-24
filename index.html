@@ -2574,11 +2574,11 @@
           <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with card or Apple Pay</h3></div></div>
           <ol>
             <li><span>1</span><div><strong>Start checkout and choose a coin</strong><small>USDT ERC-20 is the clearest beginner option when the provider supports it.</small></div></li>
-            <li><span>2</span><div><strong>Open exact-amount Transak checkout</strong><small>The full crypto invoice amount and NXT LVL receiving address are prepared automatically.</small></div></li>
+            <li><span>2</span><div><strong>Open the fee-buffered Swaps checkout</strong><small>NXT LVL starts the card-spend target above the invoice so fees are less likely to leave the order short.</small></div></li>
             <li><span>3</span><div><strong>Check “You receive” first</strong><small>It must show at least the exact crypto amount displayed by NXT LVL.</small></div></li>
-            <li><span>4</span><div><strong>Review the higher card total</strong><small>Transak calculates the USD card charge needed after provider and network fees.</small></div></li>
-            <li><span>5</span><div><strong>Complete the secure provider checkout</strong><small>The receiving address is locked to this order; identity checks and availability depend on Transak.</small></div></li>
-            <li><span>6</span><div><strong>Keep NXT LVL open for confirmation</strong><small>Do not send a second payment after the first one is detected.</small></div></li>
+            <li><span>4</span><div><strong>Review the higher card-spend target</strong><small>The prefilled USD amount includes a conservative reserve for provider and network fees.</small></div></li>
+            <li><span>5</span><div><strong>Enter the NXT LVL address and complete checkout</strong><small>Choose Ethereum ERC-20 for USDT. Identity checks and availability depend on Swaps and its selected provider.</small></div></li>
+            <li><span>6</span><div><strong>Return and paste the transaction ID</strong><small>This lets NXT LVL verify the payment even if the fee reserve sends a little more than the exact invoice amount.</small></div></li>
           </ol>
         </article>
       </div>
@@ -2586,22 +2586,21 @@
       <div class="crypto-guide-options" id="crypto-options">
         <div class="crypto-guide-options-head">
           <div>
-            <div class="section-tag">Exact-Amount Card Checkout</div>
-            <h3>Use Transak first. Swaps.app, BitPay, and Paybis are backups.</h3>
+            <div class="section-tag">Fee-Buffered Card Checkout</div>
+            <h3>Use buffered Swaps.app first. BitPay and Paybis are backups.</h3>
           </div>
-          <p>NXT LVL sends Transak the <strong>exact crypto amount that must arrive</strong>, so Transak calculates a
-            higher card total that includes its fees instead of subtracting fees from the invoice.</p>
+          <p>NXT LVL raises the Swaps <strong>fiat purchase target above the invoice</strong> to leave room for provider and network fees. Always verify that “You receive” still covers the exact crypto amount shown by NXT LVL.</p>
         </div>
         <div class="crypto-guide-research-picks" aria-label="Recommended ways to buy sendable crypto">
           <article class="crypto-guide-research-pick best">
-            <span>Recommended · exact receive target</span>
-            <strong>Transak from checkout</strong>
-            <p>Starts with the exact BTC, ETH, or USDT amount the order requires and calculates the card charge after provider fees. The NXT LVL receiving address is loaded and locked.</p>
+            <span>Recommended · fee reserve included</span>
+            <strong>Swaps.app from checkout</strong>
+            <p>Starts with a higher card-spend target to leave room for typical provider and network fees. Confirm the live “You receive” amount covers the complete NXT LVL invoice.</p>
           </article>
           <article class="crypto-guide-research-pick">
-            <span>Backup · buffered card spend</span>
-            <strong>Swaps.app</strong>
-            <p>The backup link uses a higher fiat amount to leave room for provider fees. Always confirm the final “You receive” amount still covers the NXT LVL invoice.</p>
+            <span>Important final check</span>
+            <strong>Exact receive amount</strong>
+            <p>The reserve is conservative, not a guarantee. Do not pay if the provider's final “You receive” value is below the exact amount displayed in NXT LVL checkout.</p>
           </article>
           <article class="crypto-guide-research-pick">
             <span>Additional direct-wallet backups</span>
@@ -2609,22 +2608,21 @@
             <p>Both can support purchases to an external wallet in eligible locations. Enter the NXT LVL address and verify the crypto received after fees before paying.</p>
           </article>
         </div>
-        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> No legitimate card service can promise no verification. Transak or a backup provider may require ID, bank approval, or a security review based on the customer and transaction.</div>
+        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> No legitimate card service can promise no verification. Swaps or its selected provider may require ID, bank approval, or a security review based on the customer and transaction.</div>
         <div class="crypto-guide-option-grid">
           <article class="crypto-guide-option featured">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon">💳</span><span
                 class="crypto-guide-pill">Use this first</span></div>
-            <h4>Transak—fees added above the invoice</h4>
-            <p>Use the blue Buy button to open secure Transak checkout inside NXT LVL. The provider starts from the
-              exact crypto receive target, then calculates what the card must be charged.</p>
-            <small>Confirm “You receive” shows at least the NXT LVL amount. The receiving address is locked to the order and automatic blockchain detection remains active behind the provider window.</small>
+            <h4>Swaps.app—fee reserve included</h4>
+            <p>Use the blue Buy button to open Swaps with a card-spend target above the order total. For example, a $20 invoice opens with a $25.00 target.</p>
+            <small>Confirm “You receive” shows at least the exact NXT LVL amount, select the correct network, and paste the NXT LVL receiving address if requested.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon bitpay">B</span><span
                 class="crypto-guide-label">BTC · ETH · USDT</span></div>
-            <h4>Swaps.app—buffered backup</h4>
-            <p>If exact-amount Transak checkout is unavailable, the backup opens Swaps with a larger fiat spend to help cover provider fees.</p>
-            <small>The buffer is not a provider guarantee. Verify the final crypto received is at least the exact checkout amount before paying.</small>
+            <h4>Check the live receive amount</h4>
+            <p>Provider prices and fees can change between sessions, so use the exact crypto invoice as the minimum—not the prefilled USD amount alone.</p>
+            <small>The buffer is not a provider guarantee. Do not pay if the final crypto received is below the exact checkout amount.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon paybis">P</span><span
@@ -3717,8 +3715,8 @@
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
-  <script src="lib/swaps-funding.js?v=20260824-fee-buffer-2"></script>
-  <script src="direct-wallet-checkout.js?v=20260824-exact-card-total-3"></script>
+  <script src="lib/swaps-funding.js?v=20260824-fee-buffer-3"></script>
+  <script src="direct-wallet-checkout.js?v=20260824-buffered-card-total-4"></script>
   <script src="customer-checkout-upgrade.js?v=20260823-hosted-card-link-2"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>

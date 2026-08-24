@@ -23,16 +23,14 @@
     .nxt-wallet-apps{padding:0 11px;border:1px solid rgba(167,139,250,.14);border-radius:10px;background:rgba(124,58,237,.035)}.nxt-wallet-apps>summary{display:flex;min-height:40px;align-items:center;justify-content:space-between;gap:10px;color:#cfc7e5;font-size:8.5px;font-weight:850;cursor:pointer;list-style:none}.nxt-wallet-apps>summary::-webkit-details-marker{display:none}.nxt-wallet-apps>summary:after{content:'+';color:#bca8ff;font-size:16px}.nxt-wallet-apps[open]>summary:after{content:'−'}.nxt-wallet-apps-content{padding:0 0 10px}.nxt-wallet-apps-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:9px}.nxt-wallet-apps-head span{display:block;color:#9497a6;font-size:8px;line-height:1.4}.nxt-wallet-apps-head em{flex:0 0 auto;padding:4px 7px;border-radius:999px;background:rgba(16,185,129,.10);color:#9cf2cc;font-size:7px;font-weight:900;font-style:normal;text-transform:uppercase}.nxt-wallet-apps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.nxt-wallet-app-link{min-width:0;min-height:42px;display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid rgba(255,255,255,.075);border-radius:9px;background:rgba(255,255,255,.025);color:#e9e8f0;text-decoration:none;font-size:8px;font-weight:850;line-height:1.25}.nxt-wallet-app-link i{width:23px;height:23px;flex:0 0 23px;display:grid;place-items:center;border-radius:7px;background:linear-gradient(145deg,#6d28d9,#2563eb);color:#fff;font-size:8px;font-weight:950;font-style:normal}.nxt-wallet-app-link:hover{border-color:rgba(167,139,250,.32);background:rgba(124,58,237,.09)}.nxt-wallet-apps-guide{display:flex;min-height:32px;align-items:center;justify-content:center;margin-top:7px;color:#c9bfff;text-decoration:none;font-size:8px;font-weight:850}.nxt-wallet-app-link:focus-visible,.nxt-wallet-apps-guide:focus-visible{outline:3px solid rgba(167,139,250,.42);outline-offset:2px}
     .nxt-wallet-progress{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.nxt-wallet-step{padding:8px 5px;border:1px solid rgba(255,255,255,.075);border-radius:8px;background:rgba(255,255,255,.026);color:#717486;text-align:center;font-size:8px;font-weight:850;letter-spacing:.2px}.nxt-wallet-step.active{border-color:rgba(167,139,250,.38);background:rgba(124,58,237,.13);color:#e5deff}.nxt-wallet-step.complete{border-color:rgba(52,211,153,.30);background:rgba(16,185,129,.10);color:#94f0c7}
     .nxt-wallet-warning{padding:11px 12px;border:1px solid rgba(251,191,36,.28);border-radius:10px;background:rgba(245,158,11,.075);color:#ffe7a6;font-size:10px;line-height:1.5}.nxt-wallet-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.nxt-wallet-actions a,.nxt-wallet-actions button{min-height:42px;border-radius:10px;border:1px solid rgba(255,255,255,.105);display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;background:#242432;color:#fff;font:850 9.5px Inter,sans-serif;cursor:pointer;padding:9px;transition:transform .18s,background .18s}.nxt-wallet-actions a:hover,.nxt-wallet-actions button:hover{transform:translateY(-1px);background:#2d2d3d}.nxt-wallet-actions .primary,.nxt-wallet-actions .buy{min-height:58px;border:0;color:#fff;font-size:11px;line-height:1.35}.nxt-wallet-actions .primary{background:linear-gradient(100deg,#059669,#10b981 55%,#047857);box-shadow:0 12px 27px rgba(5,150,105,.20)}.nxt-wallet-actions .buy{background:linear-gradient(100deg,#2563eb,#0ea5e9 52%,#7c3aed);box-shadow:0 12px 27px rgba(37,99,235,.22)}.nxt-wallet-actions [hidden]{display:none}.nxt-wallet-actions [disabled],.nxt-wallet-actions [aria-disabled="true"]{opacity:.45;cursor:not-allowed;pointer-events:none}
-    .nxt-transak-overlay{position:fixed;inset:0;z-index:1000060;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(2,2,7,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.nxt-transak-modal{width:min(560px,98vw);height:min(820px,96vh);overflow:hidden;border:1px solid rgba(125,211,252,.30);border-radius:19px;background:#08080d;box-shadow:0 34px 110px rgba(0,0,0,.82)}.nxt-transak-head{height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 15px;border-bottom:1px solid rgba(255,255,255,.09);background:linear-gradient(110deg,#151725,#101018);color:#fff}.nxt-transak-head strong{display:block;font-size:13px}.nxt-transak-head span{display:block;margin-top:3px;color:#a8b5c8;font-size:8.5px}.nxt-transak-close{width:40px;height:40px;flex:0 0 40px;border:1px solid rgba(255,255,255,.11);border-radius:10px;background:#242430;color:#fff;font-size:21px;cursor:pointer}.nxt-transak-frame{display:block;width:100%;height:calc(100% - 68px);border:0;background:#fff}
     .nxt-wallet-verify{padding:0 12px;border:1px solid rgba(52,211,153,.14);border-radius:10px;background:rgba(16,185,129,.035)}.nxt-wallet-verify>summary{display:flex;min-height:40px;align-items:center;justify-content:space-between;gap:10px;color:#a9c8bb;font-size:8.5px;font-weight:850;cursor:pointer;list-style:none}.nxt-wallet-verify>summary::-webkit-details-marker{display:none}.nxt-wallet-verify>summary:after{content:'+';color:#6ee7b7;font-size:16px}.nxt-wallet-verify[open]>summary:after{content:'−'}.nxt-wallet-verify-content{padding:0 0 12px}.nxt-wallet-verify label{display:block;color:#d1fae5;font-size:9px;font-weight:850;margin-bottom:7px}.nxt-wallet-verifyrow{display:grid;grid-template-columns:1fr auto;gap:8px}.nxt-wallet-verify input{min-width:0;height:43px;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:#0d0d14;color:#fff;padding:0 11px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}.nxt-wallet-verify button{border:0;border-radius:9px;background:#059669;color:#fff;font-size:9px;font-weight:900;padding:0 13px;cursor:pointer}.nxt-wallet-status{display:none;margin-top:9px;padding:9px 10px;border-radius:8px;background:rgba(255,255,255,.04);color:#c7c7d1;font-size:9.5px;line-height:1.45}.nxt-wallet-status.show{display:block}.nxt-wallet-status.good{display:block;color:#a7f3d0;background:rgba(16,185,129,.09)}.nxt-wallet-status.bad{color:#fecaca;background:rgba(239,68,68,.08)}.nxt-wallet-fine{font-size:8.5px!important;color:#747487!important;text-align:center}.nxt-wallet-success{padding:32px;text-align:center}.nxt-wallet-success .check{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(16,185,129,.15);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;font-size:30px}.nxt-wallet-success h2{margin-bottom:8px}.nxt-wallet-success a{display:inline-flex;margin-top:16px;color:#c4b5fd;font-size:10px}.nxt-wallet-success button{display:block;margin:18px auto 0;min-width:180px;min-height:44px;border:0;border-radius:10px;background:linear-gradient(100deg,#7c3aed,#6d28d9);color:#fff;font-weight:850;cursor:pointer}.nxt-wallet-resume{position:fixed;right:18px;bottom:18px;z-index:1000008;display:flex;align-items:center;gap:10px;max-width:min(420px,calc(100vw - 36px));padding:12px 14px;border:1px solid rgba(167,139,250,.35);border-radius:13px;background:#171722;color:#fff;box-shadow:0 16px 50px rgba(0,0,0,.55);font:800 10px Inter,sans-serif}.nxt-wallet-resume button{border:0;border-radius:8px;background:#7c3aed;color:#fff;padding:9px 12px;font-weight:850;cursor:pointer}.nxt-wallet-resume .dismiss{background:transparent;color:#9ca3af;padding:5px}
-    @media(max-width:700px){.nxt-wallet-pad{padding:22px 16px}.nxt-wallet-card h2{font-size:23px}.nxt-wallet-trust{grid-template-columns:1fr}.nxt-easy-trust{grid-template-columns:1fr}.nxt-easy-trust span{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px}.nxt-easy-trust b{display:inline;margin:0}.nxt-pay-path{min-height:86px;padding:14px 12px}.nxt-pay-path-tag{position:static;align-self:flex-start;margin-left:auto;white-space:nowrap}.nxt-existing-coins{padding:9px}.nxt-wallet-funding-intro ol{grid-template-columns:1fr}.nxt-wallet-pay{height:96vh}.nxt-wallet-head{padding:14px}.nxt-wallet-headcoin{width:38px;height:38px;flex-basis:38px}.nxt-wallet-secure{display:none}.nxt-wallet-head-copy strong{font-size:14px}.nxt-wallet-body{grid-template-columns:1fr;padding:16px}.nxt-wallet-qr{width:210px;margin:auto}.nxt-wallet-pay[data-intent="buy"] .nxt-wallet-actions{grid-template-columns:1fr}.nxt-wallet-next{align-items:flex-start}.nxt-wallet-buy-head{align-items:flex-start}.nxt-wallet-buy-badge{font-size:7px}.nxt-wallet-buy-confidence{display:grid;grid-template-columns:1fr}.nxt-wallet-buy-steps{grid-template-columns:1fr}.nxt-wallet-buy-step{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:8px}.nxt-wallet-buy-step b{margin:0}.nxt-wallet-buy-step small{grid-column:2}.nxt-wallet-buy-tools{grid-template-columns:1fr}.nxt-wallet-buy-copy{min-height:42px}.nxt-wallet-apps-grid{grid-template-columns:repeat(2,1fr)}.nxt-wallet-app-link{min-height:46px}.nxt-wallet-actions{grid-template-columns:1fr}.nxt-wallet-verifyrow{grid-template-columns:1fr}.nxt-wallet-verify button{min-height:42px}.nxt-swaps-drawer{width:100vw}.nxt-swaps-guide ol{grid-template-columns:1fr}.nxt-swaps-guide li{min-height:34px}.nxt-swaps-launch-facts{grid-template-columns:1fr}.nxt-swaps-footer{align-items:flex-start}.nxt-transak-overlay{padding:0}.nxt-transak-modal{width:100vw;height:100vh;max-height:none;border:0;border-radius:0}.nxt-transak-head{height:64px}.nxt-transak-frame{height:calc(100% - 64px)}}
+    @media(max-width:700px){.nxt-wallet-pad{padding:22px 16px}.nxt-wallet-card h2{font-size:23px}.nxt-wallet-trust{grid-template-columns:1fr}.nxt-easy-trust{grid-template-columns:1fr}.nxt-easy-trust span{display:flex;align-items:center;justify-content:center;gap:5px;padding:7px}.nxt-easy-trust b{display:inline;margin:0}.nxt-pay-path{min-height:86px;padding:14px 12px}.nxt-pay-path-tag{position:static;align-self:flex-start;margin-left:auto;white-space:nowrap}.nxt-existing-coins{padding:9px}.nxt-wallet-funding-intro ol{grid-template-columns:1fr}.nxt-wallet-pay{height:96vh}.nxt-wallet-head{padding:14px}.nxt-wallet-headcoin{width:38px;height:38px;flex-basis:38px}.nxt-wallet-secure{display:none}.nxt-wallet-head-copy strong{font-size:14px}.nxt-wallet-body{grid-template-columns:1fr;padding:16px}.nxt-wallet-qr{width:210px;margin:auto}.nxt-wallet-pay[data-intent="buy"] .nxt-wallet-actions{grid-template-columns:1fr}.nxt-wallet-next{align-items:flex-start}.nxt-wallet-buy-head{align-items:flex-start}.nxt-wallet-buy-badge{font-size:7px}.nxt-wallet-buy-confidence{display:grid;grid-template-columns:1fr}.nxt-wallet-buy-steps{grid-template-columns:1fr}.nxt-wallet-buy-step{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:8px}.nxt-wallet-buy-step b{margin:0}.nxt-wallet-buy-step small{grid-column:2}.nxt-wallet-buy-tools{grid-template-columns:1fr}.nxt-wallet-buy-copy{min-height:42px}.nxt-wallet-apps-grid{grid-template-columns:repeat(2,1fr)}.nxt-wallet-app-link{min-height:46px}.nxt-wallet-actions{grid-template-columns:1fr}.nxt-wallet-verifyrow{grid-template-columns:1fr}.nxt-wallet-verify button{min-height:42px}.nxt-swaps-drawer{width:100vw}.nxt-swaps-guide ol{grid-template-columns:1fr}.nxt-swaps-guide li{min-height:34px}.nxt-swaps-launch-facts{grid-template-columns:1fr}.nxt-swaps-footer{align-items:flex-start}}
     @media(prefers-reduced-motion:reduce){.nxt-wallet-buy-main,.nxt-wallet-buy-main:before,.nxt-wallet-close,.nxt-wallet-actions a,.nxt-wallet-actions button,.nxt-swaps-backdrop,.nxt-swaps-drawer{transition:none!important}}
   `;
   document.head.appendChild(style);
 
   let working = false;
   let activeOverlay = null;
-  let activeFundingOverlay = null;
   let activePoll = null;
   let activeDetectionPoll = null;
   let activeDetectionDelay = null;
@@ -133,8 +131,6 @@
 
   function closeActive() {
     stopTimers();
-    if (activeFundingOverlay) activeFundingOverlay.remove();
-    activeFundingOverlay = null;
     if (activeOverlay) activeOverlay.remove();
     activeOverlay = null;
   }
@@ -193,9 +189,9 @@
           <strong>Which crypto is already in your wallet?</strong>
           <div class="nxt-wallet-coins"><button class="nxt-wallet-coin" data-asset="BTC"><span class="nxt-wallet-icon btc">₿</span><span><strong>Bitcoin (BTC)</strong><small>Bitcoin Mainnet only</small></span><span class="nxt-wallet-arrow">›</span></button><button class="nxt-wallet-coin" data-asset="ETH"><span class="nxt-wallet-icon eth">Ξ</span><span><strong>Ethereum (ETH)</strong><small>Ethereum Mainnet only</small></span><span class="nxt-wallet-arrow">›</span></button><button class="nxt-wallet-coin" data-asset="USDT"><span class="nxt-wallet-icon usdt">₮</span><span><strong>Tether (USDT)</strong><small>Ethereum Mainnet · ERC-20 only</small></span><span class="nxt-wallet-arrow">›</span></button></div>
         </div>
-        <div class="nxt-easy-trust"><span><b>✓ Exact amount</b>Prepared for the order</span><span><b>✓ Address help</b>Copied for card checkout</span><span><b>✓ Auto detection</b>Checkout watches for payment</span></div>
+        <div class="nxt-easy-trust"><span><b>✓ Exact amount</b>Prepared for the order</span><span><b>✓ Address help</b>Ready to copy</span><span><b>✓ Verification</b>Built into checkout</span></div>
         <button class="nxt-wallet-cancel" type="button">Back</button>
-        <p class="nxt-wallet-note">Transak calculates the card total needed to deliver the full invoice amount. Availability, limits, and identity checks are controlled by the provider.</p>
+        <p class="nxt-wallet-note">The card option opens with a fee reserve above the invoice. Always confirm the provider's “You receive” amount covers the exact order amount before paying.</p>
       </div></div>`;
       let finished = false;
       const done = (asset) => { if (finished) return; finished = true; node.remove(); resolve(asset); };
@@ -276,62 +272,22 @@
     node.textContent = message;
   }
 
-  function closeFundingOverlay() {
-    if (activeFundingOverlay) activeFundingOverlay.remove();
-    activeFundingOverlay = null;
-  }
-
-  function showTransakFunding(widgetUrl, quote) {
-    closeFundingOverlay();
-    const node = document.createElement('div');
-    node.className = 'nxt-transak-overlay';
-    node.innerHTML = `<div class="nxt-transak-modal" role="dialog" aria-modal="true" aria-label="Secure card and Apple Pay checkout"><div class="nxt-transak-head"><div><strong>Buy the exact ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</strong><span>Provider fees are added to the card total · Receiving amount stays exact</span></div><button class="nxt-transak-close" type="button" aria-label="Close secure card checkout">×</button></div><iframe class="nxt-transak-frame" title="Transak secure card and Apple Pay checkout" src="${escapeHtml(widgetUrl)}" allow="camera; microphone; payment; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
-    node.querySelector('.nxt-transak-close').onclick = closeFundingOverlay;
-    node.addEventListener('click', (event) => { if (event.target === node) closeFundingOverlay(); });
-    document.body.appendChild(node);
-    activeFundingOverlay = node;
-  }
-
-  async function openCardFunding(quote, context, link, status, fallback, event) {
-    event?.preventDefault();
-    if (link.getAttribute('aria-busy') === 'true') return;
+  function openBufferedSwapsFunding(quote, context, link, status, event) {
     if (Date.now() > Number(quote.expiresAt)) {
-      setSwapsStatus(status, 'This quote expired. Create a new quote before starting card checkout.', true);
+      event?.preventDefault();
+      setSwapsStatus(status, 'This quote expired. Create a new quote before buying crypto.', true);
       return;
     }
-
-    link.setAttribute('aria-busy', 'true');
-    link.setAttribute('aria-disabled', 'true');
-    link.textContent = 'Calculating fees and exact receive amount…';
-    fallback.hidden = true;
-    setSwapsStatus(status, `Preparing a secure quote that delivers the full ${quote.amount} ${quote.asset} after provider fees.`);
-    saveActivePayment(quote, context, '');
-    try {
-      const response = await fetch('/api/create-transak-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quoteToken: quote.quoteToken }),
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.widgetUrl || data.feesIncludedInCardTotal !== true) {
-        const missing = Array.isArray(data.missing) && data.missing.length ? ` Missing setup: ${data.missing.join(', ')}.` : '';
-        throw new Error((data.error || 'Unable to create the exact-amount card checkout.') + missing);
-      }
-      if (String(data.targetCryptoAmount) !== String(quote.amount)) {
-        throw new Error('The card quote did not preserve the exact invoice amount.');
-      }
-
-      link.textContent = 'Card checkout opened — exact amount protected';
-      setSwapsStatus(status, `Fees are included in the card total. Transak is set to deliver exactly ${quote.amount} ${quote.asset} to this order.`);
-      showTransakFunding(data.widgetUrl, quote);
-    } catch (error) {
-      fallback.hidden = false;
-      setSwapsStatus(status, `${error.message || 'Exact-amount card checkout could not open.'} Use the buffered Swaps backup below or try again.`, true);
-      link.textContent = 'Retry exact-amount Card / Apple Pay';
-    } finally {
-      link.removeAttribute('aria-busy');
-      link.removeAttribute('aria-disabled');
+    if (!link.href || link.getAttribute('href') === '#') {
+      event?.preventDefault();
+      setSwapsStatus(status, 'The fee-buffered funding link could not load. Refresh and try again.', true);
+      return;
     }
+    saveActivePayment(quote, context, '');
+    const fundingUsd = link.dataset.fundingUsd || '';
+    const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
+    link.textContent = 'Swaps opened — fee reserve included ↗';
+    setSwapsStatus(status, `Swaps is opening with a $${fundingUsd} card-spend target for this $${quote.totalUsd} invoice. Before paying, make sure “You receive” is at least ${quote.amount} ${quote.asset} on ${network}. After it sends, return here and paste the transaction ID.`);
   }
 
   function setStatus(node, message, type) {
@@ -444,40 +400,44 @@
     window.nxtCheckoutDetails = context.details;
     saveActivePayment(quote, context, initialTxid);
 
-    const automaticDetection = quote.asset === 'BTC' || quote.asset === 'USDT';
     const buyingFirst = context.paymentIntent === 'buy';
+    const automaticDetection = !buyingFirst && (quote.asset === 'BTC' || quote.asset === 'USDT');
     const networkWarning = quote.asset === 'USDT'
       ? 'For USDT, select Ethereum ERC‑20—not Tron, BNB Chain, Base, or another network.'
       : '';
     const networkRestriction = /\bonly\b/i.test(quote.network)
       ? `${quote.network}.`
       : `${quote.network} only.`;
-    const txidLabel = automaticDetection
-      ? 'Automatic detection is on — transaction ID is optional'
-      : 'Transaction ID (filled automatically with a browser wallet)';
+    const txidLabel = buyingFirst
+      ? 'After Swaps sends the crypto, paste its transaction ID here'
+      : (automaticDetection
+        ? 'Automatic detection is on — transaction ID is optional'
+        : 'Transaction ID (filled automatically with a browser wallet)');
     const localization = quote.localization || {};
     const localTotal = localization.approximate
       ? `≈ ${localization.formattedTotal || `$${quote.totalUsd}`} ${localization.currency || ''}`
       : `${localization.usdFormattedTotal || `$${quote.totalUsd}`} USD`;
     const localCaption = localization.approximate ? `Based on $${quote.totalUsd} USD` : 'Order total';
     const funding = {
-      title: 'Card or Apple Pay may be available through Transak for your location.',
-      detail: 'Transak calculates the card charge needed to deliver the full crypto invoice amount after its fees. NXT LVL never receives or stores card information.',
+      title: 'Card or Apple Pay may be available through Swaps for your location.',
+      detail: 'NXT LVL starts the card-spend target above the invoice to leave room for provider and network fees. Swaps and its selected provider control the final rate, fees, and availability.',
     };
-    const fundingReturnStep = automaticDetection ? 'Keep this NXT LVL checkout open' : 'Return and verify payment';
-    const fundingReturnDetail = automaticDetection
-      ? 'The incoming payment is detected automatically behind the secure card window'
-      : 'Copy the transaction ID from Transak and paste it into the box below';
-    const fundingNetworkStep = quote.asset === 'USDT' ? 'Confirm exact USDT received' : `Confirm exact ${quote.asset} received`;
+    const fundingReturnStep = buyingFirst ? 'Return and paste the transaction ID' : (automaticDetection ? 'Keep this checkout open' : 'Return and verify payment');
+    const fundingReturnDetail = buyingFirst
+      ? 'A fee-buffered purchase may send slightly more than the invoice fingerprint, so paste the provider transaction ID below'
+      : (automaticDetection ? 'NXT LVL watches for the exact incoming payment' : 'Paste the transaction ID into the box below');
+    const fundingNetworkStep = quote.asset === 'USDT' ? 'Confirm ERC-20 receive amount' : `Confirm ${quote.asset} receive amount`;
     const fundingNetworkDetail = quote.asset === 'USDT'
-      ? `${quote.amount} USDT on Ethereum ERC-20 is preset; provider fees are added to the card total`
-      : `${quote.amount} ${quote.asset} is preset; provider fees are added to the card total`;
+      ? `Do not pay unless “You receive” is at least ${quote.amount} USDT on Ethereum ERC-20`
+      : `Do not pay unless “You receive” is at least ${quote.amount} ${quote.asset} on ${quote.network}`;
     const assetName = quote.asset === 'BTC' ? 'Bitcoin' : (quote.asset === 'ETH' ? 'Ethereum' : 'Tether');
     const assetIcon = quote.asset === 'BTC' ? '₿' : (quote.asset === 'ETH' ? 'Ξ' : '₮');
     const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const walletShortcutMarkup = mobileWalletShortcuts(quote.asset).map(([name, mark, href]) => `<a class="nxt-wallet-app-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><i>${escapeHtml(mark)}</i><span>${escapeHtml(name)}</span></a>`).join('');
     let swapsUrl = '#';
+    let swapsFundingUsd = '';
     try {
+      swapsFundingUsd = window.NxtSwapsFunding?.fundingAmountForInvoice(quote.totalUsd) || '';
       swapsUrl = window.NxtSwapsFunding?.buildCheckoutUrl({ asset: quote.asset, invoiceUsd: quote.totalUsd }) || '#';
     } catch (_) {}
     const overlay = document.createElement('div');
@@ -489,19 +449,18 @@
         <div class="nxt-wallet-order">
           <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
           <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
-          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open exact-amount card checkout</strong><span>Transak will calculate the card total—including its fees—needed to deliver the full ${escapeHtml(quote.amount)} USDT invoice.</span></span></div>` : ''}
+          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open card checkout with a fee reserve</strong><span>For this $${escapeHtml(quote.totalUsd)} invoice, Swaps opens with a $${escapeHtml(swapsFundingUsd)} card-spend target so provider and network fees are less likely to reduce the crypto below the invoice.</span></span></div>` : ''}
           <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
           <div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your beginner-friendly route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue with card or Apple Pay. If you already have USDT, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the card / Apple Pay option.`}</span></div><em>2 clear choices</em></div>
-          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><a class="buy" data-buy-crypto href="#">${buyingFirst ? 'Buy exact amount with Card / Apple Pay' : 'Buy exact crypto with Card / Apple Pay'}</a><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><a class="buy" data-buy-crypto href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(swapsFundingUsd)}">${buyingFirst ? `Buy enough with Card / Apple Pay · $${escapeHtml(swapsFundingUsd)} ↗` : `Buy enough ${escapeHtml(quote.asset)} with Card / Apple Pay ↗`}</a><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
-          <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> Send the exact amount shown. ${escapeHtml(networkWarning)}</div>
+          <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> ${buyingFirst ? `Make sure the provider's “You receive” value is at least ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.` : 'Send the exact amount shown.'} ${escapeHtml(networkWarning)}</div>
           <details class="nxt-wallet-apps"><summary>Use Coinbase, Cash App, MetaMask, or another app</summary><div class="nxt-wallet-apps-content"><div class="nxt-wallet-apps-head"><span>Open the app you already use, tap Send or Withdraw, and match the network exactly.</span><em>${escapeHtml(quote.asset)} shortcuts</em></div><div class="nxt-wallet-apps-grid">${walletShortcutMarkup}</div><a class="nxt-wallet-apps-guide" href="/shipping-and-payments.html#existing-wallets" target="_blank" rel="noopener noreferrer">See all common wallet shortcuts + instructions ↗</a></div></details>
-          <details class="nxt-wallet-buy-help"><summary>How the card / Apple Pay option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open secure Transak checkout<small>The exact crypto receive amount and NXT LVL wallet are loaded automatically</small></div><div class="nxt-wallet-buy-step"><b>2</b>Review the card total<small>Transak adds its provider and network fees above the invoice amount</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>Receiving address backup</b>It is locked into exact-amount checkout. Copy it only if you use the Swaps backup.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-swaps>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>Confirm the “You receive” amount is at least ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)} before paying.</b></small></div></details>
+          <details class="nxt-wallet-buy-help"><summary>How the card / Apple Pay option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open buffered Swaps checkout<small>A $${escapeHtml(swapsFundingUsd)} card-spend target is prefilled above the $${escapeHtml(quote.totalUsd)} invoice</small></div><div class="nxt-wallet-buy-step"><b>2</b>Check “You receive”<small>It must be at least ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)} before you pay</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>NXT LVL receiving address</b>Copy it, then paste it if Swaps asks where to send the crypto.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-swaps>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>The reserve is conservative: do not pay if “You receive” is below ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.</b></small></div></details>
           <div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div>
-          <a class="nxt-wallet-buy-fallback" data-swaps-fallback href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer" hidden>Open buffered Swaps backup ↗</a>
           <div class="nxt-wallet-status" role="status" aria-live="polite"></div>
-          <details class="nxt-wallet-verify"><summary>Payment sent but not detected? Verify manually</summary><div class="nxt-wallet-verify-content"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div></div></details>
+          <details class="nxt-wallet-verify" ${buyingFirst ? 'open' : ''}><summary>Payment sent but not detected? Verify manually</summary><div class="nxt-wallet-verify-content"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div></div></details>
           <p class="nxt-wallet-fine">${escapeHtml(quote.note)} Never share your recovery phrase or private key.</p>
         </div>
       </div>
@@ -518,18 +477,17 @@
     const buyCrypto = overlay.querySelector('[data-buy-crypto]');
     const copyForSwapsButton = overlay.querySelector('[data-copy-for-swaps]');
     const buyStatus = overlay.querySelector('[data-buy-status]');
-    const swapsFallback = overlay.querySelector('[data-swaps-fallback]');
     const copyAll = overlay.querySelector('[data-copy-all]');
     input.value = initialTxid || '';
     setPaymentStage(initialTxid ? 'detected' : 'awaiting');
 
     overlay.querySelector('[data-copy-amount]').onclick = (event) => copyText(quote.amount, event.currentTarget);
     overlay.querySelector('[data-copy-address]').onclick = (event) => copyText(quote.address, event.currentTarget);
-    buyCrypto.onclick = (event) => openCardFunding(quote, context, buyCrypto, buyStatus, swapsFallback, event);
+    buyCrypto.onclick = (event) => openBufferedSwapsFunding(quote, context, buyCrypto, buyStatus, event);
     copyForSwapsButton.onclick = async (event) => {
       await copyText(quote.address, event.currentTarget);
       const network = quote.asset === 'USDT' ? ' Select Ethereum ERC-20 in Swaps.' : '';
-      setSwapsStatus(buyStatus, `Address copied. Exact-amount Transak checkout already has it locked; paste it only if you use the Swaps backup.${network}`);
+      setSwapsStatus(buyStatus, `Address copied. Paste it if Swaps asks where to send the crypto.${network}`);
     };
     copyAll.onclick = (event) => {
       if (Date.now() > Number(quote.expiresAt)) {
@@ -622,7 +580,9 @@
         detect();
       }, 1500);
     } else if (!initialTxid) {
-      setStatus(status, 'Use Pay with browser wallet to fill the transaction ID automatically, or paste it after sending.');
+      setStatus(status, buyingFirst
+        ? 'After Swaps sends the crypto, paste the transaction ID here so the payment can be verified—even if the fee reserve sends slightly more than the exact amount.'
+        : 'Use Pay with browser wallet to fill the transaction ID automatically, or paste it after sending.');
     }
     if (initialTxid) activeDetectionDelay = setTimeout(check, 700);
 
@@ -635,7 +595,6 @@
       timer.textContent = remaining ? `Quote expires in ${minutes}:${String(seconds).padStart(2, '0')}` : 'Rate lock ended — verify if already sent';
       if (!remaining && !expiredHandled) {
         expiredHandled = true;
-        closeFundingOverlay();
         openWallet.removeAttribute('href');
         openWallet.setAttribute('aria-disabled', 'true');
         openWallet.textContent = 'Quote expired';
@@ -643,8 +602,6 @@
         buyCrypto.setAttribute('aria-disabled', 'true');
         buyCrypto.removeAttribute('href');
         copyForSwapsButton.disabled = true;
-        swapsFallback.hidden = true;
-        swapsFallback.removeAttribute('href');
         copyAll.textContent = 'Create new quote';
         if (!input.value.trim()) {
           if (activeDetectionPoll) clearTimeout(activeDetectionPoll);

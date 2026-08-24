@@ -10,7 +10,7 @@ const {
   fundingAmountForInvoice,
 } = swapsFunding;
 
-test('builds a buffered Swaps backup link with only supported public parameters', () => {
+test('builds a fee-buffered Swaps purchase link with only supported public parameters', () => {
   const url = new URL(buildCheckoutUrl({ asset: 'usdt', invoiceUsd: '20.00' }));
   assert.equal(CHECKOUT_ORIGIN, 'https://www.swaps.app/buy');
   assert.equal(url.protocol, 'https:');
@@ -22,7 +22,7 @@ test('builds a buffered Swaps backup link with only supported public parameters'
   assert.equal(url.searchParams.get('amount'), '25.00');
 });
 
-test('grosses up the fallback card spend for percentage and fixed provider fees', () => {
+test('grosses up the card spend for percentage and fixed provider fees', () => {
   assert.equal(fundingAmountForInvoice('20.00'), '25.00');
   assert.equal(fundingAmountForInvoice('100.00'), '110.11');
   assert.equal(fundingAmountForInvoice('1000.00'), '1067.56');
@@ -58,26 +58,24 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /No crypto experience needed/);
   assert.match(source, /Choose the easiest way for you/);
   assert.match(source, /Pay with Card \/ Apple Pay/);
-  assert.match(source, /Buy exact amount with Card \/ Apple Pay/);
+  assert.match(source, /Buy enough with Card \/ Apple Pay/);
   assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
-  assert.match(source, /provider fees are added to the card total/i);
+  assert.match(source, /card-spend target above the invoice/i);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
   assert.match(source, /target="_blank" rel="noopener noreferrer"/);
-  assert.match(source, /data-swaps-fallback href="\$\{escapeHtml\(swapsUrl\)\}" target="_blank"/);
+  assert.match(source, /data-funding-usd="\$\{escapeHtml\(swapsFundingUsd\)\}"/);
+  assert.match(source, /openBufferedSwapsFunding/);
+  assert.match(source, /fundingAmountForInvoice\(quote\.totalUsd\)/);
   assert.doesNotMatch(source, /window\.location\.assign\(url\)/);
   assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
   assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
-  assert.match(source, /fetch\('\/api\/create-transak-session'/);
-  assert.match(source, /targetCryptoAmount/);
-  assert.match(source, /feesIncludedInCardTotal/);
-  assert.match(source, /showTransakFunding\(data\.widgetUrl, quote\)/);
-  assert.match(source, /iframe class="nxt-transak-frame"/);
-  assert.match(source, /incoming payment is detected automatically behind the secure card window/i);
+  assert.doesNotMatch(source, /create-transak-session|nxt-transak|Transak/i);
+  assert.match(source, /make sure “You receive” is at least/);
+  assert.match(source, /paste the transaction ID/i);
   assert.doesNotMatch(source, /window\.open\(/);
   assert.doesNotMatch(source, /nxtSwapsBuy/);
   assert.doesNotMatch(source, /pageshow[^\n]+once:\s*true/);
-  assert.match(source, /fees are included in the card total/i);
-  assert.match(source, /transaction ID from Transak/i);
+  assert.match(source, /fee reserve included/i);
 });
