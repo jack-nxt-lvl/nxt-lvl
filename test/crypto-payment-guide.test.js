@@ -20,7 +20,23 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.match(navCleanup, /Crypto-only checkout/);
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-beginner-guide-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-crypto-options-2/);
+});
+
+test('instructions offer several legitimate ways to obtain crypto', () => {
+  for (const source of [homepage, guide]) {
+    assert.match(source, /Cash App/);
+    assert.match(source, /Coinbase/);
+    assert.match(source, /MetaMask/);
+    assert.match(source, /Kraken/);
+    assert.match(source, /on-chain Bitcoin Mainnet/i);
+    assert.match(source, /not Lightning/i);
+    assert.match(source, /small amount of ETH/i);
+    assert.match(source, /72-hour or longer hold/i);
+    assert.match(source, /Avoid scams/i);
+  }
+  assert.match(checkout, /See 4 more ways to obtain crypto/);
+  assert.match(checkout, /shipping-and-payments\.html#obtain/);
 });
 
 test('guide makes a precise recommendation without hiding network requirements', () => {

@@ -65,7 +65,7 @@
     .button { display: inline-flex; min-height: 50px; align-items: center; justify-content: center; padding: 0 22px; border: 1px solid var(--border); border-radius: 11px; color: #fff; font-size: .76rem; font-weight: 850; text-decoration: none; }
     .button.primary { background: linear-gradient(135deg, #8b5cf6, #5b21b6); box-shadow: 0 14px 35px rgba(91, 33, 182, .28); }
     .button.secondary { background: rgba(255, 255, 255, .04); }
-    .why, .recommendation, .path, .safety, .shipping, .network-card { border: 1px solid var(--border); border-radius: 20px; background: linear-gradient(145deg, rgba(18, 17, 26, .95), rgba(9, 9, 14, .96)); box-shadow: 0 20px 55px rgba(0, 0, 0, .24); }
+    .why, .recommendation, .path, .safety, .shipping, .network-card, .obtain { border: 1px solid var(--border); border-radius: 20px; background: linear-gradient(145deg, rgba(18, 17, 26, .95), rgba(9, 9, 14, .96)); box-shadow: 0 20px 55px rgba(0, 0, 0, .24); }
     .why { display: grid; grid-template-columns: .8fr 1.2fr; gap: 34px; align-items: center; padding: 34px; }
     .section-label { color: #a78bfa; font-size: .65rem; font-weight: 900; letter-spacing: 1.3px; text-transform: uppercase; }
     h2 { margin: 8px 0 12px; font-size: clamp(1.75rem, 4vw, 2.8rem); line-height: 1.12; }
@@ -91,6 +91,27 @@
     .network-card h3 { margin: 14px 0 3px; }
     .network-card > strong { color: #e9e2ff; font-size: .73rem; }
     .network-card p { margin-bottom: 0; font-size: .8rem; }
+    .obtain { margin-top: 22px; padding: 30px; border-color: rgba(96, 165, 250, .2); background: linear-gradient(135deg, rgba(37, 99, 235, .07), rgba(124, 58, 237, .045)); }
+    .obtain-head { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: end; }
+    .obtain-head h2 { margin-bottom: 0; }
+    .obtain-head p { margin: 0; font-size: .85rem; }
+    .obtain-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
+    .obtain-card { grid-column: span 2; min-width: 0; padding: 19px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 16px; background: rgba(7, 9, 17, .5); }
+    .obtain-card:nth-child(4), .obtain-card:nth-child(5) { grid-column: span 3; }
+    .obtain-card.featured { border-color: rgba(96, 165, 250, .27); background: linear-gradient(145deg, rgba(37, 99, 235, .13), rgba(124, 58, 237, .08)); }
+    .obtain-top { display: flex; min-height: 38px; align-items: center; justify-content: space-between; gap: 9px; }
+    .obtain-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: linear-gradient(145deg, #2563eb, #7c3aed); font-weight: 950; }
+    .obtain-icon.cash { background: #00d64f; color: #041408; }
+    .obtain-icon.coinbase { background: #0052ff; }
+    .obtain-icon.wallet { background: linear-gradient(145deg, #f6851b, #e2761b); }
+    .obtain-icon.exchange { background: linear-gradient(145deg, #6842ff, #4f2dbb); }
+    .obtain-card h3 { margin: 14px 0 7px; font-size: .94rem; }
+    .obtain-card p, .obtain-card small { display: block; margin: 0; color: #999baa; font-size: .72rem; line-height: 1.55; }
+    .obtain-card small { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .055); color: #7f8492; font-size: .65rem; }
+    .obtain-card small strong { color: #ccd2df; }
+    .obtain-link { display: inline-flex; margin-top: 11px; color: #c9e8ff; font-size: .67rem; font-weight: 850; text-underline-offset: 3px; }
+    .obtain-warning { margin-top: 13px; padding: 13px 15px; border: 1px solid rgba(248, 113, 113, .14); border-radius: 11px; background: rgba(127, 29, 29, .065); color: #b9a5a9; font-size: .72rem; }
+    .obtain-warning strong { color: #ffc8cf; }
     .two-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 36px; }
     .path { padding: 27px; }
     .path-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
@@ -132,11 +153,13 @@
       h1 { letter-spacing: -1.8px; }
       .lead { font-size: .95rem; }
       .hero-actions { flex-direction: column; }
-      .why, .recommendation, .networks, .two-paths, .shipping { grid-template-columns: 1fr; }
-      .why, .recommendation, .path, .safety, .shipping { padding: 20px 16px; }
+      .why, .recommendation, .networks, .two-paths, .shipping, .obtain-head { grid-template-columns: 1fr; }
+      .why, .recommendation, .path, .safety, .shipping, .obtain { padding: 20px 16px; }
       .recommendation { gap: 15px; }
       .coin { width: 55px; height: 55px; border-radius: 17px; font-size: 1.55rem; }
       .safety-grid { grid-template-columns: 1fr; }
+      .obtain-grid { grid-template-columns: 1fr; }
+      .obtain-card, .obtain-card:nth-child(4), .obtain-card:nth-child(5) { grid-column: auto; }
       .status { grid-template-columns: repeat(2, 1fr); }
       .button { width: 100%; }
     }
@@ -147,6 +170,7 @@
     <div class="wrap nav-inner">
       <a class="brand" href="/">NXT LVL</a>
       <a href="#choose">Which coin?</a>
+      <a href="#obtain">Get crypto</a>
       <a href="#steps">Step by step</a>
       <a href="#safety">Safety</a>
       <a class="nav-cta" href="/#menu">Shop catalog</a>
@@ -174,6 +198,17 @@
         <article class="network-card"><span class="token eth">Ξ</span><h3>Ethereum</h3><strong>Ethereum Mainnet only</strong><p>Best if you already hold ETH. Send the exact ETH amount shown; your wallet adds a separate network fee.</p></article>
         <article class="network-card"><span class="token btc">₿</span><h3>Bitcoin</h3><strong>Bitcoin Mainnet only</strong><p>Best if you already hold BTC. Detection can be quick, but final approval waits for six confirmations.</p></article>
       </div>
+    </section>
+    <section class="obtain" id="obtain" aria-labelledby="obtainHeading">
+      <div class="obtain-head"><div><div class="section-label">Five ways to obtain crypto</div><h2 id="obtainHeading">Use the option that feels most familiar.</h2></div><p>You never need to buy from a stranger. Use the secure funding option in checkout or an established app you already trust. Every method still requires you to match the asset, network, amount, and address shown by NXT LVL.</p></div>
+      <div class="obtain-grid">
+        <article class="obtain-card featured"><div class="obtain-top"><span class="obtain-icon">💳</span><span class="pill">Quickest when available</span></div><h3>1. Buy inside NXT LVL checkout</h3><p>Choose the coin, then click “Buy with Card / Apple Pay.” Swaps opens a provider offer while your payment screen stays open.</p><small>Best when you need crypto now. Availability, fees, limits, and identity checks depend on the provider and your location.</small></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon cash">$</span><span class="pill">BTC only</span></div><h3>2. Cash App</h3><p>Open Cash App → Bitcoin → Buy. Then choose Send and scan the NXT LVL Bitcoin QR code or paste the address.</p><small>Choose an <strong>on-chain Bitcoin Mainnet</strong> send—not Lightning. Identity checks, fees, limits, or a temporary transfer hold may apply.</small><a class="obtain-link" href="https://cash.app/bitcoin" target="_blank" rel="noopener noreferrer">Open official Cash App Bitcoin information ↗</a></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon coinbase">C</span><span class="pill">BTC · ETH · USDT</span></div><h3>3. Coinbase</h3><p>Buy the coin selected in checkout, tap Send crypto, paste the order address, and choose the exact matching network.</p><small>Only continue when the balance is available to send. New deposits or purchases can sometimes have a temporary hold.</small><a class="obtain-link" href="https://www.coinbase.com/" target="_blank" rel="noopener noreferrer">Open the official Coinbase website ↗</a></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon wallet">◆</span><span class="pill">ETH · USDT</span></div><h3>4. MetaMask or another wallet’s Buy feature</h3><p>In the wallet, tap Buy, select Ethereum Mainnet, compare provider quotes, and purchase ETH or ERC-20 USDT.</p><small>If you buy USDT, keep a small amount of ETH in that same self-custody wallet for the network fee required to send the USDT.</small><a class="obtain-link" href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Open the official MetaMask website ↗</a></article>
+        <article class="obtain-card"><div class="obtain-top"><span class="obtain-icon exchange">K</span><span class="pill">Exchange route</span></div><h3>5. Kraken or another established exchange</h3><p>Buy with an available bank, debit-card, or digital-wallet method, then withdraw the crypto to the NXT LVL checkout address.</p><small>Check the withdrawal screen before buying. Some funding methods can create a 72-hour or longer hold, so this route may not work for a payment due today.</small><a class="obtain-link" href="https://www.kraken.com/" target="_blank" rel="noopener noreferrer">Open the official Kraken website ↗</a></article>
+      </div>
+      <div class="obtain-warning"><strong>Avoid scams:</strong> only use official apps and websites. Ignore unsolicited “support” messages and never share your recovery phrase, password, verification code, or remote access to your device. These services are independent companies; NXT LVL does not control their availability, pricing, reviews, or transfer holds.</div>
     </section>
     <section class="two-paths" id="steps" aria-label="Crypto payment instructions">
       <article class="path">
