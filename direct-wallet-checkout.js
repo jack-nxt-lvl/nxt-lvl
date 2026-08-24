@@ -345,9 +345,9 @@
     }
 
     // The public Swaps checkout is a hosted page, not the partner-only iframe.
-    // Give the anchor its destination before the first await so the browser can
-    // open it as a trusted user-initiated tab without closing this checkout.
-    link.href = url;
+    // The anchor already has this URL before the user clicks, so the browser
+    // handles the separate tab as a normal trusted link on desktop and mobile.
+    if (link.href !== url) link.href = url;
     saveActivePayment(quote, context, '');
     link.textContent = 'Swaps opened — keep this checkout open';
     setSwapsStatus(status, 'Swaps is opening separately so this NXT LVL checkout and automatic payment detection stay open.');
@@ -500,6 +500,10 @@
     const assetIcon = quote.asset === 'BTC' ? '₿' : (quote.asset === 'ETH' ? 'Ξ' : '₮');
     const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const walletShortcutMarkup = mobileWalletShortcuts(quote.asset).map(([name, mark, href]) => `<a class="nxt-wallet-app-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><i>${escapeHtml(mark)}</i><span>${escapeHtml(name)}</span></a>`).join('');
+    let swapsUrl = '#';
+    try {
+      swapsUrl = window.NxtSwapsFunding?.buildCheckoutUrl({ asset: quote.asset, amount: quote.amount }) || '#';
+    } catch (_) {}
     const overlay = document.createElement('div');
     overlay.className = 'nxt-wallet-overlay';
     overlay.innerHTML = `<div class="nxt-wallet-card nxt-wallet-pay" data-asset="${escapeHtml(quote.asset)}" data-intent="${buyingFirst ? 'buy' : 'wallet'}" role="dialog" aria-modal="true" aria-label="Direct ${escapeHtml(quote.asset)} payment">
@@ -512,7 +516,7 @@
           ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open secure Swaps checkout</strong><span>The exact ${escapeHtml(quote.amount)} USDT is ready. Swaps opens separately so this NXT LVL payment screen stays open.</span></span></div>` : ''}
           <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
           <div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your beginner-friendly route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue with card or Apple Pay. If you already have USDT, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the card / Apple Pay option.`}</span></div><em>2 clear choices</em></div>
-          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><a class="buy" data-buy-crypto href="#" target="_blank" rel="noopener noreferrer">${buyingFirst ? 'Open Swaps — keep checkout open ↗' : 'Buy crypto with Card / Apple Pay ↗'}</a><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><a class="buy" data-buy-crypto href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer">${buyingFirst ? 'Open Swaps — keep checkout open ↗' : 'Buy crypto with Card / Apple Pay ↗'}</a><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
           <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> Send the exact amount shown. ${escapeHtml(networkWarning)}</div>

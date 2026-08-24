@@ -58,13 +58,14 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
   assert.match(source, /target="_blank" rel="noopener noreferrer"/);
+  assert.match(source, /href="\$\{escapeHtml\(swapsUrl\)\}" target="_blank"/);
   assert.doesNotMatch(source, /window\.location\.assign\(url\)/);
   assert.match(source, /SWAPS_RETURN_KEY/);
   assert.match(source, /resumeAfterSwapsReturn/);
   assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
   assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
   assert.match(source, /copyForSwapsWithoutBlocking/);
-  assert.match(source, /link\.href = url;[\s\S]{0,320}copyForSwapsWithoutBlocking\(quote\.address\)/);
+  assert.match(source, /if \(link\.href !== url\) link\.href = url;[\s\S]{0,320}copyForSwapsWithoutBlocking\(quote\.address\)/);
   assert.match(source, /closeActive\(\);[\s\S]{0,180}renderPayment\(saved\.quote/);
   assert.match(source, /this NXT LVL checkout and automatic payment detection stay open/);
   assert.doesNotMatch(source, /window\.open\(/);
