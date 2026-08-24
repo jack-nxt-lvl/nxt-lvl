@@ -83,3 +83,78 @@ test('fails over to a second Ethereum log provider for USDT discovery', async ()
     else process.env.ETHEREUM_BACKUP_RPC_URL = originalBackupRpc;
   }
 });
+
+test('uses the Blockscout log endpoint before anonymous RPC fallbacks', async () => {
+  const originalFetch = global.fetch;
+  const originalLogsRpc = process.env.ETHEREUM_LOGS_RPC_URL;
+  const originalBackupRpc = process.env.ETHEREUM_BACKUP_RPC_URL;
+  const originalRpc = process.env.ETHEREUM_RPC_URL;
+  delete process.env.ETHEREUM_LOGS_RPC_URL;
+  delete process.env.ETHEREUM_BACKUP_RPC_URL;
+  delete process.env.ETHEREUM_RPC_URL;
+  const calls = [];
+
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    const request = JSON.parse(options.body);
+    calls.push({ target, method: request.method });
+    let result = null;
+    if (request.method === 'eth_chainId') result = '0x1';
+    if (request.method === 'eth_getBlockByNumber') {
+      result = { number: '0x100', hash: `0x${'a'.repeat(64)}` };
+    }
+    if (request.method === 'eth_getLogs') result = [];
+    return { ok: true, status: 200, json: async () => ({ jsonrpc: '2.0', id: request.id, result }) };
+  };
+
+  try {
+    const result = await findOnChainPayment({
+      asset: 'USDT', amountUnits: '65000123', createdAt: Date.now(),
+    });
+    assert.equal(result.found, false);
+    assert.equal(result.status, 'not_found');
+    assert.equal(calls[0].target, 'https://eth.blockscout.com/api/eth-rpc');
+    assert.equal(calls.some((call) => call.target.includes('publicnode.com')), false);
+    assert.equal(calls.some((call) => call.target.includes('drpc.org')), false);
+  } finally {
+    global.fetch = originalFetch;
+    if (originalLogsRpc === undefined) delete process.env.ETHEREUM_LOGS_RPC_URL;
+    else process.env.ETHEREUM_LOGS_RPC_URL = originalLogsRpc;
+    if (originalBackupRpc === undefined) delete process.env.ETHEREUM_BACKUP_RPC_URL;
+    else process.env.ETHEREUM_BACKUP_RPC_URL = originalBackupRpc;
+    if (originalRpc === undefined) delete process.env.ETHEREUM_RPC_URL;
+    else process.env.ETHEREUM_RPC_URL = originalRpc;
+  }
+});
+
+test('Ethereum verification survives one blocked provider and still requires two healthy providers', async () => {
+  const originalFetch = global.fetch;
+  const txid = `0x${'0'.repeat(64)}`;
+  const providers = new Set();
+
+  global.fetch = async (url, options = {}) => {
+    const target = String(url);
+    const request = JSON.parse(options.body);
+    providers.add(target);
+    if (target.includes('publicnode.com')) {
+      return { ok: false, status: 403, json: async () => ({}) };
+    }
+    let result = null;
+    if (request.method === 'eth_chainId') result = '0x1';
+    if (request.method === 'eth_getBlockByNumber') {
+      result = { number: '0x100', hash: `0x${'a'.repeat(64)}` };
+    }
+    return { ok: true, status: 200, json: async () => ({ jsonrpc: '2.0', id: request.id, result }) };
+  };
+
+  try {
+    const result = await verifyOnChain(txid, { asset: 'ETH' });
+    assert.equal(result.ok, false);
+    assert.equal(result.status, 'not_found');
+    assert.ok(providers.has('https://ethereum-rpc.publicnode.com'));
+    assert.ok(providers.has('https://eth.drpc.org'));
+    assert.ok(providers.has('https://rpc.mevblocker.io'));
+  } finally {
+    global.fetch = originalFetch;
+  }
+});

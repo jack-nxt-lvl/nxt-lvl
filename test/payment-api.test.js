@@ -205,7 +205,7 @@ test('durably flags only a confirmed Bitcoin payment below 90% for manual review
   }
 });
 
-test('requires finalized canonical agreement from two Ethereum RPCs before confirming USDT', async () => {
+test('requires finalized canonical agreement from the healthy Ethereum RPC quorum before confirming USDT', async () => {
   const originalFetch = global.fetch;
   const txid = `0x${'f'.repeat(64)}`;
   const blockHash = `0x${'a'.repeat(64)}`;
@@ -252,7 +252,7 @@ test('requires finalized canonical agreement from two Ethereum RPCs before confi
       emailCount += 1;
       return { ok: true, json: async () => ({ id: `email-${emailCount}` }) };
     }
-    if (target.includes('publicnode.com') || target.includes('drpc.org')) {
+    if (target.includes('publicnode.com') || target.includes('drpc.org') || target.includes('mevblocker.io')) {
       const request = JSON.parse(options.body);
       rpcCalls.push({ target, method: request.method, params: request.params });
       let result;
@@ -303,8 +303,8 @@ test('requires finalized canonical agreement from two Ethereum RPCs before confi
     assert.equal(res.body.confirmations, 64);
     assert.equal(res.body.confirmationsRequired, 64);
     assert.equal(emailCount, 2);
-    assert.equal(rpcCalls.filter((call) => call.method === 'eth_getBlockByNumber' && call.params[0] === 'finalized').length, 2);
-    assert.equal(new Set(rpcCalls.map((call) => call.target)).size, 2);
+    assert.equal(rpcCalls.filter((call) => call.method === 'eth_getBlockByNumber' && call.params[0] === 'finalized').length, 3);
+    assert.equal(new Set(rpcCalls.map((call) => call.target)).size, 3);
   } finally {
     global.fetch = originalFetch;
   }
