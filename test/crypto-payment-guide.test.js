@@ -21,7 +21,7 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-4/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-frictionless-4/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-frictionless-5/);
 });
 
 test('instructions list only researched immediate-send purchase routes', () => {
@@ -42,16 +42,18 @@ test('instructions list only researched immediate-send purchase routes', () => {
 });
 
 test('checkout keeps the decision point to two primary paths', () => {
-  const directIndex = checkout.indexOf('Already own ${escapeHtml(quote.asset)}? Pay directly');
-  const directActionIndex = checkout.indexOf('data-open-wallet');
-  const buyIndex = checkout.indexOf('Need crypto? Buy it here');
-  assert.ok(directIndex >= 0);
-  assert.ok(directActionIndex > directIndex);
-  assert.ok(buyIndex > directActionIndex);
-  assert.match(checkout, /Open wallet — amount & address filled/);
-  assert.match(checkout, /Buy .* with Card \/ Apple Pay/);
+  const choiceIndex = checkout.indexOf('Choose the easiest way for you');
+  const directIndex = checkout.indexOf('I have crypto — open my wallet');
+  const buyIndex = checkout.indexOf('I need crypto — Card / Apple Pay');
+  const amountIndex = checkout.indexOf('<div class="nxt-wallet-label">Exact amount</div>');
+  assert.ok(choiceIndex >= 0);
+  assert.ok(directIndex > choiceIndex);
+  assert.ok(buyIndex > directIndex);
+  assert.ok(amountIndex > buyIndex);
+  assert.match(checkout, /2 clear choices/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
+  assert.match(checkout, /Ethereum Mainnet \/ ERC-20 only/);
   assert.match(checkout, /Payment sent but not detected\? Verify manually/);
 });
 

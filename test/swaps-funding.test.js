@@ -58,13 +58,13 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   const source = readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8');
   assert.match(source, /Need to buy crypto first\?/);
   assert.match(source, /Choose a coin above/);
-  assert.match(source, /Need crypto\? Buy it here/);
-  assert.match(source, /Buy .* with Card \/ Apple Pay/);
+  assert.match(source, /Choose the easiest way for you/);
+  assert.match(source, /I need crypto — Card \/ Apple Pay/);
   assert.match(source, /It copies automatically/);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
-  assert.match(source, /Keep this checkout open for confirmation/);
+  assert.match(source, /This NXT LVL order remains open/);
   assert.match(source, /data-swaps-fallback/);
   assert.match(source, /nxt-swaps-drawer/);
   assert.match(source, /Swaps opened beside your checkout/);
