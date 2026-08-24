@@ -5,6 +5,19 @@ document.write('<script src="/cjc-products.js?v=' + Date.now() + '"><\/script>')
 document.write('<script defer src="/premium-enhancements.js?v=2"><\/script>');
 
 window.addEventListener('DOMContentLoaded', () => {
+  // Keep every freeze-dried product together in All Compounds while preserving
+  // the existing order inside each group. This only changes catalog ordering.
+  if (typeof compounds !== 'undefined' && Array.isArray(compounds)) {
+    const freezeDried = compounds.filter(product => product.category === 'freeze-dried');
+    const otherCompounds = compounds.filter(product => product.category !== 'freeze-dried');
+    compounds.splice(0, compounds.length, ...freezeDried, ...otherCompounds);
+
+    const activeFilter = document.querySelector('.filter-btn.active');
+    if (!activeFilter || activeFilter.textContent.trim().toLowerCase() === 'all compounds') {
+      if (typeof renderGrid === 'function') renderGrid('all');
+    }
+  }
+
   // Brand mark: angular white N with a purple slash, based on the selected NXT LVL concept.
   const navLogo = document.querySelector('.logo-icon');
   if (navLogo) {
