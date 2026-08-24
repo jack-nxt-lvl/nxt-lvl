@@ -3148,9 +3148,9 @@
       const key = product.id + '::' + pricingIndex;
       const existing = findCartLine(key);
       if (existing) {
-        existing.qty += qty;
+        existing.qty = Math.min(20, existing.qty + qty);
       } else {
-        cart.push({ key, productId: product.id, name: product.name, label: pr.label, price: pr.price, qty });
+        cart.push({ key, productId: product.id, name: product.name, label: pr.label, price: pr.price, qty: Math.min(20, Math.max(1, qty)) });
       }
       renderCart();
     }
@@ -3176,7 +3176,7 @@
       const input = document.getElementById('modal-atc-qty-' + productId);
       if (!input) return;
       let val = parseInt(input.value, 10) || 1;
-      val = Math.max(1, val + delta);
+      val = Math.min(20, Math.max(1, val + delta));
       input.value = val;
     }
 
@@ -3202,7 +3202,7 @@
     function changeCartQty(key, delta) {
       const line = findCartLine(key);
       if (!line) return;
-      line.qty += delta;
+      line.qty = Math.min(20, line.qty + delta);
       if (line.qty <= 0) cart = cart.filter(l => l.key !== key);
       renderCart();
     }
