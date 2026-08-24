@@ -322,13 +322,15 @@
     node.textContent = message;
   }
 
-  async function openSwapsFunding(quote, context, button, status) {
+  async function openSwapsFunding(quote, context, link, status, event) {
     if (Date.now() > Number(quote.expiresAt)) {
+      event?.preventDefault();
       setSwapsStatus(status, 'This quote expired. Create a new quote before buying crypto.', true);
       return;
     }
     const helper = window.NxtSwapsFunding;
     if (!helper) {
+      event?.preventDefault();
       setSwapsStatus(status, 'The secure funding link could not load. Refresh the page and try again.', true);
       return;
     }
@@ -337,24 +339,23 @@
     try {
       url = helper.buildCheckoutUrl({ asset: quote.asset, amount: quote.amount });
     } catch (_) {
+      event?.preventDefault();
       setSwapsStatus(status, 'The selected coin or amount could not be sent to Swaps.', true);
       return;
     }
 
-    button.disabled = true;
-    button.textContent = 'Opening secure Swaps…';
+    // The public Swaps checkout is a hosted page, not the partner-only iframe.
+    // The anchor already has this URL before the user clicks, so the browser
+    // handles the separate tab as a normal trusted link on desktop and mobile.
+    if (link.href !== url) link.href = url;
     saveActivePayment(quote, context, '');
-    try { sessionStorage.setItem(SWAPS_RETURN_KEY, quote.orderId); } catch (_) {}
-    // Stop the on-chain long-poll before the external card checkout starts.
-    // This prevents a suspended request from piling up when mobile browsers
-    // preserve and later restore this page from their back-forward cache.
-    stopTimers();
+    link.textContent = 'Swaps opened — keep this checkout open';
+    setSwapsStatus(status, 'Swaps is opening separately so this NXT LVL checkout and automatic payment detection stay open.');
     const copied = await copyForSwapsWithoutBlocking(quote.address);
     const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
     setSwapsStatus(status, copied
-      ? `Address copied ✓ Opening Swaps in this tab. Choose card or Apple Pay, confirm ${network}, and press Back when finished.`
-      : `Opening Swaps in this tab. Confirm ${network}, copy the receiving address in checkout if needed, and press Back when finished.`);
-    window.location.assign(url);
+      ? `Address copied ✓ Finish in the separate Swaps tab, confirm ${network}, then return to this NXT LVL tab. Payment detection stays on here.`
+      : `Finish in the separate Swaps tab and confirm ${network}. Return here to copy the receiving address if Swaps asks for it.`);
   }
 
   function setStatus(node, message, type) {
@@ -487,9 +488,9 @@
       title: 'Card or Apple Pay may be available through Swaps for your location.',
       detail: 'Swaps and its selected provider control availability, fees, limits, and identity checks. NXT LVL accepts crypto only and never receives or stores your card information.',
     };
-    const fundingReturnStep = automaticDetection ? 'Press Back to return' : 'Return and verify payment';
+    const fundingReturnStep = automaticDetection ? 'Return to this NXT LVL tab' : 'Return and verify payment';
     const fundingReturnDetail = automaticDetection
-      ? 'Your order is saved and reopens automatically for payment detection'
+      ? 'Keep this checkout open—we detect the incoming payment automatically'
       : 'Copy the transaction ID from Swaps and paste it into the box below';
     const fundingNetworkStep = quote.asset === 'USDT' ? 'Paste address + choose ERC-20' : 'Paste the copied address';
     const fundingNetworkDetail = quote.asset === 'USDT'
@@ -499,6 +500,10 @@
     const assetIcon = quote.asset === 'BTC' ? '₿' : (quote.asset === 'ETH' ? 'Ξ' : '₮');
     const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const walletShortcutMarkup = mobileWalletShortcuts(quote.asset).map(([name, mark, href]) => `<a class="nxt-wallet-app-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><i>${escapeHtml(mark)}</i><span>${escapeHtml(name)}</span></a>`).join('');
+    let swapsUrl = '#';
+    try {
+      swapsUrl = window.NxtSwapsFunding?.buildCheckoutUrl({ asset: quote.asset, amount: quote.amount }) || '#';
+    } catch (_) {}
     const overlay = document.createElement('div');
     overlay.className = 'nxt-wallet-overlay';
     overlay.innerHTML = `<div class="nxt-wallet-card nxt-wallet-pay" data-asset="${escapeHtml(quote.asset)}" data-intent="${buyingFirst ? 'buy' : 'wallet'}" role="dialog" aria-modal="true" aria-label="Direct ${escapeHtml(quote.asset)} payment">
@@ -508,15 +513,15 @@
         <div class="nxt-wallet-order">
           <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
           <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
-          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: continue securely to Swaps</strong><span>The exact ${escapeHtml(quote.amount)} USDT is ready. We copy the address, save this order, and open Swaps in this same browser tab.</span></span></div>` : ''}
+          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open secure Swaps checkout</strong><span>The exact ${escapeHtml(quote.amount)} USDT is ready. Swaps opens separately so this NXT LVL payment screen stays open.</span></span></div>` : ''}
           <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
           <div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your beginner-friendly route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue with card or Apple Pay. If you already have USDT, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the card / Apple Pay option.`}</span></div><em>2 clear choices</em></div>
-          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><button type="button" class="buy" data-buy-crypto>${buyingFirst ? 'Continue to Swaps in this tab →' : 'Buy crypto with Card / Apple Pay'}</button><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a><a class="buy" data-buy-crypto href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer">${buyingFirst ? 'Open Swaps — keep checkout open ↗' : 'Buy crypto with Card / Apple Pay ↗'}</a><button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
           <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> Send the exact amount shown. ${escapeHtml(networkWarning)}</div>
           <details class="nxt-wallet-apps"><summary>Use Coinbase, Cash App, MetaMask, or another app</summary><div class="nxt-wallet-apps-content"><div class="nxt-wallet-apps-head"><span>Open the app you already use, tap Send or Withdraw, and match the network exactly.</span><em>${escapeHtml(quote.asset)} shortcuts</em></div><div class="nxt-wallet-apps-grid">${walletShortcutMarkup}</div><a class="nxt-wallet-apps-guide" href="/shipping-and-payments.html#existing-wallets" target="_blank" rel="noopener noreferrer">See all common wallet shortcuts + instructions ↗</a></div></details>
-          <details class="nxt-wallet-buy-help"><summary>How the card / Apple Pay option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Continue to Swaps<small>Your selected ${escapeHtml(quote.asset)} and requested amount open in this same tab</small></div><div class="nxt-wallet-buy-step"><b>2</b>Choose card or Apple Pay<small>Select an available provider and complete any required identity check</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>Receiving address backup</b>It copies automatically. Use this only if you need to copy it again.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-swaps>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>Before paying, confirm the coin, network, amount, and address match this checkout.</b></small></div></details>
+          <details class="nxt-wallet-buy-help"><summary>How the card / Apple Pay option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open Swaps separately<small>Your selected ${escapeHtml(quote.asset)} and requested amount open while this checkout stays here</small></div><div class="nxt-wallet-buy-step"><b>2</b>Choose card or Apple Pay<small>Select an available provider and complete any required identity check</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>Receiving address backup</b>It copies automatically. Use this only if you need to copy it again.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-swaps>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>Before paying, confirm the coin, network, amount, and address match this checkout.</b></small></div></details>
           <div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div>
           <div class="nxt-wallet-status" role="status" aria-live="polite"></div>
           <details class="nxt-wallet-verify"><summary>Payment sent but not detected? Verify manually</summary><div class="nxt-wallet-verify-content"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div></div></details>
@@ -542,7 +547,7 @@
 
     overlay.querySelector('[data-copy-amount]').onclick = (event) => copyText(quote.amount, event.currentTarget);
     overlay.querySelector('[data-copy-address]').onclick = (event) => copyText(quote.address, event.currentTarget);
-    buyCrypto.onclick = () => openSwapsFunding(quote, context, buyCrypto, buyStatus);
+    buyCrypto.onclick = (event) => openSwapsFunding(quote, context, buyCrypto, buyStatus, event);
     copyForSwapsButton.onclick = async (event) => {
       await copyText(quote.address, event.currentTarget);
       const network = quote.asset === 'USDT' ? ' Select Ethereum ERC-20 in Swaps.' : '';
@@ -656,7 +661,8 @@
         openWallet.setAttribute('aria-disabled', 'true');
         openWallet.textContent = 'Quote expired';
         if (browserPay) browserPay.disabled = true;
-        buyCrypto.disabled = true;
+        buyCrypto.setAttribute('aria-disabled', 'true');
+        buyCrypto.removeAttribute('href');
         copyForSwapsButton.disabled = true;
         swapsFallback.hidden = true;
         swapsFallback.removeAttribute('href');
