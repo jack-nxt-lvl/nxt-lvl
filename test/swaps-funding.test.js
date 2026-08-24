@@ -61,6 +61,10 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /SWAPS_RETURN_KEY/);
   assert.match(source, /resumeAfterSwapsReturn/);
   assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
+  assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
+  assert.match(source, /copyForSwapsWithoutBlocking/);
+  assert.match(source, /stopTimers\(\);[\s\S]{0,180}copyForSwapsWithoutBlocking\(quote\.address\)/);
+  assert.match(source, /closeActive\(\);[\s\S]{0,180}renderPayment\(saved\.quote/);
   assert.match(source, /same browser tab/);
   assert.doesNotMatch(source, /window\.open\(/);
   assert.doesNotMatch(source, /data-swaps-fallback|nxtSwapsBuy/);

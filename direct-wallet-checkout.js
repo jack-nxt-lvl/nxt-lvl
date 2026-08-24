@@ -41,6 +41,7 @@
   const ACTIVE_PAYMENT_KEY = 'nxtActiveDirectPaymentV3';
   const SWAPS_RETURN_KEY = 'nxtSwapsReturnPendingV1';
   const QUOTE_RECOVERY_MS = 2 * 60 * 60 * 1000;
+  const SWAPS_COPY_TIMEOUT_MS = 350;
 
   try { sessionStorage.removeItem('nxtActiveDirectPaymentV2'); } catch (_) {}
 
@@ -158,15 +159,15 @@
     let pendingOrderId = '';
     try { pendingOrderId = sessionStorage.getItem(SWAPS_RETURN_KEY) || ''; } catch (_) {}
     if (!pendingOrderId) return false;
-    if (activeOverlay) {
-      try { sessionStorage.removeItem(SWAPS_RETURN_KEY); } catch (_) {}
-      return true;
-    }
     const saved = readActivePayment();
     if (!saved || saved.quote.orderId !== pendingOrderId) {
       try { sessionStorage.removeItem(SWAPS_RETURN_KEY); } catch (_) {}
       return false;
     }
+    // A page restored from the back-forward cache can still contain the old
+    // overlay and a suspended long-poll. Tear it down before starting exactly
+    // one fresh watcher for the saved order.
+    closeActive();
     try { sessionStorage.removeItem(SWAPS_RETURN_KEY); } catch (_) {}
     activeContext = saved.context;
     window.nxtCheckoutDetails = saved.context.details;
@@ -309,6 +310,13 @@
     return copied;
   }
 
+  async function copyForSwapsWithoutBlocking(text) {
+    return Promise.race([
+      copyForSwaps(text),
+      new Promise((resolve) => setTimeout(() => resolve(false), SWAPS_COPY_TIMEOUT_MS)),
+    ]);
+  }
+
   function setSwapsStatus(node, message, bad = false) {
     node.className = `nxt-wallet-buy-status show${bad ? ' bad' : ''}`;
     node.textContent = message;
@@ -335,10 +343,14 @@
 
     button.disabled = true;
     button.textContent = 'Opening secure Swaps…';
-    const copied = await copyForSwaps(quote.address);
-    const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
     saveActivePayment(quote, context, '');
     try { sessionStorage.setItem(SWAPS_RETURN_KEY, quote.orderId); } catch (_) {}
+    // Stop the on-chain long-poll before the external card checkout starts.
+    // This prevents a suspended request from piling up when mobile browsers
+    // preserve and later restore this page from their back-forward cache.
+    stopTimers();
+    const copied = await copyForSwapsWithoutBlocking(quote.address);
+    const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
     setSwapsStatus(status, copied
       ? `Address copied ✓ Opening Swaps in this tab. Choose card or Apple Pay, confirm ${network}, and press Back when finished.`
       : `Opening Swaps in this tab. Confirm ${network}, copy the receiving address in checkout if needed, and press Back when finished.`);
@@ -698,5 +710,6 @@
     }, 400);
   };
   window.addEventListener('pageshow', restoreCheckout);
+  window.addEventListener('pagehide', stopTimers);
   restoreCheckout();
 })();
