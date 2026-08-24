@@ -20,8 +20,8 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.match(navCleanup, /Crypto-only checkout/);
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
-  assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-4/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-frictionless-5/);
+  assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-easy-pay-1/);
 });
 
 test('instructions list only researched immediate-send purchase routes', () => {
@@ -36,21 +36,25 @@ test('instructions list only researched immediate-send purchase routes', () => {
     assert.match(source, /Avoid scams/i);
   }
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
-  assert.match(checkout, /Why Swaps\.app is recommended \+ 2 backups/);
-  assert.match(checkout, /secure Swaps purchase panel/);
-  assert.match(checkout, /shipping-and-payments\.html#obtain/);
+  assert.match(guide, /Why Swaps\.app stays first/);
+  assert.match(checkout, /secure Swaps purchase panel/i);
+  assert.match(homepage, /shipping-and-payments\.html/);
 });
 
 test('checkout keeps the decision point to two primary paths', () => {
-  const choiceIndex = checkout.indexOf('Choose the easiest way for you');
-  const directIndex = checkout.indexOf('I have crypto — open my wallet');
-  const buyIndex = checkout.indexOf('I need crypto — Card / Apple Pay');
+  const choiceIndex = checkout.indexOf('How would you like to pay?');
+  const buyIndex = checkout.indexOf('Pay with Card / Apple Pay');
+  const directIndex = checkout.indexOf('I already have crypto');
   const amountIndex = checkout.indexOf('<div class="nxt-wallet-label">Exact amount</div>');
   assert.ok(choiceIndex >= 0);
-  assert.ok(directIndex > choiceIndex);
-  assert.ok(buyIndex > directIndex);
-  assert.ok(amountIndex > buyIndex);
+  assert.ok(buyIndex > choiceIndex);
+  assert.ok(directIndex > buyIndex);
+  assert.ok(amountIndex > directIndex);
   assert.match(checkout, /2 clear choices/);
+  assert.match(checkout, /data-pay-path="buy"/);
+  assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
+  assert.match(checkout, /We set up USDT on Ethereum ERC-20 automatically/);
+  assert.match(checkout, /Continue with Card \/ Apple Pay/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
   assert.match(checkout, /Ethereum Mainnet \/ ERC-20 only/);
@@ -102,9 +106,17 @@ test('guide includes safety and finality instructions for beginners', () => {
 });
 
 test('checkout marks ERC-20 USDT as its beginner pick', () => {
-  assert.match(checkout, /BEGINNER PICK/);
-  assert.match(checkout, /USDT on Ethereum ERC-20 is usually the easiest amount to understand/);
+  assert.match(checkout, /Pay with Card \/ Apple Pay/);
+  assert.match(checkout, /We set up USDT on Ethereum ERC-20 automatically/);
   assert.doesNotMatch(checkout, />STABLECOIN</);
+});
+
+test('homepage keeps advanced crypto detail collapsed behind a simple three-step path', () => {
+  assert.match(homepage, /crypto-guide-quick/);
+  assert.match(homepage, /Choose Card \/ Apple Pay/);
+  assert.match(homepage, /We select USDT and prepare the exact amount/);
+  assert.match(homepage, /<details class="crypto-guide-advanced">/);
+  assert.match(homepage, /Already have crypto or want detailed instructions/);
 });
 
 test('payment copy avoids unsafe guarantees', () => {
