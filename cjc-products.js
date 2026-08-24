@@ -1,5 +1,5 @@
 // Separate CJC-1295 10mg freeze-dried research listings.
-// Market-aligned single-vial pricing checked August 2026.
+// Medium-high market pricing checked August 2026.
 (() => {
   if (typeof compounds === 'undefined' || !Array.isArray(compounds)) return;
 
@@ -28,11 +28,11 @@
       warnings: 'For laboratory research use only. Not for human or veterinary use.',
       suggestedCompanions: ['ipamorelin', 'sermorelin', 'tesamorelin-10'],
       pricing: [
-        { label: '1 Vial', price: 65 },
-        { label: '2 Vials', price: 130 },
-        { label: '3 Vials', price: 195 },
-        { label: '4 Vials', price: 260 },
-        { label: '5 Vials', price: 325 }
+        { label: '1 Vial', price: 89.99 },
+        { label: '2 Vials', price: 179.98 },
+        { label: '3 Vials', price: 269.97 },
+        { label: '4 Vials', price: 359.96 },
+        { label: '5 Vials', price: 449.95 }
       ]
     },
     {
@@ -59,11 +59,11 @@
       warnings: 'For laboratory research use only. Not for human or veterinary use.',
       suggestedCompanions: ['ipamorelin', 'sermorelin', 'tesamorelin-10'],
       pricing: [
-        { label: '1 Vial', price: 60 },
-        { label: '2 Vials', price: 120 },
-        { label: '3 Vials', price: 180 },
-        { label: '4 Vials', price: 240 },
-        { label: '5 Vials', price: 300 }
+        { label: '1 Vial', price: 79.99 },
+        { label: '2 Vials', price: 159.98 },
+        { label: '3 Vials', price: 239.97 },
+        { label: '4 Vials', price: 319.96 },
+        { label: '5 Vials', price: 399.95 }
       ]
     }
   ];
