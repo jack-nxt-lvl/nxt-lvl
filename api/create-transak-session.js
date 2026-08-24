@@ -103,6 +103,8 @@ module.exports = async function handler(req, res) {
       quote,
     });
     const token = await accessToken(apiKey, apiSecret, config);
+    const rawToken = String(token).trim().replace(/^Bearer\s+/i, '');
+    if (!rawToken) throw new Error('Transak returned an empty access token.');
     const createSession = (formattedToken) => fetch(`${config.gatewayBase}/api/v2/auth/session`, {
       method: 'POST',
       headers: {
@@ -115,10 +117,13 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({ widgetParams }),
     });
 
-    let response = await createSession(token);
+    // Current Transak guidance describes the partner JWT as a Bearer token.
+    // Try that canonical format first; retain the raw format only for older
+    // partner accounts that still expect the historical header value.
+    let response = await createSession(`Bearer ${rawToken}`);
     let data = await response.json().catch(() => ({}));
-    if (!response.ok && !String(token).startsWith('Bearer ')) {
-      response = await createSession(`Bearer ${token}`);
+    if (!response.ok) {
+      response = await createSession(rawToken);
       data = await response.json().catch(() => ({}));
     }
 

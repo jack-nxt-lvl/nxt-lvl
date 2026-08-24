@@ -67,6 +67,7 @@ test('sends Transak the signed exact receive target and ignores browser override
   const envKeys = ['CRYPTO_QUOTE_SECRET', 'TRANSAK_API_KEY', 'TRANSAK_API_SECRET', 'TRANSAK_ENV', 'TRANSAK_REFERRER_DOMAIN'];
   const originalEnv = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]));
   let sessionRequest;
+  let sessionHeaders;
 
   process.env.CRYPTO_QUOTE_SECRET = 'test-only-quote-secret-that-is-long-enough';
   process.env.TRANSAK_API_KEY = 'test-api-key';
@@ -102,6 +103,7 @@ test('sends Transak the signed exact receive target and ignores browser override
     }
     if (String(url).endsWith('/api/v2/auth/session')) {
       sessionRequest = JSON.parse(options.body);
+      sessionHeaders = options.headers;
       return {
         ok: true,
         status: 200,
@@ -144,6 +146,7 @@ test('sends Transak the signed exact receive target and ignores browser override
   }
 
   assert.equal(res.statusCode, 200);
+  assert.equal(sessionHeaders['access-token'], 'Bearer test-access-token');
   assert.equal(sessionRequest.widgetParams.defaultCryptoAmount, 20.000856);
   assert.equal(sessionRequest.widgetParams.walletAddress, ASSETS.USDT.address);
   assert.equal(sessionRequest.widgetParams.partnerOrderId, QUOTE.orderId);
