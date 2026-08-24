@@ -2,7 +2,7 @@
 // Load the original product database synchronously so index.html can use compounds/categories/stacks immediately.
 document.write('<script src="/products-data-original.js?v=' + Date.now() + '"><\/script>');
 document.write('<script src="/cjc-products.js?v=' + Date.now() + '"><\/script>');
-document.write('<script defer src="/premium-enhancements.js?v=2"><\/script>');
+document.write('<script defer src="/premium-enhancements.js?v=20260824-beginner-guide-1"><\/script>');
 
 window.addEventListener('DOMContentLoaded', () => {
   // Keep every freeze-dried product together in All Compounds while preserving
