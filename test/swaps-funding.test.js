@@ -3,11 +3,11 @@ const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 
+const swapsFunding = require('../lib/swaps-funding');
 const {
   CHECKOUT_ORIGIN,
   buildCheckoutUrl,
-  popupFeatures,
-} = require('../lib/swaps-funding');
+} = swapsFunding;
 
 test('builds a Swaps receive-amount buy link with only supported parameters', () => {
   const url = new URL(buildCheckoutUrl({ asset: 'btc', amount: '0.00109879' }));
@@ -41,17 +41,8 @@ test('rejects unsupported assets and malformed amounts', () => {
   assert.throws(() => buildCheckoutUrl({ asset: 'USDT', amount: '1&address=evil' }), /invalid/i);
 });
 
-test('requests a compact resizable window against the right side of the screen', () => {
-  const features = popupFeatures(
-    { availWidth: 1440, availHeight: 900, availLeft: 0, availTop: 0 },
-    { outerWidth: 1200, outerHeight: 800, screenX: 0, screenY: 0 },
-  );
-  assert.match(features, /popup=yes/);
-  assert.match(features, /resizable=yes/);
-  assert.match(features, /width=540/);
-  assert.match(features, /height=872/);
-  assert.match(features, /left=890/);
-  assert.match(features, /top=14/);
+test('does not expose or configure a popup window flow', () => {
+  assert.equal(swapsFunding.popupFeatures, undefined);
 });
 
 test('keeps beginner guidance and recovery controls in the direct checkout', () => {
@@ -60,19 +51,20 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /No crypto experience needed/);
   assert.match(source, /Choose the easiest way for you/);
   assert.match(source, /Pay with Card \/ Apple Pay/);
-  assert.match(source, /Continue with Card \/ Apple Pay/);
+  assert.match(source, /Continue to Swaps in this tab/);
   assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
   assert.match(source, /It copies automatically/);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
-  assert.match(source, /This NXT LVL order remains open/);
-  assert.match(source, /data-swaps-fallback/);
-  assert.match(source, /nxt-swaps-drawer/);
-  assert.match(source, /Swaps opened beside your checkout/);
-  assert.match(source, /compact Swaps window|Swaps opened beside your checkout/);
-  assert.match(source, /window\.open\('', 'nxtSwapsBuy'/);
-  assert.doesNotMatch(source, /window\.open\([^,]+,\s*['_"]_blank/);
-  assert.match(source, /detect the incoming payment automatically/i);
+  assert.match(source, /window\.location\.assign\(url\)/);
+  assert.match(source, /SWAPS_RETURN_KEY/);
+  assert.match(source, /resumeAfterSwapsReturn/);
+  assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
+  assert.match(source, /same browser tab/);
+  assert.doesNotMatch(source, /window\.open\(/);
+  assert.doesNotMatch(source, /data-swaps-fallback|nxtSwapsBuy/);
+  assert.doesNotMatch(source, /pageshow[^\n]+once:\s*true/);
+  assert.match(source, /reopens automatically for payment detection/i);
   assert.match(source, /transaction ID from Swaps/i);
 });
