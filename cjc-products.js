@@ -59,11 +59,11 @@
       warnings: 'For laboratory research use only. Not for human or veterinary use.',
       suggestedCompanions: ['ipamorelin', 'sermorelin', 'tesamorelin-10'],
       pricing: [
-        { label: '1 Vial', price: 79.99 },
-        { label: '2 Vials', price: 159.98 },
-        { label: '3 Vials', price: 239.97 },
-        { label: '4 Vials', price: 319.96 },
-        { label: '5 Vials', price: 399.95 }
+        { label: '1 Vial', price: 89.99 },
+        { label: '2 Vials', price: 179.98 },
+        { label: '3 Vials', price: 269.97 },
+        { label: '4 Vials', price: 359.96 },
+        { label: '5 Vials', price: 449.95 }
       ]
     }
   ];
