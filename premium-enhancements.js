@@ -113,7 +113,7 @@ if (typeof document !== 'undefined') (() => {
     if (!hero.querySelector('.crypto-assurance')) {
       const assurance = document.createElement('div');
       assurance.className = 'crypto-assurance';
-      assurance.innerHTML = '<span>🔒</span><div><b>Direct crypto payments</b> · BTC, ETH, and USDT are verified independently on-chain.</div>';
+      assurance.innerHTML = '<span>🔒</span><div><b>Direct crypto payments</b> · BTC, ETH, and USDT are verified independently on-chain. <a href="#crypto-guide">New to crypto? See how it works.</a></div>';
       hero.querySelector('.hero-buttons')?.insertAdjacentElement('afterend', assurance);
     }
   }
@@ -133,7 +133,7 @@ if (typeof document !== 'undefined') (() => {
   if(menu&&!document.querySelector('.premium-search')){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=normalizeProductSearch(e.target.value);document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||normalizeProductSearch(card.textContent).includes(q)?'flex':'none';});});}
 
   const footer=document.querySelector('footer');
-  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
+  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="#crypto-guide">How to Pay</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
   const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
 
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}

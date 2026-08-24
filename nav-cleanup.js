@@ -28,8 +28,8 @@
     if (!notice) return;
     const title = notice.querySelector('.crypto-text strong');
     const copy = notice.querySelector('.crypto-text span');
-    if (title) title.textContent = 'Crypto Payments Accepted';
-    if (copy) copy.textContent = 'Pay BTC, ETH, or USDT directly from your wallet. Each payment is independently verified on the blockchain.';
+    if (title) title.textContent = 'Crypto-only checkout';
+    if (copy) copy.innerHTML = 'Pay directly with BTC, ETH, or ERC-20 USDT. New to crypto? <a href="#crypto-guide">Follow the beginner payment guide</a> before you send.';
   }
 
   function applyUpdates() {

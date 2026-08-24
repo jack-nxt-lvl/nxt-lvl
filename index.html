@@ -2418,6 +2418,7 @@
     }
   </style>
   <link rel="stylesheet" href="/nxt-responsive-redesign.css?v=20260821-1">
+  <link rel="stylesheet" href="/crypto-payment-guide.css?v=20260824-1">
 </head>
 
 <body>
@@ -2436,7 +2437,7 @@
       <ul>
         <li><a href="#menu">Compounds</a></li>
         <li><a href="#stacks">Stacks</a></li>
-        <li><a href="#order">Order</a></li>
+        <li><a href="#crypto-guide">How to Pay</a></li>
         <li><a href="#order" class="nav-cta">Place Order</a></li>
       </ul>
       <button class="cart-toggle" id="cartToggle" onclick="openCart()" aria-label="Open cart">
@@ -2490,6 +2491,108 @@
       <div class="label">Based & Shipped</div>
     </div>
   </div>
+
+  <!-- BEGINNER CRYPTO PAYMENT GUIDE -->
+  <section id="crypto-guide" class="crypto-guide" aria-labelledby="cryptoGuideTitle">
+    <div class="crypto-guide-shell">
+      <div class="crypto-guide-header">
+        <div class="crypto-guide-copy">
+          <div class="section-tag">Beginner Payment Guide</div>
+          <h2 id="cryptoGuideTitle">Never used crypto before? You can still check out confidently.</h2>
+          <p>NXT LVL's on-site checkout uses direct cryptocurrency payments. Every order receives an exact coin,
+            network, amount, and wallet address, then the blockchain is checked for payment. Your card details are
+            never entered on or stored by NXT LVL.</p>
+        </div>
+        <div class="crypto-guide-proof" aria-label="Why direct crypto checkout">
+          <span class="crypto-guide-proof-icon" aria-hidden="true">✓</span>
+          <div><strong>Clear, independently verifiable settlement</strong><small>The blockchain provides a permanent
+              transaction record that can be matched to your order.</small></div>
+        </div>
+      </div>
+
+      <div class="crypto-guide-recommendation">
+        <div class="crypto-guide-recommendation-mark" aria-hidden="true">₮</div>
+        <div>
+          <span class="crypto-guide-pill">Best for most first-time customers</span>
+          <h3>Choose USDT on Ethereum (ERC-20)</h3>
+          <p>USDT is designed to track the U.S. dollar, so the amount is usually easier to understand than a changing
+            BTC or ETH amount. At checkout, choose <strong>USDT</strong> and use <strong>Ethereum Mainnet / ERC-20
+              only</strong>. USDT can vary slightly from $1, and network or provider fees still apply.</p>
+        </div>
+      </div>
+
+      <div class="crypto-guide-assets" aria-label="Compare supported payment assets">
+        <article class="crypto-guide-asset recommended">
+          <div class="crypto-guide-asset-top"><span class="crypto-guide-asset-icon usdt">₮</span><span
+              class="crypto-guide-pill">Beginner pick</span></div>
+          <h3>USDT</h3>
+          <strong>Ethereum Mainnet · ERC-20 only</strong>
+          <p>Usually the easiest total to follow because USDT is designed to track USD. Never select Tron, BNB Chain,
+            Base, or another network for this checkout.</p>
+        </article>
+        <article class="crypto-guide-asset">
+          <div class="crypto-guide-asset-top"><span class="crypto-guide-asset-icon eth">Ξ</span><span
+              class="crypto-guide-label">If you own ETH</span></div>
+          <h3>Ethereum</h3>
+          <strong>Ethereum Mainnet only</strong>
+          <p>A good choice if ETH is already in your wallet. Send the exact ETH amount shown and allow for the wallet's
+            separate network fee.</p>
+        </article>
+        <article class="crypto-guide-asset">
+          <div class="crypto-guide-asset-top"><span class="crypto-guide-asset-icon btc">₿</span><span
+              class="crypto-guide-label">If you own BTC</span></div>
+          <h3>Bitcoin</h3>
+          <strong>Bitcoin Mainnet only</strong>
+          <p>A familiar choice for existing holders. Payment can be detected quickly, but final confirmation normally
+            takes longer because six blockchain confirmations are required.</p>
+        </article>
+      </div>
+
+      <div class="crypto-guide-paths">
+        <article class="crypto-guide-path">
+          <div class="crypto-guide-path-title"><span aria-hidden="true">◈</span><div><small>Fastest path</small><h3>I already have crypto</h3></div></div>
+          <ol>
+            <li><span>1</span><div><strong>Add products to your cart</strong><small>Review the order and continue to checkout.</small></div></li>
+            <li><span>2</span><div><strong>Enter your information</strong><small>Provide the shipping or pickup details requested.</small></div></li>
+            <li><span>3</span><div><strong>Choose BTC, ETH, or USDT</strong><small>Use only the network written beneath your chosen coin.</small></div></li>
+            <li><span>4</span><div><strong>Scan the QR or open your wallet</strong><small>The address and exact amount are also available with one-click copy buttons.</small></div></li>
+            <li><span>5</span><div><strong>Check every detail, then send once</strong><small>Confirm the coin, network, full address, and exact amount before approving.</small></div></li>
+            <li><span>6</span><div><strong>Keep checkout open</strong><small>You will see Awaiting → Detected → Confirming → Confirmed as the blockchain updates.</small></div></li>
+          </ol>
+        </article>
+
+        <article class="crypto-guide-path">
+          <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with card or Apple Pay</h3></div></div>
+          <ol>
+            <li><span>1</span><div><strong>Start checkout and choose a coin</strong><small>USDT ERC-20 is the clearest beginner option when the provider supports it.</small></div></li>
+            <li><span>2</span><div><strong>Click “Buy with Card / Apple Pay”</strong><small>Your crypto checkout stays open while the funding provider opens in a compact window or tab.</small></div></li>
+            <li><span>3</span><div><strong>Review the provider's offer</strong><small>Availability, fees, limits, and identity checks depend on the provider and your location.</small></div></li>
+            <li><span>4</span><div><strong>Buy enough for the invoice and fees</strong><small>Make sure the amount arriving in your wallet covers the exact crypto total shown.</small></div></li>
+            <li><span>5</span><div><strong>Send to the checkout address</strong><small>Paste the address if needed and select the exact network shown by NXT LVL.</small></div></li>
+            <li><span>6</span><div><strong>Return and wait for confirmation</strong><small>Do not send a second payment after the first one is detected.</small></div></li>
+          </ol>
+        </article>
+      </div>
+
+      <div class="crypto-guide-safety">
+        <div class="crypto-guide-safety-title"><span aria-hidden="true">!</span><div><strong>Pause before you press Send</strong><small>These four checks prevent the most common beginner mistakes.</small></div></div>
+        <ul>
+          <li><strong>Never share your recovery phrase or private key.</strong> NXT LVL and a legitimate payment provider do not need them.</li>
+          <li><strong>The network must match exactly.</strong> A wrong-network transfer may be permanent and unrecoverable.</li>
+          <li><strong>Crypto payments are generally irreversible.</strong> Check the first and last characters of the address and send only once.</li>
+          <li><strong>Unsure? Stop before sending.</strong> Contact support and keep the checkout open so the payment details do not get mixed up.</li>
+        </ul>
+      </div>
+
+      <div class="crypto-guide-actions">
+        <a class="crypto-guide-primary" href="#menu">Start shopping</a>
+        <a class="crypto-guide-secondary" href="/shipping-and-payments.html">Open the full payment guide</a>
+      </div>
+      <p class="crypto-guide-fineprint">If checkout offers a separate hosted card-payment link, it opens on the
+        payment provider's website. NXT LVL does not collect card details. All products are for laboratory research
+        use only.</p>
+    </div>
+  </section>
 
   <!-- PROTOCOLS -->
   <section id="protocols">
@@ -2551,8 +2654,9 @@
         <div class="crypto-notice">
           <div class="crypto-icon">₿</div>
           <div class="crypto-text">
-            <strong>Crypto Discount Available</strong>
-            <span>Pay with cryptocurrency and receive a discount on your order. Ask for details.</span>
+            <strong>Crypto-only checkout</strong>
+            <span>Pay directly with BTC, ETH, or ERC-20 USDT. New to crypto? <a href="#crypto-guide">Follow the
+                beginner payment guide</a> before you send.</span>
           </div>
         </div>
       </div>
@@ -3542,12 +3646,12 @@
       scheduleDraw();
     })();
   </script>
-  <script src="nav-cleanup.js?v=20260818-1"></script>
+  <script src="nav-cleanup.js?v=20260824-crypto-only-1"></script>
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
   <script src="lib/swaps-funding.js?v=20260821-swaps-drawer-4"></script>
-  <script src="direct-wallet-checkout.js?v=20260821-swaps-drawer-4"></script>
+  <script src="direct-wallet-checkout.js?v=20260824-beginner-guide-1"></script>
   <script src="customer-checkout-upgrade.js?v=20260823-hosted-card-link-2"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
