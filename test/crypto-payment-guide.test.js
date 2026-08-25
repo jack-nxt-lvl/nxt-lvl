@@ -21,7 +21,7 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260825-paybis-clean-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260825-paybis-match-1/);
 });
 
 test('instructions describe the Paybis purchase and existing-wallet routes', () => {
@@ -39,6 +39,9 @@ test('instructions describe the Paybis purchase and existing-wallet routes', () 
   assert.match(checkout, /purchase enough to cover your order plus provider and network fees/i);
   assert.match(checkout, /PayPal/);
   assert.match(checkout, /ACH/);
+  assert.match(checkout, /How we match your payment/i);
+  assert.match(checkout, /small fractional ending identifies your order/i);
+  assert.match(checkout, /small accepted buffer/i);
   assert.match(checkout, /make sure “You receive” is at least/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
   assert.doesNotMatch(checkout, /create-transak-session|nxt-transak/i);
@@ -85,6 +88,8 @@ test('guide separates speed from fees without promising guaranteed delivery', ()
   assert.match(guide, /exact crypto amount/i);
   assert.match(guide, /provider and network fees can reduce the crypto received/i);
   assert.match(guide, /purchase enough to cover those fees/i);
+  assert.match(guide, /small fractional ending identifies the order/i);
+  assert.match(guide, /small accepted buffer/i);
   assert.match(guide, /Paybis can require identity or fraud checks/i);
   assert.match(guide, /No legitimate provider can guarantee approval or instant delivery/i);
   assert.match(guide, /official provider documentation/i);

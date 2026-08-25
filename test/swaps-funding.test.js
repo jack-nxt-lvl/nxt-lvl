@@ -55,6 +55,9 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /Credit card/);
   assert.match(source, /Apple Pay/);
   assert.match(source, /purchase enough to cover your order plus all provider and network fees/i);
+  assert.match(source, /How we match your payment/i);
+  assert.match(source, /small fractional ending identifies your order/i);
+  assert.match(source, /small accepted buffer/i);
   assert.match(source, /Paybis is independent from NXT LVL/);
   assert.match(source, /Any Paybis account or wallet you create belongs to you/);
   assert.match(source, /Ethereum ERC-20 only/);
@@ -80,12 +83,12 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
 test('loads the Paybis link helper before the revised USDT checkout on every checkout path', () => {
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
-  const fundingVersion = 'lib/paybis-funding.js?v=20260825-paybis-clean-1';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20260825-paybis-clean-1';
+  const fundingVersion = 'lib/paybis-funding.js?v=20260825-paybis-match-1';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20260825-paybis-match-1';
 
   assert.match(homepage, /data-nxt-paybis-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260825-paybis-clean-1/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260825-paybis-match-1/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);

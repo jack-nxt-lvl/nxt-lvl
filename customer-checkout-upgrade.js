@@ -95,14 +95,14 @@
 
   async function ensureDirectWallet(){
     await loadCheckoutDependency({
-      src:'/lib/paybis-funding.js?v=20260825-paybis-clean-1',
+      src:'/lib/paybis-funding.js?v=20260825-paybis-match-1',
       selector:'script[data-nxt-paybis-funding],script[src*="lib/paybis-funding.js"]',
       marker:'data-nxt-paybis-funding',
       ready:()=>Boolean(window.NxtPaybisFunding),
       label:'USDT funding checkout',
     });
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20260825-paybis-clean-1',
+      src:'/direct-wallet-checkout.js?v=20260825-paybis-match-1',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',

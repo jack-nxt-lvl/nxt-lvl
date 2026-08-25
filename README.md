@@ -134,7 +134,11 @@ the order plus provider and network fees, and to confirm that Paybis's “You
 receive” value covers the exact crypto invoice. The signed quote's receiving
 address remains available to copy and paste into Paybis. The Paybis purchase is
 not treated as payment confirmation; fulfillment still requires the normal
-on-chain checks. The funding card is written for first-time crypto buyers with
+on-chain checks. Customer-facing copy explains that the dollar total becomes a
+unique exact crypto amount, whose small fractional ending identifies the order
+on-chain. Exact payments are discovered automatically; a payment inside the
+accepted amount buffer must include its transaction hash so it can be matched
+to the signed order. The funding card is written for first-time crypto buyers with
 payment-method guidance, four numbered steps, automatic address copying, a
 visible copy-again control, network-specific USDT guidance, and a clear
 return-to-checkout instruction. Any Paybis account or wallet belongs to the
