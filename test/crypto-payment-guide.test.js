@@ -21,21 +21,24 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-paybis-only-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260825-paybis-clean-1/);
 });
 
-test('instructions describe the fee-buffered immediate-send purchase routes', () => {
+test('instructions describe the Paybis purchase and existing-wallet routes', () => {
   for (const source of [homepage, guide]) {
     assert.match(source, /Paybis/);
     assert.match(source, /direct(?:ly)? (?:from|with) (?:your )?(?:existing )?wallet|wallet-to-wallet/i);
     assert.match(source, /exact (?:crypto )?(?:receive )?amount|exact crypto amount/i);
     assert.match(source, /provider fees/i);
     assert.match(source, /Avoid scams/i);
-    assert.match(source, /does not use Transak|Transak (?:is|are) not|no Transak fallback/i);
+    assert.match(source, /Paybis is independent from NXT LVL/i);
+    assert.doesNotMatch(source, /\b(?:Swaps|Transak)\b/);
   }
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
   assert.match(guide, /Why the exact receive amount matters/);
-  assert.match(checkout, /higher spend amount to leave room for provider and network fees/i);
+  assert.match(checkout, /purchase enough to cover your order plus provider and network fees/i);
+  assert.match(checkout, /PayPal/);
+  assert.match(checkout, /ACH/);
   assert.match(checkout, /make sure “You receive” is at least/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
   assert.doesNotMatch(checkout, /create-transak-session|nxt-transak/i);
@@ -56,11 +59,11 @@ test('checkout keeps the decision point to two primary paths', () => {
   assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
   assert.match(checkout, /Buy USDT directly with Paybis/);
   assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
-  assert.match(checkout, /Buy enough directly on Paybis/);
-  assert.match(checkout, /Transak cannot be substituted/i);
+  assert.match(checkout, /Buy USDT on Paybis/);
+  assert.match(checkout, /Paybis is independent from NXT LVL/i);
   assert.doesNotMatch(checkout, /Pay with Card \/ Apple Pay|Buy enough with Card \/ Apple Pay/);
-  assert.match(checkout, /data-funding-usd/);
-  assert.match(checkout, /openBufferedPaybisFunding/);
+  assert.doesNotMatch(checkout, /data-funding-usd|fundingAmountForInvoice|fee reserve/i);
+  assert.match(checkout, /openPaybisFunding/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
   assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
@@ -79,10 +82,10 @@ test('guide links to official apps for customers with existing crypto', () => {
 
 test('guide separates speed from fees without promising guaranteed delivery', () => {
   assert.match(guide, /Why the exact receive amount matters/);
-  assert.match(guide, /exact crypto invoice/i);
-  assert.match(guide, /fiat-spend purchase can subtract fees/i);
-  assert.match(guide, /fixed and percentage reserve/i);
-  assert.match(guide, /Paybis can still require identity or fraud checks/i);
+  assert.match(guide, /exact crypto amount/i);
+  assert.match(guide, /provider and network fees can reduce the crypto received/i);
+  assert.match(guide, /purchase enough to cover those fees/i);
+  assert.match(guide, /Paybis can require identity or fraud checks/i);
   assert.match(guide, /No legitimate provider can guarantee approval or instant delivery/i);
   assert.match(guide, /official provider documentation/i);
 });
@@ -121,7 +124,7 @@ test('checkout marks ERC-20 USDT as its beginner pick', () => {
 test('homepage keeps advanced crypto detail collapsed behind a simple three-step path', () => {
   assert.match(homepage, /crypto-guide-quick/);
   assert.match(homepage, /Choose Buy with Paybis/);
-  assert.match(homepage, /We select USDT and calculate a fee-buffered spend amount/);
+  assert.match(homepage, /purchase enough USDT to cover the order and fees/i);
   assert.match(homepage, /<details class="crypto-guide-advanced">/);
   assert.match(homepage, /Already have crypto or want detailed instructions/);
 });

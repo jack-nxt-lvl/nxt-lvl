@@ -36,7 +36,7 @@ test('shows an approximate localized total without changing the USD order', asyn
     assert.equal(result.usdFormattedTotal, '$65.00');
     assert.equal(result.approximate, true);
     assert.match(result.funding.title, /Apple Pay/i);
-    assert.match(result.funding.detail, /accepts crypto only/i);
+    assert.match(result.funding.detail, /does not receive or store/i);
   } finally {
     global.fetch = originalFetch;
   }

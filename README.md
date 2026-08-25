@@ -123,21 +123,22 @@ Bitcoin QR codes and wallet buttons use BIP-21 to prefill the receiving address
 and exact BTC amount. ETH and USDT use EIP-681-style wallet links. Customer
 country metadata from Vercel and browser locale preferences are used for an
 approximate local-currency display; the signed order and exact crypto amount
-remain USD-denominated. The regional Apple Pay/card/bank wording is informational
-guidance for compatible third-party wallet apps only. NXT LVL does not process
-cards or use a hosted fiat-payment provider.
+remain USD-denominated. Payment-method wording is informational guidance for
+the separate Paybis purchase page. NXT LVL does not process cards or receive
+the personal or payment information entered on Paybis.
 
 The checkout also offers an optional "Buy crypto" funding button that opens the
-official Paybis product page in a separate tab. This is a direct Paybis link,
-not a provider marketplace, so it cannot substitute Transak. Public Paybis
-product pages do not support unsigned amount or wallet prefills, so NXT LVL
-calculates a conservative fee-buffered spend amount, displays it, and copies it
-when the customer opens Paybis. The signed quote's receiving address remains
-available to copy and paste into Paybis. The Paybis purchase is not treated as
-payment confirmation; fulfillment still requires the normal on-chain checks.
-The funding card is written for first-time crypto buyers with four numbered
-steps, automatic address copying, a visible copy-again control, network-specific
-USDT guidance, and a clear return-to-checkout instruction.
+official Paybis product page in a separate tab. The checkout does not suggest
+or copy a dollar amount. It tells customers to purchase enough crypto to cover
+the order plus provider and network fees, and to confirm that Paybis's “You
+receive” value covers the exact crypto invoice. The signed quote's receiving
+address remains available to copy and paste into Paybis. The Paybis purchase is
+not treated as payment confirmation; fulfillment still requires the normal
+on-chain checks. The funding card is written for first-time crypto buyers with
+payment-method guidance, four numbered steps, automatic address copying, a
+visible copy-again control, network-specific USDT guidance, and a clear
+return-to-checkout instruction. Any Paybis account or wallet belongs to the
+customer, and Paybis is independent from NXT LVL.
 
 Copy controls provide visible success feedback. The cart persists in the
 browser, and an active quote can be resumed after an accidental refresh in the

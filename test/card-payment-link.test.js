@@ -87,8 +87,8 @@ test('keeps card details off-site and exposes only delivery choices in the custo
   assert.match(source, /email, text, or both/i);
   assert.match(source, /card information is never entered or processed on NXT LVL/i);
   assert.match(source, /one transactional payment-link text/i);
-  assert.match(source, /\/lib\/paybis-funding\.js\?v=20260824-paybis-only-1/);
-  assert.match(source, /\/direct-wallet-checkout\.js\?v=20260824-paybis-only-1/);
+  assert.match(source, /\/lib\/paybis-funding\.js\?v=20260825-paybis-clean-1/);
+  assert.match(source, /\/direct-wallet-checkout\.js\?v=20260825-paybis-clean-1/);
   assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
   assert.doesNotMatch(source, /cardNumber|cvc|expiryMonth|payment-element/i);
 });

@@ -184,7 +184,7 @@
         <h2>How would you like to pay?</h2>
         <p>Choose what you have right now. If you are new to crypto, use the first option—we will choose USDT and prepare the exact amount for you.</p>
         <div class="nxt-pay-paths">
-          <button class="nxt-pay-path card" type="button" data-pay-path="buy"><span class="nxt-pay-path-icon">💳</span><span class="nxt-pay-path-copy"><strong>Buy USDT directly with Paybis</strong><small>No crypto experience needed. Opens Paybis directly with a fee-buffered spend amount—Transak is not used.</small></span><span class="nxt-pay-path-tag">Recommended</span><span class="nxt-pay-path-arrow">›</span></button>
+          <button class="nxt-pay-path card" type="button" data-pay-path="buy"><span class="nxt-pay-path-icon">💳</span><span class="nxt-pay-path-copy"><strong>Buy USDT directly with Paybis</strong><small>No crypto experience needed. Pay with PayPal, ACH, debit card, credit card, or Apple Pay when available.</small></span><span class="nxt-pay-path-tag">Recommended</span><span class="nxt-pay-path-arrow">›</span></button>
           <button class="nxt-pay-path wallet" type="button" data-reveal-assets aria-expanded="false"><span class="nxt-pay-path-icon">◈</span><span class="nxt-pay-path-copy"><strong>I already have crypto</strong><small>Pay directly from a wallet using BTC, ETH, or USDT.</small></span><span class="nxt-pay-path-arrow">›</span></button>
         </div>
         <div class="nxt-existing-coins" data-existing-coins>
@@ -193,7 +193,7 @@
         </div>
         <div class="nxt-easy-trust"><span><b>✓ Exact amount</b>Prepared for the order</span><span><b>✓ Address help</b>Ready to copy</span><span><b>✓ Verification</b>Built into checkout</span></div>
         <button class="nxt-wallet-cancel" type="button">Back</button>
-        <p class="nxt-wallet-note">The Buy option opens Paybis directly, not a provider marketplace. Paybis may still request verification based on the customer, location, card, or risk review. Always confirm “You receive” covers the exact order amount before paying.</p>
+        <p class="nxt-wallet-note">Paybis handles the purchase on its own website and may request verification based on the customer, location, payment method, or risk review. Any Paybis account or wallet you create belongs to you; NXT LVL does not receive the personal or payment information you enter there.</p>
       </div></div>`;
       let finished = false;
       const done = (asset) => { if (finished) return; finished = true; node.remove(); resolve(asset); };
@@ -274,7 +274,7 @@
     node.textContent = message;
   }
 
-  function openBufferedPaybisFunding(quote, context, link, status, event) {
+  function openPaybisFunding(quote, context, link, status, event) {
     if (Date.now() > Number(quote.expiresAt)) {
       event?.preventDefault();
       setFundingStatus(status, 'This quote expired. Create a new quote before buying crypto with Paybis.', true);
@@ -286,12 +286,9 @@
       return;
     }
     saveActivePayment(quote, context, '');
-    const fundingUsd = link.dataset.fundingUsd || '';
     const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
-    link.textContent = `Paybis opened — enter $${fundingUsd} ↗`;
-    void copyText(fundingUsd).then(() => {
-      setFundingStatus(status, `$${fundingUsd} was copied. Paybis is opening directly; Transak is not part of this link. Paste that amount into “You spend,” choose ${quote.asset} on ${network}, and make sure “You receive” is at least ${quote.amount} ${quote.asset}. After Paybis sends it, return here and paste the transaction ID.`);
-    });
+    link.textContent = 'Paybis opened ↗';
+    setFundingStatus(status, `Paybis is opening in a new tab. Choose ${quote.asset} on ${network}, purchase enough to cover your order plus provider and network fees, and make sure “You receive” is at least ${quote.amount} ${quote.asset}. After Paybis sends it, return here and paste the transaction ID.`);
   }
 
   function setStatus(node, message, type) {
@@ -423,12 +420,12 @@
       : `${localization.usdFormattedTotal || `$${quote.totalUsd}`} USD`;
     const localCaption = localization.approximate ? `Based on $${quote.totalUsd} USD` : 'Order total';
     const funding = {
-      title: 'Use the direct Paybis card purchase page.',
-      detail: 'NXT LVL opens Paybis directly and prepares a higher spend amount to leave room for provider and network fees. Transak and the Swaps provider picker are not used. Paybis may still request verification based on eligibility or risk review.',
+      title: 'Paybis handles your purchase on its own website.',
+      detail: 'Paybis controls payment availability, fees, limits, and verification. Any Paybis account or wallet you create belongs to you, and NXT LVL does not receive or store the personal or payment information you enter on Paybis.',
     };
     const fundingReturnStep = buyingFirst ? 'Return and paste the transaction ID' : (automaticDetection ? 'Keep this checkout open' : 'Return and verify payment');
     const fundingReturnDetail = buyingFirst
-      ? 'A fee-buffered purchase may send slightly more than the invoice fingerprint, so paste the provider transaction ID below'
+      ? 'After Paybis sends the crypto, paste the provider transaction ID below'
       : (automaticDetection ? 'NXT LVL watches for the exact incoming payment' : 'Paste the transaction ID into the box below');
     const fundingNetworkStep = quote.asset === 'USDT' ? 'Confirm ERC-20 receive amount' : `Confirm ${quote.asset} receive amount`;
     const fundingNetworkDetail = quote.asset === 'USDT'
@@ -439,10 +436,8 @@
     const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const walletShortcutMarkup = mobileWalletShortcuts(quote.asset).map(([name, mark, href]) => `<a class="nxt-wallet-app-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><i>${escapeHtml(mark)}</i><span>${escapeHtml(name)}</span></a>`).join('');
     let paybisUrl = '#';
-    let paybisFundingUsd = '';
     try {
-      paybisFundingUsd = window.NxtPaybisFunding?.fundingAmountForInvoice(quote.totalUsd) || '';
-      paybisUrl = window.NxtPaybisFunding?.buildCheckoutUrl({ asset: quote.asset, invoiceUsd: quote.totalUsd }) || '#';
+      paybisUrl = window.NxtPaybisFunding?.buildCheckoutUrl({ asset: quote.asset }) || '#';
     } catch (_) {}
     const overlay = document.createElement('div');
     overlay.className = 'nxt-wallet-overlay';
@@ -453,15 +448,15 @@
         <div class="nxt-wallet-order">
           <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
           <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
-          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open Paybis directly with a fee reserve</strong><span>For this $${escapeHtml(quote.totalUsd)} invoice, enter $${escapeHtml(paybisFundingUsd)} in Paybis so provider and network fees are less likely to reduce the crypto below the invoice.</span></span></div>` : ''}
+          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open Paybis to purchase crypto</strong><span>Purchase enough to cover your order plus all provider and network fees. Before paying, confirm “You receive” covers the exact crypto amount shown below.</span></span></div>` : ''}
           <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
-          ${quote.asset === 'USDT' ? `<div class="nxt-wallet-usdt-buy"><div class="nxt-wallet-usdt-buy-head"><span class="nxt-wallet-usdt-buy-icon" aria-hidden="true">₮</span><span class="nxt-wallet-usdt-buy-copy"><b>Need USDT? Get it easily through Paybis</b><span>Choose a payment method, purchase enough to cover your order plus all provider and network fees, then return here to complete checkout.</span></span><em class="nxt-wallet-usdt-buy-badge">Secure Paybis</em></div><div class="nxt-wallet-usdt-methods" aria-label="Paybis payment options"><span>PayPal</span><span>ACH</span><span>Debit card</span><span>Credit card</span><span>Apple Pay</span></div><div class="nxt-wallet-usdt-tip"><b>Recommended</b><span>PayPal and ACH may offer slightly better rates and quicker approval when available.</span></div><a class="nxt-wallet-usdt-buy-main" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy USDT on Paybis (opens in a new tab)" data-funding-usd="${escapeHtml(paybisFundingUsd)}">Buy USDT on Paybis ↗</a><div class="nxt-wallet-usdt-buy-meta"><span><b>Cover the full checkout</b>Buy enough USDT to cover your order total plus provider and network fees.</span><span><b>Ethereum ERC-20 only</b>Confirm “You receive” is at least ${escapeHtml(quote.amount)} USDT.</span></div><div class="nxt-wallet-usdt-privacy"><b>🔒 Private and separate from NXT LVL</b><span>Personal and payment information entered on Paybis goes directly to Paybis. Any Paybis account or wallet you create belongs to you. NXT LVL does not access or store the information entered there.</span></div></div>` : `<div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your direct Paybis route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue to Paybis. If you already have crypto, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the direct Paybis option.`}</span></div><em>2 clear choices</em></div>`}
-          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a>${quote.asset === 'USDT' ? '' : `<a class="buy" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(paybisFundingUsd)}">${buyingFirst ? `Buy enough directly on Paybis · $${escapeHtml(paybisFundingUsd)} ↗` : `Buy enough ${escapeHtml(quote.asset)} directly on Paybis ↗`}</a>`}<button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
+          ${quote.asset === 'USDT' ? `<div class="nxt-wallet-usdt-buy"><div class="nxt-wallet-usdt-buy-head"><span class="nxt-wallet-usdt-buy-icon" aria-hidden="true">₮</span><span class="nxt-wallet-usdt-buy-copy"><b>Don’t have crypto? Buy USDT through Paybis</b><span>Choose a payment method, purchase enough to cover your order plus all provider and network fees, then return here to complete checkout.</span></span><em class="nxt-wallet-usdt-buy-badge">Secure Paybis</em></div><div class="nxt-wallet-usdt-methods" aria-label="Paybis payment options"><span>PayPal</span><span>ACH</span><span>Debit card</span><span>Credit card</span><span>Apple Pay</span></div><div class="nxt-wallet-usdt-tip"><b>Recommended</b><span>PayPal and ACH may offer slightly better rates and quicker approval when available.</span></div><a class="nxt-wallet-usdt-buy-main" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy USDT on Paybis (opens in a new tab)">Buy USDT on Paybis ↗</a><div class="nxt-wallet-usdt-buy-meta"><span><b>Cover the full checkout</b>Buy enough USDT to cover your order total plus provider and network fees.</span><span><b>Ethereum ERC-20 only</b>Confirm “You receive” is at least ${escapeHtml(quote.amount)} USDT.</span></div><div class="nxt-wallet-usdt-privacy"><b>🔒 Paybis is independent from NXT LVL</b><span>Personal and payment information entered on Paybis goes directly to Paybis. Any Paybis account or wallet you create belongs to you. NXT LVL does not access or store the information entered there.</span></div></div>` : `<div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your direct Paybis route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue to Paybis. If you already have crypto, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the direct Paybis option.`}</span></div><em>2 clear choices</em></div>`}
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a>${quote.asset === 'USDT' ? '' : `<a class="buy" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer">Buy ${escapeHtml(quote.asset)} on Paybis ↗</a>`}<button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
           <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> ${buyingFirst ? `Make sure the provider's “You receive” value is at least ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.` : 'Send the exact amount shown.'} ${escapeHtml(networkWarning)}</div>
           <details class="nxt-wallet-apps"><summary>Use Coinbase, Cash App, MetaMask, or another app</summary><div class="nxt-wallet-apps-content"><div class="nxt-wallet-apps-head"><span>Open the app you already use, tap Send or Withdraw, and match the network exactly.</span><em>${escapeHtml(quote.asset)} shortcuts</em></div><div class="nxt-wallet-apps-grid">${walletShortcutMarkup}</div><a class="nxt-wallet-apps-guide" href="/shipping-and-payments.html#existing-wallets" target="_blank" rel="noopener noreferrer">See all common wallet shortcuts + instructions ↗</a></div></details>
-          <details class="nxt-wallet-buy-help"><summary>How the direct Paybis option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open Paybis directly<small>Enter the copied $${escapeHtml(paybisFundingUsd)} spend amount for this $${escapeHtml(quote.totalUsd)} invoice</small></div><div class="nxt-wallet-buy-step"><b>2</b>Use the Paybis card checkout<small>This link does not open Swaps or allow Transak to replace Paybis</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>NXT LVL receiving address</b>Copy it, then paste it when Paybis asks where to send the crypto.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-paybis>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>The reserve is conservative: do not pay if “You receive” is below ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.</b></small></div></details>
+          <details class="nxt-wallet-buy-help"><summary>How the direct Paybis option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Choose a payment method<small>PayPal, ACH, debit card, credit card, or Apple Pay may be available</small></div><div class="nxt-wallet-buy-step"><b>2</b>Purchase enough crypto<small>Include room for provider and network fees</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>NXT LVL receiving address</b>Copy it, then paste it when Paybis asks where to send the crypto.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-paybis>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>Do not pay if “You receive” is below ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.</b></small></div></details>
           <div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div>
           <div class="nxt-wallet-status" role="status" aria-live="polite"></div>
           <details class="nxt-wallet-verify" ${buyingFirst ? 'open' : ''}><summary>Payment sent but not detected? Verify manually</summary><div class="nxt-wallet-verify-content"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div></div></details>
@@ -487,7 +482,7 @@
 
     overlay.querySelector('[data-copy-amount]').onclick = (event) => copyText(quote.amount, event.currentTarget);
     overlay.querySelector('[data-copy-address]').onclick = (event) => copyText(quote.address, event.currentTarget);
-    buyCrypto.onclick = (event) => openBufferedPaybisFunding(quote, context, buyCrypto, buyStatus, event);
+    buyCrypto.onclick = (event) => openPaybisFunding(quote, context, buyCrypto, buyStatus, event);
     copyForPaybisButton.onclick = async (event) => {
       await copyText(quote.address, event.currentTarget);
       const network = quote.asset === 'USDT' ? ' Select USDT on Ethereum ERC-20 in Paybis.' : '';
@@ -585,7 +580,7 @@
       }, 1500);
     } else if (!initialTxid) {
       setStatus(status, buyingFirst
-        ? 'After Paybis sends the crypto, paste the transaction ID here so the payment can be verified—even if the fee reserve sends slightly more than the exact amount.'
+        ? 'After Paybis sends the crypto, paste the transaction ID here so the payment can be verified.'
         : 'Use Pay with browser wallet to fill the transaction ID automatically, or paste it after sending.');
     }
     if (initialTxid) activeDetectionDelay = setTimeout(check, 700);

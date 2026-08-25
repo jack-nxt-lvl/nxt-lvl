@@ -39,7 +39,7 @@ test('homepage catalog and Paybis scripts remain connected after the visual chan
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.match(html, /products-data-original\.js\?v=20260824-performance-1/);
   assert.match(html, /data-nxt-paybis-funding="1"/);
-  assert.match(html, /lib\/paybis-funding\.js\?v=20260824-paybis-only-1/);
-  assert.match(html, /direct-wallet-checkout\.js\?v=20260824-paybis-only-1/);
-  assert.match(html, /customer-checkout-upgrade\.js\?v=20260824-paybis-only-1/);
+  assert.match(html, /lib\/paybis-funding\.js\?v=20260825-paybis-clean-1/);
+  assert.match(html, /direct-wallet-checkout\.js\?v=20260825-paybis-clean-1/);
+  assert.match(html, /customer-checkout-upgrade\.js\?v=20260825-paybis-clean-1/);
 });
