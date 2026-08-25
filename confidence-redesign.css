@@ -121,7 +121,7 @@ nav .nav-cta {
     linear-gradient(90deg, rgba(2,7,6,.98) 0%, rgba(2,9,7,.92) 38%, rgba(2,9,8,.62) 57%, rgba(2,8,8,.16) 82%, rgba(2,8,8,.08) 100%),
     linear-gradient(90deg, rgba(126,255,189,.025) 1px, transparent 1px),
     radial-gradient(ellipse at 18% 45%, rgba(85,245,138,.16), transparent 29rem),
-    url('/assets/research-lab-hero.webp') center center / cover no-repeat !important;
+    url('/assets/research-lab-hero-exact-labels.webp') center center / cover no-repeat !important;
   background-size: auto, 92px 100%, auto, cover !important;
   background-position: center, center, center, center !important;
 }
@@ -456,7 +456,7 @@ nav .nav-cta {
     background:
       linear-gradient(180deg, rgba(2,8,6,.54), rgba(2,8,6,.88)),
       linear-gradient(90deg, rgba(2,7,6,.96) 0%, rgba(2,8,7,.76) 52%, rgba(2,8,8,.28) 100%),
-      url('/assets/research-lab-hero.webp') 72% center / cover no-repeat !important;
+      url('/assets/research-lab-hero-exact-labels.webp') 72% center / cover no-repeat !important;
   }
   .hero::after { inset: 73px 9px 10px !important; border-radius: 20px !important; }
   .hero::before { right: -55% !important; width: 150vw !important; height: 150vw !important; opacity: .65; }
