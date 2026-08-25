@@ -25,10 +25,11 @@ html {
 
 body {
   background:
-    radial-gradient(circle at 12% 8%, rgba(20, 217, 139, .14), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(118, 87, 255, .14), transparent 32rem),
-    radial-gradient(circle at 50% 74%, rgba(85, 245, 138, .065), transparent 34rem),
-    linear-gradient(180deg, #030806 0%, #040907 38%, #05070b 72%, #020604 100%) !important;
+    radial-gradient(ellipse at 12% 7%, rgba(76, 255, 164, .115), transparent 34rem),
+    radial-gradient(ellipse at 88% 13%, rgba(71, 210, 255, .10), transparent 38rem),
+    radial-gradient(ellipse at 52% 58%, rgba(112, 89, 255, .055), transparent 42rem),
+    linear-gradient(112deg, transparent 0 46%, rgba(152, 255, 220, .026) 50%, transparent 54%),
+    linear-gradient(180deg, #020706 0%, #04100d 32%, #050b0d 67%, #020605 100%) !important;
   color: var(--nxt-text);
   background-attachment: fixed !important;
 }
@@ -40,12 +41,16 @@ body::before {
   z-index: 0 !important;
   pointer-events: none !important;
   background:
-    linear-gradient(rgba(99, 255, 157, .024) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 255, 157, .024) 1px, transparent 1px),
-    linear-gradient(120deg, transparent 0 42%, rgba(167, 255, 95, .026) 50%, transparent 58%) !important;
-  background-size: 48px 48px, 48px 48px, 100% 100% !important;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.92), rgba(0,0,0,.18) 72%, transparent) !important;
+    linear-gradient(rgba(117, 255, 181, .032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(117, 255, 181, .032) 1px, transparent 1px),
+    linear-gradient(rgba(117, 224, 255, .012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(117, 224, 255, .012) 1px, transparent 1px),
+    radial-gradient(circle, rgba(181, 255, 224, .18) 0 1px, transparent 1.4px) !important;
+  background-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px, 64px 64px !important;
+  background-position: center top !important;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.94), rgba(0,0,0,.48) 60%, transparent 96%) !important;
   mix-blend-mode: normal !important;
+  opacity: .78;
 }
 
 body::after {
@@ -54,7 +59,11 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 0, transparent 0 22%, rgba(1, 7, 4, .38) 82%);
+  background:
+    linear-gradient(180deg, transparent 0 27%, rgba(95, 255, 178, .035) 27.08%, transparent 27.2%),
+    repeating-linear-gradient(180deg, transparent 0 5px, rgba(204, 255, 235, .006) 6px),
+    radial-gradient(ellipse at 50% 0, transparent 0 24%, rgba(0, 8, 7, .48) 88%);
+  box-shadow: inset 0 0 180px rgba(0, 5, 4, .68);
 }
 
 body > main,
@@ -109,8 +118,11 @@ nav .nav-cta {
   text-align: left !important;
   isolation: isolate;
   background:
-    radial-gradient(circle at 18% 45%, rgba(85,245,138,.12), transparent 26rem),
-    radial-gradient(circle at 76% 30%, rgba(118,87,255,.13), transparent 31rem) !important;
+    linear-gradient(90deg, rgba(126,255,189,.018) 1px, transparent 1px),
+    radial-gradient(ellipse at 18% 45%, rgba(85,245,138,.14), transparent 28rem),
+    radial-gradient(ellipse at 80% 28%, rgba(71,210,255,.11), transparent 32rem),
+    linear-gradient(135deg, rgba(8,25,20,.60), rgba(3,10,11,.18) 58%, rgba(5,18,14,.46)) !important;
+  background-size: 92px 100%, auto, auto, auto !important;
 }
 
 .hero::before {
@@ -427,7 +439,7 @@ nav .nav-cta {
 /* Mobile: dense, readable, fast */
 @media (max-width: 768px) {
   body { background-attachment: scroll !important; }
-  body::before { background-size: 34px 34px, 34px 34px, 100% 100% !important; opacity: .7; }
+  body::before { background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px, 48px 48px !important; opacity: .62; }
   #molBg { display: none !important; }
   nav#mainNav { background: rgba(2,8,5,.95) !important; }
   .nav-toggle { border-color: var(--nxt-line) !important; background: rgba(85,245,138,.045) !important; }
