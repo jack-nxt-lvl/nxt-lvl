@@ -127,17 +127,13 @@ remain USD-denominated. The regional Apple Pay/card/bank wording is informationa
 guidance for compatible third-party wallet apps only. NXT LVL does not process
 cards or use a hosted fiat-payment provider.
 
-The checkout also offers an optional "Buy crypto" funding button that opens an
-in-page right-side instruction drawer while the NXT LVL checkout remains open.
-Swaps blocks its ordinary public page from being framed by third-party sites, so
-the drawer requests a named, compact Swaps purchase window instead of displaying
-a broken iframe. Browsers may still force that window into a tab; a clearly
-labeled separate-tab fallback remains available. The verified public parameters
-prefill the selected asset and put the requested crypto amount in Swaps' receive
-field.
-Swaps does not document a public
-wallet-address parameter, so the checkout copies the signed quote's receiving
-address for the customer to paste and verify. The Swaps flow is not treated as
+The checkout also offers an optional "Buy crypto" funding button that opens the
+official Paybis product page in a separate tab. This is a direct Paybis link,
+not a provider marketplace, so it cannot substitute Transak. Public Paybis
+product pages do not support unsigned amount or wallet prefills, so NXT LVL
+calculates a conservative fee-buffered spend amount, displays it, and copies it
+when the customer opens Paybis. The signed quote's receiving address remains
+available to copy and paste into Paybis. The Paybis purchase is not treated as
 payment confirmation; fulfillment still requires the normal on-chain checks.
 The funding card is written for first-time crypto buyers with four numbered
 steps, automatic address copying, a visible copy-again control, network-specific

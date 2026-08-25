@@ -2521,9 +2521,9 @@
         </div>
       </div>
 
-      <div class="crypto-guide-quick" aria-label="Simple ACH bank-transfer instructions">
+      <div class="crypto-guide-quick" aria-label="Simple Paybis card-purchase instructions">
         <div><span>1</span><strong>Add items and check out</strong><small>Enter shipping or pickup information.</small></div>
-        <div><span>2</span><strong>Choose ACH Bank Transfer</strong><small>We select USDT and include a fee reserve.</small></div>
+        <div><span>2</span><strong>Choose Buy with Paybis</strong><small>We select USDT and calculate a fee-buffered spend amount.</small></div>
         <div><span>3</span><strong>Finish and return</strong><small>Paste the transaction ID so checkout can verify it.</small></div>
       </div>
 
@@ -2571,13 +2571,13 @@
         </article>
 
         <article class="crypto-guide-path">
-          <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with ACH bank transfer</h3></div></div>
+          <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it directly with Paybis</h3></div></div>
           <ol>
             <li><span>1</span><div><strong>Start checkout and choose a coin</strong><small>USDT ERC-20 is the clearest beginner option when the provider supports it.</small></div></li>
-            <li><span>2</span><div><strong>Open the fee-buffered Swaps ACH checkout</strong><small>NXT LVL starts the bank-transfer target above the invoice so fees are less likely to leave the order short.</small></div></li>
+            <li><span>2</span><div><strong>Open the direct Paybis card page</strong><small>NXT LVL calculates a spend amount above the invoice so fees are less likely to leave the order short.</small></div></li>
             <li><span>3</span><div><strong>Check “You receive” first</strong><small>It must show at least the exact crypto amount displayed by NXT LVL.</small></div></li>
-            <li><span>4</span><div><strong>Keep ACH selected</strong><small>Do not switch to Card or Apple Pay inside Swaps.</small></div></li>
-            <li><span>5</span><div><strong>Enter the NXT LVL address and complete checkout</strong><small>Choose Ethereum ERC-20 for USDT. The selected ACH provider may still require bank or identity verification.</small></div></li>
+            <li><span>4</span><div><strong>Enter the buffered spend amount</strong><small>The amount is displayed and copied when the Paybis button opens.</small></div></li>
+            <li><span>5</span><div><strong>Enter the NXT LVL address and complete checkout</strong><small>Choose Ethereum ERC-20 for USDT. Paybis may still request identity verification based on eligibility or risk review.</small></div></li>
             <li><span>6</span><div><strong>Return and paste the transaction ID</strong><small>This lets NXT LVL verify the payment even if the fee reserve sends a little more than the exact invoice amount.</small></div></li>
           </ol>
         </article>
@@ -2586,16 +2586,16 @@
       <div class="crypto-guide-options" id="crypto-options">
         <div class="crypto-guide-options-head">
           <div>
-            <div class="section-tag">Fee-Buffered ACH Bank Transfer</div>
-            <h3>Use Swaps.app with ACH selected—not Card or Apple Pay.</h3>
+            <div class="section-tag">Direct Paybis Card Purchase</div>
+            <h3>Open Paybis directly—no provider picker and no Transak fallback.</h3>
           </div>
-          <p>NXT LVL raises the Swaps <strong>fiat purchase target above the invoice</strong> to leave room for provider and network fees. Always verify that “You receive” still covers the exact crypto amount shown by NXT LVL.</p>
+          <p>NXT LVL calculates a <strong>fiat spend amount above the invoice</strong> to leave room for provider and network fees. The button opens Paybis directly and copies that amount. Always verify that “You receive” still covers the exact crypto amount shown by NXT LVL.</p>
         </div>
         <div class="crypto-guide-research-picks" aria-label="Recommended ways to buy sendable crypto">
           <article class="crypto-guide-research-pick best">
             <span>Recommended · fee reserve included</span>
-            <strong>Swaps.app from checkout</strong>
-            <p>Starts with a higher ACH bank-transfer target to leave room for typical provider and network fees. Confirm the live “You receive” amount covers the complete NXT LVL invoice.</p>
+            <strong>Paybis directly from checkout</strong>
+            <p>Uses a higher card-spend amount to leave room for typical provider and network fees. Confirm the live “You receive” amount covers the complete NXT LVL invoice.</p>
           </article>
           <article class="crypto-guide-research-pick">
             <span>Important final check</span>
@@ -2608,14 +2608,14 @@
             <p>Skip the purchase provider and send the exact BTC, ETH, or ERC-20 USDT amount directly from your existing wallet.</p>
           </article>
         </div>
-        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> Swaps and its selected ACH provider may still require bank approval, ID, or a security review. NXT LVL does not offer the Swaps Card or Apple Pay route.</div>
+        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> The site opens Paybis directly and does not use Transak. Paybis may still require ID or a security review based on the customer, location, card, amount, or risk checks.</div>
         <div class="crypto-guide-option-grid">
           <article class="crypto-guide-option featured">
-            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon">🏦</span><span
+            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon paybis">💳</span><span
                 class="crypto-guide-pill">Use this first</span></div>
-            <h4>Swaps.app ACH—fee reserve included</h4>
-            <p>Use the blue Buy button to open Swaps with ACH selected and a transfer target above the order total. For example, a $20 invoice opens with a $25.00 target.</p>
-            <small>Keep ACH selected. Do not switch to Card or Apple Pay. Confirm “You receive” covers the invoice and paste the NXT LVL address if requested.</small>
+            <h4>Paybis card purchase—fee reserve included</h4>
+            <p>Use the blue Buy button to open Paybis directly. For example, a $20 invoice displays and copies a $25.00 spend amount.</p>
+            <small>Enter the copied amount, confirm “You receive” covers the invoice, and paste the NXT LVL address when Paybis requests it.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon bitpay">B</span><span
@@ -3715,9 +3715,9 @@
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
-  <script data-nxt-swaps-funding="1" src="lib/swaps-funding.js?v=20260824-ach-only-4"></script>
-  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20260824-ach-only-7"></script>
-  <script src="customer-checkout-upgrade.js?v=20260824-ach-only-5"></script>
+  <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260824-paybis-only-1"></script>
+  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20260824-paybis-only-1"></script>
+  <script src="customer-checkout-upgrade.js?v=20260824-paybis-only-1"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
 </body>

@@ -14,37 +14,37 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.match(homepage, /Never used crypto before\?/);
   assert.match(homepage, /Why checkout uses crypto|Why direct crypto checkout/i);
   assert.match(homepage, /I already have crypto/);
-  assert.match(homepage, /Buy it with ACH bank transfer/);
+  assert.match(homepage, /Buy it directly with Paybis/);
   assert.match(homepage, /Crypto-only checkout/);
   assert.doesNotMatch(homepage, /Crypto Discount Available/);
   assert.match(navCleanup, /Crypto-only checkout/);
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-ach-only-7/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-paybis-only-1/);
 });
 
 test('instructions describe the fee-buffered immediate-send purchase routes', () => {
   for (const source of [homepage, guide]) {
-    assert.match(source, /Swaps\.app/);
+    assert.match(source, /Paybis/);
     assert.match(source, /direct(?:ly)? (?:from|with) (?:your )?(?:existing )?wallet|wallet-to-wallet/i);
     assert.match(source, /exact (?:crypto )?(?:receive )?amount|exact crypto amount/i);
     assert.match(source, /provider fees/i);
     assert.match(source, /Avoid scams/i);
-    assert.doesNotMatch(source, /Transak/i);
+    assert.match(source, /does not use Transak|Transak (?:is|are) not|no Transak fallback/i);
   }
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
   assert.match(guide, /Why the exact receive amount matters/);
-  assert.match(checkout, /transfer target (?:is prefilled |starts )?above the (?:\$[^ ]+ )?invoice/i);
+  assert.match(checkout, /higher spend amount to leave room for provider and network fees/i);
   assert.match(checkout, /make sure “You receive” is at least/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
-  assert.doesNotMatch(checkout, /Transak|create-transak-session/i);
+  assert.doesNotMatch(checkout, /create-transak-session|nxt-transak/i);
   assert.match(homepage, /shipping-and-payments\.html/);
 });
 
 test('checkout keeps the decision point to two primary paths', () => {
   const choiceIndex = checkout.indexOf('How would you like to pay?');
-  const buyIndex = checkout.indexOf('Buy USDT with ACH Bank Transfer');
+  const buyIndex = checkout.indexOf('Buy USDT directly with Paybis');
   const directIndex = checkout.indexOf('I already have crypto');
   const amountIndex = checkout.indexOf('<div class="nxt-wallet-label">Exact amount</div>');
   assert.ok(choiceIndex >= 0);
@@ -54,13 +54,13 @@ test('checkout keeps the decision point to two primary paths', () => {
   assert.match(checkout, /2 clear choices/);
   assert.match(checkout, /data-pay-path="buy"/);
   assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
-  assert.match(checkout, /Buy USDT with ACH Bank Transfer/);
+  assert.match(checkout, /Buy USDT directly with Paybis/);
   assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
-  assert.match(checkout, /Buy enough with ACH Bank Transfer/);
-  assert.match(checkout, /Keep ACH selected/i);
+  assert.match(checkout, /Buy enough directly on Paybis/);
+  assert.match(checkout, /Transak cannot be substituted/i);
   assert.doesNotMatch(checkout, /Pay with Card \/ Apple Pay|Buy enough with Card \/ Apple Pay/);
   assert.match(checkout, /data-funding-usd/);
-  assert.match(checkout, /openBufferedSwapsFunding/);
+  assert.match(checkout, /openBufferedPaybisFunding/);
   assert.match(checkout, /<details class="nxt-wallet-apps">/);
   assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
   assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
@@ -80,9 +80,9 @@ test('guide links to official apps for customers with existing crypto', () => {
 test('guide separates speed from fees without promising guaranteed delivery', () => {
   assert.match(guide, /Why the exact receive amount matters/);
   assert.match(guide, /exact crypto invoice/i);
-  assert.match(guide, /fiat-spend link can subtract fees/i);
+  assert.match(guide, /fiat-spend purchase can subtract fees/i);
   assert.match(guide, /fixed and percentage reserve/i);
-  assert.match(guide, /ACH providers can still require identity, bank, or fraud checks/i);
+  assert.match(guide, /Paybis can still require identity or fraud checks/i);
   assert.match(guide, /No legitimate provider can guarantee approval or instant delivery/i);
   assert.match(guide, /official provider documentation/i);
 });
@@ -113,15 +113,15 @@ test('guide includes safety and finality instructions for beginners', () => {
 });
 
 test('checkout marks ERC-20 USDT as its beginner pick', () => {
-  assert.match(checkout, /Buy USDT with ACH Bank Transfer/);
+  assert.match(checkout, /Buy USDT directly with Paybis/);
   assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
   assert.doesNotMatch(checkout, />STABLECOIN</);
 });
 
 test('homepage keeps advanced crypto detail collapsed behind a simple three-step path', () => {
   assert.match(homepage, /crypto-guide-quick/);
-  assert.match(homepage, /Choose ACH Bank Transfer/);
-  assert.match(homepage, /We select USDT and include a fee reserve/);
+  assert.match(homepage, /Choose Buy with Paybis/);
+  assert.match(homepage, /We select USDT and calculate a fee-buffered spend amount/);
   assert.match(homepage, /<details class="crypto-guide-advanced">/);
   assert.match(homepage, /Already have crypto or want detailed instructions/);
 });

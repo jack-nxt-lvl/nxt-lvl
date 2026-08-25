@@ -183,7 +183,7 @@
         <h2>How would you like to pay?</h2>
         <p>Choose what you have right now. If you are new to crypto, use the first option—we will choose USDT and prepare the exact amount for you.</p>
         <div class="nxt-pay-paths">
-          <button class="nxt-pay-path card" type="button" data-pay-path="buy"><span class="nxt-pay-path-icon">🏦</span><span class="nxt-pay-path-copy"><strong>Buy USDT with ACH Bank Transfer</strong><small>No crypto experience needed. Swaps opens with ACH selected and a fee reserve included.</small></span><span class="nxt-pay-path-tag">Recommended</span><span class="nxt-pay-path-arrow">›</span></button>
+          <button class="nxt-pay-path card" type="button" data-pay-path="buy"><span class="nxt-pay-path-icon">💳</span><span class="nxt-pay-path-copy"><strong>Buy USDT directly with Paybis</strong><small>No crypto experience needed. Opens Paybis directly with a fee-buffered spend amount—Transak is not used.</small></span><span class="nxt-pay-path-tag">Recommended</span><span class="nxt-pay-path-arrow">›</span></button>
           <button class="nxt-pay-path wallet" type="button" data-reveal-assets aria-expanded="false"><span class="nxt-pay-path-icon">◈</span><span class="nxt-pay-path-copy"><strong>I already have crypto</strong><small>Pay directly from a wallet using BTC, ETH, or USDT.</small></span><span class="nxt-pay-path-arrow">›</span></button>
         </div>
         <div class="nxt-existing-coins" data-existing-coins>
@@ -192,7 +192,7 @@
         </div>
         <div class="nxt-easy-trust"><span><b>✓ Exact amount</b>Prepared for the order</span><span><b>✓ Address help</b>Ready to copy</span><span><b>✓ Verification</b>Built into checkout</span></div>
         <button class="nxt-wallet-cancel" type="button">Back</button>
-        <p class="nxt-wallet-note">Use the ACH bank-transfer route in Swaps. Do not switch to Card or Apple Pay. Always confirm “You receive” covers the exact order amount before paying.</p>
+        <p class="nxt-wallet-note">The Buy option opens Paybis directly, not a provider marketplace. Paybis may still request verification based on the customer, location, card, or risk review. Always confirm “You receive” covers the exact order amount before paying.</p>
       </div></div>`;
       let finished = false;
       const done = (asset) => { if (finished) return; finished = true; node.remove(); resolve(asset); };
@@ -268,27 +268,29 @@
     fallback(); return Promise.resolve();
   }
 
-  function setSwapsStatus(node, message, bad = false) {
+  function setFundingStatus(node, message, bad = false) {
     node.className = `nxt-wallet-buy-status show${bad ? ' bad' : ''}`;
     node.textContent = message;
   }
 
-  function openBufferedSwapsFunding(quote, context, link, status, event) {
+  function openBufferedPaybisFunding(quote, context, link, status, event) {
     if (Date.now() > Number(quote.expiresAt)) {
       event?.preventDefault();
-      setSwapsStatus(status, 'This quote expired. Create a new quote before buying crypto by bank transfer.', true);
+      setFundingStatus(status, 'This quote expired. Create a new quote before buying crypto with Paybis.', true);
       return;
     }
     if (!link.href || link.getAttribute('href') === '#') {
       event?.preventDefault();
-      setSwapsStatus(status, 'The fee-buffered funding link could not load. Refresh and try again.', true);
+      setFundingStatus(status, 'The direct Paybis link could not load. Refresh and try again.', true);
       return;
     }
     saveActivePayment(quote, context, '');
     const fundingUsd = link.dataset.fundingUsd || '';
     const network = quote.asset === 'USDT' ? 'Ethereum ERC-20' : quote.network;
-    link.textContent = 'Swaps ACH opened — fee reserve included ↗';
-    setSwapsStatus(status, `Swaps is opening with ACH selected and a $${fundingUsd} bank-transfer target for this $${quote.totalUsd} invoice. Keep ACH selected—do not switch to Card or Apple Pay. Before paying, make sure “You receive” is at least ${quote.amount} ${quote.asset} on ${network}. After it sends, return here and paste the transaction ID.`);
+    link.textContent = `Paybis opened — enter $${fundingUsd} ↗`;
+    void copyText(fundingUsd).then(() => {
+      setFundingStatus(status, `$${fundingUsd} was copied. Paybis is opening directly; Transak is not part of this link. Paste that amount into “You spend,” choose ${quote.asset} on ${network}, and make sure “You receive” is at least ${quote.amount} ${quote.asset}. After Paybis sends it, return here and paste the transaction ID.`);
+    });
   }
 
   function setStatus(node, message, type) {
@@ -410,7 +412,7 @@
       ? `${quote.network}.`
       : `${quote.network} only.`;
     const txidLabel = buyingFirst
-      ? 'After Swaps sends the crypto, paste its transaction ID here'
+      ? 'After Paybis sends the crypto, paste its transaction ID here'
       : (automaticDetection
         ? 'Automatic detection is on — transaction ID is optional'
         : 'Transaction ID (filled automatically with a browser wallet)');
@@ -420,8 +422,8 @@
       : `${localization.usdFormattedTotal || `$${quote.totalUsd}`} USD`;
     const localCaption = localization.approximate ? `Based on $${quote.totalUsd} USD` : 'Order total';
     const funding = {
-      title: 'Use the ACH bank-transfer route in Swaps.',
-      detail: 'NXT LVL opens Swaps with ACH selected and starts the transfer target above the invoice to leave room for provider and network fees. Do not switch to Card or Apple Pay.',
+      title: 'Use the direct Paybis card purchase page.',
+      detail: 'NXT LVL opens Paybis directly and prepares a higher spend amount to leave room for provider and network fees. Transak and the Swaps provider picker are not used. Paybis may still request verification based on eligibility or risk review.',
     };
     const fundingReturnStep = buyingFirst ? 'Return and paste the transaction ID' : (automaticDetection ? 'Keep this checkout open' : 'Return and verify payment');
     const fundingReturnDetail = buyingFirst
@@ -435,11 +437,11 @@
     const assetIcon = quote.asset === 'BTC' ? '₿' : (quote.asset === 'ETH' ? 'Ξ' : '₮');
     const qrLabel = quote.uriStandard === 'BIP-21' ? 'BIP‑21 · SCAN WITH YOUR WALLET' : 'SCAN WITH YOUR WALLET';
     const walletShortcutMarkup = mobileWalletShortcuts(quote.asset).map(([name, mark, href]) => `<a class="nxt-wallet-app-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"><i>${escapeHtml(mark)}</i><span>${escapeHtml(name)}</span></a>`).join('');
-    let swapsUrl = '#';
-    let swapsFundingUsd = '';
+    let paybisUrl = '#';
+    let paybisFundingUsd = '';
     try {
-      swapsFundingUsd = window.NxtSwapsFunding?.fundingAmountForInvoice(quote.totalUsd) || '';
-      swapsUrl = window.NxtSwapsFunding?.buildCheckoutUrl({ asset: quote.asset, invoiceUsd: quote.totalUsd }) || '#';
+      paybisFundingUsd = window.NxtPaybisFunding?.fundingAmountForInvoice(quote.totalUsd) || '';
+      paybisUrl = window.NxtPaybisFunding?.buildCheckoutUrl({ asset: quote.asset, invoiceUsd: quote.totalUsd }) || '#';
     } catch (_) {}
     const overlay = document.createElement('div');
     overlay.className = 'nxt-wallet-overlay';
@@ -450,15 +452,15 @@
         <div class="nxt-wallet-order">
           <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
           <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
-          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open ACH bank transfer with a fee reserve</strong><span>For this $${escapeHtml(quote.totalUsd)} invoice, Swaps opens with ACH selected and a $${escapeHtml(swapsFundingUsd)} transfer target so fees are less likely to reduce the crypto below the invoice.</span></span></div>` : ''}
+          ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open Paybis directly with a fee reserve</strong><span>For this $${escapeHtml(quote.totalUsd)} invoice, enter $${escapeHtml(paybisFundingUsd)} in Paybis so provider and network fees are less likely to reduce the crypto below the invoice.</span></span></div>` : ''}
           <div class="nxt-wallet-progress"><div class="nxt-wallet-step active" data-payment-stage="awaiting">1 · Awaiting</div><div class="nxt-wallet-step" data-payment-stage="detected">2 · Detected</div><div class="nxt-wallet-step" data-payment-stage="confirming">3 · Confirming</div><div class="nxt-wallet-step" data-payment-stage="confirmed">4 · Confirmed</div></div>
-          ${quote.asset === 'USDT' ? `<div class="nxt-wallet-usdt-buy"><div class="nxt-wallet-usdt-buy-head"><span class="nxt-wallet-usdt-buy-icon" aria-hidden="true">₮</span><span class="nxt-wallet-usdt-buy-copy"><b>Don't have crypto? Buy USDT with ACH.</b><span>Use an ACH bank transfer through Swaps, then return to this payment page. Keep ACH selected—not Card or Apple Pay.</span></span><em class="nxt-wallet-usdt-buy-badge">ACH selected</em></div><a class="nxt-wallet-usdt-buy-main" data-buy-crypto href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(swapsFundingUsd)}">Buy USDT here with ACH Bank Transfer · $${escapeHtml(swapsFundingUsd)} ↗</a><div class="nxt-wallet-usdt-buy-meta"><span><b>Fee reserve included</b>Opens above the $${escapeHtml(quote.totalUsd)} invoice total.</span><span><b>Ethereum ERC-20 only</b>Confirm “You receive” is at least ${escapeHtml(quote.amount)} USDT.</span></div></div>` : `<div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your beginner-friendly bank route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue with ACH bank transfer. If you already have crypto, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the ACH bank-transfer option.`}</span></div><em>2 clear choices</em></div>`}
-          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a>${quote.asset === 'USDT' ? '' : `<a class="buy" data-buy-crypto href="${escapeHtml(swapsUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(swapsFundingUsd)}">${buyingFirst ? `Buy enough with ACH Bank Transfer · $${escapeHtml(swapsFundingUsd)} ↗` : `Buy enough ${escapeHtml(quote.asset)} with ACH Bank Transfer ↗`}</a>`}<button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
+          ${quote.asset === 'USDT' ? `<div class="nxt-wallet-usdt-buy"><div class="nxt-wallet-usdt-buy-head"><span class="nxt-wallet-usdt-buy-icon" aria-hidden="true">₮</span><span class="nxt-wallet-usdt-buy-copy"><b>Don't have crypto? Buy USDT directly on Paybis.</b><span>This opens Paybis—not Swaps—so Transak cannot be substituted. Use a card, enter the fee-buffered amount, then return here.</span></span><em class="nxt-wallet-usdt-buy-badge">Paybis only</em></div><a class="nxt-wallet-usdt-buy-main" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(paybisFundingUsd)}">Buy USDT directly on Paybis · Enter $${escapeHtml(paybisFundingUsd)} ↗</a><div class="nxt-wallet-usdt-buy-meta"><span><b>Fee reserve included</b>Enter $${escapeHtml(paybisFundingUsd)} for the $${escapeHtml(quote.totalUsd)} invoice.</span><span><b>Ethereum ERC-20 only</b>Confirm “You receive” is at least ${escapeHtml(quote.amount)} USDT.</span></div></div>` : `<div class="nxt-wallet-existing"><div><b>${buyingFirst ? 'Your direct Paybis route is ready' : 'Choose the easiest way for you'}</b><span>${buyingFirst ? 'Continue to Paybis. If you already have crypto, you can open your wallet instead.' : `Already have ${escapeHtml(quote.asset)}? Wallet payment is fastest. Need it first? Use the direct Paybis option.`}</span></div><em>2 clear choices</em></div>`}
+          <div class="nxt-wallet-actions"><a class="primary" data-open-wallet href="${escapeHtml(quote.paymentUri)}">${buyingFirst ? `I already have ${escapeHtml(quote.asset)}` : 'Open my crypto wallet'}</a>${quote.asset === 'USDT' ? '' : `<a class="buy" data-buy-crypto href="${escapeHtml(paybisUrl)}" target="_blank" rel="noopener noreferrer" data-funding-usd="${escapeHtml(paybisFundingUsd)}">${buyingFirst ? `Buy enough directly on Paybis · $${escapeHtml(paybisFundingUsd)} ↗` : `Buy enough ${escapeHtml(quote.asset)} directly on Paybis ↗`}</a>`}<button type="button" class="tool" data-browser-pay ${quote.asset === 'BTC' ? 'hidden' : ''}>Use browser wallet</button><button type="button" class="tool" data-copy-all>Copy payment details</button></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Exact amount</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value amount">${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}</div><button type="button" class="nxt-wallet-copy" data-copy-amount>Copy amount</button></div></div>
           <div class="nxt-wallet-field"><div class="nxt-wallet-label">Receiving address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${escapeHtml(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
           <div class="nxt-wallet-warning"><b>${escapeHtml(networkRestriction)}</b> ${buyingFirst ? `Make sure the provider's “You receive” value is at least ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.` : 'Send the exact amount shown.'} ${escapeHtml(networkWarning)}</div>
           <details class="nxt-wallet-apps"><summary>Use Coinbase, Cash App, MetaMask, or another app</summary><div class="nxt-wallet-apps-content"><div class="nxt-wallet-apps-head"><span>Open the app you already use, tap Send or Withdraw, and match the network exactly.</span><em>${escapeHtml(quote.asset)} shortcuts</em></div><div class="nxt-wallet-apps-grid">${walletShortcutMarkup}</div><a class="nxt-wallet-apps-guide" href="/shipping-and-payments.html#existing-wallets" target="_blank" rel="noopener noreferrer">See all common wallet shortcuts + instructions ↗</a></div></details>
-          <details class="nxt-wallet-buy-help"><summary>How the ACH bank-transfer option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open buffered Swaps ACH checkout<small>A $${escapeHtml(swapsFundingUsd)} transfer target is prefilled above the $${escapeHtml(quote.totalUsd)} invoice</small></div><div class="nxt-wallet-buy-step"><b>2</b>Keep ACH selected<small>Do not switch to the Card or Apple Pay route inside Swaps</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>NXT LVL receiving address</b>Copy it, then paste it if Swaps asks where to send the crypto.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-swaps>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>The reserve is conservative: do not pay if “You receive” is below ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.</b></small></div></details>
+          <details class="nxt-wallet-buy-help"><summary>How the direct Paybis option works</summary><div class="nxt-wallet-buy-help-content"><div class="nxt-wallet-buy-steps"><div class="nxt-wallet-buy-step"><b>1</b>Open Paybis directly<small>Enter the copied $${escapeHtml(paybisFundingUsd)} spend amount for this $${escapeHtml(quote.totalUsd)} invoice</small></div><div class="nxt-wallet-buy-step"><b>2</b>Use the Paybis card checkout<small>This link does not open Swaps or allow Transak to replace Paybis</small></div><div class="nxt-wallet-buy-step"><b>3</b>${escapeHtml(fundingNetworkStep)}<small>${escapeHtml(fundingNetworkDetail)}</small></div><div class="nxt-wallet-buy-step"><b>4</b>${escapeHtml(fundingReturnStep)}<small>${escapeHtml(fundingReturnDetail)}</small></div></div><div class="nxt-wallet-buy-tools"><span><b>NXT LVL receiving address</b>Copy it, then paste it when Paybis asks where to send the crypto.</span><button type="button" class="nxt-wallet-buy-copy" data-copy-for-paybis>Copy address</button></div><small class="nxt-wallet-buy-note">${escapeHtml(funding.title)} ${escapeHtml(funding.detail)} <b>The reserve is conservative: do not pay if “You receive” is below ${escapeHtml(quote.amount)} ${escapeHtml(quote.asset)}.</b></small></div></details>
           <div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div>
           <div class="nxt-wallet-status" role="status" aria-live="polite"></div>
           <details class="nxt-wallet-verify" ${buyingFirst ? 'open' : ''}><summary>Payment sent but not detected? Verify manually</summary><div class="nxt-wallet-verify-content"><label for="nxtWalletTxid">${escapeHtml(txidLabel)}</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" spellcheck="false" placeholder="Transaction ID / hash"><button type="button" data-verify>Verify payment</button></div></div></details>
@@ -476,7 +478,7 @@
     const browserPay = overlay.querySelector('[data-browser-pay]');
     const openWallet = overlay.querySelector('[data-open-wallet]');
     const buyCrypto = overlay.querySelector('[data-buy-crypto]');
-    const copyForSwapsButton = overlay.querySelector('[data-copy-for-swaps]');
+    const copyForPaybisButton = overlay.querySelector('[data-copy-for-paybis]');
     const buyStatus = overlay.querySelector('[data-buy-status]');
     const copyAll = overlay.querySelector('[data-copy-all]');
     input.value = initialTxid || '';
@@ -484,11 +486,11 @@
 
     overlay.querySelector('[data-copy-amount]').onclick = (event) => copyText(quote.amount, event.currentTarget);
     overlay.querySelector('[data-copy-address]').onclick = (event) => copyText(quote.address, event.currentTarget);
-    buyCrypto.onclick = (event) => openBufferedSwapsFunding(quote, context, buyCrypto, buyStatus, event);
-    copyForSwapsButton.onclick = async (event) => {
+    buyCrypto.onclick = (event) => openBufferedPaybisFunding(quote, context, buyCrypto, buyStatus, event);
+    copyForPaybisButton.onclick = async (event) => {
       await copyText(quote.address, event.currentTarget);
-      const network = quote.asset === 'USDT' ? ' Select Ethereum ERC-20 in Swaps.' : '';
-      setSwapsStatus(buyStatus, `Address copied. Paste it if Swaps asks where to send the crypto.${network}`);
+      const network = quote.asset === 'USDT' ? ' Select USDT on Ethereum ERC-20 in Paybis.' : '';
+      setFundingStatus(buyStatus, `Address copied. Paste it when Paybis asks where to send the crypto.${network}`);
     };
     copyAll.onclick = (event) => {
       if (Date.now() > Number(quote.expiresAt)) {
@@ -582,7 +584,7 @@
       }, 1500);
     } else if (!initialTxid) {
       setStatus(status, buyingFirst
-        ? 'After Swaps sends the crypto, paste the transaction ID here so the payment can be verified—even if the fee reserve sends slightly more than the exact amount.'
+        ? 'After Paybis sends the crypto, paste the transaction ID here so the payment can be verified—even if the fee reserve sends slightly more than the exact amount.'
         : 'Use Pay with browser wallet to fill the transaction ID automatically, or paste it after sending.');
     }
     if (initialTxid) activeDetectionDelay = setTimeout(check, 700);
@@ -602,7 +604,7 @@
         if (browserPay) browserPay.disabled = true;
         buyCrypto.setAttribute('aria-disabled', 'true');
         buyCrypto.removeAttribute('href');
-        copyForSwapsButton.disabled = true;
+        copyForPaybisButton.disabled = true;
         copyAll.textContent = 'Create new quote';
         if (!input.value.trim()) {
           if (activeDetectionPoll) clearTimeout(activeDetectionPoll);
