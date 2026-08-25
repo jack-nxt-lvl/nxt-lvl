@@ -1,8 +1,5 @@
-// NXT LVL data loader + checkout override
-// Load the original product database synchronously so index.html can use compounds/categories/stacks immediately.
-document.write('<script src="/products-data-original.js?v=' + Date.now() + '"><\/script>');
-document.write('<script src="/cjc-products.js?v=' + Date.now() + '"><\/script>');
-document.write('<script defer src="/premium-enhancements.js?v=20260824-beginner-guide-1"><\/script>');
+// NXT LVL catalog presentation overrides. The catalog files are loaded with
+// stable, cacheable URLs in index.html before this script runs.
 
 window.addEventListener('DOMContentLoaded', () => {
   // Keep every freeze-dried product together in All Compounds while preserving
