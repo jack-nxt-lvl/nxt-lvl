@@ -118,11 +118,12 @@ nav .nav-cta {
   text-align: left !important;
   isolation: isolate;
   background:
-    linear-gradient(90deg, rgba(126,255,189,.018) 1px, transparent 1px),
-    radial-gradient(ellipse at 18% 45%, rgba(85,245,138,.14), transparent 28rem),
-    radial-gradient(ellipse at 80% 28%, rgba(71,210,255,.11), transparent 32rem),
-    linear-gradient(135deg, rgba(8,25,20,.60), rgba(3,10,11,.18) 58%, rgba(5,18,14,.46)) !important;
-  background-size: 92px 100%, auto, auto, auto !important;
+    linear-gradient(90deg, rgba(2,7,6,.98) 0%, rgba(2,9,7,.92) 38%, rgba(2,9,8,.62) 57%, rgba(2,8,8,.16) 82%, rgba(2,8,8,.08) 100%),
+    linear-gradient(90deg, rgba(126,255,189,.025) 1px, transparent 1px),
+    radial-gradient(ellipse at 18% 45%, rgba(85,245,138,.16), transparent 29rem),
+    url('/assets/research-lab-hero.webp') center center / cover no-repeat !important;
+  background-size: auto, 92px 100%, auto, cover !important;
+  background-position: center, center, center, center !important;
 }
 
 .hero::before {
@@ -452,7 +453,10 @@ nav .nav-cta {
     min-height: auto !important;
     padding: 104px 17px 58px !important;
     text-align: left !important;
-    background: radial-gradient(circle at 50% 20%, rgba(85,245,138,.10), transparent 23rem) !important;
+    background:
+      linear-gradient(180deg, rgba(2,8,6,.54), rgba(2,8,6,.88)),
+      linear-gradient(90deg, rgba(2,7,6,.96) 0%, rgba(2,8,7,.76) 52%, rgba(2,8,8,.28) 100%),
+      url('/assets/research-lab-hero.webp') 72% center / cover no-repeat !important;
   }
   .hero::after { inset: 73px 9px 10px !important; border-radius: 20px !important; }
   .hero::before { right: -55% !important; width: 150vw !important; height: 150vw !important; opacity: .65; }
