@@ -2521,10 +2521,10 @@
         </div>
       </div>
 
-      <div class="crypto-guide-quick" aria-label="Simple card or Apple Pay instructions">
+      <div class="crypto-guide-quick" aria-label="Simple ACH bank-transfer instructions">
         <div><span>1</span><strong>Add items and check out</strong><small>Enter shipping or pickup information.</small></div>
-        <div><span>2</span><strong>Choose Card / Apple Pay</strong><small>We select USDT and prepare the exact amount.</small></div>
-        <div><span>3</span><strong>Finish and return</strong><small>The checkout detects your payment automatically.</small></div>
+        <div><span>2</span><strong>Choose ACH Bank Transfer</strong><small>We select USDT and include a fee reserve.</small></div>
+        <div><span>3</span><strong>Finish and return</strong><small>Paste the transaction ID so checkout can verify it.</small></div>
       </div>
 
       <details class="crypto-guide-advanced">
@@ -2571,13 +2571,13 @@
         </article>
 
         <article class="crypto-guide-path">
-          <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with card or Apple Pay</h3></div></div>
+          <div class="crypto-guide-path-title funding"><span aria-hidden="true">▣</span><div><small>Need crypto first?</small><h3>Buy it with ACH bank transfer</h3></div></div>
           <ol>
             <li><span>1</span><div><strong>Start checkout and choose a coin</strong><small>USDT ERC-20 is the clearest beginner option when the provider supports it.</small></div></li>
-            <li><span>2</span><div><strong>Open the fee-buffered Swaps checkout</strong><small>NXT LVL starts the card-spend target above the invoice so fees are less likely to leave the order short.</small></div></li>
+            <li><span>2</span><div><strong>Open the fee-buffered Swaps ACH checkout</strong><small>NXT LVL starts the bank-transfer target above the invoice so fees are less likely to leave the order short.</small></div></li>
             <li><span>3</span><div><strong>Check “You receive” first</strong><small>It must show at least the exact crypto amount displayed by NXT LVL.</small></div></li>
-            <li><span>4</span><div><strong>Review the higher card-spend target</strong><small>The prefilled USD amount includes a conservative reserve for provider and network fees.</small></div></li>
-            <li><span>5</span><div><strong>Enter the NXT LVL address and complete checkout</strong><small>Choose Ethereum ERC-20 for USDT. Identity checks and availability depend on Swaps and its selected provider.</small></div></li>
+            <li><span>4</span><div><strong>Keep ACH selected</strong><small>Do not switch to Card or Apple Pay inside Swaps.</small></div></li>
+            <li><span>5</span><div><strong>Enter the NXT LVL address and complete checkout</strong><small>Choose Ethereum ERC-20 for USDT. The selected ACH provider may still require bank or identity verification.</small></div></li>
             <li><span>6</span><div><strong>Return and paste the transaction ID</strong><small>This lets NXT LVL verify the payment even if the fee reserve sends a little more than the exact invoice amount.</small></div></li>
           </ol>
         </article>
@@ -2586,8 +2586,8 @@
       <div class="crypto-guide-options" id="crypto-options">
         <div class="crypto-guide-options-head">
           <div>
-            <div class="section-tag">Fee-Buffered Card Checkout</div>
-            <h3>Use buffered Swaps.app first. BitPay and Paybis are backups.</h3>
+            <div class="section-tag">Fee-Buffered ACH Bank Transfer</div>
+            <h3>Use Swaps.app with ACH selected—not Card or Apple Pay.</h3>
           </div>
           <p>NXT LVL raises the Swaps <strong>fiat purchase target above the invoice</strong> to leave room for provider and network fees. Always verify that “You receive” still covers the exact crypto amount shown by NXT LVL.</p>
         </div>
@@ -2595,7 +2595,7 @@
           <article class="crypto-guide-research-pick best">
             <span>Recommended · fee reserve included</span>
             <strong>Swaps.app from checkout</strong>
-            <p>Starts with a higher card-spend target to leave room for typical provider and network fees. Confirm the live “You receive” amount covers the complete NXT LVL invoice.</p>
+            <p>Starts with a higher ACH bank-transfer target to leave room for typical provider and network fees. Confirm the live “You receive” amount covers the complete NXT LVL invoice.</p>
           </article>
           <article class="crypto-guide-research-pick">
             <span>Important final check</span>
@@ -2603,19 +2603,19 @@
             <p>The reserve is conservative, not a guarantee. Do not pay if the provider's final “You receive” value is below the exact amount displayed in NXT LVL checkout.</p>
           </article>
           <article class="crypto-guide-research-pick">
-            <span>Additional direct-wallet backups</span>
-            <strong>BitPay or Paybis</strong>
-            <p>Both can support purchases to an external wallet in eligible locations. Enter the NXT LVL address and verify the crypto received after fees before paying.</p>
+            <span>Already have crypto?</span>
+            <strong>Send from your own wallet</strong>
+            <p>Skip the purchase provider and send the exact BTC, ETH, or ERC-20 USDT amount directly from your existing wallet.</p>
           </article>
         </div>
-        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> No legitimate card service can promise no verification. Swaps or its selected provider may require ID, bank approval, or a security review based on the customer and transaction.</div>
+        <div class="crypto-guide-sendable-rule"><strong>About verification:</strong> Swaps and its selected ACH provider may still require bank approval, ID, or a security review. NXT LVL does not offer the Swaps Card or Apple Pay route.</div>
         <div class="crypto-guide-option-grid">
           <article class="crypto-guide-option featured">
-            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon">💳</span><span
+            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon">🏦</span><span
                 class="crypto-guide-pill">Use this first</span></div>
-            <h4>Swaps.app—fee reserve included</h4>
-            <p>Use the blue Buy button to open Swaps with a card-spend target above the order total. For example, a $20 invoice opens with a $25.00 target.</p>
-            <small>Confirm “You receive” shows at least the exact NXT LVL amount, select the correct network, and paste the NXT LVL receiving address if requested.</small>
+            <h4>Swaps.app ACH—fee reserve included</h4>
+            <p>Use the blue Buy button to open Swaps with ACH selected and a transfer target above the order total. For example, a $20 invoice opens with a $25.00 target.</p>
+            <small>Keep ACH selected. Do not switch to Card or Apple Pay. Confirm “You receive” covers the invoice and paste the NXT LVL address if requested.</small>
           </article>
           <article class="crypto-guide-option">
             <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon bitpay">B</span><span
@@ -2625,11 +2625,11 @@
             <small>The buffer is not a provider guarantee. Do not pay if the final crypto received is below the exact checkout amount.</small>
           </article>
           <article class="crypto-guide-option">
-            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon paybis">P</span><span
-                class="crypto-guide-label">Direct-wallet backup</span></div>
-            <h4>BitPay or Paybis—manual backup</h4>
-            <p>Choose the matching asset and network, enter the NXT LVL receiving address, and compare the final crypto received after fees.</p>
-            <small>For USDT select <strong>Ethereum / ERC-20</strong>. Approval, price, and delivery time depend on the provider, customer, and transaction.</small>
+            <div class="crypto-guide-option-top"><span class="crypto-guide-option-icon paybis">◈</span><span
+                class="crypto-guide-label">Existing-wallet route</span></div>
+            <h4>Already have crypto—send directly</h4>
+            <p>Choose BTC, ETH, or USDT in NXT LVL checkout, then send the exact amount from the wallet you already use.</p>
+            <small>For USDT select <strong>Ethereum / ERC-20</strong>. Match the full receiving address and network before sending.</small>
           </article>
         </div>
         <div class="crypto-guide-option-warning"><strong>Avoid scams:</strong> use the official app or website, ignore
@@ -3715,9 +3715,9 @@
   <script src="pt141-product.js?v=20260818-2"></script>
   <script src="bac-water-product.js?v=20260818-1"></script>
   <script src="glutathione-product.js?v=20260818-1"></script>
-  <script data-nxt-swaps-funding="1" src="lib/swaps-funding.js?v=20260824-fee-buffer-3"></script>
-  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20260824-usdt-buy-cta-6"></script>
-  <script src="customer-checkout-upgrade.js?v=20260824-usdt-deps-4"></script>
+  <script data-nxt-swaps-funding="1" src="lib/swaps-funding.js?v=20260824-ach-only-4"></script>
+  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20260824-ach-only-7"></script>
+  <script src="customer-checkout-upgrade.js?v=20260824-ach-only-5"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
 </body>

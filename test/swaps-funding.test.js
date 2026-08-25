@@ -10,19 +10,21 @@ const {
   fundingAmountForInvoice,
 } = swapsFunding;
 
-test('builds a fee-buffered Swaps purchase link with only supported public parameters', () => {
+test('builds a fee-buffered Swaps ACH link with only supported public parameters', () => {
   const url = new URL(buildCheckoutUrl({ asset: 'usdt', invoiceUsd: '20.00' }));
   assert.equal(CHECKOUT_ORIGIN, 'https://www.swaps.app/buy');
   assert.equal(url.protocol, 'https:');
   assert.equal(url.hostname, 'www.swaps.app');
   assert.equal(url.pathname, '/buy');
-  assert.deepEqual([...url.searchParams.keys()], ['side', 'to', 'amount']);
+  assert.deepEqual([...url.searchParams.keys()], ['side', 'to', 'amount', 'method', 'input']);
   assert.equal(url.searchParams.get('side'), 'buy');
   assert.equal(url.searchParams.get('to'), 'USDT');
   assert.equal(url.searchParams.get('amount'), '25.00');
+  assert.equal(url.searchParams.get('method'), 'ach');
+  assert.equal(url.searchParams.get('input'), 'send');
 });
 
-test('grosses up the card spend for percentage and fixed provider fees', () => {
+test('grosses up the bank-transfer target for percentage and fixed provider fees', () => {
   assert.equal(fundingAmountForInvoice('20.00'), '25.00');
   assert.equal(fundingAmountForInvoice('100.00'), '110.11');
   assert.equal(fundingAmountForInvoice('1000.00'), '1067.56');
@@ -57,14 +59,16 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /How would you like to pay\?/);
   assert.match(source, /No crypto experience needed/);
   assert.match(source, /Choose the easiest way for you/);
-  assert.match(source, /Pay with Card \/ Apple Pay/);
-  assert.match(source, /Buy enough with Card \/ Apple Pay/);
-  assert.match(source, /Don't have crypto\? Buy USDT here\./);
-  assert.match(source, /Buy USDT here with Card \/ Apple Pay/);
+  assert.match(source, /Buy USDT with ACH Bank Transfer/);
+  assert.match(source, /Buy enough with ACH Bank Transfer/);
+  assert.match(source, /Don't have crypto\? Buy USDT with ACH\./);
+  assert.match(source, /Buy USDT here with ACH Bank Transfer/);
   assert.match(source, /Fee reserve included/);
   assert.match(source, /Ethereum ERC-20 only/);
   assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
-  assert.match(source, /card-spend target above the invoice/i);
+  assert.match(source, /(?:bank-)?transfer target (?:is prefilled |starts )?above the (?:\$[^ ]+ )?invoice/i);
+  assert.match(source, /Keep ACH selected/i);
+  assert.match(source, /Do not switch to Card or Apple Pay/i);
   assert.match(source, /nxt-wallet-headcoin/);
   assert.match(source, /Secure checkout/);
   assert.match(source, /data-copy-for-swaps/);
@@ -76,6 +80,7 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
   assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
   assert.doesNotMatch(source, /create-transak-session|nxt-transak|Transak/i);
+  assert.doesNotMatch(source, /Pay with Card \/ Apple Pay|Buy enough with Card \/ Apple Pay/);
   assert.match(source, /make sure “You receive” is at least/);
   assert.match(source, /paste the transaction ID/i);
   assert.doesNotMatch(source, /window\.open\(/);
@@ -87,12 +92,12 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
 test('loads the fee buffer before the revised USDT checkout on every checkout path', () => {
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
-  const fundingVersion = 'lib/swaps-funding.js?v=20260824-fee-buffer-3';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20260824-usdt-buy-cta-6';
+  const fundingVersion = 'lib/swaps-funding.js?v=20260824-ach-only-4';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20260824-ach-only-7';
 
   assert.match(homepage, /data-nxt-swaps-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260824-usdt-deps-4/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260824-ach-only-5/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtSwapsFunding\)/);
