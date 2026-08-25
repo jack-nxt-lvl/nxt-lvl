@@ -74,22 +74,39 @@
     }catch(_){}
   }
 
-  function ensureDirectWallet(){
+  function loadCheckoutDependency({src,selector,marker,ready,label}){
     return new Promise((resolve,reject)=>{
-      if (typeof window.startDirectWalletCheckout === 'function') return resolve();
-      const existing = document.querySelector('script[data-nxt-direct-wallet]');
-      if (existing) {
-        const timer=setInterval(()=>{if(typeof window.startDirectWalletCheckout==='function'){clearInterval(timer);resolve();}},50);
-        setTimeout(()=>{clearInterval(timer);if(typeof window.startDirectWalletCheckout==='function')resolve();else reject(new Error('Direct-wallet checkout failed to load.'));},5000);
-        return;
-      }
+      if(ready())return resolve();
+      const existing=document.querySelector(selector);
+      const waitForReady=()=>{
+        const timer=setInterval(()=>{if(ready()){clearInterval(timer);resolve();}},50);
+        setTimeout(()=>{clearInterval(timer);if(ready())resolve();else reject(new Error(`${label} failed to load.`));},5000);
+      };
+      if(existing){waitForReady();return;}
       const script=document.createElement('script');
-      script.src='/direct-wallet-checkout.js?v=20260824-easy-pay-1';
+      script.src=src;
       script.async=false;
-      script.dataset.nxtDirectWallet='1';
-      script.onload=()=>typeof window.startDirectWalletCheckout==='function'?resolve():reject(new Error('Direct-wallet checkout failed to initialize.'));
-      script.onerror=()=>reject(new Error('Direct-wallet checkout failed to load.'));
+      script.setAttribute(marker,'1');
+      script.onload=()=>ready()?resolve():reject(new Error(`${label} failed to initialize.`));
+      script.onerror=()=>reject(new Error(`${label} failed to load.`));
       document.body.appendChild(script);
+    });
+  }
+
+  async function ensureDirectWallet(){
+    await loadCheckoutDependency({
+      src:'/lib/swaps-funding.js?v=20260824-fee-buffer-3',
+      selector:'script[data-nxt-swaps-funding],script[src*="/lib/swaps-funding.js"]',
+      marker:'data-nxt-swaps-funding',
+      ready:()=>Boolean(window.NxtSwapsFunding),
+      label:'USDT funding checkout',
+    });
+    await loadCheckoutDependency({
+      src:'/direct-wallet-checkout.js?v=20260824-usdt-buy-cta-5',
+      selector:'script[data-nxt-direct-wallet],script[src*="/direct-wallet-checkout.js"]',
+      marker:'data-nxt-direct-wallet',
+      ready:()=>typeof window.startDirectWalletCheckout==='function',
+      label:'Direct-wallet checkout',
     });
   }
 

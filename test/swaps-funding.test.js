@@ -59,6 +59,10 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.match(source, /Choose the easiest way for you/);
   assert.match(source, /Pay with Card \/ Apple Pay/);
   assert.match(source, /Buy enough with Card \/ Apple Pay/);
+  assert.match(source, /Don't have crypto\? Buy USDT here\./);
+  assert.match(source, /Buy USDT here with Card \/ Apple Pay/);
+  assert.match(source, /Fee reserve included/);
+  assert.match(source, /Ethereum ERC-20 only/);
   assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
   assert.match(source, /card-spend target above the invoice/i);
   assert.match(source, /nxt-wallet-headcoin/);
@@ -78,4 +82,16 @@ test('keeps beginner guidance and recovery controls in the direct checkout', () 
   assert.doesNotMatch(source, /nxtSwapsBuy/);
   assert.doesNotMatch(source, /pageshow[^\n]+once:\s*true/);
   assert.match(source, /fee reserve included/i);
+});
+
+test('loads the fee buffer before the revised USDT checkout on every checkout path', () => {
+  const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
+  const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
+  const fundingVersion = 'lib/swaps-funding.js?v=20260824-fee-buffer-3';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20260824-usdt-buy-cta-5';
+
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260824-usdt-deps-3/);
+  assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
+  assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
+  assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtSwapsFunding\)/);
 });
