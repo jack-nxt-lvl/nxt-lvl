@@ -88,10 +88,15 @@ test('loads the fee buffer before the revised USDT checkout on every checkout pa
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
   const fundingVersion = 'lib/swaps-funding.js?v=20260824-fee-buffer-3';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20260824-usdt-buy-cta-5';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20260824-usdt-buy-cta-6';
 
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260824-usdt-deps-3/);
+  assert.match(homepage, /data-nxt-swaps-funding="1"/);
+  assert.match(homepage, /data-nxt-direct-wallet="1"/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260824-usdt-deps-4/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtSwapsFunding\)/);
+  assert.match(checkoutUpgrade, /script\[src\*="lib\/swaps-funding\.js"\]/);
+  assert.match(checkoutUpgrade, /script\[src\*="direct-wallet-checkout\.js"\]/);
+  assert.match(readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8'), /data-asset="USDT"\] \.nxt-wallet-usdt-buy\{order:-1\}/);
 });

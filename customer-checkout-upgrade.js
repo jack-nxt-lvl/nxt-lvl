@@ -96,14 +96,14 @@
   async function ensureDirectWallet(){
     await loadCheckoutDependency({
       src:'/lib/swaps-funding.js?v=20260824-fee-buffer-3',
-      selector:'script[data-nxt-swaps-funding],script[src*="/lib/swaps-funding.js"]',
+      selector:'script[data-nxt-swaps-funding],script[src*="lib/swaps-funding.js"]',
       marker:'data-nxt-swaps-funding',
       ready:()=>Boolean(window.NxtSwapsFunding),
       label:'USDT funding checkout',
     });
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20260824-usdt-buy-cta-5',
-      selector:'script[data-nxt-direct-wallet],script[src*="/direct-wallet-checkout.js"]',
+      src:'/direct-wallet-checkout.js?v=20260824-usdt-buy-cta-6',
+      selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
       label:'Direct-wallet checkout',

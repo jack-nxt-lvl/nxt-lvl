@@ -21,7 +21,7 @@ test('homepage has a prominent first-time crypto payment guide', () => {
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-usdt-buy-cta-5/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260824-usdt-buy-cta-6/);
 });
 
 test('instructions describe the fee-buffered immediate-send purchase routes', () => {

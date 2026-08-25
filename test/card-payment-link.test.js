@@ -88,7 +88,7 @@ test('keeps card details off-site and exposes only delivery choices in the custo
   assert.match(source, /card information is never entered or processed on NXT LVL/i);
   assert.match(source, /one transactional payment-link text/i);
   assert.match(source, /\/lib\/swaps-funding\.js\?v=20260824-fee-buffer-3/);
-  assert.match(source, /\/direct-wallet-checkout\.js\?v=20260824-usdt-buy-cta-5/);
+  assert.match(source, /\/direct-wallet-checkout\.js\?v=20260824-usdt-buy-cta-6/);
   assert.ok(source.indexOf("src:'/lib/swaps-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
   assert.doesNotMatch(source, /cardNumber|cvc|expiryMonth|payment-element/i);
 });
