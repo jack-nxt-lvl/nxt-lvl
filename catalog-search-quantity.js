@@ -157,10 +157,32 @@
   }
 
   let applying = false;
+  let searchingFullCatalog = false;
+
+  function selectedCategory() {
+    const active = document.querySelector('#filterBar .filter-btn.active');
+    const call = active && active.getAttribute('onclick') || '';
+    const match = call.match(/filterByCategory\('([^']+)'/);
+    return match ? match[1] : 'all';
+  }
+
+  function syncCatalogScope(query) {
+    if (typeof renderGrid !== 'function') return;
+
+    if (query && !searchingFullCatalog) {
+      searchingFullCatalog = true;
+      renderGrid('all');
+    } else if (!query && searchingFullCatalog) {
+      searchingFullCatalog = false;
+      renderGrid(selectedCategory());
+    }
+  }
+
   function applySearch() {
     if (applying || !grid) return;
     applying = true;
     const query = normalize(input.value);
+    syncCatalogScope(query);
     const cards = Array.from(grid.querySelectorAll('.compound-card'));
     let visible = 0;
 
@@ -185,7 +207,7 @@
     if (!empty.isConnected) grid.appendChild(empty);
     status.innerHTML = query
       ? `<strong>${visible}</strong> product${visible === 1 ? '' : 's'} found`
-      : `<strong>${visible}</strong> products shown`;
+      : `<strong>${visible}</strong> shown · ${compounds.length} total`;
     applying = false;
   }
 
