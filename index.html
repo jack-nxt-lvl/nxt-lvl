@@ -2321,12 +2321,20 @@
       /* Modal */
       .modal-overlay {
         padding: 12px 10px;
+        overflow: hidden !important;
+        overscroll-behavior: none;
       }
 
       .modal {
         margin: 10px auto;
         max-width: 100%;
+        max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 8px);
         border-radius: 12px;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
       }
 
       .modal-close {
