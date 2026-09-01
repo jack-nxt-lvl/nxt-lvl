@@ -698,8 +698,12 @@ const compounds = [
       'Reduced fat-mass accumulation in mouse obesity models',
       'Useful research tool for exercise-responsive metabolic signaling'
     ],
-    sideEffects: ['Human safety profile has not been established'],
-    dosing: {},
+    sideEffects: ['Human safety profile has not been established', 'Not intended for human or veterinary use'],
+    dosing: {
+      beginner: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'No human-use dosing guidance provided.' },
+      intermediate: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Use only within an appropriate laboratory research protocol.' },
+      advanced: { dose: 'Research protocol dependent', frequency: 'Research protocol dependent', duration: 'Research protocol dependent', notes: 'Follow laboratory study design and handling requirements.' }
+    },
     amount: '10mg per vial',
     form: 'Lyophilized / Freeze-Dried Research Compound',
     appearance: 'Research powder',
