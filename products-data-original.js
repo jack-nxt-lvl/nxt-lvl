@@ -679,6 +679,46 @@ const compounds = [
     suggestedCompanions: ['mots-c', 'nad-500'],
     pricing: [ { label: '1 Vial', price: 65 }, { label: '10 Vials', price: 270 } ]
   },
+  {
+    id: 'slu-pp-332-10',
+    name: 'SLU-PP-332 — 10mg',
+    aka: 'Pan-ERR Agonist / Exercise-Mimetic Research Compound',
+    category: 'freeze-dried',
+    protocols: ['fat-loss', 'energy-vitality'],
+    badge: 'NEW',
+    tags: ['ERRα/β/γ Agonist', 'Mitochondrial Research', 'Oxidative Metabolism', 'Fatty Acid Oxidation', 'Exercise-Mimetic Research'],
+    shortDesc: 'Preclinical pan-ERR agonist studied for mitochondrial activity, oxidative metabolism, fatty-acid oxidation, and exercise-response signaling.',
+    description: 'SLU-PP-332 is a synthetic small-molecule agonist of estrogen-related receptors ERRα, ERRβ, and ERRγ, with the strongest reported activity at ERRα. Preclinical studies have investigated its effects on exercise-responsive gene programs, mitochondrial function and cellular respiration, oxidative skeletal-muscle characteristics, energy expenditure, and fatty-acid oxidation. In mouse studies, researchers reported increased oxidative type IIa muscle fibers and exercise endurance, while obesity-model studies reported increased energy expenditure and fatty-acid oxidation with reduced fat-mass accumulation. These findings are preclinical and do not establish human safety or efficacy.',
+    benefits: [
+      'Activates ERRα/β/γ signaling in preclinical research',
+      'Studied for increased mitochondrial function and cellular respiration',
+      'Studied for increased oxidative type IIa skeletal-muscle fibers',
+      'Enhanced exercise endurance in mouse research models',
+      'Studied for increased energy expenditure and fatty-acid oxidation',
+      'Reduced fat-mass accumulation in mouse obesity models',
+      'Useful research tool for exercise-responsive metabolic signaling'
+    ],
+    sideEffects: ['Human safety profile has not been established'],
+    dosing: {},
+    amount: '10mg per vial',
+    form: 'Lyophilized / Freeze-Dried Research Compound',
+    appearance: 'Research powder',
+    purity: 'See batch COA',
+    molecularFormula: 'C18H14N2O2',
+    halfLife: 'Not established in humans',
+    reconstitution: 'Follow laboratory handling procedures and batch documentation.',
+    syringe: 'N/A — laboratory research compound',
+    injectionSite: 'Not for human or veterinary use',
+    storage: 'Store according to batch documentation and laboratory handling requirements.',
+    administration: 'Laboratory research use only',
+    warnings: 'For research use only. Not for human or veterinary use. SLU-PP-332 is preclinical and is not an FDA-approved drug.',
+    suggestedCompanions: [],
+    pricing: [
+      { label: '1 Vial', price: 85 },
+      { label: '5 Vials', price: 348.5 },
+      { label: '10 Vials', price: 595 }
+    ]
+  },
 
   // ═══════════════════════════════════════
   // CAPSULES / ORAL
