@@ -504,3 +504,9 @@ nav .nav-cta {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
 }
+
+/* Accessible research support links across catalog and information pages. */
+.local-footer{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:24px 16px 96px;text-align:center;color:#bdb7cc;border-top:1px solid #50406c}
+.local-footer a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;color:#d5baff;text-decoration:underline;text-underline-offset:4px;border-radius:8px}
+.local-footer a:hover{background:#20162f}
+.local-footer a:focus-visible{outline:3px solid #e3cfff;outline-offset:3px}

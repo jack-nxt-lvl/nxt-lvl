@@ -19,7 +19,7 @@ test('supporting pages load the confidence redesign; homepage keeps its neon the
   assert.ok(pages.length >= 36);
   for (const page of pages) {
     const html = fs.readFileSync(page, 'utf8');
-    const references = html.match(/confidence-redesign\.css\?v=20260825-confidence-1/g) || [];
+    const references = html.match(/confidence-redesign\.css\?v=20261016-contact-2/g) || [];
     assert.equal(references.length, path.relative(root, page) === 'index.html' ? 0 : 1, path.relative(root, page));
     assert.ok(fs.existsSync(path.join(root, 'confidence-redesign.css')));
   }
