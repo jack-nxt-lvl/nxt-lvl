@@ -22,7 +22,14 @@ let cachedCatalog=null;
 function extractCompoundsArray(source){const match=source.match(/const\s+compounds\s*=\s*(\[[\s\S]*?\n\]);/);if(!match||!match[1])throw new Error('Could not locate compounds array');return vm.runInNewContext(`(${match[1]})`,{});}
 function loadCatalog(){if(cachedCatalog)return cachedCatalog;try{const source=fs.readFileSync(path.join(process.cwd(),'products-data-original.js'),'utf8');const compounds=extractCompoundsArray(source);if(!Array.isArray(compounds)||!compounds.length)throw new Error('Compounds array was empty');for(const extra of WEBSITE_ONLY_EXTRAS){if(!compounds.some(p=>p.id===extra.id||p.name===extra.name))compounds.push(extra);}cachedCatalog={compounds};return cachedCatalog;}catch(error){console.error('Catalog load error:',error&&error.message?error.message:error);cachedCatalog={compounds:[...WEBSITE_ONLY_EXTRAS]};return cachedCatalog;}}
 function normalizeText(value){return String(value||'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();}
-function scoreProduct(product,question){const haystack=normalizeText([product.id,product.name,product.aka,product.category,product.shortDesc,product.description,product.benefits&&product.benefits.join(' '),product.tags&&product.tags.join(' ')].join(' '));const terms=normalizeText(question).split(/\s+/).filter(t=>t.length>=3);let score=terms.reduce((n,t)=>n+(haystack.includes(t)?2:0),0);const q=normalizeText(question);if(/fat|weight|metabol|body composition|appetite/.test(q)){if(/retatrutide/.test(haystack))score+=20;else if(/tirzepatide/.test(haystack))score+=14;else if(/semaglutide/.test(haystack))score+=8;if(/tesamorelin|ipamorelin|aod|slu pp 332|mots c/.test(haystack))score+=4;}return score;}
+function scoreProduct(product, question) {
+ const words = normalizeText(question).split(/\s+/).filter(t => t.length >= 3);
+ const name = normalizeText([product.id, product.name].join(' '));
+ return words.reduce((score, word) => score + (name.includes(word) ? 1 : 0), 0);
+}
+function isHumanUseRequest(messages) {
+ return messages.some(message => message.role === 'user' && /\b(dos(?:e|ing|age)|inject(?:ion|ing)?|weight\s*loss|lose\s*weight|fat\s*loss|bodybuild(?:ing)?|muscle\s*gain|treat(?:ment)?|heal(?:ing)?|cycle|stack|personal\s*use|take\s+for|testosterone|trenbolone|anavar|nandrolone|winstrol)\b/i.test(message.content));
+}
 function formatProduct(product){const prices=(product.pricing||[]).map(p=>`${p.label}: $${Number(p.price).toFixed(2)}`).join(', ');return [`Name: ${product.name}`,`AKA: ${product.aka||'N/A'}`,`Research focus: ${product.shortDesc||product.description||''}`,`Pricing: ${prices}`].join('\n');}
 function formatProductSummary(product){const prices=(product.pricing||[]).map(p=>`${p.label} $${Number(p.price).toFixed(2)}`).join('; ');return `${product.name} | ${product.shortDesc||''} | Prices: ${prices}`;}
 function buildBusinessContext(messages){const latest=messages.length?messages[messages.length-1].content:'';const products=loadCatalog().compounds||[];const matched=products.map(product=>({product,score:scoreProduct(product,latest)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,MAX_MATCHED_PRODUCTS).map(x=>x.product);const fallback=matched.length?matched:products.slice(0,12);return ['# Business context',BUSINESS_FACTS,`Current menu item count: ${products.length}`,'<current_menu>',products.slice(0,MAX_CATALOG_SUMMARY_ITEMS).map(formatProductSummary).join('\n'),'</current_menu>','<most_relevant_items>',fallback.map(formatProduct).join('\n\n'),'</most_relevant_items>'].join('\n');}
@@ -50,7 +57,7 @@ const CHAT_INSTRUCTIONS = [
  'Do not hard-code a favorite product. Choose only from the supplied relevant current-menu items.',
  '# Research boundaries',
  'The interface already displays “For research use only,” so do not repeat a disclaimer in every reply.',
- 'If a customer frames the request as personal treatment, weight loss, bodybuilding, dosing, injection, cycling, or other human use, do not recommend a product for them. Briefly say you can help compare research products and prices but cannot advise personal use, then continue with one shopping question.',
+ 'If a customer frames the request as personal treatment, weight loss, bodybuilding, dosing, injection, cycling, or other human use, do not recommend a product for them. Briefly say you can help compare research products and prices but cannot advise personal use, Do not suggest alternatives, quantities, purchases, or checkout for that purpose.',
  'Never provide dosing, administration, injection, cycle, diagnosis, treatment, guaranteed-result, FDA-approval, or personal medical advice.',
  '# Measured failure to avoid',
  'Bad: “Retatrutide (not in catalog) — wait, we only use catalog.”',
@@ -59,6 +66,8 @@ const CHAT_INSTRUCTIONS = [
 module.exports=async function handler(req,res){
  if(req.method==='OPTIONS'){res.setHeader('Allow','POST, OPTIONS');return res.status(204).end();}
  if(req.method!=='POST'){res.setHeader('Allow','POST, OPTIONS');return res.status(405).json({error:'Method not allowed'});}
+ const boundaryMessages = normalizeMessages(req.body && req.body.messages);
+ if(isHumanUseRequest(boundaryMessages)) return res.status(200).json({reply:'These materials are not offered for human use. I cannot recommend products, dosing, combinations, or purchases for treatment, weight loss, bodybuilding, or personal use. For health questions, consult a licensed healthcare professional.'});
  if(!process.env.OPENAI_API_KEY)return res.status(500).json({error:'OPENAI_API_KEY is not configured.'});
  const messages=normalizeMessages(req.body&&req.body.messages);if(!messages.length)return res.status(400).json({error:'Message is required.'});
  const catalog=loadCatalog();if(!catalog.compounds||catalog.compounds.length<3)return res.status(500).json({error:'Product catalog failed to load. Please try again shortly.'});
@@ -71,3 +80,5 @@ module.exports=async function handler(req,res){
 };
 module.exports.cleanAssistantReply=cleanAssistantReply;
 module.exports.CHAT_INSTRUCTIONS=CHAT_INSTRUCTIONS;
+
+module.exports.isHumanUseRequest = isHumanUseRequest;

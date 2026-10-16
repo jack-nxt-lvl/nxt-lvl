@@ -107,7 +107,7 @@ if (typeof document !== 'undefined') (() => {
     const title = hero.querySelector('h1');
     if (title) title.innerHTML = '<span class="purple">NXT LVL</span><span class="silver">Research</span>';
     const copy = hero.querySelector('.hero-content > p');
-    if (copy) copy.innerHTML = 'Ultra-pure peptides and research compounds. <strong>Trusted quality.</strong> USA company with fast USA shipping.';
+    if (copy) copy.innerHTML = 'Laboratory research materials and <strong>batch documentation.</strong> Ask about South Florida fulfillment availability.';
     const primary = hero.querySelector('.btn-primary');
     if (primary) primary.textContent = 'View Compounds';
     if (!hero.querySelector('.crypto-assurance')) {
@@ -122,9 +122,9 @@ if (typeof document !== 'undefined') (() => {
   const trustBar = document.querySelector('.trust-bar');
   if (trustBar) {
     trustBar.innerHTML = `
-      <div class="trust-item"><div class="num">◇</div><div class="label">Premium Quality</div><div class="trust-sub">Carefully sourced research compounds.</div></div>
+      <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
-      <div class="trust-item"><div class="num">↗</div><div class="label">Fast USA Shipping</div><div class="trust-sub">Domestic fulfillment and discreet packaging.</div></div>
+      <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm availability and arrangements.</div></div>
       <div class="trust-item"><div class="num">🔒</div><div class="label">Direct Crypto Payments</div><div class="trust-sub">BTC, ETH and ERC-20 USDT checkout support.</div></div>`;
   }
 

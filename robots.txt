@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://nxtlvl-research.com/sitemap.xml
+Sitemap: https://www.nxtlvl-research.com/sitemap.xml

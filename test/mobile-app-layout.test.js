@@ -9,7 +9,7 @@ const mobile = fs.readFileSync(path.join(root, 'mobile-app-upgrade.js'), 'utf8')
 
 test('loads the mobile app layer last with iPhone safe-area support', () => {
   assert.match(index, /viewport-fit=cover/);
-  assert.match(index, /name="theme-color" content="#07060b"/);
+  assert.match(index, /name="theme-color" content="#020706"/);
   assert.ok(index.indexOf('mobile-app-upgrade.js') > index.indexOf('customer-checkout-upgrade.js'));
   assert.ok(index.indexOf('mobile-app-upgrade.js') > index.indexOf('ai-cart-bridge.js'));
 });

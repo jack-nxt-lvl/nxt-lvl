@@ -46,10 +46,7 @@ test('uses modest quantity discounts for freeze-dried products and injectables',
   assert.equal(oneBpc.subtotalCents, 6500);
   assert.equal(tenBpc.subtotalCents, 58500);
 
-  const oneTestE = normalizeOrder([{ key: 'test-e::0', qty: 1 }], 'pickup');
-  const fiveTestE = normalizeOrder([{ key: 'test-e::4', qty: 1 }], 'pickup');
-  assert.equal(oneTestE.subtotalCents, 8500);
-  assert.equal(fiveTestE.subtotalCents, 40375);
+  assert.throws(() => normalizeOrder([{key:'test-e::0',qty:1}], 'pickup'));
 });
 
 test('loads the visible product search and quantity upgrade after catalog supplements', () => {

@@ -14,13 +14,13 @@ function htmlFiles(directory = root) {
   });
 }
 
-test('every public HTML page loads the confidence redesign exactly once', () => {
+test('supporting pages load the confidence redesign; homepage keeps its neon theme', () => {
   const pages = htmlFiles();
   assert.ok(pages.length >= 36);
   for (const page of pages) {
     const html = fs.readFileSync(page, 'utf8');
     const references = html.match(/confidence-redesign\.css\?v=20260825-confidence-1/g) || [];
-    assert.equal(references.length, 1, path.relative(root, page));
+    assert.equal(references.length, path.relative(root, page) === 'index.html' ? 0 : 1, path.relative(root, page));
     assert.ok(fs.existsSync(path.join(root, 'confidence-redesign.css')));
   }
 });
@@ -37,7 +37,7 @@ test('the visual layer includes the green confidence palette and responsive layo
 
 test('homepage catalog and Paybis scripts remain connected after the visual change', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  assert.match(html, /products-data-original\.js\?v=20260824-performance-1/);
+  assert.match(html, /products-data-original\.js\?v=20261016-research-cleanup/);
   assert.match(html, /data-nxt-paybis-funding="1"/);
   assert.match(html, /lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
   assert.match(html, /direct-wallet-checkout\.js\?v=20260825-paybis-match-1/);

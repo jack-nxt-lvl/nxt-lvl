@@ -128,7 +128,7 @@
     </div>
     <div class="nxt-search-meta">
       <span class="nxt-search-status"><strong>All products</strong> shown</span>
-      <span>Freeze-dried: 1–10 · Injectables: 1–5</span>
+      <span>Freeze-dried: 1–10</span>
     </div>
   `;
 
