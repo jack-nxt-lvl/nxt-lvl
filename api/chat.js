@@ -9,11 +9,13 @@ const MAX_MATCHED_PRODUCTS = 12;
 const MAX_CATALOG_SUMMARY_ITEMS = 120;
 
 const BUSINESS_FACTS = [
-  'Business name: NXT LVL Research.',
+  'Business name: NXT LVL Research, operated by BLUE LIGHT VENTURES LLC. Business address: 30 N Gould St, Ste R, Sheridan, WY 82801, United States. This address is not advertised for walk-in pickup or returns. South Florida pickup arrangements must be confirmed separately.',
   'The website offers research compounds only.',
   'Products are labeled for laboratory research use only and are not for human consumption, medical, veterinary, or diagnostic purposes.',
   'Products are not FDA-approved drugs.',
   'Customers can add items to the cart, choose pricing tiers, and review a subtotal.',
+  'Fulfillment in USD: standard Priority Mail $12; overnight option $30; local pickup free; same-day local delivery $25. All fulfillment fees are waived when the merchandise subtotal exceeds $475 (strictly above, not equal), including overnight where available. Tax does not count toward the threshold.',
+  'Accepted and paid standard shipping orders are dispatched in 1–2 business days; this is handling time, not delivery time. Overnight destination, cutoff and dispatch date must be confirmed before payment. Local delivery is focused around ZIP codes 33137 and 33315, with nearby addresses checked individually. Local delivery coverage, same-day availability and pickup appointments must be confirmed; do not invent cities, cutoffs, addresses or guaranteed arrival dates.',
   'Requests require independent review of organization, purchaser authority, intended research, materials, and fulfillment before payment. Public payment access is paused while business review is completed.',
 ].join('\n');
 

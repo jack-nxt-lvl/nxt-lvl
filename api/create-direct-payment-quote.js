@@ -1,4 +1,5 @@
 const { requireApproval } = require('../lib/research-access');
+const fulfillmentRates = require('../fulfillment-rates');
 const QRCode = require('qrcode');
 const {
   ASSETS,
@@ -52,6 +53,7 @@ module.exports = async function handler(req, res) {
     if (!amount) throw new PaymentLedgerError('Unable to reserve a unique payment amount. Please retry checkout.');
     const payload = {
       v: 1,
+      fulfillmentPricingVersion: fulfillmentRates.VERSION,
       researchApprovalId: approval.reference,
       orderId,
       asset,

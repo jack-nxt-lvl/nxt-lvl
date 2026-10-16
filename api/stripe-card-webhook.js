@@ -1,3 +1,4 @@
+const fulfillmentRates = require('../fulfillment-rates');
 const crypto = require('crypto');
 const { escapeHtml, sendEmail } = require('../lib/email');
 const { redisCommand } = require('../lib/payment-ledger');
@@ -57,7 +58,7 @@ async function sendPaidNotifications(session, eventId) {
     await sendEmail({
       to: email,
       subject: `Payment received — ${orderId}`,
-      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#111;"><h2>Payment received</h2><p>Hello ${escapeHtml(name)},</p><p>Your hosted card payment of <strong>$${total}</strong> for order <strong>${escapeHtml(orderId)}</strong> was confirmed.</p><p>We will contact you separately regarding ${String(session.metadata && session.metadata.fulfillment) === 'pickup' ? 'local pickup' : 'shipping'}.</p></div>`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#111;"><h2>Payment received</h2><p>Hello ${escapeHtml(name)},</p><p>Your hosted card payment of <strong>$${total}</strong> for order <strong>${escapeHtml(orderId)}</strong> was confirmed.</p><p>We will contact you separately regarding ${escapeHtml((fulfillmentRates.OPTIONS[String(session.metadata && session.metadata.fulfillment)] || {}).label || 'fulfillment')}.</p></div>`,
       idempotencyKey: `nxt-card-paid-customer-${eventId}`,
     });
   }

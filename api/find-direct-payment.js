@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const quote = verifyQuote(req.body && req.body.quoteToken);
-    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
+    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment, quote.fulfillmentPricingVersion || 'legacy-v1');
     if (order.itemDigest !== quote.itemDigest || order.totalCents !== quote.totalCents || order.mode !== quote.fulfillment) {
       return json(res, 400, { error: 'The cart no longer matches this payment quote. Start checkout again.' });
     }

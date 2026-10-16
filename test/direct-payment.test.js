@@ -45,8 +45,8 @@ test('generates an exact BIP-21 Bitcoin wallet URI', () => {
 test('recalculates cart prices from the trusted catalog', () => {
   const order = normalizeOrder([{ key: 'bpc157-10::0', qty: 2, price: 0.01 }], 'shipping');
   assert.equal(order.subtotalCents, 13000);
-  assert.equal(order.shippingCents, 1000);
-  assert.equal(order.totalCents, 14000);
+  assert.equal(order.shippingCents, 1200);
+  assert.equal(order.totalCents, 14200);
   assert.equal(order.normalizedItems[0].unitCents, 6500);
 });
 

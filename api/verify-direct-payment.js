@@ -1,3 +1,4 @@
+const fulfillmentRates = require('../fulfillment-rates');
 const {
   ASSETS,
   applyCors,
@@ -58,7 +59,7 @@ async function sendConfirmationEmails({ quote, txid, customer, order, transactio
   const amount = quote.amountDisplay;
   const table = `<table style="width:100%;border-collapse:collapse;"><thead><tr><th style="text-align:left;padding:8px;border-bottom:2px solid #111;">Product</th><th style="padding:8px;border-bottom:2px solid #111;">Qty</th><th style="text-align:right;padding:8px;border-bottom:2px solid #111;">Total</th></tr></thead><tbody>${itemRows(order.normalizedItems)}</tbody></table>`;
   const details = `<p><strong>Order:</strong> ${escapeHtml(quote.orderId)}<br><strong>Payment:</strong> ${escapeHtml(amount)} ${escapeHtml(quote.asset)}<br><strong>Network:</strong> ${escapeHtml(asset.network)}<br><strong>Transaction:</strong> <a href="${escapeHtml(transactionUrl)}">${escapeHtml(txid)}</a><br><strong>Order total:</strong> ${formatMoney(order.totalCents)}</p>`;
-  const delivery = `<h3>${order.mode === 'pickup' ? 'Pickup' : 'Shipping address'}</h3><p>${addressHtml(customer, order.mode)}</p>`;
+  const delivery = `<h3>${escapeHtml(fulfillmentRates.label(order.mode))}</h3><p>${addressHtml(customer, order.mode)}</p>`;
   const wrapper = (title, body) => `<div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;color:#111;"><h2>${title}</h2>${body}<p style="margin-top:18px;color:#666;font-size:12px;">Payment was independently verified on the blockchain. Never share wallet recovery words or private keys.</p></div>`;
 
   await Promise.all([
@@ -111,7 +112,7 @@ module.exports = async function handler(req, res) {
   try {
     const quote = verifyQuote(req.body && req.body.quoteToken);
     const txid = cleanTxid(req.body && req.body.txid, quote.asset);
-    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
+    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment, quote.fulfillmentPricingVersion || 'legacy-v1');
     if (order.itemDigest !== quote.itemDigest || order.totalCents !== quote.totalCents || order.mode !== quote.fulfillment) {
       return json(res, 400, { error: 'The cart no longer matches this payment quote. Start checkout again.' });
     }

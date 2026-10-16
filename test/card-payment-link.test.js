@@ -69,10 +69,10 @@ test('builds an order-specific card-only hosted checkout from trusted catalog to
   assert.equal(form.get('customer_email'), customer.email);
   assert.equal(form.get('line_items[0][price_data][unit_amount]'), '6500');
   assert.equal(form.get('line_items[0][quantity]'), '2');
-  assert.equal(form.get('line_items[1][price_data][unit_amount]'), '1000');
+  assert.equal(form.get('line_items[1][price_data][unit_amount]'), '1200');
   assert.match(form.get('success_url'), /card_payment=success/);
   assert.equal(form.get('metadata[source]'), 'nxt_hosted_card_link');
-  assert.equal(order.totalCents, 14000);
+  assert.equal(order.totalCents, 14200);
 });
 
 test('shows email delivery only when the hosted provider, webhook, ledger, and sender are configured', () => {

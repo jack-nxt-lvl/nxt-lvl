@@ -2,7 +2,7 @@
   if (window.__nxtCustomerCheckoutDirectWallet) return;
   window.__nxtCustomerCheckoutDirectWallet = true;
 
-  const SHIPPING_FEE = 10;
+
   const CHECKOUT_DRAFT_KEY = 'nxtCheckoutDraftV1';
   const CART_STORAGE_KEY = 'nxtCartV1';
   let cardLinkConfigPromise;
@@ -173,13 +173,16 @@
   }
 
   async function collectCheckoutDetails(){
+    await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261016-rates',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
+    const rates=window.NxtFulfillment;
     const cardConfig=await loadCardLinkConfig();
     return new Promise(resolve=>{
       const draft=readCheckoutDraft();
-      let fulfillment=draft.fulfillment==='pickup'?'pickup':'shipping';
+      let fulfillment=Object.prototype.hasOwnProperty.call(rates.OPTIONS,draft.fulfillment)?draft.fulfillment:'shipping';
       let paymentMethod='crypto';
       let linkChannel=cardConfig.both?'both':cardConfig.email?'email':'sms';
       const base=subtotal();
+      const feeFor=mode=>rates.feeCents(mode,Math.round(base*100))/100;
       const overlay=document.createElement('div');
       overlay.className='nxt-checkout-overlay';
       overlay.innerHTML=`<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="researchReviewTitle">
@@ -192,14 +195,13 @@
           <label>Public organization website *<input id="nxtOrgWebsite" type="url" placeholder="https://" maxlength="240" required></label>
           <label class="wide">Intended laboratory research *<textarea id="nxtResearchPurpose" minlength="30" maxlength="1200" rows="3" placeholder="Describe the laboratory work and why these materials are needed. Do not include patient, health, or confidential study data." required></textarea></label>
         </div>
-        <div class="nxt-fulfillment-grid">
-          <button type="button" class="nxt-fulfillment active" data-mode="shipping"><strong>📦 Shipping request</strong><span>Standard delivery</span><span class="price">$10 shipping</span></button>
-          <button type="button" class="nxt-fulfillment" data-mode="pickup"><strong>📍 Local Pickup</strong><span>Appointment subject to review</span><span class="price">No shipping charge for pickup</span></button>
-        </div>
+        <div class="nxt-fulfillment-grid" role="group" aria-label="Fulfillment preference">
+          ${Object.entries(rates.OPTIONS).map(([mode,option])=>`<button type="button" class="nxt-fulfillment" data-mode="${mode}" aria-pressed="false"><strong>${option.label}</strong><span>${option.note}</span><span class="price">${feeFor(mode)===0?'Free':'$'+feeFor(mode).toFixed(2)}</span></button>`).join('')}
+        </div><p class="nxt-checkout-intro">Free shipping and local delivery on merchandise subtotals above $475, including overnight where available. At exactly $475, the listed rate applies. All methods remain subject to purchaser review and confirmed arrangements. <a href="/ordering-policy.html#fulfillment" target="_blank" rel="noopener">Fulfillment details</a></p>
         <div class="nxt-field-grid"><input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *"><input id="nxtEmail" autocomplete="email" placeholder="Email *"><input id="nxtPhone" autocomplete="tel" placeholder="Phone number *"></div>
         <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" placeholder="Apt / Unit"><input id="nxtCity" placeholder="City *"><input id="nxtState" placeholder="State *"><input id="nxtZip" placeholder="ZIP code *"></div></div>
         <div class="nxt-pickup-note">Provide the organization address even for pickup. An appointment, authorized collector and location must be independently confirmed before payment or travel.</div>
-        <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$10.00</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+SHIPPING_FEE).toFixed(2)}</span></div><div class="nxt-no-tax">Estimates in USD. Final stock, shipping, any applicable tax, timing and return terms must be confirmed before payment.</div></div>
+        <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$${feeFor(fulfillment).toFixed(2)}</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+feeFor(fulfillment)).toFixed(2)}</span></div><div class="nxt-no-tax">Estimates in USD. Final stock, shipping, any applicable tax, timing and return terms must be confirmed before payment.</div></div>
         <details class="nxt-approval-entry"><summary>Already reviewed? Enter your private approval code</summary><label>Approval code<input id="nxtResearchCode" type="password" autocomplete="off" spellcheck="false" maxlength="64"></label><p>Use the exact buyer, address, materials, quantities and fulfillment from your reviewed request. A code never substitutes for provider approval.</p></details><div class="nxt-payment-choice" hidden><strong>How would you like to pay?</strong><div class="nxt-payment-methods"><button type="button" class="nxt-payment-method active" data-payment="crypto"><b>₿ Pay with crypto now</b><span>Choose BTC, ETH, or USDT and pay directly from a wallet.</span><em>Blockchain verified</em></button>${cardConfig.available?`<button type="button" class="nxt-payment-method" data-payment="card-link"><b>💳 Send me a card link</b><span>Receive a separate hosted checkout link by email, text, or both.</span><em>Card details stay off-site</em></button>`:''}</div>${cardConfig.available?`<div class="nxt-link-options"><span>Where should we send your private hosted payment link?</span><div class="nxt-link-channels">${cardConfig.email?`<button type="button" class="nxt-link-channel ${cardConfig.both?'':'active'}" data-channel="email">✉ Email</button>`:''}${cardConfig.sms?`<button type="button" class="nxt-link-channel ${cardConfig.email||cardConfig.both?'':'active'}" data-channel="sms">▣ Text</button>`:''}${cardConfig.both?'<button type="button" class="nxt-link-channel recommended active" data-channel="both">✉ + ▣ Both</button>':''}</div><label class="nxt-link-consent"><input type="checkbox" id="nxtSmsConsent"><span>I agree to receive one transactional payment-link text. Message and data rates may apply.</span></label><div class="nxt-link-provider"><b>Completely separate card processing:</b> the link opens the payment provider's hosted page. NXT LVL does not receive or store card numbers.</div></div>`:''}</div>
         <label class="nxt-research-attestation"><input id="nxtResearchAttestation" type="checkbox"><span>I am authorized to request these materials for a research organization. They will not be used for human or veterinary consumption, administration, diagnosis or treatment, or supplied for personal use. I have read the <a href="/research-eligibility.html" target="_blank" rel="noopener">eligibility rules</a>, <a href="/ordering-policy.html" target="_blank" rel="noopener">ordering information</a> and <a href="/privacy.html" target="_blank" rel="noopener">privacy notice</a>.</span></label><div class="nxt-checkout-error" role="alert"></div>
         <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Wallet Payment →</button></div>
@@ -221,10 +223,10 @@
         writeCheckoutDraft({fulfillment,customer:{name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')}});
       };
       const refresh=()=>{
-        const fee=fulfillment==='pickup'?0:SHIPPING_FEE;
+        const fee=feeFor(fulfillment);
         addressWrap.classList.remove('hidden');pickupNote.classList.toggle('show',fulfillment==='pickup');
-        shippingLabel.textContent=fulfillment==='pickup'?'Local pickup':'Shipping';shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(base+fee).toFixed(2);
-        overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.classList.toggle('active',btn.dataset.mode===fulfillment));
+        shippingLabel.textContent=rates.label(fulfillment);shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(base+fee).toFixed(2);
+        overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>{const active=btn.dataset.mode===fulfillment;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});
         overlay.querySelectorAll('.nxt-payment-method').forEach(btn=>btn.classList.toggle('active',btn.dataset.payment===paymentMethod));
         overlay.querySelectorAll('.nxt-link-channel').forEach(btn=>btn.classList.toggle('active',btn.dataset.channel===linkChannel));
         linkOptions?.classList.toggle('show',paymentMethod==='card-link');
@@ -251,7 +253,7 @@
         if(!research.attestation){errorEl.textContent='Please read and acknowledge the research eligibility and privacy notices.';errorEl.classList.add('show');return;}
         if(!researchApprovalCode && (research.organization.length<3 || research.role.length<2 || !/^https:\/\//.test(research.website) || research.purpose.length<30)){errorEl.textContent='Provide your organization, role, public website and a laboratory research description of at least 30 characters.';errorEl.classList.add('show');return;}
         if(researchApprovalCode && !/^[a-f0-9]{64}$/.test(researchApprovalCode)){errorEl.textContent='Enter the complete private approval code supplied after review.';errorEl.classList.add('show');return;}
-        const shipping=fulfillment==='pickup'?0:SHIPPING_FEE;
+        const shipping=feeFor(fulfillment);
         writeCheckoutDraft({fulfillment,customer});
         overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer,research,researchApprovalCode,paymentMethod,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
       };

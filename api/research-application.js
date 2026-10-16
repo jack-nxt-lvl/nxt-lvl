@@ -1,3 +1,4 @@
+const fulfillmentRates = require('../fulfillment-rates');
 const { applyCors, cleanCustomer, json, normalizeOrder } = require('../lib/direct-payment');
 const { createApplication } = require('../lib/research-access');
 const { sendEmail, escapeHtml } = require('../lib/email');
@@ -17,7 +18,7 @@ module.exports = async (req, res) => {
     const record = await createApplication({ req, body, order, customer });
     let notified = false;
     try {
-      const rows = Object.entries({ Reference: record.reference, Organization: record.research.organization, Website: record.research.website, Role: record.research.role, Purpose: record.research.purpose, Name: customer.name, Email: customer.email, Phone: customer.phone, Address: `${customer.address}, ${customer.city}, ${customer.state} ${customer.zip}` });
+      const rows = Object.entries({ Reference: record.reference, Fulfillment: fulfillmentRates.label(order.mode), 'Fulfillment fee (USD)': (order.shippingCents / 100).toFixed(2), 'Estimated total (USD)': (order.totalCents / 100).toFixed(2), Organization: record.research.organization, Website: record.research.website, Role: record.research.role, Purpose: record.research.purpose, Name: customer.name, Email: customer.email, Phone: customer.phone, Address: `${customer.address}, ${customer.city}, ${customer.state} ${customer.zip}` });
       await sendEmail({
         to: process.env.ORDER_NOTIFICATION_EMAIL || 'payment@nxtlvl-research.com',
         subject: `RESEARCH REVIEW REQUIRED — ${record.reference}`,
