@@ -12,16 +12,16 @@ test('homepage uses stable catalog URLs instead of cache-busting every visit', (
   assert.doesNotMatch(homepage, /document\.write\([^\n]*Date\.now/);
   assert.doesNotMatch(catalogOverrides, /document\.write|Date\.now\(\)/);
   assert.match(homepage, /products-data-original\.js\?v=20261016-research-cleanup/);
-  assert.match(homepage, /cjc-products\.js\?v=20260824-performance-1/);
+  assert.match(homepage, /cjc-products\.js\?v=20261016-review/);
   assert.match(homepage, /products-data\.js\?v=20260824-performance-1/);
 });
 
 test('catalog dependencies load in the required order and every local asset exists', () => {
   const orderedScripts = [
     'products-data-original.js?v=20261016-research-cleanup',
-    'cjc-products.js?v=20260824-performance-1',
+    'cjc-products.js?v=20261016-review',
     'products-data.js?v=20260824-performance-1',
-    'premium-enhancements.js?v=20261016-research-cleanup',
+    'premium-enhancements.js?v=20261016-review',
   ];
   let previous = -1;
   for (const source of orderedScripts) {

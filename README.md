@@ -150,3 +150,14 @@ same tab. Network/RPC services can be temporarily unavailable even though funds
 remain in the receiving wallet.
 
 Run the automated chain-verification tests with `npm test` before deployment.
+
+
+## Research purchaser review (October 16, 2026)
+
+New payment requests are fail-closed by default. Public visitors submit an inquiry through `api/research-application`; acknowledgments never approve a buyer. `lib/research-access.js` binds private, expiring approval codes to the normalized customer (including address), exact items, quantity, total, and fulfillment method. Pending, rejected, revoked, expired, changed, or unavailable records cannot authorize payment. One approval is limited to one payment route and one order ID. Codes are never stored in browser persistence or returned by the public application endpoint.
+
+Do not enable payments simply to restore the former checkout. First complete the legal-seller details, paid-order policies, tax calculation/collection decision, batch-level product eligibility, purchaser-review procedures, and processor review. `RESEARCH_COMMERCE_ENABLED=true` opens only the verified-request path; `STRIPE_RESEARCH_APPROVED=true` additionally requires actual account/catalog acceptance from Stripe. Neither flag creates regulatory approval. Both remain unset by this change. Stripe's terms-of-service URL must be configured in the Stripe public business settings before creating sessions that require terms acceptance.
+
+The private `scripts/research-review.cjs` tool is excluded from Vercel deployment. With authorized server-side database credentials, inspect a request, independently document organization identity, purchaser authority, laboratory purpose, destination, lawful product supply, lot/COA evidence, final fulfillment and refund terms, and tax review, then approve or reject. It does not independently establish those facts. Evidence files and approval-code outputs must be kept outside this public repository with restricted access. Approvals expire after seven days; stored applications expire 90 days after creation or review update. Use revoke to block creation of new payment instructions; separately expire any already-issued Stripe Checkout Session in the Stripe Dashboard, and resolve any existing payment manually. Do not dispatch merely because an email says a payment was confirmed.
+
+Request notifications require the existing Redis/KV and Resend configuration. A stored request remains pending if notification fails, and the browser tells the applicant to contact support with its reference. No public approval/list endpoint exists. Operator inspect output contains personal data and must not be published. Existing payment-verification endpoints remain usable to reconcile funds already sent, but payment receipt is not fulfillment approval.

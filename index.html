@@ -61,7 +61,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="/products-data-original.js?v=20261016-research-cleanup" as="script">
-  <link rel="preload" href="/cjc-products.js?v=20260824-performance-1" as="script">
+  <link rel="preload" href="/cjc-products.js?v=20261016-review" as="script">
   <link rel="preload" href="/assets/research-lab-hero-neon-clinical-v2.webp" as="image" type="image/webp" fetchpriority="high">
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -2483,7 +2483,7 @@
   <link rel="stylesheet" href="/nxt-responsive-redesign.css?v=20260821-1">
   <link rel="stylesheet" href="/crypto-payment-guide.css?v=20260824-easy-pay-1">
   <link rel="stylesheet" href="/confidence-redesign.css?v=20260825-exact-labels-3">
-<link rel="stylesheet" href="/local-research.css">
+<link rel="stylesheet" href="/local-research.css?v=20261016-review">
 </head>
 
 <body>
@@ -2502,7 +2502,7 @@
       <ul>
         <li><a href="#menu">Compounds</a></li><li><a href="/south-florida-research.html">Local inquiries</a></li>
         <li><a href="#crypto-guide">How to Pay</a></li>
-        <li><a href="#order" class="nav-cta">Place Order</a></li>
+        <li><a href="#order" class="nav-cta">Research Review</a></li>
       </ul>
       <button class="cart-toggle" id="cartToggle" onclick="openCart()" aria-label="Open cart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -2539,6 +2539,7 @@
   <!-- TRUST BAR -->
   <div class="trust-bar"><div class="trust-item"><div class="num">COA</div><div class="label">Batch documentation</div></div><div class="trust-item"><div class="num">LAB</div><div class="label">Research only</div></div><div class="trust-item"><div class="num">USA</div><div class="label">Fulfillment inquiries</div></div><div class="trust-item"><div class="num">HELP</div><div class="label">754-290-7210</div></div></div>
 <section class="local-panel" id="local-research" aria-labelledby="localResearchTitle"><p class="eyebrow">South Florida research support</p><h2 id="localResearchTitle">Miami &amp; South Florida delivery and pickup inquiries</h2><p>Ask about availability for your laboratory, city, and ZIP code. Local delivery and appointment-based pickup require confirmation of eligibility, fees, location, and timing.</p><div class="local-actions"><a href="tel:+17542907210">Call 754-290-7210</a><a href="sms:+17542907210">Text us</a><a href="https://wa.me/17542907210">WhatsApp</a></div><a href="/south-florida-research.html">Check local fulfillment details &amp; FAQs →</a><p>For laboratory research only. Not for human consumption.</p></section>
+  <section class="local-panel" id="purchaser-review" aria-labelledby="reviewHeading"><p class="eyebrow">Research first · Review before payment</p><h2 id="reviewHeading">Built for verified research requests.</h2><p>Select materials, tell us about your organization and intended laboratory work, and request an independent eligibility review. A checkbox alone does not approve a purchaser.</p><div class="local-actions"><a href="/research-eligibility.html">How purchaser review works</a><a href="/coa.html">Review batch documentation</a></div><p><strong>Research inquiries are open. Online payment is currently unavailable while business and payment-provider review is completed.</strong></p><p>All prices are in USD. Your request is not an accepted order or delivery booking.</p></section>
   <!-- COMPOUND MENU -->
   <section id="menu">
     <div class="section-header">
@@ -2550,8 +2551,8 @@
     <div class="compound-grid" id="compoundGrid"></div>
   </section>
 
-  <section id="crypto-guide" class="crypto-guide" aria-labelledby="cryptoGuideTitle">
-    <div class="crypto-guide-shell">
+  <section id="crypto-guide" class="crypto-guide" aria-labelledby="cryptoGuideTitle"><p class="local-panel"><strong>Payment reference for reviewed orders only.</strong> Online payment is currently unavailable. Do not buy or send cryptocurrency for a pending inquiry. <a href="/research-eligibility.html">Start with purchaser review</a>.</p>
+    <details class="crypto-guide-shell"><summary style="padding:20px;cursor:pointer">Payment reference — only after purchaser and provider review</summary>
       <div class="crypto-guide-header">
         <div class="crypto-guide-copy">
           <div class="section-tag">Beginner Payment Guide</div>
@@ -2713,21 +2714,21 @@
       <p class="crypto-guide-fineprint">If checkout offers a separate hosted card-payment link, it opens on the
         payment provider's website. NXT LVL does not collect card details. All products are for laboratory research
         use only.</p>
-    </div>
+    </details>
   </section>
 
   <!-- ORDER -->
   <section id="order">
     <div class="section-header">
       <div class="section-tag">Place an Order</div>
-      <h2>Ready to Order?</h2>
-      <p>Contact us via WhatsApp to confirm material availability, fulfillment options, and order details.</p>
+      <h2>Questions before your research request?</h2>
+      <p>Contact us about documentation, purchaser review and fulfillment. Contacting support does not bypass eligibility checks.</p>
     </div>
     <div class="order-card">
       <div class="order-header-bar"></div>
       <div class="order-body">
         <div class="order-icon">📦</div>
-        <h3>Order Direct</h3>
+        <h3>Research Support</h3>
         <p class="order-sub">Message us on WhatsApp with your order details. We'll confirm availability, pricing, and
           shipping.</p>
         <div class="order-contact">
@@ -2743,7 +2744,7 @@
         <div class="crypto-notice">
           <div class="crypto-icon">₿</div>
           <div class="crypto-text">
-            <strong>Crypto-only checkout</strong>
+            <strong>Research review before payment</strong>
             <span>Pay directly with BTC, ETH, or ERC-20 USDT. New to crypto? <a href="#crypto-guide">Follow the
                 beginner payment guide</a> before you send.</span>
           </div>
@@ -2787,7 +2788,7 @@
           <span>Subtotal</span>
           <span id="cartSubtotal">$0.00</span>
         </div>
-        <p class="cart-note">Final pricing &amp; payment confirmed at checkout.</p>
+        <p class="cart-note">Prices in USD. Final terms require review before payment.</p>
         <button class="btn-primary cart-checkout-btn" id="cartCheckoutBtn">Proceed to
           Checkout</button>
       </div>
@@ -2834,9 +2835,9 @@
 
   <!-- DATA -->
   <script src="/products-data-original.js?v=20261016-research-cleanup"></script>
-  <script src="/cjc-products.js?v=20260824-performance-1"></script>
+  <script src="/cjc-products.js?v=20261016-review"></script>
   <script src="/products-data.js?v=20260824-performance-1"></script>
-  <script defer src="/premium-enhancements.js?v=20261016-research-cleanup"></script>
+  <script defer src="/premium-enhancements.js?v=20261016-review"></script>
 
   <script>
     // Nav scroll
@@ -3675,18 +3676,18 @@
       }
     })();
   </script>
-  <script src="nav-cleanup.js?v=20260824-crypto-only-1"></script>
-  <script src="pt141-product.js?v=20260818-2"></script>
-  <script src="bac-water-product.js?v=20260818-1"></script>
-  <script src="glutathione-product.js?v=20260818-1"></script>
+  <script src="nav-cleanup.js?v=20261016-review"></script>
+  <script src="pt141-product.js?v=20261016-review"></script>
+  <script src="bac-water-product.js?v=20261016-review"></script>
+  <script src="glutathione-product.js?v=20261016-review"></script>
   <script src="quantity-pricing.js?v=20260826-quantity-1"></script>
   <script src="catalog-search-quantity.js?v=20261016-research-cleanup"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
-  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20260825-paybis-match-1"></script>
-  <script src="customer-checkout-upgrade.js?v=20260825-paybis-match-1"></script>
+  <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261016-review"></script>
+  <script src="customer-checkout-upgrade.js?v=20261016-review"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
   <script src="hero-neon-lab-v5.js?v=20260825-neon-lab-hero-5"></script>
-<aside class="local-footer" aria-label="Research customer support"><a href="/south-florida-research.html">South Florida inquiries</a> · <a href="tel:+17542907210">754-290-7210</a> · <a href="sms:+17542907210">Text</a> · <a href="https://wa.me/17542907210">WhatsApp</a></aside></body>
+<aside class="local-footer" aria-label="Research customer support"><a href="/south-florida-research.html">South Florida inquiries</a> · <a href="tel:+17542907210">754-290-7210</a> · <a href="sms:+17542907210">Text</a> · <a href="https://wa.me/17542907210">WhatsApp</a></aside><div class="research-policy-links"><a href="/research-eligibility.html">Purchaser eligibility</a><a href="/ordering-policy.html">Ordering &amp; support</a><a href="/privacy.html">Privacy</a></div></body>
 
 </html>

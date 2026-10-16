@@ -1,0 +1,7 @@
+scripts/
+test/
+docs/
+README.md
+*.log
+work/
+outputs/

@@ -65,7 +65,7 @@ async function sendConfirmationEmails({ quote, txid, customer, order, transactio
     sendEmail({
       to: 'payment@nxtlvl-research.com',
       subject: `PAYMENT CONFIRMED — ${quote.orderId} — ${quote.asset} — ${formatMoney(order.totalCents)}`,
-      html: wrapper('Payment confirmed', `${details}<h3>Customer</h3><p>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}<br>${escapeHtml(customer.phone)}</p>${delivery}<h3>Products</h3>${table}`),
+      html: wrapper('Payment confirmed — fulfillment review required', `<p><strong>Do not dispatch solely on payment confirmation.</strong> Independently check purchaser eligibility, the approval record, batch documents and fulfillment terms. Legacy payments without a research approval need manual resolution.</p>${details}<h3>Customer</h3><p>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}<br>${escapeHtml(customer.phone)}</p>${delivery}<h3>Products</h3>${table}`),
       idempotencyKey: `nxt-merchant-${txid}`,
     }),
     sendEmail({
@@ -176,6 +176,7 @@ module.exports = async function handler(req, res) {
     }
     return json(res, 200, {
       status: 'paid',
+      fulfillmentStatus: 'manual_review',
       orderId: quote.orderId,
       asset: quote.asset,
       amount: quote.amountDisplay,

@@ -25,7 +25,7 @@ const supplementalProducts = [
 
 test('every browser-added freeze-dried product has 1 through 10 trusted checkout options', () => {
   for (const product of supplementalProducts) {
-    assert.match(storefrontSources, new RegExp(`id:\\s*['\"]${product.id}['\"]`));
+    assert.match(storefrontSources, new RegExp(`['"]?id['"]?:\\s*['\"]${product.id}['\"]`));
     const pricing = buildQuantityPricing({
       category: 'freeze-dried',
       pricing: [{ label: '1 Vial', price: product.basePrice }],

@@ -1,13 +1,43 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "api/create-direct-payment-quote.js": { "maxDuration": 30 },
-    "api/create-card-payment-link.js": { "maxDuration": 30 },
-    "api/find-direct-payment.js": { "maxDuration": 60 },
-    "api/verify-direct-payment.js": { "maxDuration": 60 },
-    "api/stripe-card-webhook.js": { "maxDuration": 30 }
+    "api/create-direct-payment-quote.js": {
+      "maxDuration": 30
+    },
+    "api/create-card-payment-link.js": {
+      "maxDuration": 30
+    },
+    "api/find-direct-payment.js": {
+      "maxDuration": 60
+    },
+    "api/verify-direct-payment.js": {
+      "maxDuration": 60
+    },
+    "api/stripe-card-webhook.js": {
+      "maxDuration": 30
+    },
+    "api/research-application.js": {
+      "maxDuration": 30
+    }
   },
   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    },
     {
       "source": "/",
       "headers": [

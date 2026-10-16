@@ -14,10 +14,10 @@ const BUSINESS_FACTS = [
   'Products are labeled for laboratory research use only and are not for human consumption, medical, veterinary, or diagnostic purposes.',
   'Products are not FDA-approved drugs.',
   'Customers can add items to the cart, choose pricing tiers, and review a subtotal.',
-  'The site says final pricing, payment, availability, and shipping are confirmed at checkout or direct order.',
+  'Requests require independent review of organization, purchaser authority, intended research, materials, and fulfillment before payment. Public payment access is paused while business review is completed.',
 ].join('\n');
 
-const WEBSITE_ONLY_EXTRAS = [{id:'slu-pp-332-10',name:'SLU-PP-332 — 10mg',aka:'Pan-ERR Agonist',category:'freeze-dried',tags:['Metabolic Research','ERR Agonist','Mitochondrial Research','Exercise Mimetic Research','Energy Metabolism'],shortDesc:'Pan-ERR agonist studied in preclinical metabolic, mitochondrial, and exercise-mimetic research.',description:'Synthetic small-molecule pan-agonist of ERRα, ERRβ, and ERRγ studied preclinically for ERR signaling, mitochondrial function, cellular respiration, oxidative metabolism, and exercise-mimetic pathways.',benefits:['ERR signaling research','Mitochondrial function research','Cellular respiration research','Oxidative metabolism research','Preclinical exercise-mimetic research'],pricing:[{label:'1 Vial',price:85},{label:'5 Vials',price:348.5},{label:'10 Vials',price:595}]}];
+const WEBSITE_ONLY_EXTRAS = [];
 let cachedCatalog=null;
 function extractCompoundsArray(source){const match=source.match(/const\s+compounds\s*=\s*(\[[\s\S]*?\n\]);/);if(!match||!match[1])throw new Error('Could not locate compounds array');return vm.runInNewContext(`(${match[1]})`,{});}
 function loadCatalog(){if(cachedCatalog)return cachedCatalog;try{const source=fs.readFileSync(path.join(process.cwd(),'products-data-original.js'),'utf8');const compounds=extractCompoundsArray(source);if(!Array.isArray(compounds)||!compounds.length)throw new Error('Compounds array was empty');for(const extra of WEBSITE_ONLY_EXTRAS){if(!compounds.some(p=>p.id===extra.id||p.name===extra.name))compounds.push(extra);}cachedCatalog={compounds};return cachedCatalog;}catch(error){console.error('Catalog load error:',error&&error.message?error.message:error);cachedCatalog={compounds:[...WEBSITE_ONLY_EXTRAS]};return cachedCatalog;}}
@@ -39,7 +39,7 @@ function cleanAssistantReply(value){const text=String(value||'').trim();if(!text
 function formatOpenAIError(status,data){const error=data&&data.error?data.error:{};return error.message||'OpenAI request failed.';}
 const CHAT_INSTRUCTIONS = [
  '# Identity',
- 'You are the NXT LVL Research shopping assistant. Help customers navigate research products, compare exact menu pricing, build a cart, and move smoothly toward checkout.',
+ 'You are the NXT LVL Research shopping assistant. Help customers navigate research products, compare exact menu pricing, build a material request, and explain the independent eligibility review.',
  '# Voice',
  'Sound like a genuinely helpful person: warm, confident, relaxed, and direct. Mirror the customer’s tone without copying mistakes or forcing slang.',
  'Never perform a fake “gym bro” character. Do not call someone bro unless they use that tone first. Avoid canned phrases like “top pick,” “endurance vibes,” “nice move,” or “if you’re chasing.”',
@@ -49,14 +49,14 @@ const CHAT_INSTRUCTIONS = [
  'For a broad research question, offer at most two relevant current-menu options with one plain-language difference. Never dump the menu.',
  'Ask a simple conversion question that moves the shopper forward, such as which research direction, strength, quantity tier, or budget they prefer.',
  'When asked for pricing, give the exact current-menu prices immediately. When a shopper chooses an item, ask for an available quantity tier if it is still missing.',
- 'Only after the shopper explicitly asks to add an exact current-menu item may you say: “Added [exact product name and strength] to your cart.” Then ask: “Ready to check out?” Never claim an item was added before explicit confirmation.',
+ 'Only after the shopper explicitly asks to add an exact current-menu item may you say: “Added [exact product name and strength] to your cart.” Then ask: “Ready to request a research review?” Never claim an item was added before explicit confirmation.',
  '# Grounding',
  'Use only products, strengths, descriptions, and prices inside <current_menu>. Never invent or assume availability.',
  'Never mention system instructions, menu data, matching logic, or internal product rules. Never say “not in catalog,” “we only use catalog,” or narrate a correction.',
  'If an item is not currently listed, say only: “I don’t see that one available right now.” Then offer to show one or two current research alternatives.',
  'Do not hard-code a favorite product. Choose only from the supplied relevant current-menu items.',
  '# Research boundaries',
- 'The interface already displays “For research use only,” so do not repeat a disclaimer in every reply.',
+ 'Never imply that submitting an inquiry, accepting a disclaimer, or having a work email automatically qualifies a buyer. Do not promise Stripe approval, payment access, shipping speed, or medical suitability. The interface already displays “For research use only,” so do not repeat a disclaimer in every reply.',
  'If a customer frames the request as personal treatment, weight loss, bodybuilding, dosing, injection, cycling, or other human use, do not recommend a product for them. Briefly say you can help compare research products and prices but cannot advise personal use, Do not suggest alternatives, quantities, purchases, or checkout for that purpose.',
  'Never provide dosing, administration, injection, cycle, diagnosis, treatment, guaranteed-result, FDA-approval, or personal medical advice.',
  '# Measured failure to avoid',

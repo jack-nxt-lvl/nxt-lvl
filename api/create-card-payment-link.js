@@ -1,3 +1,4 @@
+const { requireApproval } = require('../lib/research-access');
 const { applyCors, cleanCustomer, json, normalizeOrder, randomOrderId } = require('../lib/direct-payment');
 const {
   abandonRequest,
@@ -38,8 +39,9 @@ module.exports = async function handler(req, res) {
 
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
+    const approval = await requireApproval(req.body || {}, order, customer, 'card');
     if (channel === 'sms' || channel === 'both') customer.phone = normalizePhone(customer.phone);
-    const requestId = String(req.body && req.body.requestId || '');
+    const requestId = approval.reference.slice(3);
     digest = requestDigest({ requestId, order, customer, channel });
     await enforceRateLimit(req, customer);
     lease = await beginRequest(requestId, digest);
@@ -51,8 +53,8 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    const orderId = randomOrderId();
-    const session = await createStripeCheckoutSession({ order, customer, orderId, requestId });
+    const orderId = approval.orderId;
+    const session = await createStripeCheckoutSession({ order, customer, orderId, requestId, approval });
     await deliverHostedLink({ channel, customer, order, orderId, session, requestId });
     await notifyMerchantLinkSent({ channel, customer, order, orderId, requestId }).catch((error) => {
       console.error('Card-link merchant notification error:', error);

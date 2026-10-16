@@ -19,7 +19,7 @@ test('supporting pages load the confidence redesign; homepage keeps its neon the
   assert.ok(pages.length >= 36);
   for (const page of pages) {
     const html = fs.readFileSync(page, 'utf8');
-    const references = html.match(/confidence-redesign\.css\?v=20261016-contact-2/g) || [];
+    const references = html.match(/confidence-redesign\.css\?v=20261016-review/g) || [];
     assert.equal(references.length, path.relative(root, page) === 'index.html' ? 0 : 1, path.relative(root, page));
     assert.ok(fs.existsSync(path.join(root, 'confidence-redesign.css')));
   }
@@ -40,6 +40,6 @@ test('homepage catalog and Paybis scripts remain connected after the visual chan
   assert.match(html, /products-data-original\.js\?v=20261016-research-cleanup/);
   assert.match(html, /data-nxt-paybis-funding="1"/);
   assert.match(html, /lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
-  assert.match(html, /direct-wallet-checkout\.js\?v=20260825-paybis-match-1/);
-  assert.match(html, /customer-checkout-upgrade\.js\?v=20260825-paybis-match-1/);
+  assert.match(html, /direct-wallet-checkout\.js\?v=20261016-review/);
+  assert.match(html, /customer-checkout-upgrade\.js\?v=20261016-review/);
 });

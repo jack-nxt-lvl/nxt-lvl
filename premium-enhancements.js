@@ -8,50 +8,7 @@ function normalizeProductSearch(value) {
 }
 
 if (typeof document !== 'undefined') (() => {
-  // Add SLU-PP-332 to the same product database used by the storefront.
-  if (typeof compounds !== 'undefined' && Array.isArray(compounds) && !compounds.some(p => p.id === 'slu-pp-332-10')) {
-    compounds.push({
-      id: 'slu-pp-332-10',
-      name: 'SLU-PP-332 — 10mg',
-      aka: 'Pan-ERR Agonist / Exercise-Mimetic Research Compound',
-      category: 'freeze-dried',
-      protocols: ['fat-loss', 'energy-vitality'],
-      badge: 'NEW',
-      tags: ['ERRα/β/γ Agonist', 'Mitochondrial Research', 'Oxidative Metabolism', 'Fatty Acid Oxidation', 'Exercise-Mimetic Research'],
-      shortDesc: 'Preclinical pan-ERR agonist studied for mitochondrial activity, oxidative metabolism, fatty-acid oxidation, and exercise-response signaling.',
-      description: 'SLU-PP-332 is a synthetic small-molecule agonist of estrogen-related receptors ERRα, ERRβ, and ERRγ, with the strongest reported activity at ERRα. Preclinical studies have investigated its effects on exercise-responsive gene programs, mitochondrial function and cellular respiration, oxidative skeletal-muscle characteristics, energy expenditure, and fatty-acid oxidation. In mouse studies, researchers reported increased oxidative type IIa muscle fibers and exercise endurance, while obesity-model studies reported increased energy expenditure and fatty-acid oxidation with reduced fat-mass accumulation. These findings are preclinical and do not establish human safety or efficacy.',
-      benefits: [
-        'Activates ERRα/β/γ signaling in preclinical research',
-        'Studied for increased mitochondrial function and cellular respiration',
-        'Studied for increased oxidative type IIa skeletal-muscle fibers',
-        'Enhanced exercise endurance in mouse research models',
-        'Studied for increased energy expenditure and fatty-acid oxidation',
-        'Reduced fat-mass accumulation in mouse obesity models',
-        'Useful research tool for exercise-responsive metabolic signaling'
-      ],
-      sideEffects: ['Human safety profile has not been established'],
-      dosing: {},
-      amount: '10mg per vial',
-      form: 'Lyophilized / Freeze-Dried Research Compound',
-      appearance: 'Research powder',
-      purity: 'See batch COA',
-      molecularFormula: 'C18H14N2O2',
-      halfLife: 'Not established in humans',
-      reconstitution: 'Follow laboratory handling procedures and batch documentation.',
-      syringe: 'N/A — laboratory research compound',
-      injectionSite: 'Not for human or veterinary use',
-      storage: 'Store according to batch documentation and laboratory handling requirements.',
-      administration: 'Laboratory research use only',
-      warnings: 'For research use only. Not for human or veterinary use. SLU-PP-332 is preclinical and is not an FDA-approved drug.',
-      suggestedCompanions: [],
-      pricing: [
-        { label: '1 Vial', price: 85 },
-        { label: '5 Vials', price: 348.5 },
-        { label: '10 Vials', price: 595 }
-      ]
-    });
-  }
-
+  if(typeof compounds!=="undefined"&&!compounds.some(p=>p.id==="slu-pp-332-10"))compounds.push({"id": "slu-pp-332-10", "name": "SLU-PP-332 \u2014 10mg", "category": "freeze-dried", "aka": "Laboratory research material", "protocols": [], "badge": "", "tags": ["Laboratory research", "Documentation review"], "shortDesc": "SLU-PP-332, 10mg labeled vial. Request lot-specific material documentation.", "description": "SLU-PP-332 material offered for qualified laboratory research review. Confirm material identity, amount and lot-specific documentation against your laboratory requirements. Not for human or veterinary use.", "amount": "10mg per vial", "form": "Lyophilized research material", "appearance": "Research powder", "molecularFormula": "C18H14N2O2", "purity": "Refer to the lot-specific report", "warnings": "Laboratory research only. Not for human or veterinary use.", "suggestedCompanions": [], "pricing": [{"label": "1 Vial", "price": 85}, {"label": "5 Vials", "price": 348.5}, {"label": "10 Vials", "price": 595}]});
   const css = document.createElement('style');
   css.textContent = `
   :root{--lux:#c4b5fd;--lux2:#8b5cf6;--panel:#0d0d14}
@@ -113,7 +70,7 @@ if (typeof document !== 'undefined') (() => {
     if (!hero.querySelector('.crypto-assurance')) {
       const assurance = document.createElement('div');
       assurance.className = 'crypto-assurance';
-      assurance.innerHTML = '<span>🔒</span><div><b>Direct crypto payments</b> · BTC, ETH, and USDT are verified independently on-chain. <a href="#crypto-guide">New to crypto? See how it works.</a></div>';
+      assurance.innerHTML = '<span>🔒</span><div><b>Research purchaser review</b> · Organization and intended use are checked before payment. <a href="/research-eligibility.html">See eligibility requirements.</a></div>';
       hero.querySelector('.hero-buttons')?.insertAdjacentElement('afterend', assurance);
     }
   }
@@ -125,7 +82,7 @@ if (typeof document !== 'undefined') (() => {
       <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
       <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm availability and arrangements.</div></div>
-      <div class="trust-item"><div class="num">🔒</div><div class="label">Direct Crypto Payments</div><div class="trust-sub">BTC, ETH and ERC-20 USDT checkout support.</div></div>`;
+      <div class="trust-item"><div class="num">🔒</div><div class="label">Reviewed Requests</div><div class="trust-sub">Eligibility is reviewed before payment.</div></div>`;
   }
 
   const heroAi=document.querySelector('.hero .btn-secondary[onclick*="toggleAiChat"]');if(heroAi){heroAi.classList.add('hero-ai-cta');heroAi.textContent='Ask NXT LVL AI';}
@@ -139,7 +96,7 @@ if (typeof document !== 'undefined') (() => {
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}
   const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Shipping or Local Pickup')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose your payment asset')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Pay directly with')){el.dataset.premiumChecked='1';const target=el.querySelector('.nxt-wallet-head');if(target)target.insertAdjacentHTML('afterend',steps(2));}})});observer.observe(document.body,{childList:true});
 
-  function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Shipping</span><span>$10.00</span></div><div><span>Sales tax</span><span>Calculated at checkout</span></div><div class="total"><span>Secure crypto checkout</span><span>🔒</span></div>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
+  function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Shipping estimate</span><span>USD $10.00</span></div><div><span>Final charges</span><span>Confirmed before approval</span></div><div class="total"><span>Review before payment</span><span>🔒</span></div>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
 
   if(!document.querySelector('.premium-toast')){const toast=document.createElement('div');toast.className='premium-toast';toast.textContent='Added to cart ✓';document.body.appendChild(toast);document.addEventListener('click',e=>{if(e.target.closest('.card-atc-btn,.modal-atc-btn')){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1400)}});}
 })();

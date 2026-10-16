@@ -9,19 +9,19 @@ const guide = readFileSync(join(root, 'shipping-and-payments.html'), 'utf8');
 const checkout = readFileSync(join(root, 'direct-wallet-checkout.js'), 'utf8');
 const navCleanup = readFileSync(join(root, 'nav-cleanup.js'), 'utf8');
 
-test('homepage has a prominent first-time crypto payment guide', () => {
+test('homepage labels payment as following research review', () => {
   assert.match(homepage, /id="crypto-guide"/);
   assert.match(homepage, /Never used crypto before\?/);
   assert.match(homepage, /Why checkout uses crypto|Why direct crypto checkout/i);
   assert.match(homepage, /I already have crypto/);
   assert.match(homepage, /Buy it directly with Paybis/);
-  assert.match(homepage, /Crypto-only checkout/);
+  assert.match(homepage, /Research review before payment/);
   assert.doesNotMatch(homepage, /Crypto Discount Available/);
-  assert.match(navCleanup, /Crypto-only checkout/);
+  assert.match(navCleanup, /Research review before payment/);
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
-  assert.match(homepage, /nav-cleanup\.js\?v=20260824-crypto-only-1/);
+  assert.match(homepage, /nav-cleanup\.js\?v=20261016-review/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20260825-paybis-match-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261016-review/);
 });
 
 test('instructions describe the Paybis purchase and existing-wallet routes', () => {

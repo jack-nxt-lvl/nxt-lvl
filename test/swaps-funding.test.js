@@ -84,11 +84,11 @@ test('loads the Paybis link helper before the revised USDT checkout on every che
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
   const fundingVersion = 'lib/paybis-funding.js?v=20260825-paybis-match-1';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20260825-paybis-match-1';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20261016-review';
 
   assert.match(homepage, /data-nxt-paybis-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20260825-paybis-match-1/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261016-review/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);

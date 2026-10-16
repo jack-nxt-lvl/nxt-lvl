@@ -2,6 +2,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const crypto = require('crypto');
 
+process.env.RESEARCH_COMMERCE_ENABLED = 'true';
+process.env.STRIPE_RESEARCH_APPROVED = 'true';
+
 process.env.CRYPTO_QUOTE_SECRET = 'test-only-quote-secret-that-is-long-enough';
 process.env.UPSTASH_REDIS_REST_URL = 'https://redis.example.test';
 process.env.UPSTASH_REDIS_REST_TOKEN = 'test-redis-token';
@@ -9,12 +12,15 @@ process.env.RESEND_API_KEY = 'test-resend-key';
 process.env.STRIPE_SECRET_KEY = 'sk_test_1234567890abcdefghijklmnop';
 process.env.STRIPE_WEBHOOK_SECRET = 'whsec_1234567890abcdefghijklmnop';
 
-const { cleanCustomer, normalizeOrder } = require('../lib/direct-payment');
+const { cleanCustomer, customerDigest, normalizeOrder } = require('../lib/direct-payment');
 const { normalizePhone } = require('../lib/sms');
 const {
   buildStripeCheckoutForm,
   cardLinkCapabilities,
 } = require('../lib/hosted-card-link');
+let approvedTestRecord;
+function fixtureApproval(req){const order=normalizeOrder(req.body.items,req.body.fulfillment);const customer=cleanCustomer(req.body.customer,order.mode);approvedTestRecord={reference:'RR-123e4567e89b12d3a456426614174000',status:'approved',policyVersion:'2026-10-16',expiresAt:Date.now()+60000,itemDigest:order.itemDigest,customerDigest:customerDigest(customer),totalCents:order.totalCents,fulfillment:order.mode,orderId:'NXT-REVIEW-TEST-123'};req.body.researchApprovalCode='a'.repeat(64);}
+
 const createCardLinkHandler = require('../api/create-card-payment-link');
 const stripeWebhookHandler = require('../api/stripe-card-webhook');
 
@@ -88,7 +94,7 @@ test('keeps card details off-site and exposes only delivery choices in the custo
   assert.match(source, /card information is never entered or processed on NXT LVL/i);
   assert.match(source, /one transactional payment-link text/i);
   assert.match(source, /\/lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
-  assert.match(source, /\/direct-wallet-checkout\.js\?v=20260825-paybis-match-1/);
+  assert.match(source, /\/direct-wallet-checkout\.js\?v=20261016-review/);
   assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
   assert.doesNotMatch(source, /cardNumber|cvc|expiryMonth|payment-element/i);
 });
@@ -110,6 +116,7 @@ test('sends the same private hosted link by both email and text when the custome
     const target = String(url);
     if (target === process.env.UPSTASH_REDIS_REST_URL) {
       const command = JSON.parse(options.body);
+      if(command[0]==='GET' && String(command[1]).startsWith('nxt:research:v1:')) return {ok:true,json:async()=>({result:String(command[1]).includes(':code:')?approvedTestRecord.reference:JSON.stringify(approvedTestRecord)})};
       if (command[0] === 'EVAL' && String(command[1]).includes("redis.call('INCR'")) {
         return { ok: true, json: async () => ({ result: 1 }) };
       }
@@ -143,6 +150,7 @@ test('sends the same private hosted link by both email and text when the custome
       },
     };
     const res = responseRecorder();
+    fixtureApproval(req);
     await createCardLinkHandler(req, res);
 
     assert.equal(res.statusCode, 200);
@@ -171,6 +179,7 @@ test('creates and emails a hosted link without returning the private checkout UR
     const target = String(url);
     if (target === process.env.UPSTASH_REDIS_REST_URL) {
       const command = JSON.parse(options.body);
+      if(command[0]==='GET' && String(command[1]).startsWith('nxt:research:v1:')) return {ok:true,json:async()=>({result:String(command[1]).includes(':code:')?approvedTestRecord.reference:JSON.stringify(approvedTestRecord)})};
       redisCommands.push(command);
       if (command[0] === 'EVAL' && String(command[1]).includes("redis.call('INCR'")) {
         return { ok: true, json: async () => ({ result: 1 }) };
@@ -202,6 +211,7 @@ test('creates and emails a hosted link without returning the private checkout UR
       },
     };
     const res = responseRecorder();
+    fixtureApproval(req);
     await createCardLinkHandler(req, res);
 
     assert.equal(res.statusCode, 200);
@@ -243,6 +253,7 @@ test('requires explicit consent before sending a payment link by text', async ()
       },
     };
     const res = responseRecorder();
+    fixtureApproval(req);
     await createCardLinkHandler(req, res);
     assert.equal(res.statusCode, 400);
     assert.match(res.body.error, /consent/i);

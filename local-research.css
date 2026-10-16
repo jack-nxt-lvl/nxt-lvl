@@ -7,3 +7,6 @@
 .local-footer a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;color:#d5baff;text-decoration:underline;text-underline-offset:4px;border-radius:8px}
 .local-footer a:hover{background:#20162f}
 .local-footer a:focus-visible{outline:3px solid #e3cfff;outline-offset:3px}
+
+.research-policy-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;padding:20px 16px 100px}.research-policy-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;color:#caffdb;text-decoration:underline}.research-policy-links a:focus-visible{outline:3px solid #caffdb;outline-offset:3px}
+#local-research{scroll-margin-top:100px}

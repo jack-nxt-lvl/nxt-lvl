@@ -1,3 +1,4 @@
+const { requireApproval } = require('../lib/research-access');
 const QRCode = require('qrcode');
 const {
   ASSETS,
@@ -32,13 +33,14 @@ module.exports = async function handler(req, res) {
 
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
+    const approval = await requireApproval(req.body || {}, order, customer, 'crypto:' + asset);
     const [usdPrice, localization] = await Promise.all([
       fetchUsdPrice(asset),
       localizeOrderTotal(req, order.totalCents, req.body && req.body.locale),
     ]);
     const createdAt = Date.now();
     const expiresAt = createdAt + QUOTE_TTL_MS;
-    const orderId = randomOrderId();
+    const orderId = approval.orderId;
     let amount = null;
     for (let attempt = 0; attempt < 10; attempt += 1) {
       const candidate = amountForQuote(asset, order.totalCents, usdPrice);
@@ -50,6 +52,7 @@ module.exports = async function handler(req, res) {
     if (!amount) throw new PaymentLedgerError('Unable to reserve a unique payment amount. Please retry checkout.');
     const payload = {
       v: 1,
+      researchApprovalId: approval.reference,
       orderId,
       asset,
       address: config.address,
@@ -92,7 +95,7 @@ module.exports = async function handler(req, res) {
     console.error('Direct payment quote error:', error);
     const setupRequired = /CRYPTO_QUOTE_SECRET/.test(String(error && error.message));
     const temporary = error instanceof PaymentLedgerError || /price|coinbase|coingecko|fetch|network|timeout/i.test(String(error && error.message));
-    return json(res, setupRequired || temporary ? 503 : 400, {
+    return json(res, error.httpStatus || (setupRequired || temporary ? 503 : 400), {
       error: setupRequired ? 'Direct checkout is missing its internal quote-signing secret.' : (error.message || 'Unable to create a payment quote.'),
       setupRequired,
       missing: setupRequired ? ['CRYPTO_QUOTE_SECRET'] : undefined,

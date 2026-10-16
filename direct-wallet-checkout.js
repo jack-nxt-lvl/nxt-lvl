@@ -94,7 +94,7 @@
     try {
       sessionStorage.setItem(ACTIVE_PAYMENT_KEY, JSON.stringify({
         quote,
-        context,
+        context: { ...context, details: { ...context.details, researchApprovalCode: undefined, research: undefined } },
         txid: String(txid || ''),
         savedAt: Date.now(),
       }));
@@ -221,6 +221,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         asset,
+        researchApprovalCode: details.researchApprovalCode,
         fulfillment: details.fulfillment,
         customer: details.customer,
         items: context.items,
