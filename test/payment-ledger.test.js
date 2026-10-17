@@ -7,6 +7,8 @@ const {
   claimPayment,
   flagPaymentForReview,
   ledgerCredentials,
+  ledgerConfigured,
+  redisCommand,
   releasePaymentLock,
   reserveQuoteAmount,
 } = require('../lib/payment-ledger');
@@ -18,9 +20,13 @@ function withLedgerEnvironment(fn) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
       kvUrl: process.env.KV_REST_API_URL,
       kvToken: process.env.KV_REST_API_TOKEN,
+      restoredUrl: process.env.PAYMENT_LEDGER_KV_REST_API_URL,
+      restoredToken: process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN,
       fetch: global.fetch,
     };
     try {
+      delete process.env.PAYMENT_LEDGER_KV_REST_API_URL;
+      delete process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN;
       await fn();
     } finally {
       if (saved.url === undefined) delete process.env.UPSTASH_REDIS_REST_URL;
@@ -31,6 +37,10 @@ function withLedgerEnvironment(fn) {
       else process.env.KV_REST_API_URL = saved.kvUrl;
       if (saved.kvToken === undefined) delete process.env.KV_REST_API_TOKEN;
       else process.env.KV_REST_API_TOKEN = saved.kvToken;
+      if (saved.restoredUrl === undefined) delete process.env.PAYMENT_LEDGER_KV_REST_API_URL;
+      else process.env.PAYMENT_LEDGER_KV_REST_API_URL = saved.restoredUrl;
+      if (saved.restoredToken === undefined) delete process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN;
+      else process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN = saved.restoredToken;
       global.fetch = saved.fetch;
     }
   };
@@ -41,6 +51,32 @@ test('fails closed when the durable payment ledger is not configured', withLedge
   delete process.env.UPSTASH_REDIS_REST_TOKEN;
   delete process.env.KV_REST_API_URL;
   delete process.env.KV_REST_API_TOKEN;
+  assert.throws(() => ledgerCredentials(), PaymentLedgerError);
+}));
+
+test('routes payment operations to the restored ledger instead of the archived connection', withLedgerEnvironment(async () => {
+  process.env.KV_REST_API_URL = 'https://archived.example.test';
+  process.env.KV_REST_API_TOKEN = 'archived-token';
+  process.env.PAYMENT_LEDGER_KV_REST_API_URL = 'https://restored.example.test/';
+  process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN = 'restored-token';
+  global.fetch = async (url, options) => {
+    assert.equal(url, 'https://restored.example.test');
+    assert.equal(options.headers.Authorization, 'Bearer restored-token');
+    return { ok: true, json: async () => ({ result: 'PONG' }) };
+  };
+  assert.equal(ledgerConfigured(), true);
+  assert.equal(await redisCommand(['PING']), 'PONG');
+}));
+
+test('rejects an incomplete restored connection without using archived credentials', withLedgerEnvironment(async () => {
+  process.env.KV_REST_API_URL = 'https://archived.example.test';
+  process.env.KV_REST_API_TOKEN = 'archived-token';
+  process.env.PAYMENT_LEDGER_KV_REST_API_URL = 'https://restored.example.test';
+  assert.equal(ledgerConfigured(), false);
+  assert.throws(() => ledgerCredentials(), PaymentLedgerError);
+  delete process.env.PAYMENT_LEDGER_KV_REST_API_URL;
+  process.env.PAYMENT_LEDGER_KV_REST_API_TOKEN = 'restored-token';
+  assert.equal(ledgerConfigured(), false);
   assert.throws(() => ledgerCredentials(), PaymentLedgerError);
 }));
 
