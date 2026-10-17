@@ -54,7 +54,7 @@ if (typeof document !== 'undefined') (() => {
   @media(max-width:900px){.trust-bar{grid-template-columns:repeat(2,1fr)!important;margin:-55px 16px 70px!important}.trust-item:nth-child(2){border-right:none!important}.trust-item:nth-child(-n+2){border-bottom:1px solid rgba(167,139,250,.12)!important}}
   @media(max-width:700px){nav{padding:0 18px!important}.hero{padding-top:112px!important}.hero:after{inset:72px 10px 12px;border-radius:22px}.hero h1{font-size:clamp(2.65rem,16vw,4.1rem)!important;letter-spacing:-1px!important}.hero p{font-size:.98rem!important;padding:0 12px!important}.hero-buttons{flex-direction:column!important;width:min(100%,340px)!important;margin-left:auto!important;margin-right:auto!important}.hero .btn-primary,.hero-ai-cta{width:100%!important;min-height:54px!important}.trust-bar{margin:-30px 12px 55px!important;grid-template-columns:1fr 1fr!important}.trust-item{padding:22px 10px!important}.trust-item .num{font-size:1.55rem!important}.trust-item .label{font-size:.62rem!important;letter-spacing:1.1px!important}.trust-item .trust-sub{font-size:.62rem}.premium-search{margin:-18px 0 22px}.compound-grid{grid-template-columns:1fr!important}.compound-card{min-height:0;padding:22px!important}.card-atc-row{flex-direction:column}.card-atc-btn{height:44px}.cart-drawer{width:100%!important;max-width:100vw!important}.ai-chat-toggle{min-width:0!important;width:56px!important;height:56px!important;border-radius:50%!important;padding:0!important;right:14px!important;bottom:14px!important}.ai-chat-toggle:after{display:none}.checkout-steps i{width:18px}.checkout-steps{font-size:9px}.crypto-assurance{padding:0 14px;text-align:center;font-size:11px}}
   `;
-  document.head.appendChild(css);
+  if (!document.body.classList.contains('miami-site')) document.head.appendChild(css);
 
   // Homepage hero redesign.
   const hero = document.querySelector('.hero');
@@ -70,7 +70,7 @@ if (typeof document !== 'undefined') (() => {
 
   // Replace number-focused trust bar with premium company/payment trust points.
   const trustBar = document.querySelector('.trust-bar');
-  if (trustBar) {
+  if (trustBar && !trustBar.classList.contains('miami-trust')) {
     trustBar.innerHTML = `
       <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
@@ -83,7 +83,7 @@ if (typeof document !== 'undefined') (() => {
   if(menu&&!document.querySelector('.premium-search, .nxt-product-search')){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=normalizeProductSearch(e.target.value);document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||normalizeProductSearch(card.textContent).includes(q)?'flex':'none';});});}
 
   const footer=document.querySelector('footer');
-  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="#crypto-guide">How to Pay</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
+  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="/research-eligibility.html">How to order</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
   const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
 
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}

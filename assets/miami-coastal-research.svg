@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="580" height="620" viewBox="0 0 580 620" fill="none">
+<defs>
+ <linearGradient id="sky" x1="290" y1="0" x2="290" y2="620" gradientUnits="userSpaceOnUse"><stop stop-color="#e5f1ee"/><stop offset=".65" stop-color="#b6dcd9"/><stop offset="1" stop-color="#8fc8c4"/></linearGradient>
+ <linearGradient id="stone" x1="30" y1="0" x2="410" y2="590" gradientUnits="userSpaceOnUse"><stop stop-color="#fffefa"/><stop offset="1" stop-color="#dce7de"/></linearGradient>
+ <linearGradient id="ocean" x1="300" y1="360" x2="300" y2="580" gradientUnits="userSpaceOnUse"><stop stop-color="#7ebcba"/><stop offset="1" stop-color="#277f83"/></linearGradient>
+ <linearGradient id="glass" x1="285" y1="285" x2="460" y2="490" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity=".85"/><stop offset=".5" stop-color="#d8eeea" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity=".7"/></linearGradient>
+ <clipPath id="arch"><path d="M174 580V254a124 124 0 0 1 248 0v326Z"/></clipPath>
+ <pattern id="grid" width="29" height="29" patternUnits="userSpaceOnUse"><path d="M29 0H0V29" stroke="#1c6c70" stroke-opacity=".05"/></pattern>
+</defs>
+<path fill="url(#sky)" d="M0 0h580v620H0z"/>
+<path fill="url(#grid)" d="M0 0h580v620H0z"/>
+<circle cx="450" cy="126" r="51" fill="#e8a98f"/>
+<circle cx="450" cy="126" r="68" stroke="#fff" stroke-opacity=".6"/>
+<path d="M18 580V252a280 280 0 0 1 560 0v328H18Z" fill="url(#stone)"/>
+<path d="M93 580V254a205 205 0 0 1 410 0v326H93Z" stroke="#b6cfc7"/>
+<path d="M107 580V254a191 191 0 0 1 382 0v326H107Z" stroke="#c3d7ce"/>
+<path d="M121 580V254a177 177 0 0 1 354 0v326H121Z" stroke="#c3d7ce"/>
+<path d="M135 580V254a163 163 0 0 1 326 0v326H135Z" stroke="#c3d7ce"/>
+<path d="M150 580V254a148 148 0 0 1 296 0v326H150Z" fill="#d0e4df"/>
+<g clip-path="url(#arch)">
+ <path d="M174 130h248v450H174z" fill="#bee2df"/>
+ <circle cx="371" cy="241" r="42" fill="#f2bc9f"/>
+ <path d="M174 343h248v237H174z" fill="url(#ocean)"/>
+ <path d="M174 361h248M174 376h248M174 395h248M174 420h248M174 454h248" stroke="#e4f4ed" stroke-opacity=".4"/>
+ <path d="M174 504 422 457v123H174Z" fill="#c2d9c9"/>
+ <path d="m174 530 248-39" stroke="#f6f9ef" stroke-width="2"/>
+</g>
+<path d="M174 580V254a124 124 0 0 1 248 0v326" stroke="#a4c9c1" stroke-width="2"/>
+<path d="M0 558h580v62H0z" fill="#e0e8da"/>
+<path d="M0 578h580M0 602h580" stroke="#c4d3c9"/>
+<path d="m174 558-95 62m216-62-10 62m137-62 80 62" stroke="#c4d3c9"/>
+<g fill="#175d60" opacity=".94">
+ <path d="M61 560c5-139 13-271 62-382-39 125-37 253-34 382H61Z"/>
+ <path d="M122 190C99 102 48 89 0 113c54 1 93 36 122 77Z"/>
+ <path d="M122 190C74 125 21 133-15 181c53-24 94-14 137 9Z"/>
+ <path d="M122 190C67 180 21 207 14 259c33-42 70-56 108-69Z"/>
+ <path d="M122 190c-7-79 34-122 89-117-47 26-71 66-89 117Z"/>
+ <path d="M122 190c32-66 88-75 135-42-52-9-95 11-135 42Z"/>
+ <path d="M122 190c54-33 109-9 131 42-45-30-86-39-131-42Z"/>
+ <path d="M122 190c35-1 62 40 51 88-10-41-27-62-51-88Z"/>
+</g>
+<path d="m66 504 17-4m-14-35 13-3m-12-34 12-3m-9-33 12-3m-8-34 12-3" stroke="#a9cec0" stroke-opacity=".5"/>
+<g stroke="#136567" stroke-width="1.4" opacity=".6">
+ <path d="m460 297 27-16 27 16v31l-27 16-27-16v-31Zm0 31-27 16v31l27 16 27-16v-31m27-47 27-16v-31"/>
+ <circle cx="487" cy="281" r="4" fill="#f9fcf5"/><circle cx="514" cy="328" r="4" fill="#f9fcf5"/><circle cx="460" cy="391" r="4" fill="#f9fcf5"/><circle cx="541" cy="250" r="4" fill="#f9fcf5"/>
+</g>
+<rect x="259" y="352" width="225" height="167" rx="4" fill="url(#glass)" stroke="#f8fffa"/>
+<path d="M277 376h25m-12.5-12.5v25" stroke="#12666a" stroke-width="2"/>
+<text x="277" y="423" font-family="Arial,sans-serif" font-size="29" font-weight="700" letter-spacing="2" fill="#164b50">NXT LVL</text>
+<text x="279" y="448" font-family="Arial,sans-serif" font-size="10" letter-spacing="4" fill="#326a6c">R E S E A R C H</text>
+<path d="M278 464h186" stroke="#7aa7a3"/>
+<text x="279" y="489" font-family="Arial,sans-serif" font-size="8" letter-spacing="1.4" fill="#346569">LABORATORY MATERIALS / FLORIDA</text>
+<path d="M35 33h17m-8.5-8.5v17m492 505h17m-8.5-8.5v17" stroke="#4d8383"/>
+</svg>

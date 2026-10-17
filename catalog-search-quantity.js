@@ -138,7 +138,7 @@
   const status = wrap.querySelector('.nxt-search-status');
   const empty = document.createElement('div');
   empty.className = 'nxt-search-empty';
-  empty.textContent = 'No products match that search. Try a product name, strength, or category.';
+  empty.textContent = 'No materials match that search. Try a compound name or labeled amount.';
   if (grid) grid.appendChild(empty);
 
   function normalize(value) {
@@ -160,6 +160,9 @@
 
   let applying = false;
   let searchingFullCatalog = false;
+  const showAll = document.getElementById('catalogShowAll');
+  let expanded = false;
+  if (showAll) showAll.addEventListener('click', () => { expanded = true; applySearch(); });
 
   function selectedCategory() {
     const active = document.querySelector('#filterBar .filter-btn.active');
@@ -180,6 +183,26 @@
     }
   }
 
+  function syncRequestedQuantity() {
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get('product');
+    const quantity = url.searchParams.get('qty');
+    if (!id || !/^(?:[1-9]|10)$/.test(quantity || '')) return;
+    const product = compounds.find((item) => item.id === id);
+    const index = product?.pricing.findIndex((option) => {
+      const match = option.label.match(/^(\d+) Vials?\b/i);
+      return match && Number(match[1]) === Number(quantity);
+    });
+    if (!Number.isInteger(index) || index < 0) return;
+    const selector = document.getElementById('atc-select-' + product.id);
+    if (!selector) return;
+    selector.dataset.value = String(index);
+    const option = product.pricing[index];
+    const label = selector.querySelector('.custom-select-label');
+    if (label) label.textContent = option.label + ' — $' + option.price.toFixed(2);
+    selector.querySelectorAll('.custom-select-option').forEach((entry) => entry.classList.toggle('selected', entry.dataset.value === String(index)));
+  }
+
   function applySearch() {
     if (applying || !grid) return;
     applying = true;
@@ -187,6 +210,7 @@
     syncCatalogScope(query);
     const cards = Array.from(grid.querySelectorAll('.compound-card'));
     let visible = 0;
+    let matched = 0;
 
     cards.forEach((card) => {
       const product = productForCard(card);
@@ -199,17 +223,21 @@
         ...(product.tags || []),
       ].join(' ') : card.textContent);
       const matches = !query || haystack.includes(query);
-      card.hidden = !matches;
-      card.style.display = matches ? '' : 'none';
-      if (matches) visible += 1;
+      if (matches) matched += 1;
+      const shown = matches && (query || expanded || !showAll || visible < 6);
+      card.hidden = !shown;
+      card.style.display = shown ? '' : 'none';
+      if (shown) visible += 1;
     });
 
+    if (showAll) { showAll.hidden = Boolean(query) || expanded || matched <= 6; showAll.textContent = `View all ${matched} materials`; }
     wrap.classList.toggle('has-query', Boolean(query));
     empty.classList.toggle('show', Boolean(query) && visible === 0);
     if (!empty.isConnected) grid.appendChild(empty);
     status.innerHTML = query
       ? `<strong>${visible}</strong> product${visible === 1 ? '' : 's'} found`
       : `<strong>${visible}</strong> shown · ${compounds.length} total`;
+    syncRequestedQuantity();
     applying = false;
   }
 

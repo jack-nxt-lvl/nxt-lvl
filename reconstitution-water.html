@@ -11,7 +11,7 @@
   <meta property="og:description" content="10mL preserved water solution with 0.9% benzyl alcohol for laboratory research use.">
   <meta property="og:type" content="product">
   <meta property="og:url" content="https://www.nxtlvl-research.com/reconstitution-water.html">
-  <meta name="theme-color" content="#07060b">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   <script type="application/ld+json">
   {
@@ -47,8 +47,8 @@
     @media(max-width:540px){nav{height:66px;padding:0 16px}.hero,.product{padding-left:16px;padding-right:16px}.hero h1{font-size:2.75rem}.icons{gap:12px}.iconitem{width:46%}.visual{min-height:360px}.vial{width:105px;height:250px}.cap{top:-28px;height:48px}.label{top:84px;padding:12px 8px}.label b{font-size:.73rem}.whiteband{top:157px;padding:7px 8px}.whiteband strong{font-size:.9rem}.whiteband div{font-size:.42rem}.trustitem{font-size:.62rem;padding:18px 9px}.whygrid{grid-template-columns:1fr}.q{grid-template-columns:1fr auto}.q .deal{grid-column:2}.micro{flex-direction:column;gap:7px}.gallery{min-height:390px;padding:20px}.mini{width:48px}.tray{gap:5px;padding:18px 10px}}
   </style>
   <link rel="stylesheet" href="/confidence-redesign.css?v=20261016-review">
-</head>
-<body>
+<link rel="stylesheet" href="/miami-research.css?v=20261017-coastal-1"><meta name="theme-color" content="#f7faf8"></head>
+<body class="miami-site miami-water">
   <div class="announce">🚚 RESEARCH PURCHASER REVIEW REQUIRED</div>
   <nav>
     <a class="brand" href="/"><span class="mark"></span><span>NXT LVL<small>PREMIUM RESEARCH</small></span></a>
@@ -59,7 +59,7 @@
     <section class="hero">
       <div>
         <div class="eyebrow">PREMIUM LABORATORY SUPPLY</div>
-        <h1>RECONSTITUTION<br>WATER <span>0.9% BENZYL ALCOHOL</span></h1><p>Online payment is currently unavailable. <a href="/research-eligibility.html">Review research purchaser eligibility</a> before making a request. Amounts shown are USD estimates.</p>
+        <h1>Reconstitution<br>water <span>0.9% BENZYL ALCOHOL</span></h1><p>Online payment is currently unavailable. <a href="/research-eligibility.html">Review research purchaser eligibility</a> before making a request. Amounts shown are USD estimates.</p>
         <p class="lead">10mL preserved water solution containing 0.9% benzyl alcohol for laboratory research, sample preparation, and documented laboratory workflows.</p>
         <div class="icons">
           <div class="iconitem"><span class="ico">⚗</span><span>LABORATORY<br>USE</span></div>
@@ -91,13 +91,13 @@
         <div class="checklist"><div>10mL glass vial format</div><div>Contains 0.9% benzyl alcohol</div><div>Clear preserved water solution</div><div>Designed for laboratory research and sample-preparation workflows</div><div>Research use only — not for human consumption</div></div>
         <div class="quantity-title">SELECT QUANTITY</div>
         <div class="quantity-grid">
-          <div class="q active" data-qty="1" data-price="10"><strong>◉ &nbsp;1 Vial</strong><span>USD $10.00</span><span></span></div>
-          <div class="q" data-qty="5" data-price="41"><strong>○ &nbsp;5 Vials</strong><span>USD $47.50 <small>($9.50/vial)</small></span><span class="deal">SAVE</span></div>
-          <div class="q" data-qty="10" data-price="70"><strong>○ &nbsp;10 Vials</strong><span>USD $90.00 <small>($9.00/vial)</small></span><span class="deal">BEST VALUE</span></div>
+          <button type="button" class="q active" aria-pressed="true" data-qty="1" data-price="10"><strong>◉ &nbsp;1 Vial</strong><span>USD $10.00</span><span></span></button>
+          <button type="button" class="q" aria-pressed="false" data-qty="5" data-price="47.50"><strong>○ &nbsp;5 Vials</strong><span>USD $47.50 <small>($9.50/vial)</small></span><span class="deal">SAVE</span></button>
+          <button type="button" class="q" aria-pressed="false" data-qty="10" data-price="90"><strong>○ &nbsp;10 Vials</strong><span>USD $90.00 <small>($9.00/vial)</small></span><span class="deal">BEST VALUE</span></button>
         </div>
-        <a id="shopBtn" href="/#menu" class="btn btn-primary add">VIEW MATERIAL REQUEST</a>
+        <a id="shopBtn" href="/?product=bac-water-10ml#menu" class="btn btn-primary add">VIEW MATERIAL REQUEST</a>
         <div class="fine">Continue to the material catalog to prepare a research-review request. No payment is taken when a request is submitted.</div>
-        <div class="disclosure"><strong>Important:</strong> This page describes a laboratory research supply. Product labeling and advertising should accurately reflect the actual formulation and intended use. This page does not make medical, therapeutic, or injection-use claims.</div>
+        <div class="disclosure"><strong>Important:</strong> This page describes a laboratory research supply. Confirm the formulation, supplied lot and documentation against your laboratory requirements. This page does not make medical, therapeutic, or injection-use claims.</div>
       </div>
     </section>
 
@@ -121,8 +121,8 @@
     const quantityCards=[...document.querySelectorAll('.q')];
     const shopBtn=document.getElementById('shopBtn');
     quantityCards.forEach(card=>card.addEventListener('click',()=>{
-      quantityCards.forEach(x=>{x.classList.remove('active');const s=x.querySelector('strong');if(s)s.innerHTML=s.innerHTML.replace('◉','○')});
-      card.classList.add('active');const strong=card.querySelector('strong');if(strong)strong.innerHTML=strong.innerHTML.replace('○','◉');
+      quantityCards.forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false');const s=x.querySelector('strong');if(s)s.innerHTML=s.innerHTML.replace('◉','○')});
+      card.classList.add('active');card.setAttribute('aria-pressed','true');const strong=card.querySelector('strong');if(strong)strong.innerHTML=strong.innerHTML.replace('○','◉');
       const qty=card.dataset.qty;shopBtn.href='/?product=bac-water-10ml&qty='+encodeURIComponent(qty)+'#menu';
     }));
   </script>
