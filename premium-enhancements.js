@@ -59,14 +59,7 @@ if (typeof document !== 'undefined') (() => {
   // Homepage hero redesign.
   const hero = document.querySelector('.hero');
   if (hero) {
-    const badge = hero.querySelector('.hero-badge');
-    if (badge) badge.innerHTML = '<span class="hero-badge-dot"></span>Premium Research Compounds';
-    const title = hero.querySelector('h1');
-    if (title) title.innerHTML = '<span class="purple">NXT LVL</span><span class="silver">Research</span>';
-    const copy = hero.querySelector('.hero-content > p');
-    if (copy) copy.innerHTML = 'Laboratory research materials and <strong>batch documentation.</strong> Ask about South Florida fulfillment availability.';
-    const primary = hero.querySelector('.btn-primary');
-    if (primary) primary.textContent = 'View Compounds';
+    // Keep the heading, description and links authored in the server HTML.
     if (!hero.querySelector('.crypto-assurance')) {
       const assurance = document.createElement('div');
       assurance.className = 'crypto-assurance';

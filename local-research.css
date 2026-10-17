@@ -10,3 +10,19 @@
 
 .research-policy-links{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;padding:20px 16px 100px}.research-policy-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;color:#caffdb;text-decoration:underline}.research-policy-links a:focus-visible{outline:3px solid #caffdb;outline-offset:3px}
 #local-research{scroll-margin-top:100px}
+
+/* Clear catalog paths and regional fulfillment sections. */
+.hero .hero-content h1.local-search-heading{max-width:780px!important;font-size:clamp(2.5rem,5.6vw,5.4rem)!important;line-height:1.04!important;letter-spacing:-2px!important;text-transform:none!important;font-style:normal!important}
+.hero .hero-content h1.local-search-heading span{display:block}
+.catalog-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:1200px;margin:0 auto 38px}
+.catalog-paths a{display:flex;flex-direction:column;gap:8px;padding:22px;border:1px solid rgba(85,245,138,.28);border-radius:12px;background:#08160f;color:#caffdb;text-decoration:none}
+.catalog-paths span{font-size:.85rem;color:#b7c8bd;line-height:1.5}
+.catalog-paths a:hover,.local-material-links a:hover{border-color:#55f58a;background:#11271a}
+.catalog-paths a:focus-visible,.local-panel a:focus-visible{outline:3px solid #caffdb;outline-offset:4px}
+.local-panel .local-jump-links{display:flex;flex-wrap:wrap;gap:10px;padding:16px 0;border-bottom:1px solid #443453}
+.local-jump-links a,.local-inline-cta,.local-material-links a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;text-underline-offset:4px}
+.local-panel section[id]{scroll-margin-top:28px}
+.local-material-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.local-material-links a{border:1px solid #50406c;border-radius:9px;padding:16px}
+.local-panel footer{overflow-wrap:anywhere}
+@media(max-width:700px){.hero .hero-content h1.local-search-heading{font-size:clamp(2.2rem,9.7vw,3.7rem)!important;letter-spacing:-1px!important}.catalog-paths,.local-material-links{grid-template-columns:1fr}.local-panel .local-jump-links a{flex:1 1 40%}.hero .btn-secondary{min-height:52px;display:flex;align-items:center;justify-content:center}}
