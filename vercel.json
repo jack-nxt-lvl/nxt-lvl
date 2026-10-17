@@ -142,6 +142,11 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/research/semax-10mg.html",
+      "destination": "/research/semax-11mg.html",
+      "permanent": true
     }
   ]
 }

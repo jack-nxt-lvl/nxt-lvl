@@ -2501,7 +2501,7 @@
   <link rel="stylesheet" href="/nxt-responsive-redesign.css?v=20260821-1">
   <link rel="stylesheet" href="/crypto-payment-guide.css?v=20260824-easy-pay-1">
   <link rel="stylesheet" href="/confidence-redesign.css?v=20260825-exact-labels-3">
-<link rel="stylesheet" href="/local-research.css?v=20261017-local-seo">
+<link rel="stylesheet" href="/local-research.css?v=20261017-inquiries">
 </head>
 
 <body>
@@ -2518,7 +2518,7 @@
       <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
         onclick="const menu=document.querySelector('nav ul');const open=menu.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')"><span></span><span></span><span></span></button>
       <ul>
-        <li><a href="#menu">Compounds</a></li><li><a href="/south-florida-research.html">Miami &amp; Fort Lauderdale</a></li>
+        <li><a href="#menu">Compounds</a></li><li><a href="/south-florida-research.html">Local Delivery</a></li>
         <li><a href="#crypto-guide">How to Pay</a></li>
         <li><a href="#order" class="nav-cta">Research Review</a></li>
       </ul>
@@ -2887,16 +2887,44 @@
       grid.innerHTML = filtered.map(p => cardTemplate(p)).join('');
     }
 
+    const researchPagePaths = {
+  "bpc157-10": "/research/bpc-157.html",
+  "tb500-10": "/research/tb-500.html",
+  "tb500-bpc157": "/research/tb-500-bpc-157.html",
+  "tesamorelin-10": "/research/tesamorelin.html",
+  "sermorelin": "/research/sermorelin.html",
+  "ipamorelin": "/research/ipamorelin.html",
+  "mela2-10": "/research/melanotan-2.html",
+  "mela1-10": "/research/melanotan-1.html",
+  "nad-500": "/research/nad-plus-500mg.html",
+  "ghk-cu-50": "/research/ghk-cu-50mg.html",
+  "ghk-cu-100": "/research/ghk-cu-100mg.html",
+  "glow-70": "/research/glow-70mg.html",
+  "mots-c": "/research/mots-c.html",
+  "hcg-5000": "/research/hcg-5000iu.html",
+  "hcg-10000": "/research/hcg-10000iu.html",
+  "semaglutide": "/research/semaglutide-10mg.html",
+  "tirzepatide": "/research/tirzepatide-10mg.html",
+  "retatrutide-10": "/research/retatrutide-10mg.html",
+  "retatrutide-20": "/research/retatrutide-20mg.html",
+  "selank": "/research/selank-11mg.html",
+  "semax": "/research/semax-11mg.html",
+  "dsip": "/research/dsip-10mg.html",
+  "aod-9604": "/research/aod-9604.html",
+  "igf1-lr3": "/research/igf-1-lr3.html",
+  "slu-pp-332-10": "/research/slu-pp-332-10mg.html"
+};
+
     function cardTemplate(p) {
       const startPrice = p.pricing[0].price;
       const catName = categories.find(c => c.id === p.category)?.name || p.category;
       return `
-    <div class="compound-card" onclick="openModal('${p.id}')">
+    <div class="compound-card" data-product-id="${p.id}" onclick="openModal('${p.id}')">
       <div class="card-top">
         <span class="card-category">${catName}</span>
         ${p.badge ? `<span class="card-badge ${p.badge === 'New' ? 'new-badge' : ''}">${p.badge}</span>` : ''}
       </div>
-      <div class="card-name">${p.name}</div>
+      <h3 class="card-name">${researchPagePaths[p.id] ? `<a href="${researchPagePaths[p.id]}" onclick="event.stopPropagation()">${p.name}</a>` : `<button type="button" onclick="event.stopPropagation();openModal('${p.id}')">${p.name}</button>`}</h3>
       <div class="card-aka">${p.aka}</div>
       <div class="card-desc">${p.shortDesc}</div>
       ${['equipoise','deca','npp','tren-ace'].includes(p.id) ? `<div style="margin-top:10px;padding:8px 10px;border:1px solid rgba(167,139,250,.16);border-radius:7px;color:#c4b5fd;font-size:.72rem;font-weight:700;letter-spacing:.3px;">Available quantities: 1–5 vials</div>` : ''}
@@ -3704,7 +3732,7 @@
   <script src="bac-water-product.js?v=20261016-review"></script>
   <script src="glutathione-product.js?v=20261016-review"></script>
   <script src="quantity-pricing.js?v=20260826-quantity-1"></script>
-  <script src="catalog-search-quantity.js?v=20261016-research-cleanup"></script>
+  <script src="catalog-search-quantity.js?v=20261017-navigation"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261016-review"></script>
   <script src="customer-checkout-upgrade.js?v=20261016-rates"></script>

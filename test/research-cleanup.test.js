@@ -42,6 +42,29 @@ test('local inquiry prepares an encoded draft without submitting or sending it',
  assert.match(target.searchParams.get('text'),/Miami & 33101/);
  assert.match(target.searchParams.get('text'),/Pickup appointment inquiry/);
 });
+test('local inquiry preserves material details in WhatsApp, text and email drafts', () => {
+ for (const channel of ['whatsapp','sms','email']) {
+  let handler;
+  const field={value:''};
+  const window={location:{href:'',search:'?material=GHK-Cu%2050mg'}};
+  const values={city:'Fort Lauderdale & 33315',method:'Local delivery inquiry',organization:'A&B Lab',material:'GHK-Cu 50mg',quantity:'2 vials',channel};
+  const form={querySelector(){return field;},addEventListener(event,fn){handler=fn;}};
+  vm.runInNewContext(read('local-research.js'),{window,URLSearchParams,encodeURIComponent,FormData:class{get(k){return values[k];}},document:{getElementById(){return form;}}});
+  assert.equal(field.value,'GHK-Cu 50mg');
+  assert.equal(window.location.href,'');
+  handler.call(form,{preventDefault(){}});
+  const target=new URL(window.location.href);
+  assert.equal(target.protocol,{whatsapp:'https:',sms:'sms:',email:'mailto:'}[channel]);
+  if(channel==='email')assert.equal(target.pathname,'payment@nxtlvl-research.com');
+  if(channel==='sms')assert.equal(target.pathname,'+17542907210');
+  const body=target.searchParams.get(channel==='whatsapp'?'text':'body');
+  assert.match(body,/Fort Lauderdale & 33315/);
+  assert.match(body,/A&B Lab/);
+  assert.match(body,/GHK-Cu 50mg/);
+  assert.match(body,/2 vials/);
+  assert.match(body,/not a confirmed order/);
+ }
+});
 test('local structured data uses the owner-supplied business address without inventing a local branch or hours', () => {
  const html=read('south-florida-research.html');
  for(const match of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {

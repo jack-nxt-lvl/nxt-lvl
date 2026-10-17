@@ -122,12 +122,12 @@
         <path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
       </svg>
       <input id="nxtProductSearch" type="search" autocomplete="off"
-        placeholder="Search BPC-157, Retatrutide, Test C, strength…"
+        placeholder="Search compound name or labeled amount…"
         aria-label="Search research products">
       <button class="nxt-search-clear" type="button" aria-label="Clear product search">×</button>
     </div>
     <div class="nxt-search-meta">
-      <span class="nxt-search-status"><strong>All products</strong> shown</span>
+      <span class="nxt-search-status" role="status" aria-live="polite" aria-atomic="true"><strong>All products</strong> shown</span>
       <span>Freeze-dried: 1–10</span>
     </div>
   `;
@@ -151,6 +151,8 @@
   }
 
   function productForCard(card) {
+    const id = card.getAttribute('data-product-id');
+    if (id) return compounds.find((product) => product.id === id) || null;
     const call = card.getAttribute('onclick') || '';
     const match = call.match(/openModal\('([^']+)'\)/);
     return match ? compounds.find((product) => product.id === match[1]) : null;
@@ -211,15 +213,32 @@
     applying = false;
   }
 
-  input.addEventListener('input', applySearch);
+  function clearProductParameter() {
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has('product')) return;
+    url.searchParams.delete('product');
+    window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
+
+  function loadRequestedProduct() {
+    const id = new URL(window.location.href).searchParams.get('product');
+    const requested = compounds.find((product) => product.id === id);
+    input.value = requested ? requested.name : '';
+    applySearch();
+  }
+
+  input.addEventListener('input', () => { clearProductParameter(); applySearch(); });
+  window.addEventListener('popstate', loadRequestedProduct);
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && input.value) {
       input.value = '';
+      clearProductParameter();
       applySearch();
     }
   });
   clear.addEventListener('click', () => {
     input.value = '';
+    clearProductParameter();
     applySearch();
     input.focus();
   });
@@ -236,5 +255,5 @@
     }).observe(grid, { childList: true });
   }
 
-  applySearch();
+  loadRequestedProduct();
 })();
