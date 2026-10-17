@@ -2505,7 +2505,7 @@
   <link rel="stylesheet" href="/crypto-payment-guide.css?v=20260824-easy-pay-1">
   <link rel="stylesheet" href="/confidence-redesign.css?v=20260825-exact-labels-3">
 <link rel="stylesheet" href="/local-research.css?v=20261017-inquiries">
-<link rel="stylesheet" href="/miami-research.css?v=20261017-night-1"><meta name="theme-color" content="#080e10"></head>
+<link rel="stylesheet" href="/miami-research.css?v=20261017-night-1"><meta name="theme-color" content="#080e10"><link rel="stylesheet" href="/atelier-layout.css?v=20261017-1"></head>
 
 <body class="miami-site miami-home">
 
@@ -2542,7 +2542,7 @@
     <div class="hero-content">
       <div class="hero-badge"><span class="hero-badge-dot"></span>ONLINE RESEARCH MATERIALS · USA SHIPPING</div>
       <h1 class="local-search-heading" id="homeTitle"><span class="purple">Research<br>peptides.</span><span class="silver">NXT LVL.</span></h1>
-      <p>An online destination for laboratory research materials, shipped across the USA. Local delivery and pickup are available only in the Miami and Fort Lauderdale areas, by confirmation.</p>
+      <p>Laboratory research materials. Delivered across the USA.<br> Local delivery and pickup in Miami and Fort Lauderdale, by confirmation.</p>
       <div class="hero-buttons">
         <a href="#menu" class="btn-primary">Explore the catalog <span aria-hidden="true">↗</span></a>
         <a href="/shipping-and-payments.html" class="btn-secondary">Shipping &amp; local delivery</a>
@@ -2555,14 +2555,14 @@
   <div class="trust-bar miami-trust" aria-label="Research support essentials">
     <a class="trust-item" href="/coa.html"><span class="num" aria-hidden="true">01</span><div><span class="label">Batch documentation</span><span class="trust-sub">Review the offered lot ↗</span></div></a>
     <a class="trust-item" href="/research-eligibility.html"><span class="num" aria-hidden="true">02</span><div><span class="label">Research eligibility</span><span class="trust-sub">Know the requirements ↗</span></div></a>
-    <a class="trust-item" href="/shipping-and-payments.html"><span class="num" aria-hidden="true">03</span><div><span class="label">Shipping across the USA</span><span class="trust-sub">Local delivery: Miami / Fort Lauderdale ↗</span></div></a>
+    <a class="trust-item" href="/shipping-and-payments.html"><span class="num" aria-hidden="true">03</span><div><span class="label">Shipping across the USA</span><span class="trust-sub">See fulfillment options ↗</span></div></a>
   </div>
   <!-- COMPOUND MENU -->
   <section id="menu">
     <div class="section-header">
       <div class="section-tag">Materials with a research purpose</div>
-      <h2>The research catalog.</h2>
-      <p>Review each material’s identity, labeled amount, format, and batch documentation. For laboratory research only; not for human consumption.</p>
+      <h2>The research collection.</h2>
+      <p>Explore materials by name and labeled amount. Review batch documentation before ordering. For laboratory research only.</p>
     </div>
     <div class="catalog-paths" aria-label="Browse research catalog categories">
       <a href="/research-peptides.html"><strong>Research peptides</strong><span>Material information and purchaser requirements</span></a>
@@ -2786,9 +2786,14 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">NXT LVL</div>
-    <p>&copy; 2026 NXT LVL Research. Operated by BLUE LIGHT VENTURES LLC. All rights reserved. For laboratory research use only.</p>
+  <footer class="atelier-footer">
+    <div class="atelier-footer-grid">
+      <div class="atelier-footer-brand"><a class="footer-logo" href="#home">NXT <span>LVL.</span></a><p>Research materials.<br>South Florida perspective.</p><small>Online across the USA.<br>Local in Miami &amp; Fort Lauderdale.</small></div>
+      <div class="atelier-footer-column"><h3>Explore</h3><a href="#menu">Shop the collection</a><a href="/research-peptides.html">Research peptides</a><a href="/research-supplies.html">Laboratory supplies</a><a href="/coa.html">Batch documentation</a></div>
+      <div class="atelier-footer-column"><h3>Order information</h3><a href="/how-to-order.html">How to pay with crypto</a><a href="/shipping-and-payments.html">Shipping &amp; fulfillment</a><a href="/south-florida-research.html">Local delivery &amp; pickup</a><a href="/research-eligibility.html">Research eligibility</a></div>
+      <div class="atelier-footer-column"><h3>Personal support</h3><a class="atelier-footer-phone" href="tel:+17542907210">754-290-7210 ↗</a><a href="sms:+17542907210">Send a text</a><a href="https://wa.me/17542907210">Chat on WhatsApp</a><a href="mailto:payment@nxtlvl-research.com">Email support</a></div>
+    </div>
+    <div class="atelier-footer-bottom"><p>&copy; 2026 NXT LVL Research · BLUE LIGHT VENTURES LLC.<br>For laboratory research only. Not for human or veterinary use.</p><div><a href="/ordering-policy.html#refunds">Final-sale policy</a><a href="/ordering-policy.html">Ordering terms</a><a href="/privacy.html">Privacy</a></div></div>
   </footer>
 
   <!-- MODAL -->
@@ -2858,7 +2863,7 @@
   <script src="/products-data-original.js?v=20261016-research-cleanup"></script>
   <script src="/cjc-products.js?v=20261016-review"></script>
   <script src="/products-data.js?v=20260824-performance-1"></script>
-  <script defer src="/premium-enhancements.js?v=20261017-crypto-health"></script>
+  <script defer src="/premium-enhancements.js?v=20261017-atelier-1"></script>
 
   <script>
     // Nav scroll
@@ -2919,7 +2924,7 @@
       return `
     <div class="compound-card" data-product-id="${p.id}" onclick="openModal('${p.id}')">
       <div class="card-top">
-        <span class="card-category">${catName}</span>
+        <span class="catalog-index" aria-hidden="true">${String(compounds.indexOf(p) + 1).padStart(2, '0')}</span><span class="card-category">${catName}</span>
         ${p.badge ? `<span class="card-badge ${p.badge === 'New' ? 'new-badge' : ''}">${p.badge}</span>` : ''}
       </div>
       <h3 class="card-name">${researchPagePaths[p.id] ? `<a href="${researchPagePaths[p.id]}" onclick="event.stopPropagation()">${p.name}</a>` : `<button type="button" onclick="event.stopPropagation();openModal('${p.id}')">${p.name}</button>`}</h3>
@@ -2929,10 +2934,13 @@
       <div class="card-tags">${p.tags.slice(0, 4).map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
       <div class="card-footer">
         <div class="card-price">$${startPrice.toFixed(2)} <span>from</span></div>
-        <div class="card-arrow">&rarr;</div>
+        <button type="button" class="card-arrow" aria-label="Quick view ${p.name}" onclick="event.stopPropagation();openModal('${p.id}')">↗</button>
       </div>
       <div class="card-atc-row" onclick="event.stopPropagation()">
         <div class="custom-select card-atc-dropdown" id="atc-select-${p.id}" data-value="0">
+          <select class="native-pack-select" aria-label="Pack size for ${p.name}" onchange="selectDropdownOption(event,'atc-select-${p.id}',Number(this.value),this.options[this.selectedIndex].text)">
+            ${p.pricing.map((pr,i)=>`<option value="${i}">${pr.label.replace(/ · Save .*$/, '')} · $${pr.price.toFixed(2)}</option>`).join('')}
+          </select>
           <button type="button" class="custom-select-trigger" onclick="toggleDropdown(event, 'atc-select-${p.id}')">
             <span class="custom-select-label">${p.pricing[0].label} — $${p.pricing[0].price.toFixed(2)}</span>
             <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2945,7 +2953,7 @@
             </div>`).join('')}
           </div>
         </div>
-        <button class="card-atc-btn" id="atc-btn-${p.id}" onclick="quickAddToCart('${p.id}')">Add</button>
+        <button class="card-atc-btn" id="atc-btn-${p.id}" onclick="quickAddToCart('${p.id}')">Add to cart</button>
       </div>
     </div>`;
     }
@@ -3115,6 +3123,8 @@
       const container = document.getElementById(id);
       if (!container) return;
       container.dataset.value = value;
+      const nativeSelect = container.querySelector('.native-pack-select');
+      if (nativeSelect) nativeSelect.value = String(value);
       const labelEl = container.querySelector('.custom-select-label');
       labelEl.textContent = labelText;
       labelEl.classList.remove('placeholder');
@@ -3730,10 +3740,10 @@
   <script src="bac-water-product.js?v=20261016-review"></script>
   <script src="glutathione-product.js?v=20261016-review"></script>
   <script src="quantity-pricing.js?v=20260826-quantity-1"></script>
-  <script src="catalog-search-quantity.js?v=20261017-coastal-1"></script>
+  <script src="catalog-search-quantity.js?v=20261017-atelier-1"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261017-crypto-health"></script>
-  <script src="customer-checkout-upgrade.js?v=20261017-crypto-health"></script>
+  <script src="customer-checkout-upgrade.js?v=20261017-atelier-1"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
   <script src="mobile-app-upgrade.js?v=20260822-4"></script>
 <aside class="local-footer" aria-label="Research customer support"><a href="/south-florida-research.html">Miami / Fort Lauderdale local delivery</a> · <a href="tel:+17542907210">754-290-7210</a> · <a href="sms:+17542907210">Text</a> · <a href="https://wa.me/17542907210">WhatsApp</a></aside><div class="research-policy-links"><a href="/research-eligibility.html">Purchaser eligibility</a><a href="/ordering-policy.html">Ordering &amp; support</a><a href="/ordering-policy.html#refunds">Returns &amp; refunds</a><a href="/privacy.html">Privacy</a></div></body>

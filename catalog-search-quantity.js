@@ -122,13 +122,13 @@
         <path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
       </svg>
       <input id="nxtProductSearch" type="search" autocomplete="off"
-        placeholder="Search compound name or labeled amount…"
+        placeholder="Search materials…"
         aria-label="Search research products">
       <button class="nxt-search-clear" type="button" aria-label="Clear product search">×</button>
     </div>
     <div class="nxt-search-meta">
       <span class="nxt-search-status" role="status" aria-live="polite" aria-atomic="true"><strong>All products</strong> shown</span>
-      <span>Freeze-dried: 1–10</span>
+      <span>Prices in USD</span>
     </div>
   `;
 
@@ -197,6 +197,8 @@
     const selector = document.getElementById('atc-select-' + product.id);
     if (!selector) return;
     selector.dataset.value = String(index);
+    const nativeSelect = selector.querySelector('.native-pack-select');
+    if (nativeSelect) nativeSelect.value = String(index);
     const option = product.pricing[index];
     const label = selector.querySelector('.custom-select-label');
     if (label) label.textContent = option.label + ' — $' + option.price.toFixed(2);
@@ -232,6 +234,7 @@
 
     if (showAll) { showAll.hidden = Boolean(query) || expanded || matched <= 6; showAll.textContent = `View all ${matched} materials`; }
     wrap.classList.toggle('has-query', Boolean(query));
+    clear.hidden = !query;
     empty.classList.toggle('show', Boolean(query) && visible === 0);
     if (!empty.isConnected) grid.appendChild(empty);
     status.innerHTML = query

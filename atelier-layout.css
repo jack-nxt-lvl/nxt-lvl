@@ -1,0 +1,262 @@
+/* Shared storefront refinement: typography, spacing, navigation and touch targets. */
+body.miami-site { --atelier-line:rgba(192,218,210,.17); --atelier-soft:#9eb5af; }
+body.miami-site button,body.miami-site a,body.miami-site select { touch-action:manipulation; }
+body.miami-site :is(button,input,select,textarea,a) { -webkit-tap-highlight-color:rgba(89,226,206,.16); }
+body.miami-site :is(.wrap,.w,.ru-wrap) { min-width:0; }
+body.miami-site h1,body.miami-site h2 { text-wrap:balance; }
+body.miami-site :is(.lead,.ru-lead) { max-width:740px; text-wrap:pretty; }
+body.miami-site :is(.top,.ru-nav) a { display:inline-flex;align-items:center;min-height:44px; }
+body.miami-site .specs { gap:16px; }
+body.miami-site .spec { padding:24px; border-radius:10px!important; }
+body.miami-site .spec small { letter-spacing:1.4px; font-size:10px; }
+body.miami-site .spec strong { font-size:24px; font-weight:500; }
+
+/* Header and photographic cover. */
+body.miami-site #mainNav { height:88px;padding-inline:max(4vw,24px)!important;border-color:var(--atelier-line)!important; }
+body.miami-site .nav-inner { height:88px;max-width:1360px!important;gap:30px; }
+body.miami-site nav ul { gap:30px; }
+body.miami-site nav ul li a { font-weight:500!important; }
+body.miami-site nav .nav-cta { min-height:44px;border-radius:6px!important;padding:10px 20px!important; }
+body.miami-site :is(.cart-toggle,.nav-toggle) { min-width:44px;min-height:44px;border-radius:7px!important; }
+body.miami-home .hero { min-height:760px!important;padding:156px max(5vw,28px) 74px!important; }
+body.miami-home .hero-content { max-width:1320px!important; }
+body.miami-home .hero .hero-content h1.local-search-heading { font-size:clamp(68px,7.5vw,106px)!important;letter-spacing:-.055em!important;font-weight:600!important;line-height:.98!important;max-width:850px!important; }
+body.miami-home .hero h1 .silver { word-spacing:.12em; }
+body.miami-home .hero-badge { font-weight:500!important;letter-spacing:2.2px!important; }
+body.miami-home .hero p { max-width:480px!important;font-size:15px!important;line-height:1.9!important;margin:30px 0!important; }
+body.miami-home .hero .btn-primary,body.miami-home .hero .btn-secondary { border-radius:7px!important;min-height:54px!important;padding:15px 25px!important;font-weight:600!important; }
+body.miami-home .hero .btn-secondary { border-color:#64817a!important;background:rgba(7,20,24,.32)!important; }
+body.miami-home .miami-hero-location { margin-top:31px;font-size:9px;font-weight:500;letter-spacing:1.5px; }
+body.miami-home .miami-hero-visual::after { background:linear-gradient(90deg,#061017ed,#061017a8 39%,#06101708 79%),linear-gradient(0deg,#080e10,transparent 27%); }
+body.miami-site .trust-bar.miami-trust { max-width:1320px!important;width:calc(100% - 80px);border-color:var(--atelier-line)!important; }
+body.miami-site .miami-trust .trust-item { min-height:106px;padding:24px 30px!important;border-color:var(--atelier-line)!important;transition:background .2s; }
+body.miami-site .miami-trust .trust-item:hover { background:#12201e!important; }
+body.miami-site .miami-trust .num { font-size:13px!important;font-weight:400!important;color:#7a9c92!important; }
+body.miami-site .miami-trust .label { font-size:13px!important;font-weight:500!important; }
+body.miami-site .miami-trust .trust-sub { font-size:11px;margin-top:6px;color:#92aba2; }
+
+/* A quieter catalog with a clear sequence: search, category, material, pack. */
+body.miami-site #menu { max-width:1400px;padding:94px 40px 88px!important; }
+body.miami-home #menu .section-header { display:grid;grid-template-columns:1.15fr 1fr;column-gap:64px;max-width:none;margin-bottom:35px!important;align-items:end; }
+body.miami-home #menu .section-tag { grid-column:1/-1;margin-bottom:16px;font-size:10px!important;font-weight:500!important;letter-spacing:2px!important; }
+body.miami-home #menu .section-header h2 { font-size:clamp(38px,4.3vw,58px)!important;font-weight:500!important;line-height:1.08!important;letter-spacing:-.045em;margin:0!important; }
+body.miami-home #menu .section-header p { font-size:14px!important;line-height:1.85;max-width:450px;justify-self:end; }
+body.miami-site .nxt-search-shell { border:1px solid var(--atelier-line)!important;background:#101b1d!important;min-height:58px;border-radius:8px; }
+body.miami-site .nxt-search-icon { width:19px;height:19px;color:#a0bdb4!important; }
+body.miami-site #nxtProductSearch::-webkit-search-cancel-button { -webkit-appearance:none; }
+body.miami-site .nxt-search-clear { width:44px;height:44px;border-radius:5px;background:transparent; }
+body.miami-site .nxt-search-shell { grid-template-columns:46px minmax(0,1fr) 44px; }
+body.miami-site .nxt-search-meta { margin-top:12px;font-weight:400; }
+body.miami-site .catalog-paths { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 28px;border-color:var(--atelier-line); }
+body.miami-site .catalog-paths a { min-height:58px;align-content:center;border-color:var(--atelier-line);padding:12px 20px 17px; }
+body.miami-site .catalog-paths strong { font-size:13px;font-weight:500; }
+body.miami-site .catalog-paths span { display:block;margin-top:4px;font-size:10px;color:#91a99f; }
+body.miami-site .filter-bar { gap:9px;margin-bottom:24px!important; }
+body.miami-site .filter-btn { min-height:44px;border-radius:6px!important;padding:10px 18px!important;font-size:12px!important;font-weight:500!important; }
+body.miami-site .filter-btn.active { background:#c7e5db!important;border-color:#c7e5db!important;color:#102820!important; }
+body.miami-site .compound-grid { gap:20px!important; }
+body.miami-site .compound-card { position:relative;min-width:0;padding:29px!important;border:1px solid var(--atelier-line)!important;border-radius:12px!important;background:linear-gradient(140deg,#142024,#0f181a)!important;transition:border-color .2s,box-shadow .2s!important; }
+body.miami-site .compound-card:hover { border-color:#6d9b8d!important;box-shadow:0 16px 36px #0003!important; }
+body.miami-site .compound-card:focus-within { border-color:#86c7b4!important; }
+body.miami-site .card-top { display:flex;align-items:center;gap:12px;min-height:25px;margin-bottom:28px; }
+body.miami-site .catalog-index { font:400 12px/1.3 'Space Grotesk',sans-serif;color:#94b5a8;letter-spacing:1px; }
+body.miami-site .card-category { font-size:8px!important;font-weight:500!important;letter-spacing:1.1px!important;background:transparent!important;color:#92aaa1!important;border-left:1px solid #496559;padding:0 0 0 12px;border-radius:0!important; }
+body.miami-site .card-name { min-height:64px!important;font-size:clamp(23px,2.2vw,29px)!important;line-height:1.15!important;font-weight:500!important;letter-spacing:-.035em!important;margin-bottom:14px!important;overflow-wrap:anywhere; }
+body.miami-site .card-name :is(a,button) { text-decoration:none; }
+body.miami-site .card-name :is(a,button):hover { color:#8be5d1!important; }
+body.miami-site .card-desc { color:#9bb0a8!important;font-size:12px!important;line-height:1.8!important;min-height:44px;margin-bottom:20px!important; }
+body.miami-site .card-tags { margin-bottom:24px!important; }
+body.miami-site .card-tag { border:0!important;background:transparent!important;padding:0!important;color:#8fb2a5!important;letter-spacing:1px!important;font-size:8px!important; }
+body.miami-site .card-footer { padding-top:21px!important;border-top:1px solid var(--atelier-line)!important; }
+body.miami-site .card-price { font-family:'Space Grotesk',Inter,sans-serif!important;font-size:29px!important;font-weight:400!important;letter-spacing:-1px; }
+body.miami-site .card-price span { font-family:Inter,sans-serif;letter-spacing:0;font-size:10px!important;margin-left:5px; }
+body.miami-site .card-arrow { display:inline-flex!important;align-items:center;justify-content:center;opacity:1!important;transform:none!important;min-width:44px;width:44px;min-height:44px;height:44px;border:1px solid var(--atelier-line)!important;background:transparent!important;border-radius:50%!important;font-size:22px;color:#bdd8ce!important;cursor:pointer; }
+body.miami-site .card-atc-row { grid-template-columns:minmax(0,1fr) 108px!important;gap:8px!important;margin-top:20px; }
+body.miami-site .card-atc-btn { min-height:48px!important;font-size:12px!important;font-weight:650!important;border-radius:6px!important;background:#c7e5db!important;border-color:#c7e5db!important;white-space:nowrap; }
+body.miami-site .card-atc-btn:hover { background:#8aefdf!important; }
+body.miami-site .custom-select-trigger { min-height:48px;font-size:11px!important;border-radius:6px!important;padding-inline:12px!important; }
+.native-pack-select { display:none; }
+body.miami-site .miami-catalog-more { margin-top:37px; }
+body.miami-site .miami-catalog-more button { min-height:50px;border-color:#6d9b8d;border-radius:6px;padding:13px 30px;color:#d0e7de;font-weight:500; }
+
+/* Delivery, payment guidance and support get space to breathe. */
+body.miami-home .local-panel { width:calc(100% - 80px)!important;max-width:1320px!important;margin:0 auto 44px!important;padding:48px!important;border-color:var(--atelier-line);border-radius:12px;background:#101b1c; }
+body.miami-home .local-panel h2 { font-size:clamp(32px,3.3vw,46px)!important;font-weight:500!important;letter-spacing:-.045em; }
+body.miami-home .miami-local { gap:48px; }
+body.miami-home .miami-rate-grid { gap:14px; }
+body.miami-home .miami-rate-grid>div { padding:25px 22px;border-radius:8px;border-color:var(--atelier-line);background:#152220; }
+body.miami-home .miami-rate-grid strong { font-weight:400;font-size:34px; }
+body.miami-home #purchaser-review { display:grid;grid-template-columns:1fr 1fr;gap:14px 70px;padding:52px; }
+body.miami-home #purchaser-review .eyebrow { grid-column:1/-1;margin:0; }
+body.miami-home #purchaser-review h2 { grid-column:1;margin:0; }
+body.miami-home #purchaser-review>p:not(.eyebrow) { grid-column:2;margin:0;font-size:13px; }
+body.miami-home #purchaser-review>.local-actions { grid-column:1;grid-row:3 / 5;align-self:start;flex-direction:column;align-items:flex-start;margin:12px 0 0; }
+body.miami-home #purchaser-review>.local-actions a { min-height:48px;border-radius:6px; }
+body.miami-home #crypto-guide { width:calc(100% - 80px)!important;max-width:1320px!important;margin:0 auto 60px!important;padding:0!important; }
+body.miami-home #crypto-guide>.local-panel { display:none; }
+body.miami-site .crypto-guide-shell { border:1px solid var(--atelier-line)!important;border-radius:12px!important;background:#0e191b!important;box-shadow:none!important; }
+body.miami-site .crypto-guide-shell>summary { padding:25px 32px!important;color:#c7e5db!important;font-size:14px;font-weight:500; }
+body.miami-home #order { max-width:1400px;padding:48px 40px 80px!important; }
+body.miami-home #order .section-header h2 { font-size:44px!important;font-weight:500!important; }
+body.miami-home .disclaimer-section { max-width:1320px;padding:28px 0 45px!important;margin:auto;border:0!important; }
+
+/* Full footer; every destination remains directly reachable. */
+body.miami-home footer.atelier-footer { max-width:none!important;width:100%;margin:0;padding:66px max(5vw,28px) 26px!important;border-top:1px solid var(--atelier-line)!important;background:#0d1719!important;text-align:left!important; }
+.atelier-footer-grid { display:grid;grid-template-columns:1.35fr 1fr 1.15fr 1fr;gap:38px;max-width:1320px;margin:auto; }
+body.miami-site .atelier-footer-brand .footer-logo { display:inline-block;font-family:'Space Grotesk',sans-serif!important;font-size:38px!important;letter-spacing:-2px!important;font-weight:600!important;margin:0 0 20px!important;text-decoration:none; }
+body.miami-site .atelier-footer-brand .footer-logo span { color:#8ed8c4;-webkit-text-fill-color:#8ed8c4; }
+body.miami-site .atelier-footer-brand p { font-size:15px!important;line-height:1.7;margin:0 0 15px; }
+.atelier-footer-brand small { font-size:11px;line-height:1.8;color:#88a099; }
+body.miami-site .atelier-footer-column h3 { font:500 10px/1.5 Inter,sans-serif!important;color:#bcd6ca;letter-spacing:1.4px;text-transform:uppercase;margin:8px 0 17px; }
+.atelier-footer-column a { display:flex;align-items:center;min-height:44px;color:#9bb4aa!important;text-decoration:none;font-size:12px; }
+.atelier-footer-column a:hover { color:#d2eee4!important;text-decoration:underline; }
+.atelier-footer-column .atelier-footer-phone { font-size:16px;color:#edf5f3!important; }
+.atelier-footer-bottom { display:flex;align-items:center;justify-content:space-between;gap:28px;max-width:1320px;margin:48px auto 0;padding-top:24px;border-top:1px solid var(--atelier-line); }
+body.miami-site .atelier-footer-bottom p { font-size:10px!important;line-height:1.9;letter-spacing:.15px;margin:0; }
+.atelier-footer-bottom>div { display:flex;gap:22px;flex-wrap:wrap; }
+.atelier-footer-bottom a { display:inline-flex;align-items:center;min-height:44px;font-size:10px;text-decoration:none;color:#a3bcb0!important; }
+body.miami-home>.local-footer,body.miami-home>.research-policy-links { display:none; }
+body.miami-home .atelier-footer .premium-footer-links { display:none; }
+
+/* Cart and form polish keeps all payment behavior unchanged. */
+body.miami-site .cart-drawer { background:#0d1719!important;border-left:1px solid var(--atelier-line)!important; }
+body.miami-site .cart-drawer-header,body.miami-site .cart-drawer-footer { background:#0d1719!important; }
+body.miami-site .cart-item { border-color:var(--atelier-line)!important; }
+body.miami-site .cart-item-qty button { min-width:44px;min-height:44px; }
+body.miami-site .cart-item-remove { min-height:44px;font-size:11px; }
+body.miami-site .nxt-checkout-card { border-radius:12px!important;scrollbar-color:#476a5e #101b1b; }
+body.miami-site .nxt-checkout-card h2 { font-weight:500!important; }
+body.miami-site .nxt-checkout-card input { font-size:16px!important; }
+body.miami-site .nxt-checkout-card :is(input[type=checkbox]) { min-height:20px!important; }
+body.miami-site .nxt-checkout-card label { line-height:1.7; }
+body.miami-site .nxt-checkout-actions button { font-size:13px!important; }
+body.miami-site .nxt-checkout-cancel,body.miami-site .nxt-checkout-continue { min-height:50px; }
+
+@media(max-width:1100px) {
+ body.miami-site #mainNav,.miami-site .nav-inner { height:78px; }
+ body.miami-site nav ul { gap:18px; }
+ body.miami-home .hero { min-height:710px!important;padding:140px 40px 64px!important; }
+ body.miami-site #menu { padding:70px 28px!important; }
+ body.miami-home #menu .section-header { column-gap:35px; }
+ body.miami-site .compound-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+ body.miami-site .card-name { font-size:27px!important; }
+ body.miami-home .local-panel,body.miami-home #crypto-guide { margin-left:28px;margin-right:28px; }
+ body.miami-home .local-panel { padding:32px; }
+ body.miami-home #purchaser-review { padding:35px;gap:18px 32px; }
+ body.miami-home .disclaimer-section { padding:24px 28px 40px!important; }
+ .atelier-footer-grid { grid-template-columns:1.2fr 1fr;gap:30px 50px; }
+}
+@media(max-width:760px) {
+ html:has(body.miami-site) { scroll-padding-top:76px; }
+ body.miami-site section[id] { scroll-margin-top:76px; }
+ body.miami-site #mainNav { height:72px;padding:0 20px!important; }
+ body.miami-site .nav-inner { height:72px;gap:10px; }
+ body.miami-site #mainNav ul.open { top:72px!important;border-bottom:1px solid var(--atelier-line)!important;padding:14px 20px 24px!important;background:#0c181b!important;max-height:calc(100dvh - 165px);overflow-y:auto; }
+ body.miami-site #mainNav ul.open a { display:flex;align-items:center;min-height:48px; }
+ body.miami-home .hero { min-height:650px!important;padding:110px 22px 42px!important; }
+ body.miami-home .hero .hero-content h1.local-search-heading { font-size:clamp(47px,12.8vw,78px)!important;font-weight:600!important;letter-spacing:-.055em!important;line-height:1.01!important;margin-bottom:0!important; }
+ body.miami-home .hero-badge { font-size:8px!important;letter-spacing:1.3px!important;margin-bottom:26px!important; }
+ body.miami-home .hero p { font-size:13px!important;line-height:1.85!important;margin:24px 0!important;max-width:350px!important; }
+ body.miami-home .hero p br { display:none; }
+ body.miami-home .hero .btn-primary,body.miami-home .hero .btn-secondary { min-height:50px!important;padding:13px 18px!important;font-size:13px!important; }
+ body.miami-home .crypto-assurance { margin-top:22px!important;font-size:10px!important; }
+ body.miami-home .miami-hero-location { margin-top:25px;font-size:7px;letter-spacing:1px;gap:10px; }
+ body.miami-home .miami-hero-location i { width:15px; }
+ body.miami-home .miami-hero-visual img { object-position:65% center; }
+ body.miami-home .miami-hero-visual::after { background:linear-gradient(90deg,#06131bdb,#06131b80),linear-gradient(0deg,#080e10,transparent 42%); }
+ body.miami-site .trust-bar.miami-trust { grid-template-columns:repeat(3,minmax(0,1fr))!important;width:calc(100% - 40px);margin:0 20px!important; }
+ body.miami-site .miami-trust .trust-item { display:block;min-height:112px;padding:20px 12px!important;border:0!important;border-right:1px solid var(--atelier-line)!important; }
+ body.miami-site .miami-trust .trust-item:first-child { padding-left:0!important; }
+ body.miami-site .miami-trust .trust-item:last-child { padding-right:0!important;border-right:0!important; }
+ body.miami-site .miami-trust .num { display:none!important; }
+ body.miami-site .miami-trust .label { font-size:11px!important;line-height:1.55;font-weight:500!important; }
+ body.miami-site .miami-trust .trust-sub { font-size:9px;line-height:1.6;margin-top:8px; }
+ body.miami-site #menu { padding:48px 20px 52px!important; }
+ body.miami-home #menu .section-header { display:block;margin-bottom:24px!important; }
+ body.miami-home #menu .section-tag { margin-bottom:15px;font-size:8px!important;letter-spacing:1.8px!important; }
+ body.miami-home #menu .section-header h2 { font-size:36px!important;margin:0 0 16px!important; }
+ body.miami-home #menu .section-header p { font-size:12px!important;line-height:1.75;max-width:400px; }
+ body.miami-site .nxt-product-search { margin:0 0 18px!important; }
+ body.miami-site .nxt-search-shell { min-height:52px;border-radius:7px; }
+ body.miami-site #nxtProductSearch { font-size:16px!important; }
+ body.miami-site .nxt-search-meta { font-size:10px; }
+ body.miami-site .catalog-paths { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-bottom:18px; }
+ body.miami-site .catalog-paths a,body.miami-site .catalog-paths a:first-child { display:flex;align-items:center;justify-content:center;padding:9px 5px;min-height:48px;border:0;border-right:1px solid var(--atelier-line);text-align:center; }
+ body.miami-site .catalog-paths a:last-child { border:0; }
+ body.miami-site .catalog-paths strong { font-size:10px;line-height:1.45; }
+ body.miami-site .catalog-paths span { display:none; }
+ body.miami-site .filter-bar { gap:8px;margin-bottom:18px!important; }
+ body.miami-site .filter-btn { font-size:10px!important;min-height:44px;padding:9px 12px!important; }
+ body.miami-site .compound-grid { grid-template-columns:1fr!important;gap:14px!important; }
+ body.miami-site .compound-card { padding:23px!important;border-radius:10px!important; }
+ body.miami-site .card-top { margin-bottom:20px; }
+ body.miami-site .card-name { font-size:27px!important;min-height:0!important;margin-bottom:12px!important; }
+ body.miami-site .card-desc { font-size:12px!important;min-height:0;margin-bottom:14px!important; }
+ body.miami-site .card-tags { margin-bottom:18px!important; }
+ body.miami-site .card-footer { padding-top:16px!important; }
+ body.miami-site .card-price { font-size:28px!important; }
+ body.miami-site .card-atc-row { grid-template-columns:minmax(0,1fr) 108px!important;margin-top:17px; }
+ body.miami-site .card-atc-dropdown>.custom-select-trigger,body.miami-site .card-atc-dropdown>.custom-select-menu { display:none!important; }
+ body.miami-site .native-pack-select { display:block;width:100%;min-width:0;max-width:100%;min-height:49px;appearance:auto;padding:8px;color:#d3e4db;background:#091315;border:1px solid #395248;border-radius:6px;font-family:inherit;font-size:16px!important;cursor:pointer; }
+ body.miami-site .miami-catalog-more { margin-top:25px;gap:20px; }
+ body.miami-home .local-panel { width:calc(100% - 40px)!important;margin:0 20px 28px!important;padding:26px 22px!important;border-radius:10px; }
+ body.miami-home .local-panel h2 { font-size:33px!important; }
+ body.miami-home .local-panel p { font-size:12px;line-height:1.85; }
+ body.miami-home .miami-local { gap:28px; }
+ body.miami-home .miami-rate-grid>div { padding:20px 15px; }
+ body.miami-home .miami-rate-grid strong { font-size:30px; }
+ body.miami-home .miami-contact-strip { gap:12px; }
+ body.miami-home .miami-contact-strip a { min-height:44px;display:inline-flex;align-items:center; }
+ body.miami-home #purchaser-review { display:block!important;width:calc(100% - 40px)!important;margin:0 20px 28px!important;padding:28px 22px!important; }
+ body.miami-home #purchaser-review>h2 { margin:12px 0 20px; }
+ body.miami-home #purchaser-review>p { margin:12px 0!important; }
+ body.miami-home #purchaser-review>.local-actions { margin:22px 0;align-items:stretch; }
+ body.miami-home #crypto-guide { width:calc(100% - 40px)!important;margin:0 20px 34px!important; }
+ body.miami-site .crypto-guide-shell>summary { padding:22px!important;line-height:1.7;font-size:13px; }
+ body.miami-home #order { padding:30px 20px 45px!important; }
+ body.miami-home #order .section-header h2 { font-size:34px!important; }
+ body.miami-home .disclaimer-section { padding:20px 22px 35px!important; }
+ body.miami-home footer.atelier-footer { padding:38px 22px 32px!important; }
+ .atelier-footer-grid { grid-template-columns:1fr 1fr;gap:30px 20px; }
+ .atelier-footer-brand { grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0 14px; }
+ body.miami-site .atelier-footer-brand .footer-logo { grid-column:1/-1;font-size:34px!important;margin-bottom:20px!important; }
+ body.miami-site .atelier-footer-brand p { font-size:12px!important;margin:0; }
+ .atelier-footer-brand small { font-size:10px; }
+ .atelier-footer-column:last-child { grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0 20px; }
+ .atelier-footer-column:last-child h3 { grid-column:1/-1; }
+ .atelier-footer-column a { font-size:11px;line-height:1.7; }
+ .atelier-footer-column .atelier-footer-phone { font-size:14px; }
+ .atelier-footer-bottom { flex-direction:column;align-items:flex-start;gap:15px;margin-top:28px;padding-top:22px; }
+ .atelier-footer-bottom>div { gap:20px; }
+ body.miami-site .nxt-mobile-tabbar { border-radius:14px!important;border-color:#40594f!important;background:rgba(10,22,23,.97)!important;box-shadow:0 10px 36px #0006!important; }
+ body.miami-site .nxt-mobile-tabbar .active { background:#203a31!important; }
+ body.miami-site .cart-item-qty button { width:44px!important;height:44px!important; }
+ body.miami-site .cart-item-remove { min-height:44px!important; }
+ body.miami-site .cart-drawer-header h3 { font-weight:500!important; }
+ body.miami-site .nxt-checkout-card { border-radius:0!important;max-width:100%!important; }
+ body.miami-site .nxt-checkout-card .nxt-checkout-intro { font-size:13px!important; }
+ body.miami-site .nxt-checkout-card input { min-height:52px!important; }
+ body.miami-site .nxt-checkout-card input[type=checkbox] { min-height:20px!important;min-width:20px!important; }
+ body.miami-site .nxt-checkout-actions button { font-size:12px!important; }
+ body.miami-site .nxt-checkout-card .nxt-fulfillment strong { line-height:1.4!important; }
+ body.miami-site .nxt-checkout-card .nxt-fulfillment span { font-size:11px; }
+ body.miami-site .specs { grid-template-columns:1fr!important;gap:12px; }
+ body.miami-site .spec { padding:20px;display:flex;align-items:center;justify-content:space-between;gap:15px; }
+ body.miami-site .spec strong { font-size:19px; }
+ body.miami-site :is(.top,.ru-nav) { row-gap:6px; }
+ body.miami-site :is(.top,.ru-nav) a { min-height:44px;font-size:12px; }
+}
+@media(max-width:360px) {
+ body.miami-home .hero { padding-inline:18px!important; }
+ body.miami-home .hero-badge { font-size:7px!important;letter-spacing:1px!important; }
+ body.miami-site #menu { padding-inline:16px!important; }
+ body.miami-site .compound-card { padding:19px!important; }
+ body.miami-site .card-atc-row { grid-template-columns:1fr!important; }
+ body.miami-site .card-atc-btn { width:100%; }
+ body.miami-site .native-pack-select { width:100%; }
+ .atelier-footer-grid { gap:26px 14px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ html:has(body.miami-site) { scroll-behavior:auto!important; }
+ body.miami-site * { transition:none!important; }
+}
