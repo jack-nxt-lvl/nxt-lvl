@@ -42,12 +42,14 @@ test('local inquiry prepares an encoded draft without submitting or sending it',
  assert.match(target.searchParams.get('text'),/Miami & 33101/);
  assert.match(target.searchParams.get('text'),/Pickup appointment inquiry/);
 });
-test('local structured data is valid and does not invent a street address or hours', () => {
+test('local structured data uses the owner-supplied business address without inventing a local branch or hours', () => {
  const html=read('south-florida-research.html');
  for(const match of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
   const schema=JSON.parse(match[1]);
   assert.equal(schema['@graph'][0].telephone,'+1-754-290-7210');
-  assert.doesNotMatch(match[1],/streetAddress|openingHours|aggregateRating|LocalBusiness/);
+  assert.equal(schema['@graph'][0].legalName,'BLUE LIGHT VENTURES LLC');
+  assert.deepEqual(schema['@graph'][0].address,{'@type':'PostalAddress',streetAddress:'30 N Gould St, Ste R',addressLocality:'Sheridan',addressRegion:'WY',postalCode:'82801',addressCountry:'US'});
+  assert.doesNotMatch(match[1],/openingHours|aggregateRating|LocalBusiness/);
  }
  assert.match(html,/tel:\+17542907210/);assert.match(html,/sms:\+17542907210/);
  assert.match(read('robots.txt'),/https:\/\/www\.nxtlvl-research\.com\/sitemap.xml/);
