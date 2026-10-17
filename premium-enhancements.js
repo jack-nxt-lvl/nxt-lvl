@@ -63,7 +63,7 @@ if (typeof document !== 'undefined') (() => {
     if (!hero.querySelector('.crypto-assurance')) {
       const assurance = document.createElement('div');
       assurance.className = 'crypto-assurance';
-      assurance.innerHTML = '<span>🔒</span><div><b>Research purchaser review</b> · Organization and intended use are checked before payment. <a href="/research-eligibility.html">See eligibility requirements.</a></div>';
+      assurance.innerHTML = '<span>🔒</span><div><b>Direct crypto checkout</b> · BTC, ETH or USDT. <a href="/how-to-order.html">How to order and pay.</a></div>';
       hero.querySelector('.hero-buttons')?.insertAdjacentElement('afterend', assurance);
     }
   }
@@ -75,7 +75,7 @@ if (typeof document !== 'undefined') (() => {
       <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
       <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm availability and arrangements.</div></div>
-      <div class="trust-item"><div class="num">🔒</div><div class="label">Reviewed Requests</div><div class="trust-sub">Eligibility is reviewed before payment.</div></div>`;
+      <div class="trust-item"><div class="num">🔒</div><div class="label">Research Use Only</div><div class="trust-sub">Laboratory research eligibility applies.</div></div>`;
   }
 
   const heroAi=document.querySelector('.hero .btn-secondary[onclick*="toggleAiChat"]');if(heroAi){heroAi.classList.add('hero-ai-cta');heroAi.textContent='Ask NXT LVL AI';}
@@ -83,13 +83,13 @@ if (typeof document !== 'undefined') (() => {
   if(menu&&!document.querySelector('.premium-search, .nxt-product-search')){const wrap=document.createElement('div');wrap.className='premium-search';wrap.innerHTML='<input id="premiumProductSearch" type="search" placeholder="Search compounds and research products…" aria-label="Search products">';menu.insertAdjacentElement('afterend',wrap);wrap.querySelector('input').addEventListener('input',e=>{const q=normalizeProductSearch(e.target.value);document.querySelectorAll('.compound-card').forEach(card=>{card.style.display=!q||normalizeProductSearch(card.textContent).includes(q)?'flex':'none';});});}
 
   const footer=document.querySelector('footer');
-  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="/research-eligibility.html">How to order</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
+  if(footer&&!footer.querySelector('.premium-footer-links')){const links=document.createElement('div');links.className='premium-footer-links';links.innerHTML='<a href="#menu">Products</a><a href="/how-to-order.html">How to order</a><a href="#order">Ordering</a><a href="mailto:payment@nxtlvl-research.com">Contact</a><a href="#research-disclaimer">Research Disclaimer</a>';footer.prepend(links);}
   const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
 
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}
   const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Shipping or Local Pickup')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose your payment asset')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Pay directly with')){el.dataset.premiumChecked='1';const target=el.querySelector('.nxt-wallet-head');if(target)target.insertAdjacentHTML('afterend',steps(2));}})});observer.observe(document.body,{childList:true});
 
-  function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Fulfillment options</span><span>USD $0–$30</span></div><div><span>Above $475 in materials</span><span>Free fulfillment</span></div><div><span>Final charges</span><span>Confirmed before approval</span></div><div class="total"><span>Review before payment</span><span>🔒</span></div>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
+  function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Fulfillment options</span><span>USD $0–$30</span></div><div><span>Above $475 in materials</span><span>Free fulfillment</span></div><div><span>Final charges</span><span>Shown in checkout</span></div><div class="total"><span>Crypto checkout</span><span>🔒</span></div><p>All sales final once an order is placed. Applicable legal rights remain. <a href="/ordering-policy.html#refunds">Final-sale policy</a></p>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
 
   if(!document.querySelector('.premium-toast')){const toast=document.createElement('div');toast.className='premium-toast';toast.textContent='Added to cart ✓';document.body.appendChild(toast);document.addEventListener('click',e=>{if(e.target.closest('.card-atc-btn,.modal-atc-btn')){toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1400)}});}
 })();

@@ -1,3 +1,4 @@
+const cryptoAccess = require('../lib/crypto-checkout-access');
 const { cardLinkCapabilities } = require('../lib/hosted-card-link');
 
 module.exports = async function handler(req, res) {
@@ -8,5 +9,5 @@ module.exports = async function handler(req, res) {
   res.status(200);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, max-age=0');
-  return res.end(JSON.stringify(cardLinkCapabilities()));
+  return res.end(JSON.stringify({ ...cardLinkCapabilities(), cryptoAvailable: cryptoAccess.ready(), researchConsentVersion: cryptoAccess.POLICY_VERSION }));
 };

@@ -221,7 +221,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         asset,
-        researchApprovalCode: details.researchApprovalCode,
+        researchConsent: details.researchConsent,
         fulfillment: details.fulfillment,
         customer: details.customer,
         items: context.items,
@@ -447,6 +447,7 @@
       <div class="nxt-wallet-body">
         <div class="nxt-wallet-qr"><img src="${escapeHtml(quote.qrDataUrl)}" alt="${escapeHtml(quote.asset)} payment QR code"><small>${escapeHtml(qrLabel)}</small></div>
         <div class="nxt-wallet-order">
+          <div class="nxt-wallet-warning"><strong>All sales final once an order is placed.</strong> No change-of-mind refunds. Applicable legal rights remain. <a href="/ordering-policy.html#refunds" target="_blank" rel="noopener">Policy &amp; required exceptions</a></div>
           <div class="nxt-wallet-summary"><span>Order total <b>$${escapeHtml(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer">Quote expires in 15:00</span></div>
           <div class="nxt-wallet-local"><span><b>${escapeHtml(localTotal)}</b>${escapeHtml(localCaption)}</span><span>Crypto amount stays exact</span></div>
           ${buyingFirst ? `<div class="nxt-wallet-next"><span class="nxt-wallet-next-icon">1</span><span><strong>Next: open Paybis to purchase crypto</strong><span>Purchase enough to cover your order plus all provider and network fees. Before paying, confirm “You receive” covers the exact crypto amount shown below.</span></span></div>` : ''}

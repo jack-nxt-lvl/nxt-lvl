@@ -85,18 +85,13 @@ test('shows email delivery only when the hosted provider, webhook, ledger, and s
   process.env.STRIPE_WEBHOOK_SECRET = previous;
 });
 
-test('keeps card details off-site and exposes only delivery choices in the customer UI', () => {
-  const source = require('fs').readFileSync(require('path').join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
-  assert.match(source, /Pay with crypto now/);
-  assert.match(source, /Send me a card link/);
-  assert.match(source, /data-channel="both"/);
-  assert.match(source, /email, text, or both/i);
-  assert.match(source, /card information is never entered or processed on NXT LVL/i);
-  assert.match(source, /one transactional payment-link text/i);
-  assert.match(source, /\/lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
-  assert.match(source, /\/direct-wallet-checkout\.js\?v=20261016-review/);
-  assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
-  assert.doesNotMatch(source, /cardNumber|cvc|expiryMonth|payment-element/i);
+test('public checkout offers crypto without exposing card collection or an approval-code field', () => {
+ const source=require('fs').readFileSync(require('path').join(__dirname,'..','customer-checkout-upgrade.js'),'utf8');
+ assert.match(source,/Continue to crypto payment/);
+ assert.match(source,/researchConsent/);
+ assert.doesNotMatch(source,/id="nxtResearchCode"|cardNumber|cvc|expiryMonth|payment-element/);
+ assert.match(source,/direct-wallet-checkout\.js\?v=20261017-crypto-final/);
+ assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
 });
 
 test('sends the same private hosted link by both email and text when the customer chooses both', async () => {

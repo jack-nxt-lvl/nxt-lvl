@@ -28,8 +28,8 @@
     if (!notice) return;
     const title = notice.querySelector('.crypto-text strong');
     const copy = notice.querySelector('.crypto-text span');
-    if (title) title.textContent = 'Research review before payment';
-    if (copy) copy.innerHTML = 'Online payment is currently unavailable. <a href="/research-eligibility.html">Review purchaser eligibility</a> and submit a research request first.';
+    if (title) title.textContent = 'BTC · ETH · USDT checkout';
+    if (copy) copy.innerHTML = '<a href="/how-to-order.html">Follow the crypto checkout instructions</a>. Send the exact amount on the network shown in checkout.';
   }
 
   function applyUpdates() {

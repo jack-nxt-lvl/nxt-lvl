@@ -1,4 +1,4 @@
-const { requireApproval } = require('../lib/research-access');
+const cryptoAccess = require('../lib/crypto-checkout-access');
 const fulfillmentRates = require('../fulfillment-rates');
 const QRCode = require('qrcode');
 const {
@@ -34,14 +34,14 @@ module.exports = async function handler(req, res) {
 
     const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
-    const approval = await requireApproval(req.body || {}, order, customer, 'crypto:' + asset);
+    const acknowledgment = await cryptoAccess.authorize(req, customer);
     const [usdPrice, localization] = await Promise.all([
       fetchUsdPrice(asset),
       localizeOrderTotal(req, order.totalCents, req.body && req.body.locale),
     ]);
     const createdAt = Date.now();
     const expiresAt = createdAt + QUOTE_TTL_MS;
-    const orderId = approval.orderId;
+    const orderId = randomOrderId();
     let amount = null;
     for (let attempt = 0; attempt < 10; attempt += 1) {
       const candidate = amountForQuote(asset, order.totalCents, usdPrice);
@@ -54,7 +54,8 @@ module.exports = async function handler(req, res) {
     const payload = {
       v: 1,
       fulfillmentPricingVersion: fulfillmentRates.VERSION,
-      researchApprovalId: approval.reference,
+      researchPolicyVersion: acknowledgment.policyVersion,
+      researchAcknowledgedAt: acknowledgment.acknowledgedAt,
       orderId,
       asset,
       address: config.address,
