@@ -328,3 +328,14 @@ body.miami-water .micro{color:#526b70}
 @media(max-width:900px){body.miami-water .hero{grid-template-columns:1fr!important;padding:35px 20px!important}body.miami-water .hero h1{font-size:clamp(31px,8vw,50px)!important}body.miami-water .visual{min-height:350px}body.miami-water .product{margin:0 16px;padding:25px 20px;min-width:0}body.miami-water .details h2{font-size:28px;overflow-wrap:anywhere}}
 
 body.miami-water .mark{display:grid;place-items:center;background:#136c70!important;box-shadow:none!important;transform:none;border-radius:5px}body.miami-water .mark::after{content:'N';color:#fff;font-weight:800;font-size:22px}
+
+/* The optional payment reference must remain readable in the light palette. */
+body.miami-site .crypto-guide-shell::before{background:linear-gradient(90deg,#136c70 0 70%,#dfa88c 70%)!important}
+body.miami-site .crypto-guide-shell :is(p,small,li,summary){color:#526b70!important}
+body.miami-site .crypto-guide-shell :is(h2,h3,h4,strong,b){color:#143b43!important}
+body.miami-site .crypto-guide-pill,body.miami-site .crypto-guide-label{background:#e5f1e9!important;color:#136c70!important;border-color:#b6ceca!important}
+body.miami-site .crypto-guide-path,body.miami-site .crypto-guide-research-pick,body.miami-site .crypto-guide-asset,body.miami-site .crypto-guide-options{background:#f7faf8!important;border-color:#d2e0dd!important}
+body.miami-site .crypto-guide-recommendation,body.miami-site .crypto-guide-quick>div{background:#edf4ef!important;border-color:#d2e0dd!important}
+body.miami-site .crypto-guide-option-warning,body.miami-site .crypto-guide-sendable-rule{background:#f6efe7!important;color:#66564b!important;border-color:#dccbb9!important}
+body.miami-site .crypto-guide-primary{background:#136c70!important;color:#fff!important;box-shadow:none!important}
+body.miami-site .crypto-guide-secondary{background:#fff!important;color:#136c70!important;border-color:#b6ceca!important}
