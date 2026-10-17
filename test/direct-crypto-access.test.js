@@ -15,7 +15,7 @@ async function mockNetwork(fn,{count=1}={}){
  global.fetch=async(url,options)=>{
   calls.push(url);
   if(url==='https://redis.example.test'){
-   const args=JSON.parse(options.body);const result=args[0]==='INCR'?count:args[0]==='SET'?'OK':1;
+   const args=JSON.parse(options.body);const result=args[0]==='PING'?'PONG':args[0]==='INCR'?count:args[0]==='SET'?'OK':1;
    return {ok:true,json:async()=>({result})};
   }
   if(String(url).includes('coinbase'))return {ok:true,json:async()=>({data:{amount:'100000',rates:{USD:'100000'}}})};
@@ -27,7 +27,7 @@ async function mockNetwork(fn,{count=1}={}){
 test('direct crypto has its own explicit switch and does not enable card approval',async()=>{
  delete process.env.DIRECT_CRYPTO_CHECKOUT_ENABLED;
  const old=global.fetch;global.fetch=()=>{throw new Error('Unexpected network');};
- try{await assert.rejects(()=>access.authorize(req(),customer),e=>e.httpStatus===403);assert.equal(access.ready(),false);}finally{global.fetch=old;}
+ try{await assert.rejects(()=>access.authorize(req(),customer),e=>e.httpStatus===403);assert.equal(await access.ready(),false);}finally{global.fetch=old;}
  assert.notEqual(process.env.STRIPE_RESEARCH_APPROVED,'true');
 });
 test('missing acknowledgment, false acknowledgment and stale terms fail before external calls',async()=>{
@@ -63,4 +63,11 @@ test('restored quote uses current shipping, signed buyer/cart and real network r
   assert.ok(signed.fulfillmentPricingVersion);
   assert.equal(calls.some(x=>String(x).includes('resend')||String(x).includes('stripe')),false);
  });
+});
+
+test('readiness verifies the live ledger instead of trusting configured variables',async()=>{
+ process.env.DIRECT_CRYPTO_CHECKOUT_ENABLED='true';
+ await mockNetwork(async()=>assert.equal(await access.ready(),true));
+ const old=global.fetch;global.fetch=async()=>{throw new Error('offline');};
+ try{assert.equal(await access.ready(),false);}finally{global.fetch=old;}
 });

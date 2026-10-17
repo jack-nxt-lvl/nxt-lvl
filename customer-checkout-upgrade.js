@@ -103,7 +103,7 @@
       label:'USDT funding checkout',
     });
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20261017-crypto-final',
+      src:'/direct-wallet-checkout.js?v=20261017-crypto-health',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
@@ -115,8 +115,8 @@
     if(!cardLinkConfigPromise){
       cardLinkConfigPromise=fetch('/api/card-payment-link-config',{headers:{Accept:'application/json'}})
         .then(response=>response.ok?response.json():Promise.reject(new Error('Unavailable')))
-        .then(data=>({available:Boolean(data.available),email:Boolean(data.email),sms:Boolean(data.sms),both:Boolean(data.both||data.email&&data.sms)}))
-        .catch(()=>({available:false,email:false,sms:false,both:false}));
+        .then(data=>({cryptoAvailable:data.cryptoAvailable===true,available:Boolean(data.available),email:Boolean(data.email),sms:Boolean(data.sms),both:Boolean(data.both||data.email&&data.sms)}))
+        .catch(()=>({cryptoAvailable:false,available:false,email:false,sms:false,both:false}));
     }
     return cardLinkConfigPromise;
   }
@@ -172,10 +172,9 @@
     return data;
   }
 
-  async function collectCheckoutDetails(){
+  async function collectCheckoutDetails(cardConfig){
     await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261016-rates',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
     const rates=window.NxtFulfillment;
-    const cardConfig=await loadCardLinkConfig();
     return new Promise(resolve=>{
       const draft=readCheckoutDraft();
       let fulfillment=Object.prototype.hasOwnProperty.call(rates.OPTIONS,draft.fulfillment)?draft.fulfillment:'shipping';
@@ -261,7 +260,16 @@
     if(!cartItems().length)return;
     try{if(typeof closeCart==='function')closeCart();}catch(_){}
     let details;
-    try{details=await collectCheckoutDetails();}
+    try{
+      cardLinkConfigPromise=null;
+      const config=await loadCardLinkConfig();
+      if(!config.cryptoAvailable){
+        const overlay=document.createElement('div');overlay.className='nxt-checkout-overlay';
+        overlay.innerHTML='<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="cryptoUnavailableTitle"><div class="nxt-checkout-kicker">Payment service status</div><h2 id="cryptoUnavailableTitle">Crypto checkout is temporarily unavailable</h2><p class="nxt-checkout-intro">We cannot generate verified payment instructions right now. Your cart is saved. Please contact support before sending funds, and do not reuse an old payment address or quote.</p><p><a href="sms:+17542907210">Text 754-290-7210</a> · <a href="tel:+17542907210">Call support</a></p><div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Close</button></div></div>';
+        overlay.querySelector('button').onclick=()=>overlay.remove();document.body.appendChild(overlay);overlay.querySelector('button').focus();return;
+      }
+      details=await collectCheckoutDetails(config);
+    }
     catch(err){alert(err.message||'Unable to open checkout. Please try again.');return;}
     if(!details)return;
     window.nxtCheckoutDetails=details;

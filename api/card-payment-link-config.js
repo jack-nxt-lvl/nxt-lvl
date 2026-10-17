@@ -9,5 +9,6 @@ module.exports = async function handler(req, res) {
   res.status(200);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, max-age=0');
-  return res.end(JSON.stringify({ ...cardLinkCapabilities(), cryptoAvailable: cryptoAccess.ready(), researchConsentVersion: cryptoAccess.POLICY_VERSION }));
+  const cryptoAvailable = await cryptoAccess.ready();
+  return res.end(JSON.stringify({ ...cardLinkCapabilities(), cryptoAvailable, researchConsentVersion: cryptoAccess.POLICY_VERSION }));
 };
