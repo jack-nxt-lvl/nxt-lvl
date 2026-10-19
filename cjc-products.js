@@ -13,23 +13,23 @@
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 89.99
+        "price": 125.99
       },
       {
         "label": "2 Vials",
-        "price": 179.98
+        "price": 251.97
       },
       {
         "label": "3 Vials",
-        "price": 269.97
+        "price": 377.96
       },
       {
         "label": "4 Vials",
-        "price": 359.96
+        "price": 503.94
       },
       {
         "label": "5 Vials",
-        "price": 449.95
+        "price": 629.93
       }
     ],
     "aka": "Laboratory research material",
@@ -59,23 +59,23 @@
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 89.99
+        "price": 125.99
       },
       {
         "label": "2 Vials",
-        "price": 179.98
+        "price": 251.97
       },
       {
         "label": "3 Vials",
-        "price": 269.97
+        "price": 377.96
       },
       {
         "label": "4 Vials",
-        "price": 359.96
+        "price": 503.94
       },
       {
         "label": "5 Vials",
-        "price": 449.95
+        "price": 629.93
       }
     ],
     "aka": "Laboratory research material",

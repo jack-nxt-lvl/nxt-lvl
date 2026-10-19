@@ -15,12 +15,12 @@ const storefrontSources = [
 ].map((file) => readFileSync(join(root, file), 'utf8')).join('\n');
 
 const supplementalProducts = [
-  { id: 'cjc1295-dac-10', basePrice: 89.99 },
-  { id: 'cjc1295-no-dac-10', basePrice: 89.99 },
-  { id: 'pt141-10', basePrice: 45 },
-  { id: 'bac-water-10ml', basePrice: 10 },
-  { id: 'glutathione-1500', basePrice: 79 },
-  { id: 'slu-pp-332-10', basePrice: 85 },
+  { id: 'cjc1295-dac-10', basePrice: 125.99 },
+  { id: 'cjc1295-no-dac-10', basePrice: 125.99 },
+  { id: 'pt141-10', basePrice: 63 },
+  { id: 'bac-water-10ml', basePrice: 14 },
+  { id: 'glutathione-1500', basePrice: 110.6 },
+  { id: 'slu-pp-332-10', basePrice: 119 },
 ];
 
 test('every browser-added freeze-dried product has 1 through 10 trusted checkout options', () => {
@@ -43,8 +43,8 @@ test('every browser-added freeze-dried product has 1 through 10 trusted checkout
 test('uses modest quantity discounts for freeze-dried products and injectables', () => {
   const oneBpc = normalizeOrder([{ key: 'bpc157-10::0', qty: 1 }], 'pickup');
   const tenBpc = normalizeOrder([{ key: 'bpc157-10::9', qty: 1 }], 'pickup');
-  assert.equal(oneBpc.subtotalCents, 6500);
-  assert.equal(tenBpc.subtotalCents, 58500);
+  assert.equal(oneBpc.subtotalCents, 9100);
+  assert.equal(tenBpc.subtotalCents, 81900);
 
   assert.throws(() => normalizeOrder([{key:'test-e::0',qty:1}], 'pickup'));
 });

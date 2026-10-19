@@ -52,7 +52,7 @@ test('restored quote uses current shipping, signed buyer/cart and real network r
  await mockNetwork(async calls=>{
   const output=res();await quote(req(),output);
   assert.equal(output.code,200,output.body.error);
-  assert.equal(output.body.totalUsd,'22.00');
+  assert.equal(output.body.totalUsd,'26.00');
   assert.equal(output.body.network,'Bitcoin Mainnet');
   assert.equal(output.body.confirmationsRequired,6);
   assert.match(output.body.qrDataUrl,/^data:image\/png;base64,/);
