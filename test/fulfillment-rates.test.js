@@ -13,12 +13,12 @@ test('all four fulfillment methods use the owner rates and the strict free thres
 });
 
 test('trusted merchandise prices determine the free threshold, not client prices or totals', () => {
-  const items = [{key:'bpc157-10::0',qty:5,price:1000},{key:'bac-water-10ml::0',qty:1,price:1000}];
+  const items = [{key:'bpc157-10::0',qty:4,price:1000},{key:'bac-water-10ml::0',qty:3,price:1000}];
   for (const mode of ['shipping','overnight','local-delivery']) {
     const below = normalizeOrder(items,mode);
-    assert.equal(below.subtotalCents,46900);
+    assert.equal(below.subtotalCents,46690);
     assert.equal(below.shippingCents,rates.OPTIONS[mode].cents);
-    const above = normalizeOrder([items[0],{...items[1],qty:2}],mode);
+    const above = normalizeOrder([items[0],{...items[1],qty:4}],mode);
     assert.equal(above.subtotalCents,48300);
     assert.equal(above.shippingCents,0);
     assert.equal(above.totalCents,48300);
@@ -48,8 +48,8 @@ test('hosted invoices identify the selected method and omit waived fees', () => 
 
 test('legacy signed-quote reconciliation retains its old fee while new requests use current rates', () => {
   const items=[{key:'bpc157-10::0',qty:2}];
-  assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,19200);
-  assert.equal(normalizeOrder(items,'shipping').totalCents,19400);
+  assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,21930);
+  assert.equal(normalizeOrder(items,'shipping').totalCents,22130);
   assert.throws(()=>normalizeOrder(items,'overnight','legacy-v1'),/legacy/);
   assert.throws(()=>normalizeOrder(items,'shipping','invented-version'),/version/);
 });

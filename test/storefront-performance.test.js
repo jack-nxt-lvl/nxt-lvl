@@ -11,17 +11,17 @@ const vercel = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'
 test('homepage uses stable catalog URLs instead of cache-busting every visit', () => {
   assert.doesNotMatch(homepage, /document\.write\([^\n]*Date\.now/);
   assert.doesNotMatch(catalogOverrides, /document\.write|Date\.now\(\)/);
-  assert.match(homepage, /products-data-original\.js\?v=20261019-prices-40/);
-  assert.match(homepage, /cjc-products\.js\?v=20261019-prices-40/);
+  assert.match(homepage, /products-data-original\.js\?v=20261019-prices-plus15/);
+  assert.match(homepage, /cjc-products\.js\?v=20261019-prices-plus15/);
   assert.match(homepage, /products-data\.js\?v=20260824-performance-1/);
 });
 
 test('catalog dependencies load in the required order and every local asset exists', () => {
   const orderedScripts = [
-    'products-data-original.js?v=20261019-prices-40',
-    'cjc-products.js?v=20261019-prices-40',
+    'products-data-original.js?v=20261019-prices-plus15',
+    'cjc-products.js?v=20261019-prices-plus15',
     'products-data.js?v=20260824-performance-1',
-    'premium-enhancements.js?v=20261019-prices-40',
+    'premium-enhancements.js?v=20261019-prices-plus15',
   ];
   let previous = -1;
   for (const source of orderedScripts) {

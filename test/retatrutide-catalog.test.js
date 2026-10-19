@@ -5,8 +5,8 @@ const { compounds, categories } = require('../products-data-original.js');
 
 test('lists both Retatrutide strengths in the peptide category with trusted prices', () => {
   const expected = [
-    { id: 'retatrutide-10', name: 'Retatrutide — 10mg', prices: [154.00, 631.40, 1078.00] },
-    { id: 'retatrutide-20', name: 'Retatrutide — 20mg', prices: [224.00, 918.40, 1568.00] }
+    { id: 'retatrutide-10', name: 'Retatrutide — 10mg', prices: [177.10, 726.11, 1239.70] },
+    { id: 'retatrutide-20', name: 'Retatrutide — 20mg', prices: [257.60, 1056.16, 1803.20] }
   ];
 
   assert.ok(categories.some(({ id }) => id === 'freeze-dried'));

@@ -68,12 +68,12 @@ test('builds hosted checkout from trusted totals and leaves eligible methods to 
   assert.equal(form.has('payment_method_types[0]'), false);
   assert.match(form.get('integration_identifier'), /^nxt_hosted_checkout_[a-z]{8}$/);
   assert.equal(form.get('customer_email'), customer.email);
-  assert.equal(form.get('line_items[0][price_data][unit_amount]'), '9100');
+  assert.equal(form.get('line_items[0][price_data][unit_amount]'), '10465');
   assert.equal(form.get('line_items[0][quantity]'), '2');
   assert.equal(form.get('line_items[1][price_data][unit_amount]'), '1200');
   assert.match(form.get('success_url'), /card_payment=success/);
   assert.equal(form.get('metadata[source]'), 'nxt_hosted_card_link');
-  assert.equal(order.totalCents, 19400);
+  assert.equal(order.totalCents, 22130);
 });
 
 test('shows email delivery only when the hosted provider, webhook, ledger, and sender are configured', () => {

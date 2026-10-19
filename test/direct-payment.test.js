@@ -44,10 +44,10 @@ test('generates an exact BIP-21 Bitcoin wallet URI', () => {
 
 test('recalculates cart prices from the trusted catalog', () => {
   const order = normalizeOrder([{ key: 'bpc157-10::0', qty: 2, price: 0.01 }], 'shipping');
-  assert.equal(order.subtotalCents, 18200);
+  assert.equal(order.subtotalCents, 20930);
   assert.equal(order.shippingCents, 1200);
-  assert.equal(order.totalCents, 19400);
-  assert.equal(order.normalizedItems[0].unitCents, 9100);
+  assert.equal(order.totalCents, 22130);
+  assert.equal(order.normalizedItems[0].unitCents, 10465);
 });
 
 test('signs temporary quotes and rejects tampering', () => {

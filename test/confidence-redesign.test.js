@@ -37,7 +37,7 @@ test('the visual layer includes the green confidence palette and responsive layo
 
 test('homepage catalog and Paybis scripts remain connected after the visual change', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-  assert.match(html, /products-data-original\.js\?v=20261019-prices-40/);
+  assert.match(html, /products-data-original\.js\?v=20261019-prices-plus15/);
   assert.match(html, /data-nxt-paybis-funding="1"/);
   assert.match(html, /lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
   assert.match(html, /direct-wallet-checkout\.js\?v=20261017-crypto-health/);
