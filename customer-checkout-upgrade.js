@@ -6,6 +6,7 @@
   const CHECKOUT_DRAFT_KEY = 'nxtCheckoutDraftV1';
   const CART_STORAGE_KEY = 'nxtCartV1';
   let cardLinkConfigPromise;
+  let checkoutOpening = false;
 
   function readCheckoutDraft(){
     try{return JSON.parse(sessionStorage.getItem(CHECKOUT_DRAFT_KEY)||'null')||{};}catch(_){return {};}
@@ -34,7 +35,8 @@
     .nxt-link-options{display:none;margin-top:9px;padding:12px;border:1px solid rgba(96,165,250,.25);border-radius:12px;background:rgba(37,99,235,.07)}.nxt-link-options.show{display:block}.nxt-link-options>span{display:block;color:#cbd5e1;font-size:9.5px;line-height:1.45}.nxt-link-channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-top:9px}.nxt-link-channel{min-height:46px;padding:8px 7px;border:1px solid rgba(255,255,255,.10);border-radius:9px;background:#171722;color:#c7c8d1;font-size:10px;font-weight:850;cursor:pointer}.nxt-link-channel.active{border-color:#60a5fa;background:rgba(37,99,235,.18);color:#fff;box-shadow:0 0 0 2px rgba(96,165,250,.10)}.nxt-link-channel.recommended:after{content:'RECOMMENDED';display:block;margin-top:3px;color:#86efac;font-size:6.5px;letter-spacing:.55px}.nxt-link-consent{display:none;align-items:flex-start;gap:8px;margin-top:10px;color:#aab3c2;font-size:8.5px;line-height:1.45}.nxt-link-consent.show{display:flex}.nxt-link-consent input{width:16px!important;min-height:16px!important;height:16px!important;margin-top:1px;padding:0!important;accent-color:#7c3aed}.nxt-link-provider{margin-top:9px;color:#7f8999;font-size:8px;line-height:1.45}.nxt-link-provider b{color:#b6c2d2}
     .nxt-checkout-actions{display:grid;grid-template-columns:1fr 1.7fr;gap:9px;margin-top:17px}.nxt-checkout-actions button{min-height:50px;border-radius:11px;border:0;font-weight:850;cursor:pointer}.nxt-checkout-cancel{background:#242431;color:#aaa}.nxt-checkout-continue{background:linear-gradient(100deg,#7c3aed,#9f55ff 55%,#6d28d9);color:#fff}.nxt-checkout-error{display:none;color:#fca5a5;font-size:10px;margin-top:10px}.nxt-checkout-error.show{display:block}
     .nxt-link-status-card{text-align:center}.nxt-link-status-icon{width:58px;height:58px;margin:0 auto 15px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#2563eb,#7c3aed);font-size:27px;box-shadow:0 15px 40px rgba(37,99,235,.28)}.nxt-link-status-card h2{margin-bottom:8px}.nxt-link-status-card p{color:#a9a9b7;font-size:12px;line-height:1.6}.nxt-link-status-card .nxt-link-order{margin:16px 0;padding:13px;border:1px solid rgba(167,139,250,.20);border-radius:11px;background:rgba(124,58,237,.07);color:#e9e2ff;font-size:11px}.nxt-link-status-card button{width:100%;min-height:50px;margin-top:15px;border:0;border-radius:11px;background:linear-gradient(100deg,#7c3aed,#9f55ff);color:#fff;font-weight:900;cursor:pointer}
-    @media(max-width:620px){.nxt-checkout-card{padding:22px 16px}.nxt-checkout-card h2{font-size:24px}.nxt-field-grid{grid-template-columns:1fr}.nxt-field-grid .wide{grid-column:auto}.nxt-payment-methods{grid-template-columns:1fr 1fr}.nxt-payment-method{min-height:96px}.nxt-link-channels{grid-template-columns:repeat(3,1fr)}.nxt-link-channel{font-size:9px}}
+    .nxt-checkout-overlay,.nxt-checkout-card,.nxt-checkout-card input{box-sizing:border-box}.nxt-checkout-card{max-height:calc(100dvh - 36px);overscroll-behavior:contain}.nxt-field-grid>*{min-width:0}
+    @media(max-width:620px){.nxt-checkout-overlay{padding:10px}.nxt-checkout-card{padding:22px 16px;max-height:calc(100dvh - 20px)}.nxt-checkout-card h2{font-size:24px}.nxt-checkout-card input,.nxt-checkout-card textarea{font-size:16px}.nxt-checkout-intro,.nxt-checkout-card label{font-size:14px}.nxt-checkout-error{font-size:13px}.nxt-field-grid{grid-template-columns:1fr;gap:12px}.nxt-field-grid .wide{grid-column:auto}.nxt-payment-methods{grid-template-columns:1fr 1fr}.nxt-payment-method{min-height:96px}.nxt-link-channels{grid-template-columns:repeat(3,1fr)}.nxt-link-channel{font-size:11px}}
   `;
   document.head.appendChild(style);
 
@@ -135,7 +137,7 @@
     const overlay=document.createElement('div');
     overlay.className='nxt-checkout-overlay';
     const destination=data.destination?` to <strong>${String(data.destination).replace(/[<>&]/g,'')}</strong>`:'';
-    overlay.innerHTML=`<div class="nxt-checkout-card nxt-link-status-card" role="dialog" aria-modal="true" aria-label="Payment link sent"><div class="nxt-link-status-icon">✓</div><div class="nxt-checkout-kicker">Secure hosted checkout</div><h2>Payment link sent</h2><p>We sent your private card and Apple Pay checkout link${destination}. Open that message whenever you are ready. Your card information is entered only on the payment provider's secure website.</p><div class="nxt-link-order">Order <strong>${String(data.orderId||'').replace(/[<>&]/g,'')}</strong><br>Payment is not complete until the hosted checkout confirms it.</div><button type="button">Done</button></div>`;
+    overlay.innerHTML=`<div class="nxt-checkout-card nxt-link-status-card" role="dialog" aria-modal="true" aria-label="Payment link sent"><div class="nxt-link-status-icon">✓</div><div class="nxt-checkout-kicker">Secure hosted checkout</div><h2>Payment link sent</h2><p>We sent your private payment link${destination}. Open that message to see the eligible payment options on Stripe's secure website. A sent link is not a payment receipt.</p><div class="nxt-link-order">${data.orderId?'Order <strong>'+String(data.orderId).replace(/[<>&]/g,'')+'</strong><br>':''}Check your confirmation email for payment status. Contact support before retrying a payment that is still processing.</div><button type="button">Done</button></div>`;
     overlay.querySelector('button').onclick=()=>overlay.remove();
     document.body.appendChild(overlay);
   }
@@ -143,7 +145,7 @@
   function showCardLinkProgress(){
     const overlay=document.createElement('div');
     overlay.className='nxt-checkout-overlay';
-    overlay.innerHTML='<div class="nxt-checkout-card nxt-link-status-card" role="dialog" aria-modal="true" aria-label="Sending payment link"><div class="nxt-link-status-icon">↗</div><div class="nxt-checkout-kicker">Secure hosted checkout</div><h2>Sending your link…</h2><p>We are creating an order-specific card and Apple Pay checkout on the payment provider\'s website.</p></div>';
+    overlay.innerHTML='<div class="nxt-checkout-card nxt-link-status-card" role="dialog" aria-modal="true" aria-label="Sending payment link"><div class="nxt-link-status-icon">↗</div><div class="nxt-checkout-kicker">Secure hosted checkout</div><h2>Sending your link…</h2><p>We are creating your order-specific payment link. Eligible payment options appear on Stripe\'s secure website.</p></div>';
     document.body.appendChild(overlay);
     return overlay;
   }
@@ -167,8 +169,7 @@
       response=await fetch('/api/create-card-payment-link',options);
       data=await response.json().catch(()=>({}));
     }
-    if(!response.ok&&!data.sent)throw new Error(data.error||'Unable to send the secure payment link.');
-    if(!data.sent&&response.status===202)throw new Error(data.message||'Your payment link is still being prepared. Please wait a moment.');
+    if(!response.ok||data.sent!==true)throw new Error(data.error||data.message||'Your payment link has not been confirmed as sent. Please contact support before trying again.');
     return data;
   }
 
@@ -257,7 +258,10 @@
 
   async function runCheckout(event){
     if(event){event.preventDefault();event.stopPropagation();event.stopImmediatePropagation?.();}
+    if(checkoutOpening)return;
     if(!cartItems().length)return;
+    checkoutOpening=true;
+    try {
     try{if(typeof closeCart==='function')closeCart();}catch(_){}
     let details;
     try{
@@ -287,6 +291,7 @@
     }
     try{await ensureDirectWallet();await window.startDirectWalletCheckout();}
     catch(err){alert(err.message||'Unable to open direct-wallet checkout. Please try again.');}
+    } finally { checkoutOpening=false; }
   }
 
   window.proceedToCheckout=runCheckout;

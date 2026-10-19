@@ -61,11 +61,12 @@ test('normalizes US and international mobile numbers for transactional texts', (
   assert.throws(() => normalizePhone('1234'), /valid mobile number/i);
 });
 
-test('builds an order-specific card-only hosted checkout from trusted catalog totals', () => {
+test('builds hosted checkout from trusted totals and leaves eligible methods to Stripe', () => {
   const { order, customer } = sampleOrder();
   const form = buildStripeCheckoutForm({ order, customer, orderId: 'NXT-CARD-TEST-123' });
   assert.equal(form.get('ui_mode'), 'hosted');
-  assert.equal(form.get('payment_method_types[0]'), 'card');
+  assert.equal(form.has('payment_method_types[0]'), false);
+  assert.match(form.get('integration_identifier'), /^nxt_hosted_checkout_[a-z]{8}$/);
   assert.equal(form.get('customer_email'), customer.email);
   assert.equal(form.get('line_items[0][price_data][unit_amount]'), '6500');
   assert.equal(form.get('line_items[0][quantity]'), '2');
@@ -215,7 +216,8 @@ test('creates and emails a hosted link without returning the private checkout UR
     assert.equal(Object.hasOwn(res.body, 'url'), false);
     assert.equal(stripeRequests.length, 1);
     assert.match(String(stripeRequests[0].headers['Idempotency-Key']), /123e4567/);
-    assert.match(String(stripeRequests[0].body), /payment_method_types%5B0%5D=card/);
+    assert.doesNotMatch(String(stripeRequests[0].body), /payment_method_types/);
+    assert.equal(stripeRequests[0].headers['Stripe-Version'], '2026-08-26.dahlia');
     assert.equal(emailRequests.length, 2);
     assert.match(emailRequests[0].body.html, /checkout\.stripe\.com/);
     assert.doesNotMatch(emailRequests[1].body.html, /checkout\.stripe\.com/);
