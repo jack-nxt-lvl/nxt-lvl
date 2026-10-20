@@ -910,21 +910,22 @@ const compounds = [
       }
     ],
     "aka": "Laboratory research material",
-    "badge": "",
+    "badge": "In stock",
     "protocols": [],
     "tags": [
       "Laboratory research",
       "Documentation review"
     ],
-    "shortDesc": "KPV — 10mg per vial. Material information for qualified laboratory research. Confirm availability and lot documentation before payment.",
-    "description": "KPV research material with a labeled amount of 10mg per vial. Confirm the exact supplied form, identity and lot documentation against your laboratory requirements before ordering. The labeled amount describes supplied material, not a dose or instruction for use.",
+    "shortDesc": "KPV — 10mg per vial. In stock for qualified laboratory research orders. Review lot documentation before payment.",
+    "description": "KPV research material with a labeled amount of 10mg per vial. In stock, with dispatch in 1–2 business days after acceptance and payment. Review the exact supplied form, identity and lot documentation against your laboratory requirements before ordering. The labeled amount describes supplied material, not a dose or instruction for use.",
     "benefits": [],
     "sideEffects": [],
     "purity": "Refer to the lot-specific report",
     "storage": "Request the applicable supplier handling and storage documentation.",
     "warnings": "For laboratory research only. Not for human consumption, medical, veterinary or diagnostic use.",
     "suggestedCompanions": [],
-    "availabilityNote": "Confirm current availability and lot documentation before payment."
+    "availabilityNote": "In stock · Ready to ship. Dispatch in 1–2 business days after acceptance and payment; transit is additional. Review lot documentation before ordering.",
+    "seoDescription": "KPV 10mg research material in stock at $69.95 per vial. Compare quantity discounts, review lot documentation and arrange U.S. shipping or South Florida fulfillment."
   }
 ];
 const stacks = [];

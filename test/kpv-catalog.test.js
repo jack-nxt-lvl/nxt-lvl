@@ -27,14 +27,18 @@ test('KPV uses the selected price and all existing quantity discounts in browser
   assert.throws(() => normalizeOrder([{ key: 'kpv-10::10', qty: 1 }], 'shipping'), /invalid product/);
 });
 
-test('KPV is discoverable with an honest image fallback and no invented batch or availability claims', () => {
+test('KPV shows owner-confirmed stock while retaining honest image and batch information', () => {
   const product = compounds.find(p => p.id === 'kpv-10');
   const html = read('research/kpv-10mg.html');
-  assert.match(html, /Confirm current availability and lot documentation before payment/);
+  assert.equal(product.badge, 'In stock');
+  assert.match(html, /In stock · Ready to ship/);
+  assert.match(html, /Dispatch in 1–2 business days after acceptance and payment/);
+  assert.match(html, /Review lot documentation before ordering/);
+  assert.match(read('catalog.html'), /<p class="eyebrow">In stock<\/p>/);
   assert.match(html, /product photo pending/);
   assert.match(html, /https:\/\/www.nxtlvl-research.com\/assets\/miami-skyline-night.webp/);
   assert.match(html, /name="product" value="kpv-10"/);
-  assert.doesNotMatch(html, /InStock|in stock|99\.[0-9]+%|aggregateRating|weight.loss program/i);
+  assert.doesNotMatch(html, /99\.[0-9]+%|aggregateRating|weight.loss program/i);
   assert.doesNotMatch(images.image(product), /<img|src=/);
   assert.match(images.image(product), /KPV — 10mg/);
   for (const file of ['index.html', 'catalog.html', 'sitemap.xml']) {
