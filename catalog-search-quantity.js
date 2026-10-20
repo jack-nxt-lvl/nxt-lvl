@@ -146,6 +146,16 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
     </div>
   `;
 
+  const sorting = document.createElement('div');
+  sorting.className = 'pro-sort';
+  sorting.innerHTML = '<label for="catalogSort">Sort collection</label><select id="catalogSort"><option value="featured">Featured order</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
+  document.getElementById('filterBar')?.insertAdjacentElement('afterend', sorting);
+  sorting.querySelector('select').addEventListener('change', (event) => {
+    window.nxtCatalogSort = event.target.value;
+    renderGrid(input.value ? 'all' : selectedCategory());
+    applySearch();
+  });
+
   const grid = document.getElementById('compoundGrid');
   const input = wrap.querySelector('#nxtProductSearch');
   const clear = wrap.querySelector('.nxt-search-clear');
