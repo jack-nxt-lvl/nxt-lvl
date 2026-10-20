@@ -5,7 +5,7 @@
   function url(id, size = 480) { return ids.has(id) ? '/assets/products/' + id + '-' + size + '-v1.webp' : ''; }
   function image(product, options = {}) {
     if (product.components) return '<div class="product-pair">' + product.components.map(c => image({id:c.productId,name:c.name}, options)).join('') + '</div>';
-    if (!ids.has(product.id)) return '';
+    if (!ids.has(product.id)) return '<div class="product-material-tile"><span>NXT LVL · Research</span><strong>' + escape(product.name) + '</strong><span>' + escape(product.amount || 'Laboratory material') + '</span></div>';
     const alt = 'NXT LVL ' + product.name + ' box and vial — product mockup';
     return '<img class="product-packshot" src="' + url(product.id) + '" srcset="' + url(product.id) + ' 480w, ' + url(product.id,960) + ' 960w" sizes="' + (options.sizes || '(max-width:600px) 45vw, (max-width:1000px) 45vw, 380px') + '" width="960" height="960" alt="' + escape(alt) + '" loading="' + (options.eager ? 'eager' : 'lazy') + '" decoding="async"' + (options.eager ? ' fetchpriority="high"' : '') + '>';
   }

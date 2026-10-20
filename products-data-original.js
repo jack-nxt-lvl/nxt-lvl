@@ -895,6 +895,36 @@ const compounds = [
     "storage": "Follow batch-specific documentation and your laboratory handling procedures.",
     "warnings": "For laboratory research only. Not for human consumption, medical, veterinary, or diagnostic use. No human dosing or administration guidance is provided.",
     "suggestedCompanions": []
+  },
+  {
+    "id": "kpv-10",
+    "name": "KPV — 10mg",
+    "category": "freeze-dried",
+    "amount": "10mg per vial",
+    "form": "Research material",
+    "appearance": "Refer to supplier specification",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 69.95
+      }
+    ],
+    "aka": "Laboratory research material",
+    "badge": "",
+    "protocols": [],
+    "tags": [
+      "Laboratory research",
+      "Documentation review"
+    ],
+    "shortDesc": "KPV — 10mg per vial. Material information for qualified laboratory research. Confirm availability and lot documentation before payment.",
+    "description": "KPV research material with a labeled amount of 10mg per vial. Confirm the exact supplied form, identity and lot documentation against your laboratory requirements before ordering. The labeled amount describes supplied material, not a dose or instruction for use.",
+    "benefits": [],
+    "sideEffects": [],
+    "purity": "Refer to the lot-specific report",
+    "storage": "Request the applicable supplier handling and storage documentation.",
+    "warnings": "For laboratory research only. Not for human consumption, medical, veterinary or diagnostic use.",
+    "suggestedCompanions": [],
+    "availabilityNote": "Confirm current availability and lot documentation before payment."
   }
 ];
 const stacks = [];

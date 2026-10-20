@@ -8,7 +8,7 @@ const read = file => fs.readFileSync(path.join(__dirname,'..',file),'utf8');
 
 test('all published material pages and directory match the checkout catalog',()=>{
  const products=catalog();
- assert.equal(products.length,30);
+ assert.equal(products.length,31);
  for(const p of products){
   const html=read(p.path.slice(1));
   assert.match(html,new RegExp('name="product" value="'+p.id+'"'));
@@ -28,9 +28,9 @@ test('the directory and its schema cover the same real material pages',()=>{
  const html=read('catalog.html');
  const schema=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
  const list=schema['@graph'].find(x=>x['@type']==='ItemList');
- assert.equal(list.numberOfItems,30);
- assert.equal(list.itemListElement.length,30);
- assert.equal((html.match(/class="directory-card"/g)||[]).length,30);
+ assert.equal(list.numberOfItems,31);
+ assert.equal(list.itemListElement.length,31);
+ assert.equal((html.match(/class="directory-card"/g)||[]).length,31);
  for(const item of list.itemListElement)assert.ok(html.includes('href="'+new URL(item.url).pathname+'"'));
  assert.doesNotMatch(html,/aggregateRating|reviewCount|"availability"/);
 });

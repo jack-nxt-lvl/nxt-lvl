@@ -94,7 +94,7 @@ test('browser registration preserves materials, is idempotent and matches truste
  const context={compounds:materials,categories:[{id:'all'}],window:{},document:{}};
  vm.runInNewContext(read('research-packages.js'),context);
  vm.runInNewContext(read('research-packages.js'),context);
- assert.equal(context.compounds.length,34);
+ assert.equal(context.compounds.length,35);
  assert.equal(context.categories.filter(c=>c.id==='research-packages').length,1);
  for(const [id,,cents] of expected){
   const p=context.compounds.find(p=>p.id===id);
