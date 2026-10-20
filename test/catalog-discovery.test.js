@@ -10,7 +10,10 @@ test('all published material pages and directory match the checkout catalog',()=
  const products=catalog();
  assert.equal(products.length,31);
  for(const p of products){
+  assert.equal(p.badge,'In stock',p.id);
+  assert.match(p.availabilityNote,/Dispatch in 1–2 business days/,p.id);
   const html=read(p.path.slice(1));
+  assert.match(html,/In stock · Ready to ship/,p.id);
   assert.match(html,new RegExp('name="product" value="'+p.id+'"'));
   assert.match(html,/<form action="\/#menu" method="get"/);
   for(const option of p.options){
@@ -29,6 +32,7 @@ test('the directory and its schema cover the same real material pages',()=>{
  const schema=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
  const list=schema['@graph'].find(x=>x['@type']==='ItemList');
  assert.equal(list.numberOfItems,31);
+ assert.equal((html.match(/<p class="eyebrow">In stock<\/p>/g)||[]).length,31);
  assert.equal(list.itemListElement.length,31);
  assert.equal((html.match(/class="directory-card"/g)||[]).length,31);
  for(const item of list.itemListElement)assert.ok(html.includes('href="'+new URL(item.url).pathname+'"'));

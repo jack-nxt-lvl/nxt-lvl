@@ -25,7 +25,8 @@
       }
     ],
     "aka": "Laboratory research material",
-    "badge": "",
+    "badge": "In stock",
+    "availabilityNote": "In stock · Ready to ship. Dispatch in 1–2 business days after acceptance and payment; transit is additional. Review lot documentation before ordering.",
     "protocols": [],
     "tags": [
       "Laboratory research",

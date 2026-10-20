@@ -8,7 +8,7 @@ function normalizeProductSearch(value) {
 }
 
 if (typeof document !== 'undefined') (() => {
-  if(typeof compounds!=="undefined"&&!compounds.some(p=>p.id==="slu-pp-332-10"))compounds.push({"id": "slu-pp-332-10", "name": "SLU-PP-332 \u2014 10mg", "category": "freeze-dried", "aka": "Laboratory research material", "protocols": [], "badge": "", "tags": ["Laboratory research", "Documentation review"], "shortDesc": "SLU-PP-332, 10mg labeled vial. Request lot-specific material documentation.", "description": "SLU-PP-332 material offered for qualified laboratory research review. Confirm material identity, amount and lot-specific documentation against your laboratory requirements. Not for human or veterinary use.", "amount": "10mg per vial", "form": "Lyophilized research material", "appearance": "Research powder", "molecularFormula": "C18H14N2O2", "purity": "Refer to the lot-specific report", "warnings": "Laboratory research only. Not for human or veterinary use.", "suggestedCompanions": [], "pricing": [{"label": "1 Vial", "price": 136.85}, {"label": "5 Vials", "price": 561.09}, {"label": "10 Vials", "price": 957.95}]});
+  if(typeof compounds!=="undefined"&&!compounds.some(p=>p.id==="slu-pp-332-10"))compounds.push({"id": "slu-pp-332-10", "name": "SLU-PP-332 \u2014 10mg", "category": "freeze-dried", "aka": "Laboratory research material", "protocols": [], "badge": "In stock", "availabilityNote": "In stock · Ready to ship. Dispatch in 1–2 business days after acceptance and payment; transit is additional. Review lot documentation before ordering.", "tags": ["Laboratory research", "Documentation review"], "shortDesc": "SLU-PP-332, 10mg labeled vial. Request lot-specific material documentation.", "description": "SLU-PP-332 material offered for qualified laboratory research review. Confirm material identity, amount and lot-specific documentation against your laboratory requirements. Not for human or veterinary use.", "amount": "10mg per vial", "form": "Lyophilized research material", "appearance": "Research powder", "molecularFormula": "C18H14N2O2", "purity": "Refer to the lot-specific report", "warnings": "Laboratory research only. Not for human or veterinary use.", "suggestedCompanions": [], "pricing": [{"label": "1 Vial", "price": 136.85}, {"label": "5 Vials", "price": 561.09}, {"label": "10 Vials", "price": 957.95}]});
   const css = document.createElement('style');
   css.textContent = `
   :root{--lux:#c4b5fd;--lux2:#8b5cf6;--panel:#0d0d14}
@@ -74,7 +74,7 @@ if (typeof document !== 'undefined') (() => {
     trustBar.innerHTML = `
       <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
-      <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm availability and arrangements.</div></div>
+      <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm delivery or pickup arrangements.</div></div>
       <div class="trust-item"><div class="num">🔒</div><div class="label">Research Use Only</div><div class="trust-sub">Laboratory research eligibility applies.</div></div>`;
   }
 

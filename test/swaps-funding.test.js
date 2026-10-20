@@ -88,7 +88,7 @@ test('loads the Paybis link helper before the revised USDT checkout on every che
 
   assert.match(homepage, /data-nxt-paybis-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261018-checkout-reliability/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261020-stock-1/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);

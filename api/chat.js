@@ -11,6 +11,7 @@ const MAX_CATALOG_SUMMARY_ITEMS = 120;
 const BUSINESS_FACTS = [
   'Business name: NXT LVL Research, operated by BLUE LIGHT VENTURES LLC. Business address: 30 N Gould St, Ste R, Sheridan, WY 82801, United States. This address is not advertised for walk-in pickup or returns. South Florida pickup arrangements must be confirmed separately.',
   'The website offers research compounds only.',
+  'The owner confirms all currently listed materials and research packages are in stock. Do not invent inventory quantities or guaranteed arrival dates. Stock status does not remove purchaser eligibility or local-fulfillment confirmation requirements.',
   'Products are labeled for laboratory research use only and are not for human consumption, medical, veterinary, or diagnostic purposes.',
   'Products are not FDA-approved drugs.',
   'Customers can add items to the cart, choose pricing tiers, and review a subtotal.',

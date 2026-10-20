@@ -98,6 +98,7 @@ test('browser registration preserves materials, is idempotent and matches truste
  assert.equal(context.categories.filter(c=>c.id==='research-packages').length,1);
  for(const [id,,cents] of expected){
   const p=context.compounds.find(p=>p.id===id);
+  assert.match(p.badge,/In stock/);
   assert.equal(p.pricing[0].price,cents/100);
   assert.equal(normalizeOrder([{key:id+'::0',qty:1}],'pickup').totalCents,cents);
  }
@@ -109,6 +110,7 @@ test('browser registration preserves materials, is idempotent and matches truste
 
 test('public deals match server totals and are discoverable without false stock or outcome claims',()=>{
  const html=read('research-package-deals.html');
+ assert.equal((html.match(/In stock · Save 5% · 2 separate vials/g)||[]).length,4);
  const choices=[...html.matchAll(/href="\/\?product=([^#]+)#menu" aria-label="Choose [^"]+ for \$(\d+\.\d{2})"/g)];
  assert.equal(choices.length,4);
  for(const [,id,displayed] of choices){
