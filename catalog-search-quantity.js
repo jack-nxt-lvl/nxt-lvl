@@ -1,3 +1,17 @@
+function normalizeCatalogSearch(value) {
+  return String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, ' ').trim().toLowerCase();
+}
+
+function matchesCatalogProduct(product, query, requestedId) {
+  if (!product) return false;
+  if (requestedId) return product.id === requestedId;
+  const needle = normalizeCatalogSearch(query);
+  const haystack = normalizeCatalogSearch([product.name, product.aka, product.category, product.amount, product.shortDesc, ...(product.tags || [])].join(' '));
+  return !needle || haystack.includes(needle) || haystack.replace(/ /g, '').includes(needle.replace(/ /g, ''));
+}
+
+if (typeof module !== 'undefined' && module.exports) module.exports = {normalizeCatalogSearch, matchesCatalogProduct};
+
 (function () {
   'use strict';
 
@@ -142,12 +156,7 @@
   if (grid) grid.appendChild(empty);
 
   function normalize(value) {
-    return String(value || '')
-      .normalize('NFKD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/gi, ' ')
-      .trim()
-      .toLowerCase();
+    return normalizeCatalogSearch(value);
   }
 
   function productForCard(card) {
@@ -209,6 +218,8 @@
     if (applying || !grid) return;
     applying = true;
     const query = normalize(input.value);
+    const requestedId = new URL(window.location.href).searchParams.get('product');
+    const exactProduct = compounds.some((product) => product.id === requestedId) ? requestedId : null;
     syncCatalogScope(query);
     const cards = Array.from(grid.querySelectorAll('.compound-card'));
     let visible = 0;
@@ -216,15 +227,7 @@
 
     cards.forEach((card) => {
       const product = productForCard(card);
-      const haystack = normalize(product ? [
-        product.name,
-        product.aka,
-        product.category,
-        product.amount,
-        product.shortDesc,
-        ...(product.tags || []),
-      ].join(' ') : card.textContent);
-      const matches = !query || haystack.includes(query);
+      const matches = product ? matchesCatalogProduct(product, query, exactProduct) : !exactProduct && normalize(card.textContent).includes(query);
       if (matches) matched += 1;
       const shown = matches && (query || expanded || !showAll || visible < 6);
       card.hidden = !shown;
@@ -248,6 +251,7 @@
     const url = new URL(window.location.href);
     if (!url.searchParams.has('product')) return;
     url.searchParams.delete('product');
+    url.searchParams.delete('qty');
     window.history.replaceState(null, '', url.pathname + url.search + url.hash);
   }
 

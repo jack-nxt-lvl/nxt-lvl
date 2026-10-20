@@ -1,4 +1,6 @@
-scripts/
+scripts/*
+!scripts/build-catalog-pages.cjs
+!scripts/catalog-paths.json
 test/
 docs/
 README.md

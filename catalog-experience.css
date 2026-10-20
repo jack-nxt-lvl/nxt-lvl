@@ -1,0 +1,84 @@
+/* Shared, lightweight catalog pages. The existing Miami brand remains the base. */
+body.miami-site.product-detail .wrap,body.miami-site.catalog-directory .wrap{max-width:1180px;padding:34px 28px 48px}
+body.miami-site.product-detail h1,.catalog-directory h1{font-size:clamp(2.3rem,5vw,4.5rem)!important;line-height:1.06;letter-spacing:-.04em;overflow-wrap:anywhere}
+body.miami-site.product-detail .lead{max-width:830px!important}
+body.miami-site.product-detail nav{padding-bottom:16px!important;margin-bottom:22px!important}
+body.miami-site.product-detail .wrap>.eyebrow{margin:20px 0 12px!important}
+body.miami-site.product-detail .crumbs{margin:12px 0!important;font-size:12px}
+body.miami-site.product-detail h1{margin:22px 0 16px!important}
+body.miami-site.product-detail .lead{margin:0 0 22px!important;font-size:15px!important;line-height:1.7}
+body.miami-site.product-detail .specs{margin:0 0 22px;gap:12px}
+body.miami-site.product-detail .spec{padding:14px 17px!important}
+body.miami-site.product-detail .spec strong,body.miami-site.product-detail .spec span{font-size:16px!important}
+.product-purchase{border:1px solid #36514e;border-radius:16px;background:linear-gradient(135deg,#152725,#101b1e);padding:30px;margin:26px 0 20px!important}
+body.miami-site.product-detail section.product-purchase{padding:30px!important}
+.purchase-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.purchase-heading .eyebrow{margin:0 0 8px;color:#82dfd1;font-size:10px;letter-spacing:1.5px}
+.purchase-heading h2{font-size:clamp(1.7rem,3vw,2.2rem)!important;margin:0!important;letter-spacing:-.035em}
+.purchase-heading>a{white-space:nowrap;font-size:13px}
+.purchase-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:42px}
+.product-pack-form{min-width:0}
+.product-pack-form label,.directory-search label{display:block;font-weight:600;font-size:14px;margin-bottom:9px}
+.product-pack-form select,.directory-search input{width:100%;min-width:0;min-height:52px;border:1px solid #607d76;border-radius:8px;background:#0b171a;color:#f1faf7;padding:12px;font:500 16px/1.45 Inter,Arial,sans-serif;color-scheme:dark}
+.product-pack-form select:focus-visible,.directory-search input:focus-visible{outline:3px solid #80ded0;outline-offset:3px}
+.pack-price{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:22px 0 8px!important}
+.pack-price strong{font-size:42px;line-height:1.1;font-weight:500;letter-spacing:-.045em;color:#f4faf8}
+.pack-price span{font-size:13px;color:#b5c9c3}
+.product-pack-form #packHelp,.product-pack-form .purchase-note{font-size:12px;line-height:1.65;color:#b5c9c3;margin:12px 0 18px}
+body.miami-site .purchase-button{display:flex;justify-content:space-between;align-items:center;gap:20px;width:100%;padding:16px 20px;min-height:54px;background:#82dfd1;color:#062425;border:1px solid #82dfd1;border-radius:7px;font:700 15px/1.4 Inter,Arial,sans-serif;cursor:pointer}
+.purchase-button:hover{filter:brightness(1.08)}
+.purchase-button:focus-visible,.product-purchase a:focus-visible,.directory-card a:focus-visible,.catalog-footer a:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.purchase-assurance{border-left:1px solid #36514e;padding-left:30px}
+.purchase-assurance h3{font-size:15px;line-height:1.5;margin:0 0 15px}
+.purchase-assurance ul{list-style:none;padding:0;margin:0;display:grid;gap:15px}
+.purchase-assurance li{margin:0;padding:0;line-height:1.6}
+.purchase-assurance strong{display:block;color:#e1efeb;font-size:13px}
+.purchase-assurance span{display:block;font-size:12px;color:#b5c9c3}
+.product-purchase a,.product-docs a,.catalog-directory a{color:#9ce8da;text-underline-offset:4px}
+.product-docs{padding:25px 0;margin:15px 0;border-bottom:1px solid #2d4442}
+.product-docs h2{font-size:1.35rem!important;letter-spacing:-.02em}
+.product-docs p{font-size:14px;line-height:1.8;color:#b8cbc4}
+.product-doc-links{display:flex;gap:10px 24px;flex-wrap:wrap;font-size:13px}
+.product-doc-links a{padding:10px 0}
+.catalog-directory nav,body.miami-site.product-detail nav{display:flex;gap:12px 24px;align-items:center;flex-wrap:wrap}
+.catalog-directory nav a,body.miami-site.product-detail nav a{padding:10px 0;min-height:44px;font-size:13px}
+.catalog-skip{position:absolute;left:15px;top:-100px;padding:12px;background:#82dfd1;color:#062425!important;z-index:100}
+.catalog-skip:focus{top:10px}
+.directory-search{max-width:680px;margin:35px 0 25px}
+.directory-search[hidden],.directory-card[hidden],#directoryEmpty[hidden]{display:none!important}
+#directoryCount{font-size:12px;color:#b5c9c3;margin:9px 0}
+.directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.directory-card{display:flex;flex-direction:column;min-width:0;padding:24px;background:#111f21;border:1px solid #304b47;border-radius:12px}
+.directory-card .eyebrow{font-size:9px;letter-spacing:1.1px;color:#9ab6ab;margin:0 0 15px}
+.directory-card h2{font-size:19px!important;line-height:1.4;margin:0 0 10px!important;overflow-wrap:anywhere}
+.directory-card h2 a{color:#eef7f3;text-decoration:none}
+.directory-card h2 a:hover{text-decoration:underline}
+.directory-card>p:not(.eyebrow){font-size:13px;color:#b5c9c3;margin:0 0 26px}
+.directory-card-bottom{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:auto;border-top:1px solid #304b47;padding-top:16px;font-size:11px}
+.directory-card-bottom strong{color:#fff;font-size:18px;font-weight:500}
+.directory-card-bottom>a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
+.catalog-footer{margin-top:42px;padding:30px 0;border-top:1px solid #304b47;font-size:13px;color:#b5c9c3}
+.catalog-footer div{display:flex;gap:12px 24px;flex-wrap:wrap;margin:10px 0}
+.catalog-footer a{display:inline-flex;align-items:center;min-height:44px}
+body.miami-home .catalog-decisions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 25px;padding:20px 0;border-block:1px solid #304b47}
+.catalog-decisions div{min-width:0;font-size:12px;color:#a9c1b7;line-height:1.6}
+.catalog-decisions strong{display:block;color:#e5f6ee;font-size:13px;margin-bottom:4px}
+.catalog-decisions a{color:#97e8d5;text-underline-offset:3px}
+body.miami-home .buyer-faq{max-width:1320px;margin:0 auto 50px;padding:28px 40px}
+.buyer-faq h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.035em;margin:0 0 24px}
+.buyer-faq details{border-bottom:1px solid #304b47;padding:0 2px}
+.buyer-faq summary{padding:20px 0;cursor:pointer;font-size:15px;color:#e5f6ee;font-weight:600}
+.buyer-faq p{font-size:14px;line-height:1.8;color:#b5c9c3;max-width:850px;margin:0 0 22px}
+.buyer-faq a{color:#97e8d5;text-underline-offset:3px}
+/* Native selectors support keyboard and screen-reader use on desktop and phones. */
+body.miami-home .card-atc-dropdown .native-pack-select{display:block!important;position:static!important;opacity:1!important;width:100%;min-width:0;min-height:48px;border:1px solid #59776c;border-radius:6px;background:#0e1c1a;color:#e9f5ed;padding:10px 30px 10px 12px;font:500 14px/1.4 Inter,Arial,sans-serif;color-scheme:dark}
+body.miami-home .card-atc-dropdown .custom-select-trigger,body.miami-home .card-atc-dropdown .custom-select-menu{display:none!important}
+body.miami-home .native-pack-select:focus-visible{outline:2px solid #82dfd1;outline-offset:3px}
+@media(max-width:900px){.directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.purchase-layout{gap:24px}.purchase-assurance{padding-left:24px}}
+@media(max-width:640px){body.miami-site.product-detail .wrap,body.miami-site.catalog-directory .wrap{padding:20px 18px 32px}.product-purchase{padding:21px 17px;border-radius:12px}.purchase-layout{grid-template-columns:1fr;gap:20px}.purchase-assurance{padding:22px 0 0;border-left:0;border-top:1px solid #36514e}.purchase-heading{align-items:flex-start;flex-direction:column;gap:10px}.purchase-heading>a{padding:6px 0}.product-purchase select{font-size:16px}.purchase-assurance span{font-size:13px}.directory-grid{grid-template-columns:1fr}.directory-card{padding:22px}.product-doc-links{flex-direction:column;gap:0}body.miami-site.product-detail .specs{grid-template-columns:1fr}.catalog-decisions{grid-template-columns:1fr!important;gap:15px!important}body.miami-home .buyer-faq{padding:24px 22px}body.miami-home .card-atc-dropdown .native-pack-select{font-size:16px!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+@media(max-width:640px){body.miami-site.product-detail section.product-purchase{padding:22px 17px!important}body.miami-site.product-detail .specs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}body.miami-site.product-detail .spec{display:block!important;padding:12px 9px!important;min-width:0}body.miami-site.product-detail .spec b{font-size:8px!important;letter-spacing:.5px!important}body.miami-site.product-detail .spec span,body.miami-site.product-detail .spec strong{display:block;font-size:13px!important;line-height:1.5;margin-top:7px;overflow-wrap:anywhere}body.miami-site.product-detail nav{gap:5px 15px!important}body.miami-site.product-detail nav a{font-size:11px!important}body.miami-site.product-detail .purchase-heading h2{font-size:1.6rem!important}body.miami-site.product-detail .purchase-heading{margin-bottom:16px}body.miami-site.product-detail .product-docs{padding:24px 0!important}}
+
+body.miami-site.product-detail .purchase-heading .eyebrow{margin:0 0 8px!important;padding:0!important;font-size:10px!important;letter-spacing:1.5px!important}
+body.miami-site.product-detail .purchase-heading h2{margin:0!important}
+body.miami-site.product-detail .purchase-heading>a{margin:0!important}

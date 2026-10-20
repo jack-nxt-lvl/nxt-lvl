@@ -56,15 +56,6 @@
       ]
     },
     {
-      "source": "/coa.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate, max-age=0"
-        }
-      ]
-    },
-    {
       "source": "/(.*).html",
       "headers": [
         {
@@ -135,6 +126,15 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
+    },
+    {
+      "source": "/coa.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, max-age=0"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -148,5 +148,7 @@
       "destination": "/research/semax-11mg.html",
       "permanent": true
     }
-  ]
+  ],
+  "buildCommand": "node scripts/build-catalog-pages.cjs",
+  "outputDirectory": "."
 }

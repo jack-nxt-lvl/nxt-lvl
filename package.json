@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "build": "node scripts/build-catalog-pages.cjs",
+    "check:catalog": "node scripts/build-catalog-pages.cjs --check"
   },
   "dependencies": {
     "ethers": "^6.17.0",

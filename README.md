@@ -19,7 +19,7 @@ Static single-page catalog site — "NXT LVL | Premium Research Compounds".
 
 ## Running it locally
 
-No build step. Open `index.html` in a browser, or serve the folder:
+Run `npm run build` after catalog or pricing changes, then serve the folder. The build generates product pack information and the complete directory from the checkout catalog. `npm run check:catalog` detects stale generated content; Vercel also runs the build before publishing.
 
 ```bash
 npx serve .
@@ -27,9 +27,7 @@ npx serve .
 
 ## Editing the catalog
 
-All products live in `products-data.js`. Categories are defined at the bottom of
-that file (`all`, `freeze-dried`, `capsules`, `injectables`). Add or edit a
-product object and reload — nothing needs to be recompiled.
+Active catalog entries live in `products-data-original.js` and the supplemental material scripts. Keep supplemental prices consistent with `lib/direct-payment.js`, which is authoritative at checkout. Use `npm run build`, `npm run check:catalog` and `npm test` after edits. Archived offers must remain unavailable unless explicitly reviewed and restored.
 
 ## Contact / ordering
 
@@ -170,3 +168,10 @@ The public guide is `how-to-order.html`, with supporting instructions in the hom
 The owner confirmed Priority Mail $12, overnight $30, free pickup, and same-day local delivery $25 around ZIP codes 33137 and 33315. All fulfillment fees, including overnight, are waived when the merchandise subtotal is strictly above $475. Coverage, carrier cutoff/dispatch date and local availability still require confirmation before payment. Shipped orders normally dispatch 1–2 business days after acceptance and payment; carrier transit is additional.
 
 `fulfillment-rates.js` is shared between the request form and server calculations. Unknown methods are rejected and every non-pickup option requires a full address. New quotes include the pricing version; reconciliation of older signed quotes preserves the original $10 standard shipping rate. Browser-supplied prices and rate versions do not control new quotes. Crypto uses its dedicated acknowledgment gate; card routes retain purchaser and processor approval guards.
+
+
+### Search and shopping pages
+
+`/catalog.html` is the complete, crawlable material directory. `scripts/catalog-paths.json` maps active catalog IDs to their public pages. `scripts/build-catalog-pages.cjs` reads existing product sources and uses the trusted checkout normalizer for all 300 pack prices. It does not create payments or access customer records. The five newer material pages and complete directory are generated in full; older material pages preserve their existing content outside marked shopping sections. Run the build and tests before committing catalog edits. When adding a material, supply an accurate page path and update the sitemap. Do not add unverified availability, purity, reviews, or medical claims to structured data.
+
+Public discovery checks: all sitemap URLs should respond successfully, self-canonicalize, contain one main heading, link internally, and have valid JSON-LD. `/404.html` is intentionally noindex and excluded from the sitemap. Batch reports use a no-store cache exception after the general HTML rule.
