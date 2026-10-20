@@ -2577,7 +2577,7 @@
     <div class="catalog-paths" aria-label="Browse research catalog categories">
       <a href="/catalog.html"><strong>Complete research catalog</strong><span>All materials, labeled amounts and pack pricing</span></a>
       <a href="/research-multipacks.html"><strong>Research multipacks</strong><span>Compare 3, 5 and 10-vial packs with quantity savings</span></a>
-      <a href="/research-supplies.html"><strong>Research supplies</strong><span>Supporting laboratory supply listings</span></a>
+      <a href="/research-package-deals.html"><strong>Package deals · save 5%</strong><span>Two separate materials with automatic package savings</span></a>
     </div>
     <div class="catalog-decisions" aria-label="Before you order"><div><strong>Review the offered lot</strong><a href="/coa.html">Batch reports</a> and <a href="/research-eligibility.html">purchaser eligibility</a> come first.</div><div><strong>Know your fulfillment cost</strong>U.S. standard $12 · overnight $30.<br>All available options free above $475.</div><div><strong>Plan your payment</strong>BTC, ETH or USDT. <a href="/how-to-order.html">See how it works</a>.<br><a href="/south-florida-research.html#local-inquiry">Confirm local delivery or pickup</a>.</div></div>
     <div class="filter-bar" id="filterBar"></div>
@@ -2949,13 +2949,13 @@
         <span class="catalog-index" aria-hidden="true">${String(compounds.indexOf(p) + 1).padStart(2, '0')}</span><span class="card-category">${catName}</span>
         ${p.badge ? `<span class="card-badge ${p.badge === 'New' ? 'new-badge' : ''}">${p.badge}</span>` : ''}
       </div>
-      <h3 class="card-name">${researchPagePaths[p.id] ? `<a href="${researchPagePaths[p.id]}" onclick="event.stopPropagation()">${p.name}</a>` : `<button type="button" onclick="event.stopPropagation();openModal('${p.id}')">${p.name}</button>`}</h3>
+      <h3 class="card-name">${(researchPagePaths[p.id] || p.path) ? `<a href="${researchPagePaths[p.id] || p.path}" onclick="event.stopPropagation()">${p.name}</a>` : `<button type="button" onclick="event.stopPropagation();openModal('${p.id}')">${p.name}</button>`}</h3>
       <div class="card-aka">${p.aka}</div>
       <div class="card-desc">${p.shortDesc}</div>
       ${['equipoise','deca','npp','tren-ace'].includes(p.id) ? `<div style="margin-top:10px;padding:8px 10px;border:1px solid rgba(167,139,250,.16);border-radius:7px;color:#c4b5fd;font-size:.72rem;font-weight:700;letter-spacing:.3px;">Available quantities: 1–5 vials</div>` : ''}
       <div class="card-tags">${p.tags.slice(0, 4).map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
       <div class="card-footer">
-        <div class="card-price">$${startPrice.toFixed(2)} <span>from</span></div>
+        <div class="card-price">$${startPrice.toFixed(2)} <span>${p.category === 'research-packages' ? 'per package' : 'from'}</span></div>
         <button type="button" class="card-arrow" aria-label="Quick view ${p.name}" onclick="event.stopPropagation();openModal('${p.id}')">↗</button>
       </div>
       <div class="card-atc-row" onclick="event.stopPropagation()">
@@ -3762,6 +3762,7 @@
   <script src="bac-water-product.js?v=20261019-prices-plus15"></script>
   <script src="glutathione-product.js?v=20261019-prices-plus15"></script>
   <script src="quantity-pricing.js?v=20260826-quantity-1"></script>
+  <script src="research-packages.js?v=20261020-deals-1"></script>
   <script src="catalog-search-quantity.js?v=20261020-1"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261017-crypto-health"></script>
