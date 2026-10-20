@@ -35,11 +35,17 @@ test('KPV shows owner-confirmed stock while retaining honest image and batch inf
   assert.match(html, /Dispatch in 1–2 business days after acceptance and payment/);
   assert.match(html, /Review lot documentation before ordering/);
   assert.match(read('catalog.html'), /<p class="eyebrow">In stock<\/p>/);
-  assert.match(html, /product photo pending/);
-  assert.match(html, /https:\/\/www.nxtlvl-research.com\/assets\/miami-skyline-night.webp/);
+  assert.doesNotMatch(html, /product photo pending/);
+  assert.match(html, /Illustrative packaging preview/);
+  assert.match(html, /https:\/\/www.nxtlvl-research.com\/assets\/products\/kpv-10-960-v1.webp/);
   assert.match(html, /name="product" value="kpv-10"/);
   assert.doesNotMatch(html, /99\.[0-9]+%|aggregateRating|weight.loss program/i);
-  assert.doesNotMatch(images.image(product), /<img|src=/);
+  assert.match(images.image(product), /<img/);
+  for (const size of [480,960]) {
+    const file = images.url(product.id,size).slice(1);
+    assert.ok(fs.existsSync(path.join(__dirname,'..',file)),file);
+    assert.ok(fs.statSync(path.join(__dirname,'..',file)).size < 150000,file);
+  }
   assert.match(images.image(product), /KPV — 10mg/);
   for (const file of ['index.html', 'catalog.html', 'sitemap.xml']) {
     assert.ok(read(file).includes('/research/kpv-10mg.html'), file);
