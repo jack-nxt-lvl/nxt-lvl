@@ -14,7 +14,7 @@
       card.hidden = !text.includes(query);
       if (!card.hidden) shown++;
     });
-    count.textContent = shown + (shown === 1 ? ' material' : ' materials') + (query ? ' found' : '');
+    count.textContent = shown + (shown === 1 ? ' product' : ' products') + (query ? ' found' : '');
     empty.hidden = shown !== 0;
   }
   search.closest('.directory-search').hidden = false;
@@ -23,3 +23,4 @@
   window.addEventListener('pageshow', filter);
   filter();
 })();
+

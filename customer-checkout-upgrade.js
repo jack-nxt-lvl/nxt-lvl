@@ -189,9 +189,9 @@
         <div class="nxt-checkout-kicker">Direct crypto checkout</div>
         <h2 id="researchReviewTitle">Shipping &amp; order details</h2>
         <div class="nxt-checkout-intro">Enter your order information, then choose BTC, ETH, or USDT. Your payment screen shows the exact amount, network and receiving address. Research purchasers only. <a href="/how-to-order.html" target="_blank" rel="noopener">How to order &amp; pay</a>.</div>
-        <div class="nxt-fulfillment-grid" role="group" aria-label="Fulfillment preference">
+        <div class="nxt-fulfillment-grid" role="group" aria-label="Shipping or delivery method">
           ${Object.entries(rates.OPTIONS).map(([mode,option])=>`<button type="button" class="nxt-fulfillment" data-mode="${mode}" aria-pressed="false"><strong>${option.label}</strong><span>${option.note}</span><span class="price">${feeFor(mode)===0?'Free':'$'+feeFor(mode).toFixed(2)}</span></button>`).join('')}
-        </div><p class="nxt-checkout-intro">Free shipping and local delivery on merchandise subtotals above $475, including overnight where available. At exactly $475, the listed rate applies. Local delivery, pickup and overnight timing must be confirmed before payment. <a href="/ordering-policy.html#fulfillment" target="_blank" rel="noopener">Fulfillment details</a></p>
+        </div><p class="nxt-checkout-intro">Free shipping and local delivery on merchandise subtotals above $475, including overnight where available. At exactly $475, the listed rate applies. Local delivery, pickup and overnight timing must be confirmed before payment. <a href="/ordering-policy.html#fulfillment" target="_blank" rel="noopener">Shipping &amp; delivery details</a></p>
         <div class="nxt-field-grid"><input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *"><input id="nxtEmail" type="email" inputmode="email" enterkeyhint="next" autocomplete="email" placeholder="Email *"><input id="nxtPhone" type="tel" inputmode="tel" enterkeyhint="next" autocomplete="tel" placeholder="Phone number *"></div>
         <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" autocomplete="address-line2" placeholder="Apt / Unit"><input id="nxtCity" autocomplete="address-level2" placeholder="City *"><input id="nxtState" autocomplete="address-level1" autocapitalize="characters" maxlength="2" placeholder="U.S. state code (FL, NY…) *"><input id="nxtZip" autocomplete="postal-code" inputmode="numeric" maxlength="10" placeholder="U.S. ZIP code *"></div></div>
         <div class="nxt-pickup-note">Provide your address for the order record, including pickup. Confirm local availability, pickup location, collector and appointment with support before payment or travel.</div>
@@ -199,7 +199,7 @@
         <div class="nxt-checkout-intro"><strong>Pay with BTC, ETH or USDT.</strong> Choose your crypto on the next screen. Card numbers are never entered on NXT LVL.</div>
         <div class="nxt-checkout-intro nxt-final-sale"><strong>All sales final once an order is placed.</strong> No change-of-mind cancellations, returns, exchanges or refunds. Applicable legal rights remain. <a href="/ordering-policy.html#refunds" target="_blank" rel="noopener">Read the final-sale policy and required exceptions</a>.</div>
         <label class="nxt-research-attestation"><input id="nxtResearchAttestation" type="checkbox"><span>I am authorized to purchase these materials for legitimate laboratory research. They will not be used for human or veterinary consumption, administration, diagnosis or treatment, or supplied for personal use. I understand the final-sale policy and have read the <a href="/research-eligibility.html" target="_blank" rel="noopener">eligibility rules</a>, <a href="/ordering-policy.html" target="_blank" rel="noopener">ordering information</a> and <a href="/privacy.html" target="_blank" rel="noopener">privacy notice</a>.</span></label><div class="nxt-checkout-error" role="alert"></div>
-        <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to Wallet Payment →</button></div>
+        <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to payment →</button></div>
       </div>`;
 
       const addressWrap=overlay.querySelector('.nxt-address-fields');
@@ -302,3 +302,4 @@
   }
   setupCartPersistence();bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();
+

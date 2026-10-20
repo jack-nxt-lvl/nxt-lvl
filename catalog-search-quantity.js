@@ -136,7 +136,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
         <path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
       </svg>
       <input id="nxtProductSearch" type="search" autocomplete="off"
-        placeholder="Search materials…"
+        placeholder="Search products…"
         aria-label="Search research products">
       <button class="nxt-search-clear" type="button" aria-label="Clear product search">×</button>
     </div>
@@ -148,7 +148,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
 
   const sorting = document.createElement('div');
   sorting.className = 'pro-sort';
-  sorting.innerHTML = '<label for="catalogSort">Sort collection</label><select id="catalogSort"><option value="featured">Featured order</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
+  sorting.innerHTML = '<label for="catalogSort">Sort products</label><select id="catalogSort"><option value="featured">Featured</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
   document.getElementById('filterBar')?.insertAdjacentElement('afterend', sorting);
   sorting.querySelector('select').addEventListener('change', (event) => {
     window.nxtCatalogSort = event.target.value;
@@ -162,7 +162,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
   const status = wrap.querySelector('.nxt-search-status');
   const empty = document.createElement('div');
   empty.className = 'nxt-search-empty';
-  empty.textContent = 'No materials match that search. Try a compound name or labeled amount.';
+  empty.textContent = 'No products match your search. Try a product name or amount per vial.';
   if (grid) grid.appendChild(empty);
 
   function normalize(value) {
@@ -245,7 +245,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
       if (shown) visible += 1;
     });
 
-    if (showAll) { showAll.hidden = Boolean(query) || expanded || matched <= 6; showAll.textContent = `View all ${matched} materials`; }
+    if (showAll) { showAll.hidden = Boolean(query) || expanded || matched <= 6; showAll.textContent = `View all ${matched} products`; }
     wrap.classList.toggle('has-query', Boolean(query));
     clear.hidden = !query;
     empty.classList.toggle('show', Boolean(query) && visible === 0);
@@ -302,3 +302,4 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
 
   loadRequestedProduct();
 })();
+
