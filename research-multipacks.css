@@ -1,31 +1,119 @@
-.multipacks-page main>.eyebrow{margin-top:28px!important}
-.multipacks-page main>.crumbs{margin-top:12px!important}
-.multipack-card>.eyebrow{margin:0 0 12px!important}
-.multipacks-page .multipack-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:30px 0 22px}
-.multipack-summary div{border:1px solid #38534d;border-radius:12px;padding:20px;background:#122220}
-.multipack-summary strong,.multipack-summary span{display:block}
-.multipack-summary strong{font-size:23px;color:#eef6f2}
-.multipack-summary span{color:#9be2cf;font-size:14px;margin-top:5px}
-.multipack-intro{color:#b8c8c2;max-width:850px;line-height:1.8}
-.multipack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:32px 0}
-.multipack-card{min-width:0;border:1px solid #38534d;border-radius:16px;padding:25px;background:linear-gradient(145deg,#142522,#0d1919)}
-.multipack-card h2{margin:9px 0 12px!important;font-size:25px!important;letter-spacing:-.6px!important}
-.multipack-card h2 a{color:#edf7f2!important;text-decoration:none}
-.multipack-card .eyebrow{font-size:10px!important;line-height:1.7!important;letter-spacing:1px!important;color:#9edac8!important}
-.multipack-baseline{font-size:13px;color:#b7c7c1}
-.multipack-options{list-style:none;padding:0!important;margin:20px 0 8px!important}
-.multipack-options li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:17px 0;border-top:1px solid #2f4841}
-.multipack-options strong,.multipack-options span{display:block}
-.multipack-options strong{color:#f1f7f4;font-size:17px}
-.multipack-options span{font-size:11px;color:#9fb9ae;line-height:1.6;margin-top:4px}
-.multipack-price{text-align:right}
-.multipack-select{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;min-height:44px;padding:9px 14px;border-radius:7px;border:1px solid #3b6154;background:#1c3930;color:#d7f6e8!important;font-size:13px;text-decoration:none}
-.multipack-select span{margin:0;font-size:17px;color:inherit}
-.multipack-select:hover{background:#254a3d}
-.multipack-details{display:inline-flex;align-items:center;min-height:44px;font-size:12px;color:#a8d8c6!important}
-.multipack-faq details{border-top:1px solid #355047;padding:16px 0}
-.multipack-faq summary{cursor:pointer;min-height:44px;align-content:center;color:#e5f2ec;font-size:16px}
-.multipack-faq p{color:#b4c9bf;font-size:14px;line-height:1.8;max-width:850px}
-.multipacks-page a:focus-visible,.multipack-faq summary:focus-visible{outline:3px solid #d2f9e9;outline-offset:4px}
-.multipacks-page section{padding:28px 0!important}
-@media(max-width:720px){.multipack-grid{grid-template-columns:1fr}.multipack-card{padding:21px}.multipacks-page .multipack-summary{gap:8px}.multipack-summary div{padding:15px 10px}.multipack-summary strong{font-size:18px}.multipack-summary span{font-size:12px}.multipacks-page nav{gap:7px 14px!important}.multipacks-page nav a{font-size:11px!important}}
+/* Multipack collection: compact product cards with directly linked pack prices. */
+body.miami-site.multipacks-page .wrap{max-width:1240px;padding:24px 40px 48px}
+.multipacks-page main>.crumbs{margin:22px 0 0!important;font-size:12px}
+.multipacks-page .multipack-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;padding:36px 0 32px}
+.multipacks-page .multipack-hero .eyebrow{margin:0!important;color:#b6e66b!important}
+.multipacks-page .multipack-hero h1{font-size:clamp(40px,4.6vw,60px)!important;line-height:1.02;letter-spacing:-.055em;margin:15px 0 18px}
+.multipack-hero h1 span{color:#b6e66b}
+.multipacks-page .multipack-hero .lead{font-size:14px;line-height:1.75;margin:0;max-width:430px;color:#b4c1b8}
+.multipacks-page .multipack-browse{display:inline-flex;align-items:center;gap:28px;min-height:44px;margin-top:17px;font-size:13px;font-weight:650;color:#d6edbd;text-decoration:none}
+.multipack-saving-panel{border:1px solid #354737;background:radial-gradient(ellipse at 100% 0,#263c24 0,transparent 72%),#101b15;border-radius:16px;padding:26px}
+.multipacks-page .multipack-saving-panel>p{font-size:13px;color:#dde6da;margin:0 0 20px}
+.multipack-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.multipack-summary>div{border-right:1px solid #3d503b;padding-right:10px}
+.multipack-summary>div:last-child{border:0;padding:0}
+.multipack-summary span{display:block;color:#b9c9b3;font-size:12px}
+.multipack-summary strong{display:block;font-size:48px;font-weight:500;letter-spacing:-.055em;line-height:1.3;color:#b6e66b;margin:5px 0}
+.multipack-summary small{font-size:22px;letter-spacing:-.03em}
+.multipacks-page .multipack-saving-panel .multipack-saving-note{margin:22px 0 0;padding-top:18px;border-top:1px solid #344634;font-size:11px;line-height:1.6;color:#afbfaa}
+.multipack-service-strip{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-block:1px solid #2e4035;padding:15px 0;color:#afc0b3;font-size:11px}
+.multipack-service-strip a{color:#d4e9bf!important;text-decoration:none}
+.multipacks-page section.multipack-collection{padding:34px 0 0!important;scroll-margin-top:18px}
+.multipack-collection-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+.multipack-collection-heading .eyebrow{margin:0 0 8px!important;color:#b6e66b!important;font-size:9px!important}
+.multipack-collection-heading h2{margin:0!important;font-size:30px!important;letter-spacing:-.04em}
+.multipack-collection-heading>a{font-size:12px;min-height:44px;display:inline-flex;align-items:center;color:#cde6b5!important}
+.multipacks-page .multipack-intro{font-size:12px;line-height:1.75;color:#abbcaf;margin:14px 0 22px;max-width:800px}
+.multipack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:0}
+.multipack-card{display:flex;flex-direction:column;min-width:0;border:1px solid #34473a;border-radius:14px;padding:22px;background:#121d16;overflow:hidden}
+.multipack-card-head{display:grid;grid-template-columns:128px minmax(0,1fr);gap:22px;align-items:center;min-height:128px;margin-bottom:22px}
+body.multipacks-page .pro-pack-image{display:block;max-width:none;width:128px;margin:0;border-radius:9px;overflow:hidden;background:#f7f8f6}
+.multipack-product-copy{min-width:0}
+.multipack-stock{display:inline-flex;align-items:center;gap:6px;color:#c7e3b0;font-size:10px;line-height:1.4}
+.multipack-stock::before{content:'';width:5px;height:5px;background:#b6e66b;border-radius:50%;flex:none}
+.multipack-card h3{margin:8px 0!important;font-size:23px!important;line-height:1.2;letter-spacing:-.035em!important;overflow-wrap:anywhere}
+.multipack-card h3 a{color:#eff5e9!important;text-decoration:none}
+.multipacks-page .multipack-product-copy>p{font-size:11px;color:#a9bbae;margin:6px 0;line-height:1.5}
+.multipacks-page .multipack-product-copy>.multipack-baseline{margin-top:9px;color:#a2b1a5}
+.multipack-baseline strong{color:#dbe5d6;font-weight:500;margin-left:5px}
+.multipack-table-label{display:flex;justify-content:space-between;padding:0 36px 9px 12px;color:#9bac9f;font-size:9px;text-transform:uppercase;letter-spacing:1px}
+.multipack-options{list-style:none;padding:0!important;margin:0!important;display:grid;gap:8px}
+.multipack-options li{margin:0;padding:0;min-width:0}
+body.multipacks-page .multipack-select{display:grid;grid-template-columns:minmax(0,1fr) auto 16px;align-items:center;gap:12px;min-height:80px;padding:13px 14px;border-radius:8px;border:1px solid #3a4c3f;background:#0e1711;color:#eef5e7!important;text-decoration:none;transition:background .15s,border-color .15s}
+.multipack-select strong,.multipack-select small{display:block}
+.multipack-quantity strong{font-size:16px;font-weight:650;line-height:1.35}
+.multipack-quantity small{font-size:11px;color:#aac796;margin-top:5px;line-height:1.5}
+.multipack-price{text-align:right;font-variant-numeric:tabular-nums}
+.multipack-price strong{font-size:21px;font-weight:600;line-height:1.3;letter-spacing:-.025em}
+.multipack-price small{font-size:10px;color:#9eafa3;margin-top:5px;line-height:1.5}
+.multipack-arrow{font-size:20px;color:#a8bd9d}
+body.multipacks-page .multipack-select.multipack-best{background:#1c2c1b;border-color:#6d8956}
+.multipack-best .multipack-price strong,.multipack-best .multipack-arrow{color:#c5ee90}
+body.multipacks-page .multipack-select:hover{background:#293b24;border-color:#b6e66b}
+.multipack-card-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px}
+.multipack-card-foot>span{font-size:10px;line-height:1.5;color:#a7b5a6;max-width:155px}
+.multipack-card-foot a{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:11px;color:#d0e5bc!important;text-decoration:none}
+.multipacks-page .multipack-image-note{font-size:10px;color:#8fa296;margin:14px 0 0;line-height:1.7}
+.multipacks-page .product-docs{margin:32px 0 0;padding:26px!important;border:1px solid #34473a;border-radius:14px;background:#142019}
+.multipacks-page .product-docs>.eyebrow{margin:0 0 12px!important;color:#b6e66b!important}
+.multipacks-page .product-docs h2{font-size:26px!important;margin:0 0 12px}
+.multipacks-page .product-docs p{font-size:13px}
+.multipacks-page section.multipack-faq{padding:34px 0 0!important}
+.multipack-faq h2{font-size:26px!important;margin:0 0 18px}
+.multipack-faq details{border-top:1px solid #304638;padding:14px 0}
+.multipack-faq summary{cursor:pointer;min-height:44px;align-content:center;color:#e5f2dc;font-size:15px}
+.multipack-faq p{color:#b0c0b3;font-size:13px;line-height:1.8;max-width:850px}
+.multipacks-page a:focus-visible,.multipack-faq summary:focus-visible{outline:3px solid #d2efaa;outline-offset:4px}
+@media(max-width:980px){
+ body.miami-site.multipacks-page .wrap{padding-inline:28px}
+ .multipacks-page .multipack-hero{gap:30px}
+ .multipack-card{padding:17px}
+ .multipack-card-head{grid-template-columns:106px minmax(0,1fr);gap:15px}
+ body.multipacks-page .pro-pack-image{width:106px}
+ .multipack-card h3{font-size:20px!important}
+ .multipack-card-foot{align-items:flex-start;flex-direction:column;gap:0}
+ .multipack-card-foot>span{max-width:none}
+ .multipack-price strong{font-size:19px}
+}
+@media(max-width:760px){
+ body.miami-site.multipacks-page .wrap{padding:16px 18px 30px}
+ .multipacks-page nav{gap:4px 16px!important;padding:0 0 14px!important}
+ .multipacks-page nav .brand{flex-basis:100%;font-size:20px!important}
+ .multipacks-page nav a:not(.brand){font-size:12px!important}
+ .multipacks-page main>.crumbs{margin-top:16px!important}
+ .multipacks-page .multipack-hero{grid-template-columns:1fr;gap:22px;padding:24px 0}
+ .multipacks-page .multipack-hero h1{font-size:44px!important;margin:12px 0 14px}
+ .multipacks-page .multipack-hero .lead{font-size:13px;max-width:400px}
+ .multipacks-page .multipack-browse{margin-top:10px}
+ .multipack-saving-panel{padding:18px}
+ .multipacks-page .multipack-saving-panel>p{font-size:12px;margin-bottom:12px}
+ .multipack-summary strong{font-size:36px;margin:3px 0}
+ .multipack-summary small{font-size:18px}
+ .multipacks-page .multipack-saving-panel .multipack-saving-note{margin-top:12px;padding-top:12px;font-size:10px}
+ .multipack-service-strip{gap:8px 16px;font-size:10px;padding:13px 0}
+ .multipack-collection-heading{align-items:flex-start;flex-direction:column;gap:7px}
+ .multipack-collection-heading h2{font-size:28px!important}
+ .multipack-collection-heading>a{min-height:36px;font-size:11px}
+ .multipacks-page .multipack-intro{margin-top:5px;font-size:11px}
+ .multipack-grid{grid-template-columns:1fr;gap:18px}
+ .multipack-card{padding:18px}
+ .multipack-card-head{min-height:106px;margin-bottom:17px}
+ .multipack-card h3{font-size:23px!important}
+ .multipack-card-foot{align-items:center;flex-direction:row;gap:10px}
+ .multipack-card-foot>span{max-width:135px;font-size:9px}
+ .multipack-card-foot a{font-size:10px}
+ .multipacks-page .product-docs{padding:20px!important}
+}
+@media(max-width:380px){
+ body.miami-site.multipacks-page .wrap{padding-inline:14px}
+ .multipack-card{padding:14px}
+ .multipack-card-head{grid-template-columns:86px minmax(0,1fr);gap:13px}
+ body.multipacks-page .pro-pack-image{width:86px}
+ .multipack-card h3{font-size:20px!important}
+ body.multipacks-page .multipack-select{gap:8px;padding:12px 10px}
+ .multipack-price strong{font-size:18px}
+ .multipack-quantity small{font-size:10px}
+ .multipack-card-foot{align-items:flex-start;flex-direction:column;gap:0}
+ .multipack-card-foot>span{max-width:none}
+}
+@media(prefers-reduced-motion:reduce){.multipack-select{transition:none!important}}
