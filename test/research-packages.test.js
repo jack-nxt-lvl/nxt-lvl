@@ -57,6 +57,28 @@ test('package quantities, mixed carts and fulfillment use discounted totals',()=
  }
 });
 
+test('optional 10mL water remains a separately priced line alongside every package',()=>{
+ for(const [id,,cents] of expected){
+  const order=normalizeOrder([{key:id+'::0',qty:1},{key:'bac-water-10ml::0',qty:1,price:0}],'shipping');
+  assert.equal(order.normalizedItems[0].unitCents,cents);
+  assert.equal(order.normalizedItems[1].unitCents,1610);
+  assert.equal(order.normalizedItems[1].quantity,1);
+  assert.equal(order.subtotalCents,cents+1610);
+  assert.equal(order.totalCents,cents+1610+1200);
+ }
+});
+
+test('optional water affects the free-fulfillment threshold at its actual price',()=>{
+ const items=[{key:'pack-cjc-no-dac-ipamorelin::0',qty:2},{key:'bac-water-10ml::0',qty:1}];
+ const below=normalizeOrder(items,'shipping');
+ assert.equal(below.subtotalCents,47494);
+ assert.equal(below.shippingCents,1200);
+ items[1].qty=2;
+ const above=normalizeOrder(items,'shipping');
+ assert.equal(above.subtotalCents,49104);
+ assert.equal(above.shippingCents,0);
+});
+
 test('package calculations follow changed source prices and reject missing components',()=>{
  const materials=catalog();
  const before=buildResearchPackages(materials)[0];

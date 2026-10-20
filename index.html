@@ -2515,6 +2515,7 @@
 <link rel="stylesheet" href="/miami-research.css?v=20261017-night-1"><meta name="theme-color" content="#080e10"><link rel="stylesheet" href="/atelier-layout.css?v=20261017-1">
 <meta property="og:image:alt" content="Miami skyline at dusk — NXT LVL Research">
 <link rel="stylesheet" href="/catalog-experience.css?v=20261020-1">
+<link rel="stylesheet" href="/package-supply-reminder.css?v=20261020-1">
 </head>
 
 <body class="miami-site miami-home">
@@ -3297,6 +3298,7 @@
       }
 
       document.getElementById('cartSubtotal').textContent = '$' + cartSubtotal().toFixed(2);
+      window.NxtPackageSupplyReminder?.render(cart, compounds);
     }
 
     function openCart() {
@@ -3763,6 +3765,7 @@
   <script src="glutathione-product.js?v=20261019-prices-plus15"></script>
   <script src="quantity-pricing.js?v=20260826-quantity-1"></script>
   <script src="research-packages.js?v=20261020-deals-1"></script>
+  <script src="package-supply-reminder.js?v=20261020-1"></script>
   <script src="catalog-search-quantity.js?v=20261020-1"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261017-crypto-health"></script>

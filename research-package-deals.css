@@ -26,3 +26,7 @@
 .deal-faq p{color:#b4c9bf;font-size:14px;line-height:1.8;max-width:850px}
 .package-deals-page a:focus-visible,.deal-faq summary:focus-visible{outline:3px solid #d2f9e9;outline-offset:4px}
 @media(max-width:720px){.deal-grid{grid-template-columns:1fr;gap:18px}.deal-card{padding:21px}.deal-card h2{font-size:23px!important}.deal-total strong{font-size:31px}.package-deals-page nav{gap:7px 14px!important}.package-deals-page nav a{font-size:11px!important}.deal-benefits{gap:8px}.deal-benefits span{font-size:11px}}
+
+.deal-supply{display:flex;align-items:center;gap:28px;border:1px solid #486246;border-radius:14px;padding:23px;background:#16251c;margin-top:26px}
+.deal-supply>div{min-width:0;flex:1}.deal-supply .eyebrow{margin:0 0 9px!important;font-size:10px!important;color:#bad9a3!important}.deal-supply h2{font-size:22px!important;letter-spacing:-.4px!important;margin:0 0 10px!important}.deal-supply p{font-size:13px;line-height:1.7;color:#c1d0bd}.deal-supply .deal-supply-note{font-size:11px;color:#aabc9e;margin-bottom:0}.deal-supply>a{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-height:46px;padding:12px 18px;border:1px solid #81976a;border-radius:8px;color:#dceacb!important;font-size:13px;text-decoration:none}
+@media(max-width:720px){.deal-supply{align-items:stretch;flex-direction:column;gap:16px;padding:20px}.deal-supply h2{font-size:20px!important}}
