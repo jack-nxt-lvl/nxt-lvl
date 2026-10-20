@@ -1,0 +1,31 @@
+.multipacks-page main>.eyebrow{margin-top:28px!important}
+.multipacks-page main>.crumbs{margin-top:12px!important}
+.multipack-card>.eyebrow{margin:0 0 12px!important}
+.multipacks-page .multipack-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:30px 0 22px}
+.multipack-summary div{border:1px solid #38534d;border-radius:12px;padding:20px;background:#122220}
+.multipack-summary strong,.multipack-summary span{display:block}
+.multipack-summary strong{font-size:23px;color:#eef6f2}
+.multipack-summary span{color:#9be2cf;font-size:14px;margin-top:5px}
+.multipack-intro{color:#b8c8c2;max-width:850px;line-height:1.8}
+.multipack-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:32px 0}
+.multipack-card{min-width:0;border:1px solid #38534d;border-radius:16px;padding:25px;background:linear-gradient(145deg,#142522,#0d1919)}
+.multipack-card h2{margin:9px 0 12px!important;font-size:25px!important;letter-spacing:-.6px!important}
+.multipack-card h2 a{color:#edf7f2!important;text-decoration:none}
+.multipack-card .eyebrow{font-size:10px!important;line-height:1.7!important;letter-spacing:1px!important;color:#9edac8!important}
+.multipack-baseline{font-size:13px;color:#b7c7c1}
+.multipack-options{list-style:none;padding:0!important;margin:20px 0 8px!important}
+.multipack-options li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:17px 0;border-top:1px solid #2f4841}
+.multipack-options strong,.multipack-options span{display:block}
+.multipack-options strong{color:#f1f7f4;font-size:17px}
+.multipack-options span{font-size:11px;color:#9fb9ae;line-height:1.6;margin-top:4px}
+.multipack-price{text-align:right}
+.multipack-select{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;min-height:44px;padding:9px 14px;border-radius:7px;border:1px solid #3b6154;background:#1c3930;color:#d7f6e8!important;font-size:13px;text-decoration:none}
+.multipack-select span{margin:0;font-size:17px;color:inherit}
+.multipack-select:hover{background:#254a3d}
+.multipack-details{display:inline-flex;align-items:center;min-height:44px;font-size:12px;color:#a8d8c6!important}
+.multipack-faq details{border-top:1px solid #355047;padding:16px 0}
+.multipack-faq summary{cursor:pointer;min-height:44px;align-content:center;color:#e5f2ec;font-size:16px}
+.multipack-faq p{color:#b4c9bf;font-size:14px;line-height:1.8;max-width:850px}
+.multipacks-page a:focus-visible,.multipack-faq summary:focus-visible{outline:3px solid #d2f9e9;outline-offset:4px}
+.multipacks-page section{padding:28px 0!important}
+@media(max-width:720px){.multipack-grid{grid-template-columns:1fr}.multipack-card{padding:21px}.multipacks-page .multipack-summary{gap:8px}.multipack-summary div{padding:15px 10px}.multipack-summary strong{font-size:18px}.multipack-summary span{font-size:12px}.multipacks-page nav{gap:7px 14px!important}.multipacks-page nav a{font-size:11px!important}}

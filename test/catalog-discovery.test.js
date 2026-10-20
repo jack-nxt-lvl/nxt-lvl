@@ -67,3 +67,19 @@ test('the batch-report cache exception follows generic HTML caching',()=>{
  assert.match(read('404.html'),/name="robots" content="noindex,follow"/);
  assert.doesNotMatch(read('sitemap.xml'),/404\.html/);
 });
+
+test('multipack choices retain the precise material, quantity and trusted checkout total',()=>{
+ const html=read('research-multipacks.html');
+ const choices=[...html.matchAll(/href="\/\?product=([^&]+)&amp;qty=(\d+)#menu" aria-label="Choose [^"]+ for \$(\d+\.\d{2})"/g)];
+ assert.equal(choices.length,24);
+ assert.equal(new Set(choices.map(m=>m[1])).size,8);
+ for(const [,id,quantity,displayed] of choices){
+  assert.ok([3,5,10].includes(Number(quantity)));
+  const actual=normalizeOrder([{key:id+'::'+(Number(quantity)-1),qty:1}],'shipping');
+  assert.equal(Math.round(Number(displayed)*100),actual.subtotalCents,id+' '+quantity);
+ }
+ assert.match(read('catalog.html'),/href="\/research-multipacks.html"/);
+ assert.match(read('index.html'),/href="\/research-multipacks.html"/);
+ assert.match(read('sitemap.xml'),/https:\/\/www.nxtlvl-research.com\/research-multipacks.html/);
+ assert.doesNotMatch(html,/aggregateRating|reviewCount|"availability"|buy now|weight.loss|recovery stack|anti.aging/i);
+});
