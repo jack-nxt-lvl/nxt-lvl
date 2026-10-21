@@ -30,3 +30,9 @@
 .deal-supply{display:flex;align-items:center;gap:28px;border:1px solid #486246;border-radius:14px;padding:23px;background:#16251c;margin-top:26px}
 .deal-supply>div{min-width:0;flex:1}.deal-supply .eyebrow{margin:0 0 9px!important;font-size:10px!important;color:#bad9a3!important}.deal-supply h2{font-size:22px!important;letter-spacing:-.4px!important;margin:0 0 10px!important}.deal-supply p{font-size:13px;line-height:1.7;color:#c1d0bd}.deal-supply .deal-supply-note{font-size:11px;color:#aabc9e;margin-bottom:0}.deal-supply>a{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-height:46px;padding:12px 18px;border:1px solid #81976a;border-radius:8px;color:#dceacb!important;font-size:13px;text-decoration:none}
 @media(max-width:720px){.deal-supply{align-items:stretch;flex-direction:column;gap:16px;padding:20px}.deal-supply h2{font-size:20px!important}}
+
+/* Each package has its own cohesive two-box product image. */
+.deal-product-visual{margin:0 0 22px;min-width:0}
+.deal-product-visual .product-combo-packshot{width:100%;height:auto;aspect-ratio:1.45;object-fit:contain;mix-blend-mode:normal;background:#f7f8f6;border-radius:10px}
+.deal-product-visual figcaption{font-size:10px;line-height:1.6;color:#a6b9af;margin:8px 0 0}
+@media(max-width:720px){.deal-product-visual .product-combo-packshot{aspect-ratio:1.15}}
