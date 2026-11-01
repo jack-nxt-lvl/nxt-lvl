@@ -21,7 +21,7 @@ test('homepage exposes direct crypto instructions with research-use restrictions
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20261017-crypto-health/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261101-usdt-easy-1/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261101-usdt-audit-2/);
 });
 
 test('instructions describe the Paybis purchase and existing-wallet routes', () => {

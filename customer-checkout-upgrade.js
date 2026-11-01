@@ -98,14 +98,7 @@
 
   async function ensureDirectWallet(){
     await loadCheckoutDependency({
-      src:'/lib/paybis-funding.js?v=20260825-paybis-match-1',
-      selector:'script[data-nxt-paybis-funding],script[src*="lib/paybis-funding.js"]',
-      marker:'data-nxt-paybis-funding',
-      ready:()=>Boolean(window.NxtPaybisFunding),
-      label:'USDT funding checkout',
-    });
-    await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20261101-usdt-easy-1',
+      src:'/direct-wallet-checkout.js?v=20261101-usdt-audit-2',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
@@ -251,7 +244,8 @@
         if(!researchConsent.attestation){showFieldError('Please read and accept the research-use and ordering terms.','#nxtResearchAttestation');return;}
         const regions='AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY AS GU MP PR VI AA AE AP'.split(' ');
         customer.state=customer.state.toUpperCase();
-        if(!regions.includes(customer.state)||!/^\d{5}(?:-\d{4})?$/.test(customer.zip)){errorEl.textContent='Enter a valid U.S. state or territory code and ZIP code. We ship within the USA only.';errorEl.classList.add('show');return;}
+        if(!regions.includes(customer.state)){showFieldError('Enter a two-letter U.S. state or territory code, such as FL.','#nxtState');return;}
+        if(!/^\d{5}(?:-\d{4})?$/.test(customer.zip)){showFieldError('Enter a valid U.S. ZIP code, such as 33137.','#nxtZip');return;}
         const shipping=feeFor(fulfillment);
         writeCheckoutDraft({fulfillment,paymentAsset,customer});
         overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer,researchConsent,paymentMethod,paymentAsset,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
@@ -266,10 +260,13 @@
   async function runCheckout(event){
     if(event){event.preventDefault();event.stopPropagation();event.stopImmediatePropagation?.();}
     if(checkoutOpening)return;
+    if(window.resumeDirectWalletCheckout?.())return;
     if(!cartItems().length)return;
     checkoutOpening=true;
+    const checkoutButton=document.getElementById('cartCheckoutBtn');
+    const originalLabel=checkoutButton?.textContent;
+    if(checkoutButton){checkoutButton.disabled=true;checkoutButton.textContent='Opening secure checkout…';checkoutButton.setAttribute('aria-busy','true');}
     try {
-    try{if(typeof closeCart==='function')closeCart();}catch(_){}
     let details;
     try{
       cardLinkConfigPromise=null;
@@ -279,6 +276,7 @@
         overlay.innerHTML='<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="cryptoUnavailableTitle"><div class="nxt-checkout-kicker">Payment service status</div><h2 id="cryptoUnavailableTitle">Crypto checkout is temporarily unavailable</h2><p class="nxt-checkout-intro">We cannot generate verified payment instructions right now. Your cart is saved. Please contact support before sending funds, and do not reuse an old payment address or quote.</p><p><a href="sms:+17542907210">Text 754-290-7210</a> · <a href="tel:+17542907210">Call support</a></p><div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Close</button></div></div>';
         overlay.querySelector('button').onclick=()=>overlay.remove();document.body.appendChild(overlay);overlay.querySelector('button').focus();return;
       }
+      try{if(typeof closeCart==='function')closeCart();}catch(_){}
       details=await collectCheckoutDetails(config);
     }
     catch(err){alert(err.message||'Unable to open checkout. Please try again.');return;}
@@ -298,7 +296,7 @@
     }
     try{await ensureDirectWallet();await window.startDirectWalletCheckout(details.paymentAsset || 'USDT');}
     catch(err){alert(err.message||'Unable to open direct-wallet checkout. Please try again.');}
-    } finally { checkoutOpening=false; }
+    } finally { checkoutOpening=false;if(checkoutButton){checkoutButton.disabled=false;checkoutButton.textContent=originalLabel;checkoutButton.removeAttribute('aria-busy');} }
   }
 
   window.proceedToCheckout=runCheckout;
