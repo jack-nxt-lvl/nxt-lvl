@@ -149,6 +149,6 @@
       "permanent": true
     }
   ],
-  "buildCommand": "npm test && npm run build",
+  "buildCommand": "env -i PATH=\"$PATH\" HOME=\"$HOME\" npm test && npm run build",
   "outputDirectory": "."
 }

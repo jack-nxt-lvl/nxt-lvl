@@ -88,7 +88,7 @@ test('shows email delivery only when the hosted provider, webhook, ledger, and s
 
 test('public checkout offers crypto without exposing card collection or an approval-code field', () => {
  const source=require('fs').readFileSync(require('path').join(__dirname,'..','customer-checkout-upgrade.js'),'utf8');
- assert.match(source,/Continue to crypto payment/);
+ assert.match(source,/Pay now with/);
  assert.match(source,/researchConsent/);
  assert.doesNotMatch(source,/id="nxtResearchCode"|cardNumber|cvc|expiryMonth|payment-element/);
  assert.match(source,/direct-wallet-checkout\.js\?v=20261101-usdt-easy-1/);
