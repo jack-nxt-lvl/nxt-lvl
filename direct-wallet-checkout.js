@@ -299,6 +299,7 @@
         if (String(chainId).toLowerCase() !== '0x1') await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x1'}]});
         if (!current()) return;
         if (expire()) throw new Error('This amount expired while connecting. Get a new amount before sending.');
+        if (session.txid || session.detectedTxid) { setStatus(session,'A transfer is already being checked. Do not send another payment.'); return; }
         const target = String(quote.address).toLowerCase().replace(/^0x/,'').padStart(64,'0');
         const units = BigInt(quote.amountUnits).toString(16);
         const tx = quote.asset === 'ETH' ? {from,to:quote.address,value:`0x${units}`} : {from,to:USDT_CONTRACT,value:'0x0',data:`0xa9059cbb${target}${units.padStart(64,'0')}`};
