@@ -15,7 +15,7 @@
     .nxt-wallet-overlay,.nxt-wallet-loading{position:fixed;inset:0;z-index:1000002;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(3,5,9,.88);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f7f8fc}
     .nxt-wallet-overlay *,.nxt-wallet-loading *{box-sizing:border-box}.nxt-wallet-overlay [hidden]{display:none!important}
     .nxt-wallet-card{width:min(800px,100%);max-height:calc(100dvh - 40px);overflow:auto;overscroll-behavior:contain;background:#10141c;border:1px solid #364050;border-radius:22px;box-shadow:0 30px 100px #0009}
-    .nxt-wallet-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 24px;border-bottom:1px solid #293240}.nxt-wallet-kicker{font-size:11px;letter-spacing:1.4px;color:#af9cfa;font-weight:800;text-transform:uppercase;margin-bottom:6px}
+    .nxt-wallet-head{background:#10141c;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 24px;border-bottom:1px solid #293240}.nxt-wallet-kicker{font-size:11px;letter-spacing:1.4px;color:#af9cfa;font-weight:800;text-transform:uppercase;margin-bottom:6px}
     .nxt-wallet-head h2{font:750 25px/1.2 Inter,-apple-system,sans-serif;margin:0}.nxt-wallet-head p{font-size:12px;color:#b8c0cf;margin:8px 0 0}.nxt-wallet-close{flex:none;width:44px;height:44px;border:1px solid #414b5a;border-radius:12px;background:#1c2430;color:white;font-size:24px;cursor:pointer}
     .nxt-wallet-body{padding:22px 24px;display:grid;grid-template-columns:minmax(0,1fr) 208px;gap:22px}.nxt-wallet-main{min-width:0}.nxt-wallet-side{min-width:0}.nxt-wallet-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#b8c0cf;font-size:12px;margin-bottom:16px}.nxt-wallet-summary b{color:white}
     .nxt-wallet-amount{padding:18px;background:#18221f;border:1px solid #376554;border-radius:14px}.nxt-wallet-label{color:#c3cbda;font-size:12px;font-weight:650;margin-bottom:8px}.nxt-wallet-copyline{display:flex;align-items:center;justify-content:space-between;gap:12px}.nxt-wallet-value{font:650 13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;min-width:0}.nxt-wallet-value.amount{font-size:24px;line-height:1.3;color:#a6f0d4}.nxt-wallet-copy{flex:none;border:1px solid #607362;border-radius:9px;background:#233c31;color:#e9fff4;font-size:12px;font-weight:700;min-height:44px;padding:8px 12px;cursor:pointer}.nxt-wallet-copy.copied{background:#24583f}
@@ -28,6 +28,7 @@
     .nxt-wallet-qr{border:1px solid #354151;border-radius:14px;padding:14px}.nxt-wallet-qr summary{font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px}.nxt-wallet-qr img{width:100%;height:auto;display:block;border-radius:8px;background:#fff}.nxt-wallet-qr p{font-size:11px;line-height:1.6;color:#bec8d6;margin:10px 0 0}.nxt-wallet-side .nxt-wallet-note{font-size:11px}.nxt-wallet-order-id{overflow-wrap:anywhere}.nxt-wallet-support{display:block;text-align:center;padding:13px 8px;font-size:12px}
     .nxt-wallet-expired{margin:12px 0;padding:16px;border:1px solid #b37d42;background:#302315;border-radius:12px}.nxt-wallet-expired strong{font-size:15px}.nxt-wallet-expired p{font-size:12px;line-height:1.6;margin:8px 0 12px;color:#f5dbb8}.nxt-wallet-pad{padding:32px}.nxt-wallet-pad h2{font-size:25px;margin:0 0 12px}.nxt-wallet-pad p{color:#bec8d6;font-size:14px;line-height:1.6}.nxt-wallet-pad button{margin-top:12px}.nxt-wallet-loadbox{max-width:360px;padding:28px;border:1px solid #4a586c;border-radius:16px;background:#10141c;text-align:center}.nxt-wallet-loadbox h3{font-size:20px}.nxt-wallet-loadbox p{font-size:13px;color:#bec8d6;line-height:1.6}
     .nxt-wallet-resume{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:1000001;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 24px);padding:12px 14px;border:1px solid #6d559e;border-radius:14px;background:#171423;color:white;box-shadow:0 8px 40px #0008;font:12px Inter,sans-serif}.nxt-wallet-resume span{min-width:0}.nxt-wallet-resume button{min-height:44px;border:0;border-radius:8px;background:#8052e6;color:white;padding:8px 14px;cursor:pointer}.nxt-wallet-resume .dismiss{padding:8px;background:transparent;font-size:20px}
+    .nxt-simple-payment .nxt-wallet-summary{font-size:12px!important}.nxt-simple-payment .nxt-wallet-value.amount{font-size:24px!important}.nxt-simple-payment .nxt-wallet-qr{width:100%!important}.nxt-simple-payment .nxt-wallet-copy{min-height:44px!important}
     @media(max-width:620px){.nxt-wallet-overlay,.nxt-wallet-loading{padding:8px}.nxt-wallet-card{max-height:calc(100dvh - 16px);border-radius:16px}.nxt-wallet-head{padding:18px 16px}.nxt-wallet-head h2{font-size:22px}.nxt-wallet-body{padding:16px;grid-template-columns:1fr;gap:8px}.nxt-wallet-value.amount{font-size:22px}.nxt-wallet-copyline{gap:8px}.nxt-wallet-amount{padding:14px}.nxt-wallet-value:not(.amount){font-size:12px}.nxt-wallet-qr{max-width:100%}.nxt-wallet-qr img{max-width:220px;margin:auto}.nxt-wallet-verifyrow input{font-size:16px}.nxt-wallet-pad{padding:24px 18px}}
   `;
   document.head.appendChild(style);
@@ -162,7 +163,7 @@
     try { paybisUrl = window.NxtPaybisFunding?.buildCheckoutUrl({asset:quote.asset}) || ''; } catch (_) {}
     const overlay = document.createElement('div'); session.overlay = overlay; overlay.className = 'nxt-wallet-overlay';
     const e = escapeHtml;
-    overlay.innerHTML = `<div class="nxt-wallet-card" role="dialog" aria-modal="true" aria-labelledby="nxtPayTitle">
+    overlay.innerHTML = `<div class="nxt-wallet-card nxt-simple-payment" role="dialog" aria-modal="true" aria-labelledby="nxtPayTitle">
       <div class="nxt-wallet-head"><div><div class="nxt-wallet-kicker">Step 2 of 2 · Payment</div><h2 id="nxtPayTitle">Pay now with ${e(quote.asset)}</h2><p>Send once. Wait here for confirmation.</p></div><button type="button" class="nxt-wallet-close" aria-label="Close and save checkout">×</button></div>
       <div class="nxt-wallet-body"><div class="nxt-wallet-main">
         <div class="nxt-wallet-summary"><span>Order total <b>$${e(quote.totalUsd)} USD</b></span><span id="nxtWalletTimer"></span></div>
@@ -171,7 +172,7 @@
         <div class="nxt-wallet-field"><div class="nxt-wallet-label">2. Send to this address</div><div class="nxt-wallet-copyline"><div class="nxt-wallet-value">${e(quote.address)}</div><button type="button" class="nxt-wallet-copy" data-copy-address>Copy address</button></div></div>
         <div class="nxt-wallet-expired" data-expired hidden><strong>This payment amount has expired</strong><p>Already sent it? Check your payment below. Do not send again. If you have not sent anything, get a fresh amount.</p><button type="button" class="nxt-wallet-secondary" data-refresh>I haven’t sent — get a new amount</button></div>
         <div class="nxt-wallet-actions"><a class="nxt-wallet-primary" data-open-wallet href="${e(quote.paymentUri)}">Open my wallet →</a><button type="button" class="nxt-wallet-secondary" data-browser-pay ${quote.asset === 'BTC' || !window.ethereum ? 'hidden' : ''}>Pay with browser wallet</button><button type="button" class="nxt-wallet-secondary" data-check>I sent payment — check status</button></div>
-        <p class="nxt-wallet-note">Your wallet shows any network fee before you confirm. The full amount above must arrive${quote.asset === 'USDT' ? '. A self-custody wallet also needs ETH for its network fee' : ''}.</p>
+        <p class="nxt-wallet-note">If no wallet opens, copy the amount and address into your app. Your wallet shows any network fee before you confirm. The full amount above must arrive${quote.asset === 'USDT' ? '. A self-custody wallet also needs ETH for its network fee' : ''}.</p>
         <div class="nxt-wallet-status" role="status" aria-live="polite"></div>
         <ol class="nxt-wallet-stages" aria-label="Payment progress"><li data-payment-stage="awaiting">Waiting</li><li data-payment-stage="detected">Detected</li><li data-payment-stage="confirming">Confirming</li><li data-payment-stage="confirmed">Paid</li></ol>
         <details class="nxt-wallet-help" data-buy-help><summary>Need ${e(quote.asset)}? Buy with Paybis</summary><ol><li>Open Paybis below. It is a separate service and may require identity verification.</li><li>Choose <strong>${e(quote.asset)} on ${e(network)}</strong>. Purchase enough to cover your order plus provider and network fees.</li><li>Copy the address above if Paybis supports sending to it. Before confirming, make sure “You receive” is at least <strong>${e(quote.amount)} ${e(quote.asset)}</strong>. If you buy into your own wallet, return here for a current amount before sending.</li><li>Return here and tap <strong>I sent payment — check status</strong>. If the provider changed the amount, paste its transaction ID below.</li></ol><a class="nxt-wallet-secondary" data-buy-crypto ${paybisUrl ? `href="${e(paybisUrl)}"` : 'aria-disabled="true"'} target="_blank" rel="noopener noreferrer">Buy ${e(quote.asset)} on Paybis ↗</a><p>Paybis controls availability, fees, payment methods and verification times. Opening Paybis does not pay this order. Do not send after the timer expires.</p><div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div></details>
@@ -228,7 +229,7 @@
         if (!current()) return;
         if (txid && response.ok && data.status === 'paid') { showSuccess(session,data); return; }
         if (!txid && response.ok && data.status === 'found' && data.txid) {
-          input.value = data.txid; session.txid = data.txid; saveActivePayment(quote,context,data.txid);
+          input.value = data.txid; session.txid = data.txid; saveActivePayment(quote,context,data.txid); updateTimer();
           setPaymentStage(session,'detected'); setStatus(session,'Payment detected. Waiting for blockchain confirmation. Do not send again.','good');
           later(session,() => check(),500); retry = false; return;
         }
@@ -295,7 +296,7 @@
         if (current()) setStatus(session,Number(error.code) === 4001 ? 'Wallet request cancelled. No payment was confirmed here. You can try again.' : (error.message || 'Unable to open your wallet. Copy the details to pay instead.'),'bad');
       } finally { session.walletBusy = false; if (current()) browserButton.disabled = expire() || Boolean(session.txid); }
     };
-    function updateTimer() {
+    function updateTimer(schedule = false) {
       if (!current()) return;
       const remaining = Math.max(0,Number(quote.expiresAt) - Date.now());
       overlay.querySelector('#nxtWalletTimer').textContent = remaining ? `Send within ${Math.floor(remaining / 60000)}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2,'0')}` : 'Amount expired';
@@ -308,11 +309,11 @@
       overlay.querySelector('.nxt-wallet-qr').hidden = !remaining || sent;
       overlay.querySelector('[data-expired]').hidden = Boolean(remaining) || sent;
       overlay.querySelector('[data-refresh]').disabled = sent || session.walletBusy;
-      later(session,updateTimer,1000);
+      if (schedule) later(session,() => updateTimer(true),1000);
     }
     if (context.paymentIntent === 'buy') overlay.querySelector('[data-buy-help]').open = true;
     setStatus(session,automaticDetection ? 'Waiting for your payment. We’ll check automatically after you send.' : 'Send from your wallet, then paste the transaction ID below.');
-    updateTimer(); later(session,() => check(),initialTxid ? 500 : 1500);
+    updateTimer(true); later(session,() => check(),initialTxid ? 500 : 1500);
   }
   async function start(preferredAsset = 'USDT', suppliedContext) {
     if (working) return;
