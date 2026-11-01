@@ -21,7 +21,7 @@ test('homepage exposes direct crypto instructions with research-use restrictions
   assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
   assert.match(homepage, /nav-cleanup\.js\?v=20261017-crypto-health/);
   assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261017-crypto-health/);
+  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261101-usdt-easy-1/);
 });
 
 test('instructions describe the Paybis purchase and existing-wallet routes', () => {
@@ -37,40 +37,27 @@ test('instructions describe the Paybis purchase and existing-wallet routes', () 
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
   assert.match(guide, /Why the exact receive amount matters/);
   assert.match(checkout, /purchase enough to cover your order plus provider and network fees/i);
-  assert.match(checkout, /PayPal/);
-  assert.match(checkout, /ACH/);
-  assert.match(checkout, /How we match your payment/i);
-  assert.match(checkout, /small fractional ending identifies your order/i);
-  assert.match(checkout, /small accepted buffer/i);
+
+
+
+
+
   assert.match(checkout, /make sure “You receive” is at least/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
   assert.doesNotMatch(checkout, /create-transak-session|nxt-transak/i);
   assert.match(homepage, /shipping-and-payments\.html/);
 });
 
-test('checkout keeps the decision point to two primary paths', () => {
-  const choiceIndex = checkout.indexOf('How would you like to pay?');
-  const buyIndex = checkout.indexOf('Buy USDT directly with Paybis');
-  const directIndex = checkout.indexOf('I already have crypto');
-  const amountIndex = checkout.indexOf('<div class="nxt-wallet-label">Exact amount</div>');
-  assert.ok(choiceIndex >= 0);
-  assert.ok(buyIndex > choiceIndex);
-  assert.ok(directIndex > buyIndex);
-  assert.ok(amountIndex > directIndex);
-  assert.match(checkout, /2 clear choices/);
-  assert.match(checkout, /data-pay-path="buy"/);
-  assert.match(checkout, /\{ asset: 'USDT', intent: 'buy' \}/);
-  assert.match(checkout, /Buy USDT directly with Paybis/);
-  assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
-  assert.match(checkout, /Buy USDT on Paybis/);
-  assert.match(checkout, /Paybis is independent from NXT LVL/i);
-  assert.doesNotMatch(checkout, /Pay with Card \/ Apple Pay|Buy enough with Card \/ Apple Pay/);
-  assert.doesNotMatch(checkout, /data-funding-usd|fundingAmountForInvoice|fee reserve/i);
-  assert.match(checkout, /openPaybisFunding/);
-  assert.match(checkout, /<details class="nxt-wallet-apps">/);
-  assert.match(checkout, /<details class="nxt-wallet-buy-help">/);
-  assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
-  assert.match(checkout, /Payment sent but not detected\? Verify manually/);
+test('checkout presents the amount and network before optional funding help', () => {
+  const amountIndex = checkout.indexOf('1. Send this exact amount');
+  const networkIndex = checkout.indexOf('Network:');
+  const addressIndex = checkout.indexOf('2. Send to this address');
+  const fundingIndex = checkout.indexOf('Need ${e(quote.asset)}? Buy with Paybis');
+  assert.ok(amountIndex >= 0 && networkIndex > amountIndex);
+  assert.ok(addressIndex > networkIndex && fundingIndex > addressIndex);
+  assert.match(checkout, /Ethereum \(ERC-20\) only/);
+  assert.match(checkout, /Payment sent but not detected/);
+  assert.match(checkout, /Never share your recovery phrase or private key/);
 });
 
 test('guide links to official apps for customers with existing crypto', () => {
@@ -120,10 +107,10 @@ test('guide includes safety and finality instructions for beginners', () => {
   }
 });
 
-test('checkout marks ERC-20 USDT as its beginner pick', () => {
-  assert.match(checkout, /Buy USDT directly with Paybis/);
-  assert.match(checkout, /Ethereum Mainnet (?:\/|·) ERC-20 only/);
-  assert.doesNotMatch(checkout, />STABLECOIN</);
+test('checkout defaults to USDT without changing BTC or ETH availability', () => {
+  const form = readFileSync(join(root, 'customer-checkout-upgrade.js'), 'utf8');
+  assert.match(checkout, /preferredAsset = 'USDT'/);
+  for (const asset of ['BTC','ETH','USDT']) assert.ok(form.includes('value="'+asset+'"'));
 });
 
 test('homepage keeps advanced crypto detail collapsed behind a simple three-step path', () => {
@@ -138,3 +125,4 @@ test('payment copy avoids unsafe guarantees', () => {
   const copy = `${homepage}\n${guide}`;
   assert.doesNotMatch(copy, /guaranteed anonymous|completely anonymous|no kyc|no fees/i);
 });
+

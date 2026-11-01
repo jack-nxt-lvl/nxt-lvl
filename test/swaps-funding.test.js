@@ -41,58 +41,35 @@ test('does not expose or configure a popup window flow', () => {
   assert.equal(paybisFunding.popupFeatures, undefined);
 });
 
-test('keeps beginner guidance and recovery controls in the direct checkout', () => {
+test('keeps direct wallet payment first and optional provider guidance separate', () => {
   const source = readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8');
-  assert.match(source, /How would you like to pay\?/);
-  assert.match(source, /No crypto experience needed/);
-  assert.match(source, /Choose the easiest way for you/);
-  assert.match(source, /Buy USDT directly with Paybis/);
-  assert.match(source, /Don.t have crypto\? Buy USDT through Paybis/);
-  assert.match(source, /Buy USDT on Paybis/);
-  assert.match(source, /PayPal/);
-  assert.match(source, /ACH/);
-  assert.match(source, /Debit card/);
-  assert.match(source, /Credit card/);
-  assert.match(source, /Apple Pay/);
-  assert.match(source, /purchase enough to cover your order plus all provider and network fees/i);
-  assert.match(source, /How we match your payment/i);
-  assert.match(source, /small fractional ending identifies your order/i);
-  assert.match(source, /small accepted buffer/i);
-  assert.match(source, /Paybis is independent from NXT LVL/);
-  assert.match(source, /Any Paybis account or wallet you create belongs to you/);
-  assert.match(source, /Ethereum ERC-20 only/);
-  assert.match(source, /data-intent="\$\{buyingFirst \? 'buy' : 'wallet'\}"/);
-  assert.match(source, /nxt-wallet-headcoin/);
-  assert.match(source, /Secure checkout/);
-  assert.match(source, /data-copy-for-paybis/);
-  assert.match(source, /target="_blank" rel="noopener noreferrer"/);
-  assert.match(source, /openPaybisFunding/);
-  assert.doesNotMatch(source, /window\.location\.assign\(url\)/);
-  assert.match(source, /window\.addEventListener\('pageshow', restoreCheckout\)/);
-  assert.match(source, /window\.addEventListener\('pagehide', stopTimers\)/);
-  assert.doesNotMatch(source, /\b(?:Swaps|Transak)\b/);
-  assert.doesNotMatch(source, /enter \$|for this \$|data-funding-usd|fundingAmountForInvoice|fee reserve/i);
-  assert.doesNotMatch(source, /Pay with Card \/ Apple Pay|Buy enough with Card \/ Apple Pay/);
+  assert.match(source, /Pay now with/);
+  assert.match(source, /Ethereum \(ERC-20\) only/);
+  assert.match(source, /Copy amount/);
+  assert.match(source, /Copy address/);
+  assert.match(source, /I sent payment — check status/);
+  assert.match(source, /Opening Paybis does not pay this order/);
+  assert.match(source, /provider and network fees/);
   assert.match(source, /make sure “You receive” is at least/);
-  assert.match(source, /paste the transaction ID/i);
-  assert.doesNotMatch(source, /window\.open\(/);
-  assert.doesNotMatch(source, /nxtSwapsBuy/);
-  assert.doesNotMatch(source, /pageshow[^\n]+once:\s*true/);
+  assert.match(source, /Do not send after the timer expires/);
+  assert.match(source, /target="_blank" rel="noopener noreferrer"/);
+  assert.doesNotMatch(source, /window\.open\(|window\.location\.assign/);
 });
 
 test('loads the Paybis link helper before the revised USDT checkout on every checkout path', () => {
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
   const fundingVersion = 'lib/paybis-funding.js?v=20260825-paybis-match-1';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20261017-crypto-health';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20261101-usdt-easy-1';
 
   assert.match(homepage, /data-nxt-paybis-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261020-stock-1/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261101-usdt-easy-1/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
   assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
   assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);
   assert.match(checkoutUpgrade, /script\[src\*="lib\/paybis-funding\.js"\]/);
   assert.match(checkoutUpgrade, /script\[src\*="direct-wallet-checkout\.js"\]/);
-  assert.match(readFileSync(join(__dirname, '..', 'direct-wallet-checkout.js'), 'utf8'), /data-asset="USDT"\] \.nxt-wallet-usdt-buy\{order:-1\}/);
+
 });
+

@@ -88,10 +88,10 @@ test('shows email delivery only when the hosted provider, webhook, ledger, and s
 
 test('public checkout offers crypto without exposing card collection or an approval-code field', () => {
  const source=require('fs').readFileSync(require('path').join(__dirname,'..','customer-checkout-upgrade.js'),'utf8');
- assert.match(source,/Continue to crypto payment/);
+ assert.match(source,/Pay now with/);
  assert.match(source,/researchConsent/);
  assert.doesNotMatch(source,/id="nxtResearchCode"|cardNumber|cvc|expiryMonth|payment-element/);
- assert.match(source,/direct-wallet-checkout\.js\?v=20261017-crypto-health/);
+ assert.match(source,/direct-wallet-checkout\.js\?v=20261101-usdt-easy-1/);
  assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
 });
 
@@ -269,3 +269,4 @@ test('verifies the signed raw Stripe webhook and ignores forged payloads', () =>
   assert.equal(stripeWebhookHandler.verifyStripeSignature(payload, `t=${timestamp},v1=${'0'.repeat(64)}`, process.env.STRIPE_WEBHOOK_SECRET, timestamp), false);
   assert.equal(stripeWebhookHandler.verifyStripeSignature(payload, `t=${timestamp - 600},v1=${signature}`, process.env.STRIPE_WEBHOOK_SECRET, timestamp), false);
 });
+
