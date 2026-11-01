@@ -149,6 +149,6 @@
       "permanent": true
     }
   ],
-  "buildCommand": "node scripts/build-catalog-pages.cjs",
+  "buildCommand": "npm test && npm run build",
   "outputDirectory": "."
 }

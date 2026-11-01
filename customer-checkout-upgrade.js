@@ -22,7 +22,7 @@
 
   const style = document.createElement('style');
   style.textContent = `
-    .nxt-checkout-overlay [hidden]{display:none!important}.nxt-checkout-card label{display:block;font-size:12px;color:#d9d7e3;line-height:1.6}.nxt-research-fields{margin:16px 0}.nxt-checkout-card textarea{width:100%;box-sizing:border-box;background:#15151f;color:white;border:1px solid #6d6088;border-radius:8px;padding:12px;font:inherit}.nxt-checkout-card a{color:#c4b5fd;text-decoration:underline}.nxt-approval-entry{margin:18px 0;padding:14px;border:1px solid #6d6088;border-radius:12px}.nxt-approval-entry summary{cursor:pointer;padding:8px}.nxt-approval-entry p{font-size:12px}.nxt-checkout-card .nxt-research-attestation{display:flex;gap:12px;margin:18px 0}.nxt-research-attestation input{width:20px!important;height:20px;min-height:20px!important;flex-shrink:0;margin-top:4px}.nxt-checkout-card :focus-visible{outline:3px solid #b9f5cf;outline-offset:3px}
+    .nxt-checkout-overlay [hidden]{display:none!important}.nxt-checkout-card label{display:block;font-size:12px;color:#d9d7e3;line-height:1.6}.nxt-research-fields{margin:16px 0}.nxt-checkout-card textarea{width:100%;box-sizing:border-box;background:#15151f;color:white;border:1px solid #6d6088;border-radius:8px;padding:12px;font:inherit}.nxt-checkout-card a{color:#c4b5fd;text-decoration:underline}.nxt-approval-entry{margin:18px 0;padding:14px;border:1px solid #6d6088;border-radius:12px}.nxt-approval-entry summary{cursor:pointer;padding:8px}.nxt-approval-entry p{font-size:12px}.nxt-checkout-card .nxt-research-attestation{display:flex;gap:12px;margin:18px 0}.nxt-research-attestation input{width:20px!important;height:20px;min-height:20px!important;flex-shrink:0;margin-top:4px}.nxt-checkout-card select{width:100%;min-height:50px;margin:8px 0 10px;padding:12px;background:#15151f;color:white;border:1px solid #7962a7;border-radius:10px;font-size:16px}.nxt-checkout-card [aria-invalid=true]{border-color:#fca5a5}.nxt-checkout-card :focus-visible{outline:3px solid #b9f5cf;outline-offset:3px}
     .nxt-checkout-overlay{position:fixed;inset:0;z-index:1000000;background:rgba(0,0,0,.84);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     .nxt-checkout-card{width:min(680px,96vw);max-height:94vh;overflow:auto;padding:28px;border-radius:22px;border:1px solid rgba(167,139,250,.34);background:radial-gradient(circle at 50% -15%,rgba(124,58,237,.18),transparent 42%),linear-gradient(155deg,#12121b,#090910);box-shadow:0 38px 110px rgba(0,0,0,.72);color:#fff;position:relative}
     .nxt-checkout-card:before{content:'';position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#2563eb,#8b5cf6,#d946ef)}
@@ -105,7 +105,7 @@
       label:'USDT funding checkout',
     });
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20261017-crypto-health',
+      src:'/direct-wallet-checkout.js?v=20261101-usdt-easy-1',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
@@ -115,10 +115,12 @@
 
   function loadCardLinkConfig(){
     if(!cardLinkConfigPromise){
-      cardLinkConfigPromise=fetch('/api/card-payment-link-config',{headers:{Accept:'application/json'}})
+      const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),12000);
+      cardLinkConfigPromise=fetch('/api/card-payment-link-config',{headers:{Accept:'application/json'},signal:controller.signal})
         .then(response=>response.ok?response.json():Promise.reject(new Error('Unavailable')))
         .then(data=>({cryptoAvailable:data.cryptoAvailable===true,available:Boolean(data.available),email:Boolean(data.email),sms:Boolean(data.sms),both:Boolean(data.both||data.email&&data.sms)}))
-        .catch(()=>({cryptoAvailable:false,available:false,email:false,sms:false,both:false}));
+        .catch(()=>({cryptoAvailable:false,available:false,email:false,sms:false,both:false}))
+        .finally(()=>clearTimeout(timeout));
     }
     return cardLinkConfigPromise;
   }
@@ -180,13 +182,14 @@
       const draft=readCheckoutDraft();
       let fulfillment=Object.prototype.hasOwnProperty.call(rates.OPTIONS,draft.fulfillment)?draft.fulfillment:'shipping';
       let paymentMethod='crypto';
+      let paymentAsset=['USDT','BTC','ETH'].includes(draft.paymentAsset)?draft.paymentAsset:'USDT';
       let linkChannel=cardConfig.both?'both':cardConfig.email?'email':'sms';
       const base=subtotal();
       const feeFor=mode=>rates.feeCents(mode,Math.round(base*100))/100;
       const overlay=document.createElement('div');
       overlay.className='nxt-checkout-overlay';
       overlay.innerHTML=`<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="researchReviewTitle">
-        <div class="nxt-checkout-kicker">Direct crypto checkout</div>
+        <div class="nxt-checkout-kicker">Step 1 of 2 · Your details</div>
         <h2 id="researchReviewTitle">Shipping &amp; order details</h2>
         <div class="nxt-checkout-intro">Enter your order information, then choose BTC, ETH, or USDT. Your payment screen shows the exact amount, network and receiving address. Research purchasers only. <a href="/how-to-order.html" target="_blank" rel="noopener">How to order &amp; pay</a>.</div>
         <div class="nxt-fulfillment-grid" role="group" aria-label="Shipping or delivery method">
@@ -196,7 +199,7 @@
         <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" autocomplete="address-line2" placeholder="Apt / Unit"><input id="nxtCity" autocomplete="address-level2" placeholder="City *"><input id="nxtState" autocomplete="address-level1" autocapitalize="characters" maxlength="2" placeholder="U.S. state code (FL, NY…) *"><input id="nxtZip" autocomplete="postal-code" inputmode="numeric" maxlength="10" placeholder="U.S. ZIP code *"></div></div>
         <div class="nxt-pickup-note">Provide your address for the order record, including pickup. Confirm local availability, pickup location, collector and appointment with support before payment or travel.</div>
         <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$${feeFor(fulfillment).toFixed(2)}</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+feeFor(fulfillment)).toFixed(2)}</span></div><div class="nxt-no-tax">Amounts are in USD. Confirm fulfillment and any applicable tax with support before payment. This checkout does not calculate sales tax.</div></div>
-        <div class="nxt-checkout-intro"><strong>Pay with BTC, ETH or USDT.</strong> Choose your crypto on the next screen. Card numbers are never entered on NXT LVL.</div>
+        <div class="nxt-payment-choice"><label for="nxtPaymentAsset"><strong>Pay directly to our wallet</strong></label><select id="nxtPaymentAsset" aria-describedby="nxtAssetNote"><option value="USDT">USDT · Ethereum (ERC-20)</option><option value="BTC">Bitcoin · Bitcoin Mainnet</option><option value="ETH">Ethereum · Ethereum Mainnet</option></select><p id="nxtAssetNote" class="nxt-checkout-intro">Next: your exact amount, receiving address and QR code. Your wallet asks you to confirm before sending.</p></div>
         <div class="nxt-checkout-intro nxt-final-sale"><strong>All sales final once an order is placed.</strong> No change-of-mind cancellations, returns, exchanges or refunds. Applicable legal rights remain. <a href="/ordering-policy.html#refunds" target="_blank" rel="noopener">Read the final-sale policy and required exceptions</a>.</div>
         <label class="nxt-research-attestation"><input id="nxtResearchAttestation" type="checkbox"><span>I am authorized to purchase these materials for legitimate laboratory research. They will not be used for human or veterinary consumption, administration, diagnosis or treatment, or supplied for personal use. I understand the final-sale policy and have read the <a href="/research-eligibility.html" target="_blank" rel="noopener">eligibility rules</a>, <a href="/ordering-policy.html" target="_blank" rel="noopener">ordering information</a> and <a href="/privacy.html" target="_blank" rel="noopener">privacy notice</a>.</span></label><div class="nxt-checkout-error" role="alert"></div>
         <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to payment →</button></div>
@@ -215,7 +218,7 @@
       Object.entries(fieldMap).forEach(([key,selector])=>{const input=overlay.querySelector(selector);if(input&&draft.customer&&draft.customer[key])input.value=draft.customer[key];});
       const saveDraft=()=>{
         const val=s=>(overlay.querySelector(s)?.value||'').trim();
-        writeCheckoutDraft({fulfillment,customer:{name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')}});
+        writeCheckoutDraft({fulfillment,paymentAsset,customer:{name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')}});
       };
       const refresh=()=>{
         const fee=feeFor(fulfillment);
@@ -226,8 +229,9 @@
         overlay.querySelectorAll('.nxt-link-channel').forEach(btn=>btn.classList.toggle('active',btn.dataset.channel===linkChannel));
         linkOptions?.classList.toggle('show',paymentMethod==='card-link');
         smsConsent?.closest('.nxt-link-consent')?.classList.toggle('show',paymentMethod==='card-link'&&(linkChannel==='sms'||linkChannel==='both'));
-        continueButton.textContent='Continue to crypto payment →';
+        continueButton.textContent='Pay now with '+paymentAsset+' →';
       };
+      const assetSelect=overlay.querySelector('#nxtPaymentAsset');assetSelect.value=paymentAsset;assetSelect.onchange=()=>{paymentAsset=assetSelect.value;refresh();saveDraft();};
       overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.onclick=()=>{fulfillment=btn.dataset.mode;refresh();saveDraft();});
       overlay.querySelectorAll('.nxt-payment-method').forEach(btn=>btn.onclick=()=>{paymentMethod=btn.dataset.payment;errorEl.classList.remove('show');refresh();});
       overlay.querySelectorAll('.nxt-link-channel').forEach(btn=>btn.onclick=()=>{linkChannel=btn.dataset.channel;errorEl.classList.remove('show');refresh();});
@@ -236,22 +240,25 @@
       overlay.querySelector('.nxt-checkout-continue').onclick=()=>{
         const val=s=>(overlay.querySelector(s)?.value||'').trim();
         const customer={name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')};
+        overlay.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));
+        const showFieldError=(message,selector)=>{errorEl.textContent=message;errorEl.classList.add('show');const field=overlay.querySelector(selector);field?.setAttribute('aria-invalid','true');field?.focus();field?.scrollIntoView({block:'center',behavior:'smooth'});};
+        const missingKey=['name','email','phone','address','city','state','zip'].find(key=>!customer[key]);
         const required=[customer.name,customer.email,customer.phone,customer.address,customer.city,customer.state,customer.zip];
-        if(required.some(v=>!v)){errorEl.textContent='Please complete your contact details and full U.S. address, including for pickup.';errorEl.classList.add('show');return;}
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)){errorEl.textContent='Please enter a valid email address.';errorEl.classList.add('show');return;}
+        if(required.some(v=>!v)){showFieldError('Please complete this required field.',fieldMap[missingKey]);return;}
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)){showFieldError('Please enter a valid email address.','#nxtEmail');return;}
         if(paymentMethod==='card-link'&&(linkChannel==='sms'||linkChannel==='both')&&!smsConsent?.checked){errorEl.textContent='Please agree to receive the one-time payment-link text.';errorEl.classList.add('show');return;}
         const researchConsent={attestation:overlay.querySelector('#nxtResearchAttestation').checked,policyVersion:'2026-10-17-final-sale'};
-        if(!researchConsent.attestation){errorEl.textContent='Please read and accept the research-use and ordering terms.';errorEl.classList.add('show');return;}
+        if(!researchConsent.attestation){showFieldError('Please read and accept the research-use and ordering terms.','#nxtResearchAttestation');return;}
         const regions='AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY AS GU MP PR VI AA AE AP'.split(' ');
         customer.state=customer.state.toUpperCase();
         if(!regions.includes(customer.state)||!/^\d{5}(?:-\d{4})?$/.test(customer.zip)){errorEl.textContent='Enter a valid U.S. state or territory code and ZIP code. We ship within the USA only.';errorEl.classList.add('show');return;}
         const shipping=feeFor(fulfillment);
-        writeCheckoutDraft({fulfillment,customer});
-        overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer,researchConsent,paymentMethod,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
+        writeCheckoutDraft({fulfillment,paymentAsset,customer});
+        overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer,researchConsent,paymentMethod,paymentAsset,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
       };
       const previousFocus=document.activeElement;
       overlay.querySelectorAll('.nxt-field-grid > input').forEach(input=>{const label=document.createElement('label');label.className=input.classList.contains('wide')?'wide':'';label.textContent=input.placeholder;input.before(label);label.appendChild(input);});
-      overlay.addEventListener('keydown',event=>{if(event.key==='Escape'){overlay.remove();previousFocus?.focus();resolve(null);}if(event.key==='Tab'){const fields=[...overlay.querySelectorAll('a,button,input,textarea,summary')].filter(el=>el.getClientRects().length&&!el.disabled);const first=fields[0],last=fields[fields.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
+      overlay.addEventListener('keydown',event=>{if(event.key==='Escape'){overlay.remove();previousFocus?.focus();resolve(null);}if(event.key==='Tab'){const fields=[...overlay.querySelectorAll('a,button,input,select,textarea,summary')].filter(el=>el.getClientRects().length&&!el.disabled);const first=fields[0],last=fields[fields.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
       document.body.appendChild(overlay);refresh();overlay.querySelector('#nxtName').focus();
     });
   }
@@ -289,7 +296,7 @@
       }
       return;
     }
-    try{await ensureDirectWallet();await window.startDirectWalletCheckout();}
+    try{await ensureDirectWallet();await window.startDirectWalletCheckout(details.paymentAsset || 'USDT');}
     catch(err){alert(err.message||'Unable to open direct-wallet checkout. Please try again.');}
     } finally { checkoutOpening=false; }
   }
@@ -298,8 +305,9 @@
 
   function bind(){
     const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtDirectWallet==='1')return;
-    btn.textContent='Checkout with crypto →';btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
+    btn.textContent='Pay now · USDT / BTC / ETH →';btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
   }
   setupCartPersistence();bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();
+
 
