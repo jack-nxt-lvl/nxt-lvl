@@ -56,19 +56,18 @@ test('keeps direct wallet payment first and optional provider guidance separate'
   assert.doesNotMatch(source, /window\.open\(|window\.location\.assign/);
 });
 
-test('loads the Paybis link helper before the revised USDT checkout on every checkout path', () => {
+test('loads optional Paybis help on the homepage without making it a direct-payment prerequisite', () => {
   const homepage = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
   const checkoutUpgrade = readFileSync(join(__dirname, '..', 'customer-checkout-upgrade.js'), 'utf8');
   const fundingVersion = 'lib/paybis-funding.js?v=20260825-paybis-match-1';
-  const checkoutVersion = 'direct-wallet-checkout.js?v=20261101-usdt-easy-1';
+  const checkoutVersion = 'direct-wallet-checkout.js?v=20261101-usdt-audit-2';
 
   assert.match(homepage, /data-nxt-paybis-funding="1"/);
   assert.match(homepage, /data-nxt-direct-wallet="1"/);
-  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261101-usdt-easy-1/);
+  assert.match(homepage, /customer-checkout-upgrade\.js\?v=20261101-usdt-audit-2/);
   assert.ok(homepage.indexOf(fundingVersion) < homepage.indexOf(checkoutVersion));
-  assert.ok(checkoutUpgrade.indexOf(fundingVersion) < checkoutUpgrade.indexOf(checkoutVersion));
-  assert.match(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);
-  assert.match(checkoutUpgrade, /script\[src\*="lib\/paybis-funding\.js"\]/);
+  assert.ok(checkoutUpgrade.includes(checkoutVersion));
+  assert.doesNotMatch(checkoutUpgrade, /ready:\(\)=>Boolean\(window\.NxtPaybisFunding\)/);
   assert.match(checkoutUpgrade, /script\[src\*="direct-wallet-checkout\.js"\]/);
 
 });

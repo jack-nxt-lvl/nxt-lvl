@@ -91,7 +91,7 @@ test('public checkout offers crypto without exposing card collection or an appro
  assert.match(source,/Pay now with/);
  assert.match(source,/researchConsent/);
  assert.doesNotMatch(source,/id="nxtResearchCode"|cardNumber|cvc|expiryMonth|payment-element/);
- assert.match(source,/direct-wallet-checkout\.js\?v=20261101-usdt-easy-1/);
+ assert.match(source,/direct-wallet-checkout\.js\?v=20261101-usdt-audit-2/);
  assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
 });
 

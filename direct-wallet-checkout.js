@@ -40,8 +40,8 @@
     try { return typeof cart !== 'undefined' && Array.isArray(cart) ? cart : (Array.isArray(window.cart) ? window.cart : []); }
     catch (_) { return []; }
   }
-  function saveActivePayment(quote, context, txid) {
-    try { sessionStorage.setItem(ACTIVE_PAYMENT_KEY, JSON.stringify({quote, context:{...context,details:{...context.details,researchApprovalCode:undefined,research:undefined}},txid:String(txid || ''),savedAt:Date.now()})); } catch (_) {}
+  function saveActivePayment(quote, context, txid, detectedTxid = '') {
+    try { sessionStorage.setItem(ACTIVE_PAYMENT_KEY, JSON.stringify({quote, context:{...context,details:{...context.details,researchApprovalCode:undefined,research:undefined}},txid:String(txid || ''),detectedTxid:String(detectedTxid || ''),savedAt:Date.now()})); } catch (_) {}
   }
   function readActivePayment() {
     try {
@@ -113,7 +113,7 @@
     const saved = readActivePayment(); if (!saved || active) return;
     const node = document.createElement('div'); node.className = 'nxt-wallet-resume';
     node.innerHTML = '<span>Your payment checkout is saved.</span><button type="button" data-resume>Resume</button><button type="button" class="dismiss" aria-label="Dismiss payment reminder">×</button>';
-    node.querySelector('[data-resume]').onclick = () => { const current = readActivePayment(); if (current) renderPayment(current.quote,current.context,current.txid); else node.remove(); };
+    node.querySelector('[data-resume]').onclick = () => { const current = readActivePayment(); if (current) renderPayment(current.quote,current.context,current.txid,current.detectedTxid); else node.remove(); };
     node.querySelector('.dismiss').onclick = () => node.remove(); document.body.appendChild(node);
   }
   function showError(message, retry) {
@@ -153,10 +153,11 @@
     session.overlay.innerHTML = `<div class="nxt-wallet-card" role="dialog" aria-modal="true" aria-labelledby="nxtPaidTitle"><div class="nxt-wallet-pad"><div class="nxt-wallet-kicker">Payment verified</div><h2 id="nxtPaidTitle">You’re all set ✓</h2><p>Order <strong>${escapeHtml(data.orderId)}</strong> is paid. ${email}</p><p>No further payment is needed.</p>${transactionUrl ? `<a href="${escapeHtml(transactionUrl)}" target="_blank" rel="noopener noreferrer">View confirmed transaction ↗</a>` : ''}<button type="button" class="nxt-wallet-primary">Done</button><a class="nxt-wallet-support" href="sms:+17542907210">Text us for order help</a></div></div>`;
     session.overlay.querySelector('button').onclick = closeActive; session.overlay.querySelector('button').focus();
   }
-  function renderPayment(quote, context, initialTxid = '') {
+  function renderPayment(quote, context, initialTxid = '', detectedTxid = '') {
+    initialTxid = initialTxid || detectedTxid;
     closeActive(); document.querySelector('.nxt-wallet-resume')?.remove();
     const previousFocus = document.activeElement;
-    const session = {quote,context,txid:initialTxid,timers:new Set(),controllers:new Set(),halted:false,previousFocus,checking:false,walletBusy:false};
+    const session = {quote,context,txid:initialTxid,detectedTxid,timers:new Set(),controllers:new Set(),halted:false,previousFocus,checking:false,walletBusy:false};
     const automaticDetection = quote.asset === 'BTC' || quote.asset === 'USDT';
     const network = quote.asset === 'USDT' ? 'Ethereum (ERC-20) only' : `${quote.network} only`;
     let paybisUrl = '';
@@ -177,9 +178,9 @@
         <ol class="nxt-wallet-stages" aria-label="Payment progress"><li data-payment-stage="awaiting">Waiting</li><li data-payment-stage="detected">Detected</li><li data-payment-stage="confirming">Confirming</li><li data-payment-stage="confirmed">Paid</li></ol>
         <details class="nxt-wallet-help" data-buy-help><summary>Need ${e(quote.asset)}? Buy with Paybis</summary><ol><li>Open Paybis below. It is a separate service and may require identity verification.</li><li>Choose <strong>${e(quote.asset)} on ${e(network)}</strong>. Purchase enough to cover your order plus provider and network fees.</li><li>Copy the address above if Paybis supports sending to it. Before confirming, make sure “You receive” is at least <strong>${e(quote.amount)} ${e(quote.asset)}</strong>. If you buy into your own wallet, return here for a current amount before sending.</li><li>Return here and tap <strong>I sent payment — check status</strong>. If the provider changed the amount, paste its transaction ID below.</li></ol><a class="nxt-wallet-secondary" data-buy-crypto ${paybisUrl ? `href="${e(paybisUrl)}"` : 'aria-disabled="true"'} target="_blank" rel="noopener noreferrer">Buy ${e(quote.asset)} on Paybis ↗</a><p>Paybis controls availability, fees, payment methods and verification times. Opening Paybis does not pay this order. Do not send after the timer expires.</p><div class="nxt-wallet-buy-status" data-buy-status role="status" aria-live="polite"></div></details>
         <details class="nxt-wallet-help nxt-wallet-verify"><summary>Payment sent but not detected?</summary><p>Do not pay twice. Use the transaction ID from your wallet or exchange, or text us for help.</p><label for="nxtWalletTxid">Transaction ID / hash</label><div class="nxt-wallet-verifyrow"><input id="nxtWalletTxid" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste transaction ID"><button type="button" class="nxt-wallet-secondary" data-verify>Verify payment</button></div></details>
-      </div><aside class="nxt-wallet-side"><details class="nxt-wallet-qr" ${window.matchMedia('(min-width:621px)').matches ? 'open' : ''}><summary>Scan with another device</summary><img src="${e(quote.qrDataUrl)}" alt="${e(quote.asset)} payment QR code with exact amount and network"><p>Scan in a compatible wallet. Check the amount and network before confirming.</p></details><p class="nxt-wallet-note nxt-wallet-order-id">Order ${e(quote.orderId)}</p><p class="nxt-wallet-note">The small fractional amount helps identify your order. Keep every decimal when you send.</p><p class="nxt-wallet-note">Never share your recovery phrase or private key.</p><a class="nxt-wallet-support" href="sms:+17542907210">Need help? Text us ↗</a></aside></div>
+      </div><aside class="nxt-wallet-side"><details class="nxt-wallet-qr" ${window.matchMedia('(min-width:621px)').matches ? 'open' : ''}><summary>Scan with another device</summary><img src="${e(quote.qrDataUrl)}" alt="${e(quote.asset)} payment QR code with exact amount and network"><p>Scan in a compatible wallet. Check the amount and network before confirming.</p></details><p class="nxt-wallet-note nxt-wallet-order-id">Order ${e(quote.orderId)}</p><p class="nxt-wallet-note">The small fractional amount helps identify your order. Keep every decimal when you send.</p><p class="nxt-wallet-note">Never share your recovery phrase or private key.</p><button type="button" class="nxt-wallet-secondary" data-edit>I haven’t paid — edit order</button><a class="nxt-wallet-support" href="sms:+17542907210">Need help? Text us ↗</a></aside></div>
     </div>`;
-    active = session; window.nxtCheckoutDetails = context.details; saveActivePayment(quote,context,initialTxid);
+    active = session; window.nxtCheckoutDetails = context.details; saveActivePayment(quote,context,initialTxid,detectedTxid);
     document.body.appendChild(overlay);
     session.status = overlay.querySelector('.nxt-wallet-status');
     const input = overlay.querySelector('#nxtWalletTxid'); input.value = initialTxid;
@@ -191,31 +192,46 @@
     const expire = () => Date.now() >= Number(quote.expiresAt);
     const current = () => active === session && !session.halted;
     const paymentBody = () => ({quoteToken:quote.quoteToken,fulfillment:context.details.fulfillment,customer:context.details.customer,items:context.items});
-    const dismiss = () => { closeActive(); showResumePrompt(); };
+    const dismiss = () => {
+      if (session.walletBusy) { setStatus(session,'Finish or cancel the request in your wallet before closing checkout.'); return; }
+      closeActive(); showResumePrompt();
+    };
     overlay.querySelector('.nxt-wallet-close').onclick = dismiss; trapFocus(overlay,dismiss);
     overlay.querySelector('.nxt-wallet-close').focus();
     setPaymentStage(session,initialTxid ? 'detected' : 'awaiting');
 
     for (const [selector,value] of [['[data-copy-amount]',quote.amount],['[data-copy-address]',quote.address]]) {
-      overlay.querySelector(selector).onclick = event => { if (!expire()) copyText(value,event.currentTarget); else updateTimer(); };
+      overlay.querySelector(selector).onclick = event => { if (!expire() && !session.txid && !session.detectedTxid && !session.walletBusy) copyText(value,event.currentTarget); else updateTimer(); };
     }
     openWallet.onclick = event => {
-      if (expire()) { event.preventDefault(); updateTimer(); return; }
+      if (expire() || session.txid || session.detectedTxid || session.walletBusy) { event.preventDefault(); updateTimer(); return; }
       setStatus(session,'Review the amount and network in your wallet. After sending, return here. Do not send twice.');
     };
     buyLink.onclick = event => {
-      if (expire() || !paybisUrl) { event.preventDefault(); updateTimer(); return; }
-      saveActivePayment(quote,context,input.value.trim());
+      if (expire() || session.txid || session.detectedTxid || session.walletBusy || !paybisUrl) { event.preventDefault(); updateTimer(); return; }
+      saveActivePayment(quote,context,input.value.trim(),session.detectedTxid);
       overlay.querySelector('[data-buy-status]').textContent = 'Paybis opens in a new tab. Your order is still unpaid. Return here to check the payment, and do not reuse expired instructions.';
     };
-    overlay.querySelector('[data-refresh]').onclick = () => { if (session.txid || session.walletBusy) return; closeActive(); start(quote.asset,context); };
-    input.addEventListener('input',() => { session.txid = input.value.trim(); saveActivePayment(quote,context,session.txid); });
+    overlay.querySelector('[data-refresh]').onclick = () => { if (session.txid || session.detectedTxid || session.walletBusy) return; closeActive(); clearActivePayment(); start(quote.asset,context); };
+    overlay.querySelector('[data-edit]').onclick = () => { if (session.txid || session.detectedTxid || session.walletBusy) return; closeActive(); clearActivePayment(); window.proceedToCheckout?.(); };
+    input.addEventListener('input',() => {
+      session.txid = input.value.trim(); input.removeAttribute('aria-invalid');
+      saveActivePayment(quote,context,session.txid,session.detectedTxid); updateTimer();
+    });
 
     let pollingTimer = null;
     async function check(manual = false) {
       if (!current() || session.checking) return;
       if (pollingTimer) { clearTimeout(pollingTimer); session.timers.delete(pollingTimer); pollingTimer = null; }
-      const txid = input.value.trim();
+      const enteredTxid = input.value.trim();
+      const validTxid = /^(?:0x)?[a-fA-F0-9]{64}$/.test(enteredTxid);
+      if (manual && enteredTxid && !validTxid) {
+        overlay.querySelector('.nxt-wallet-verify').open = true; input.setAttribute('aria-invalid','true'); input.focus();
+        setStatus(session,'Use the 64-character transaction ID from your wallet, not a wallet address or order number.','bad');
+        if (automaticDetection) pollingTimer = later(session,() => check(),4000);
+        return;
+      }
+      const txid = validTxid ? enteredTxid : session.detectedTxid;
       if (!txid && !automaticDetection) {
         setStatus(session,'Paste your transaction ID below, or pay with your browser wallet to fill it automatically.');
         if (manual) { overlay.querySelector('.nxt-wallet-verify').open = true; input.focus(); }
@@ -229,16 +245,18 @@
         if (!current()) return;
         if (txid && response.ok && data.status === 'paid') { showSuccess(session,data); return; }
         if (!txid && response.ok && data.status === 'found' && data.txid) {
-          input.value = data.txid; session.txid = data.txid; saveActivePayment(quote,context,data.txid); updateTimer();
+          input.value = data.txid; session.txid = data.txid; session.detectedTxid = data.txid; saveActivePayment(quote,context,data.txid,data.txid); updateTimer();
           setPaymentStage(session,'detected'); setStatus(session,'Payment detected. Waiting for blockchain confirmation. Do not send again.','good');
           later(session,() => check(),500); retry = false; return;
         }
         if (response.status === 202) {
           if (data.status === 'manual_review') {
+            session.detectedTxid = txid; saveActivePayment(quote,context,txid,txid); updateTimer();
             retry = false; setPaymentStage(session,'detected');
             setStatus(session,data.message || 'Your transfer needs review. Do not send again; contact support with your order number.','bad');
           } else if (txid) {
             const confirming = ['confirming','provider_disagreement','reorged'].includes(data.status);
+            if (confirming) { session.detectedTxid = txid; saveActivePayment(quote,context,txid,txid); updateTimer(); }
             setPaymentStage(session,confirming ? 'confirming' : 'detected');
             setStatus(session,data.message || 'Your transfer is being checked. Do not send again.');
           } else {
@@ -254,7 +272,7 @@
         session.checking = false;
         if (current()) {
           checkButton.disabled = false; verifyButton.disabled = false;
-          overlay.querySelector('[data-refresh]').disabled = Boolean(session.txid || session.walletBusy);
+          overlay.querySelector('[data-refresh]').disabled = Boolean(session.txid || session.detectedTxid || session.walletBusy);
           if (retry && Date.now() < Number(quote.expiresAt) + QUOTE_RECOVERY_MS) pollingTimer = later(session,() => check(),txid ? 12000 : 4000);
         }
       }
@@ -267,8 +285,8 @@
     };
     input.addEventListener('keydown',event => { if (event.key === 'Enter') verifyButton.click(); });
     browserButton.onclick = async () => {
-      if (!current() || session.walletBusy || expire()) return;
-      session.walletBusy = true; browserButton.disabled = true;
+      if (!current() || session.walletBusy || session.txid || session.detectedTxid || expire()) return;
+      session.walletBusy = true; updateTimer();
       try {
         const provider = window.ethereum;
         if (!provider) throw new Error('No browser wallet found. Use Open my wallet or copy the payment details.');
@@ -281,6 +299,7 @@
         if (String(chainId).toLowerCase() !== '0x1') await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x1'}]});
         if (!current()) return;
         if (expire()) throw new Error('This amount expired while connecting. Get a new amount before sending.');
+        if (session.txid || session.detectedTxid) { setStatus(session,'A transfer is already being checked. Do not send another payment.'); return; }
         const target = String(quote.address).toLowerCase().replace(/^0x/,'').padStart(64,'0');
         const units = BigInt(quote.amountUnits).toString(16);
         const tx = quote.asset === 'ETH' ? {from,to:quote.address,value:`0x${units}`} : {from,to:USDT_CONTRACT,value:'0x0',data:`0xa9059cbb${target}${units.padStart(64,'0')}`};
@@ -288,25 +307,29 @@
         const txid = await provider.request({method:'eth_sendTransaction',params:[tx]});
         // A wallet may finish while the checkout is closed. Preserve its hash without replacing a newer order.
         const saved = readActivePayment();
-        if (saved?.quote.quoteToken === quote.quoteToken) saveActivePayment(quote,context,txid);
+        if (saved?.quote.quoteToken === quote.quoteToken) saveActivePayment(quote,context,txid,txid);
         if (!current()) return;
-        input.value = txid; session.txid = txid; setPaymentStage(session,'detected');
+        input.value = txid; session.txid = txid; session.detectedTxid = txid; updateTimer(); setPaymentStage(session,'detected');
         setStatus(session,'Payment submitted. Waiting for confirmation. Do not send again.','good'); await check();
       } catch (error) {
         if (current()) setStatus(session,Number(error.code) === 4001 ? 'Wallet request cancelled. No payment was confirmed here. You can try again.' : (error.message || 'Unable to open your wallet. Copy the details to pay instead.'),'bad');
-      } finally { session.walletBusy = false; if (current()) browserButton.disabled = expire() || Boolean(session.txid); }
+      } finally { session.walletBusy = false; if (current()) updateTimer(); }
     };
     function updateTimer(schedule = false) {
       if (!current()) return;
       const remaining = Math.max(0,Number(quote.expiresAt) - Date.now());
       overlay.querySelector('#nxtWalletTimer').textContent = remaining ? `Send within ${Math.floor(remaining / 60000)}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2,'0')}` : 'Amount expired';
-      const sent = Boolean(session.txid);
-      for (const selector of ['[data-copy-amount]','[data-copy-address]']) overlay.querySelector(selector).disabled = !remaining || sent;
+      const sent = Boolean(session.txid || session.detectedTxid);
+      const paymentLocked = sent || session.walletBusy;
+      for (const selector of ['[data-copy-amount]','[data-copy-address]']) overlay.querySelector(selector).disabled = !remaining || paymentLocked;
       browserButton.disabled = !remaining || sent || session.walletBusy;
       for (const link of [openWallet,buyLink]) {
-        if (!remaining || sent) { link.removeAttribute('href'); link.setAttribute('aria-disabled','true'); }
+        const href = link === openWallet ? quote.paymentUri : paybisUrl;
+        if (!remaining || paymentLocked || !href) { link.removeAttribute('href'); link.setAttribute('aria-disabled','true'); }
+        else { link.setAttribute('href',href); link.removeAttribute('aria-disabled'); }
       }
-      overlay.querySelector('.nxt-wallet-qr').hidden = !remaining || sent;
+      overlay.querySelector('.nxt-wallet-qr').hidden = !remaining || paymentLocked;
+      overlay.querySelector('[data-edit]').hidden = paymentLocked;
       overlay.querySelector('[data-expired]').hidden = Boolean(remaining) || sent;
       overlay.querySelector('[data-refresh]').disabled = sent || session.walletBusy;
       if (schedule) later(session,() => updateTimer(true),1000);
@@ -333,8 +356,13 @@
     finally { loading.remove(); working = false; }
   }
   window.startDirectWalletCheckout = start;
+  window.resumeDirectWalletCheckout = () => {
+    const saved = readActivePayment(); if (!saved) return false;
+    if (!active || active.halted) renderPayment(saved.quote,saved.context,saved.txid,saved.detectedTxid);
+    return true;
+  };
   const restoreCheckout = () => {
-    if (active?.halted && active.quote) { const saved = readActivePayment(); if (saved) renderPayment(saved.quote,saved.context,saved.txid); }
+    if (active?.halted && active.quote) { const saved = readActivePayment(); if (saved) renderPayment(saved.quote,saved.context,saved.txid,saved.detectedTxid); }
     else showResumePrompt();
   };
   window.addEventListener('pageshow',restoreCheckout);
