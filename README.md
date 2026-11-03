@@ -201,3 +201,7 @@ Cards and Apple Pay are not activated by this change. The forthcoming merchant
 provider needs its actual integration documentation, approved account configuration
 and verified payment callbacks before enabling a new payment option. Existing
 payment verification, research eligibility and quote recovery remain in place.
+
+### Research reference content
+
+Material-specific notes, original literature links, comparison questions and the explicit sample-report mapping are maintained in `scripts/research-content.cjs`. Literature is context, not evidence for a stock lot. Keep report links restricted to the correct labeled presentation and disclose BTLabs verification. Update source-check dates only after reviewing the relevant sources. Regenerate with `node scripts/build-catalog-pages.cjs`; the material-reference tests check catalog coverage, citations, unique sections and report assignment.

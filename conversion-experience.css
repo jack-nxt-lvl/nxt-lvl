@@ -1,4 +1,20 @@
 /* Buying information shared by the storefront and static landing pages. */
+.research-reference{margin:42px 0;padding:28px;border:1px solid #365343;border-radius:16px;background:#101c17;scroll-margin-top:100px;color:#dfebe3}
+.research-reference h2{font-size:clamp(25px,3.4vw,37px);line-height:1.18;color:#f3faf5;max-width:28ch}
+.research-reference h3{margin:28px 0 12px;font-size:19px;color:#d3f9dd}
+.research-reference p,.research-reference li{font-size:16px;line-height:1.75;max-width:82ch}
+.research-reference a,.research-report-links a{color:#c0f1ce;text-underline-offset:4px;overflow-wrap:anywhere}
+.research-overview{font-size:18px!important}
+.research-citations{border-left:3px solid #83b994;padding:0 0 0 20px;margin:24px 0}
+.research-citations li,.research-checks li,.research-report-links li{margin:10px 0}
+.research-citations p,.research-compare-note,.research-editorial-note{font-size:13px!important;color:#b6c9bd}
+.research-question{margin:26px 0;border-top:1px solid #365343;border-bottom:1px solid #365343;padding:18px 0}
+.research-question summary{font-size:17px;font-weight:600;line-height:1.5;cursor:pointer;min-height:30px;color:#f1f7f4}
+.research-topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 32px}
+nav.research-jumps{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:10px;margin:20px 0;padding:0;position:static;border:0;background:none}
+.research-jumps a{min-height:44px;display:inline-flex;align-items:center;border:1px solid #3d5747;border-radius:8px;padding:8px 14px;color:#d3f9dd;text-decoration:none;font-size:14px}
+.research-reference a:focus-visible,.research-jumps a:focus-visible,.research-question summary:focus-visible{outline:2px solid #c0f1ce;outline-offset:5px}
+@media(max-width:640px){.research-reference{padding:20px 17px;margin:30px 0}.research-topic-grid{grid-template-columns:minmax(0,1fr)}.research-citations{padding-left:14px}.research-reference ul{padding-left:20px}.research-jumps a{font-size:13px;padding:8px 10px}}
 .nxt-value-line{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;color:#d6f4e2;font:600 13px/1.6 Inter,system-ui,sans-serif}
 .nxt-value-line a{color:inherit;text-decoration:underline;text-underline-offset:4px}
 .nxt-value-line span{border:1px solid #365343;border-radius:8px;padding:8px 12px;background:#0d2218}

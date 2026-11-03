@@ -5,6 +5,7 @@ const path = require('node:path');
 const {catalog,build} = require('../scripts/build-catalog-pages.cjs');
 const {normalizeOrder} = require('../lib/direct-payment');
 const cart = require('../cart-storage');
+const research = require('../scripts/research-content.cjs');
 const root = path.join(__dirname,'..');
 const read = file => fs.readFileSync(path.join(root,file),'utf8');
 const graph = html => JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
@@ -71,4 +72,37 @@ test('cart storage rejects malformed selections and propagates storage denial fo
  assert.throws(()=>cart.add(storage,'bpc157-10',10),/Invalid/);
  assert.throws(()=>cart.add({getItem(){throw new Error('blocked');}},'bpc157-10',0),/blocked/);
  assert.deepEqual(cart.normalize([{productId:'bpc157-10',pricingIndex:0,qty:19},{productId:'bpc157-10',pricingIndex:0,qty:8},{productId:'bpc157-10',pricingIndex:-1,qty:1}]),[{productId:'bpc157-10',pricingIndex:0,qty:20}]);
+});
+
+test('every catalog material renders its own reference content and working literature citations',()=>{
+ const products=catalog();
+ assert.deepEqual(Object.keys(research.records).sort(),products.map(p=>p.id).sort());
+ assert.equal(new Set(Object.values(research.records).map(r=>r.overview)).size,products.length);
+ for(const p of products){
+  const html=read(p.path.slice(1)), r=research.get(p.id);
+  assert.equal((html.match(/id="research-overview"/g)||[]).length,1,p.id);
+  assert.equal((html.match(/id="docsTitle"/g)||[]).length,1,p.id);
+  assert.equal((html.match(/aria-label="On this product page"/g)||[]).length,1,p.id);
+  const page=graph(html).find(n=>n['@type']==='WebPage');
+  assert.deepEqual(page.citation,r.sources.map(key=>research.sources[key][0]));
+  for(const url of page.citation)assert.ok(html.includes('href="'+url.replace(/&/g,'&amp;')+'"'),p.id+': '+url);
+  for(const id of r.related)assert.ok(html.includes('href="'+products.find(p=>p.id===id).path+'"'),id);
+  assert.doesNotMatch(html,/continuing to direct crypto checkout|class="section catalog-detail-actions"/);
+ }
+});
+
+test('published sample reports are linked only to the matching labeled presentations',()=>{
+ const linked=catalog().filter(p=>/verify\.btlabtesting\.com\/view-pdf/.test(read(p.path.slice(1)))).map(p=>p.id).sort();
+ assert.deepEqual(linked,['retatrutide-20','tb500-10']);
+ for(const p of catalog()){
+  const html=read(p.path.slice(1));
+  for(const r of Object.values(research.reports)){
+   const expected=(research.get(p.id).reports||[]).some(key=>research.reports[key]===r);
+   assert.equal(html.includes('href="'+r.url.replace(/&/g,'&amp;')+'"'),expected,p.id+' '+r.id);
+  }
+ }
+ assert.match(read('research/retatrutide-10mg.html'),/20mg samples/);
+ assert.match(read('research/glow-70mg.html'),/does not publish a component-by-component formula/);
+ assert.match(read('research/tb-500-bpc-157.html'),/does not specify the mass of each component/);
+ assert.match(read('.vercelignore'),/!scripts\/research-content\.cjs/);
 });

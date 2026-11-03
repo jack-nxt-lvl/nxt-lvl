@@ -2,6 +2,7 @@ scripts/*
 !scripts/build-catalog-pages.cjs
 !scripts/catalog-paths.json
 !scripts/seo-content.cjs
+!scripts/research-content.cjs
 test/
 docs/
 README.md
