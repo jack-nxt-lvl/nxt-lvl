@@ -28,7 +28,7 @@ test('keeps the AI chat attached to the visible iPhone viewport while typing', (
   assert.match(mobile, /window\.visualViewport\?\.addEventListener\('resize'/);
   assert.match(mobile, /viewport\?\.offsetTop/);
   assert.match(index, /enterkeyhint="send"/);
-  assert.match(index, /mobile-app-upgrade\.js\?v=20260822-4/);
+  assert.match(index, /mobile-app-upgrade\.js\?v=20261102-home-about/);
 });
 
 test('pauses expensive page effects while the mobile chat is open', () => {

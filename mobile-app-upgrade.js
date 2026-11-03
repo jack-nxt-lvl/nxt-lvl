@@ -378,7 +378,7 @@
   `;
   document.head.appendChild(style);
 
-  const hero = document.querySelector('.hero');
+  const hero = document.getElementById('home') || document.querySelector('.hero');
   if (hero && !hero.id) hero.id = 'home';
 
   const tabbar = document.createElement('div');

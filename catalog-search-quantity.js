@@ -128,6 +128,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
   }
   if (!wrap) return;
 
+  const searchSlot = document.querySelector('.home-search-slot');
+  if (searchSlot) searchSlot.appendChild(wrap);
   wrap.className = 'nxt-product-search';
   wrap.innerHTML = `
     <div class="nxt-search-shell">
@@ -149,7 +151,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
   const sorting = document.createElement('div');
   sorting.className = 'pro-sort';
   sorting.innerHTML = '<label for="catalogSort">Sort products</label><select id="catalogSort"><option value="featured">Featured</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
-  document.getElementById('filterBar')?.insertAdjacentElement('afterend', sorting);
+  const sortSlot = document.querySelector('.home-sort-slot');
+  if (sortSlot) sortSlot.appendChild(sorting);
+  else document.getElementById('filterBar')?.insertAdjacentElement('afterend', sorting);
   sorting.querySelector('select').addEventListener('change', (event) => {
     window.nxtCatalogSort = event.target.value;
     renderGrid(input.value ? 'all' : selectedCategory());
