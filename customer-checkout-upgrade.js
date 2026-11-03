@@ -98,7 +98,7 @@
 
   async function ensureDirectWallet(){
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20261101-usdt-audit-2',
+      src:'/direct-wallet-checkout.js?v=20261102-pricing',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
@@ -169,7 +169,7 @@
   }
 
   async function collectCheckoutDetails(cardConfig){
-    await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261016-rates',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
+    await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261102-pricing',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
     const rates=window.NxtFulfillment;
     return new Promise(resolve=>{
       const draft=readCheckoutDraft();
@@ -187,7 +187,7 @@
         <div class="nxt-checkout-intro">Enter your order information, then choose BTC, ETH, or USDT. Your payment screen shows the exact amount, network and receiving address. Research purchasers only. <a href="/how-to-order.html" target="_blank" rel="noopener">How to order &amp; pay</a>.</div>
         <div class="nxt-fulfillment-grid" role="group" aria-label="Shipping or delivery method">
           ${Object.entries(rates.OPTIONS).map(([mode,option])=>`<button type="button" class="nxt-fulfillment" data-mode="${mode}" aria-pressed="false"><strong>${option.label}</strong><span>${option.note}</span><span class="price">${feeFor(mode)===0?'Free':'$'+feeFor(mode).toFixed(2)}</span></button>`).join('')}
-        </div><p class="nxt-checkout-intro">Free shipping and local delivery on merchandise subtotals above $475, including overnight where available. At exactly $475, the listed rate applies. Local delivery, pickup and overnight timing must be confirmed before payment. <a href="/ordering-policy.html#fulfillment" target="_blank" rel="noopener">Shipping &amp; delivery details</a></p>
+        </div><p class="nxt-checkout-intro">Free standard U.S. shipping on merchandise subtotals over $200 after discounts. Overnight and local delivery retain the free threshold above $475. Exactly $200 pays $12 standard shipping; exactly $475 pays the listed overnight or delivery rate. Local delivery, pickup and overnight timing must be confirmed before payment. <a href="/ordering-policy.html#fulfillment" target="_blank" rel="noopener">Shipping &amp; delivery details</a></p>
         <div class="nxt-field-grid"><input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *"><input id="nxtEmail" type="email" inputmode="email" enterkeyhint="next" autocomplete="email" placeholder="Email *"><input id="nxtPhone" type="tel" inputmode="tel" enterkeyhint="next" autocomplete="tel" placeholder="Phone number *"></div>
         <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" autocomplete="address-line2" placeholder="Apt / Unit"><input id="nxtCity" autocomplete="address-level2" placeholder="City *"><input id="nxtState" autocomplete="address-level1" autocapitalize="characters" maxlength="2" placeholder="U.S. state code (FL, NY…) *"><input id="nxtZip" autocomplete="postal-code" inputmode="numeric" maxlength="10" placeholder="U.S. ZIP code *"></div></div>
         <div class="nxt-pickup-note">Provide your address for the order record, including pickup. Confirm local availability, pickup location, collector and appointment with support before payment or travel.</div>
@@ -198,6 +198,21 @@
         <div class="nxt-checkout-actions"><button type="button" class="nxt-checkout-cancel">Cancel</button><button type="button" class="nxt-checkout-continue">Continue to payment →</button></div>
       </div>`;
 
+      const waterProduct=typeof compounds!=='undefined' && compounds.find(p=>p.id==='bac-water-10ml');
+      const waterPresent=cart.some(p=>p.productId==='bac-water-10ml');
+      const needsWaterReminder=cart.some(item=>compounds.some(p=>p.id===item.productId && ['freeze-dried','research-packages'].includes(p.category)));
+      if(waterProduct && needsWaterReminder){
+        const reminder=document.createElement('aside');
+        reminder.className='package-supply-reminder';
+        reminder.setAttribute('aria-label','Optional bacteriostatic water');
+        reminder.innerHTML=waterPresent ? '<p><strong>Bacteriostatic water is in your cart.</strong> Review its quantity before payment.</p>' : `<strong>Does your laboratory need bacteriostatic water?</strong><p>Optional, sold separately. 1 × 10mL vial · $${waterProduct.pricing[0].price.toFixed(2)}. Review suitability and lot documentation. Nothing is added automatically.</p><button type="button" id="checkoutAddWater">Add water &amp; review updated order</button>`;
+        overlay.querySelector('.nxt-order-summary').before(reminder);
+        reminder.querySelector('button')?.addEventListener('click',()=>{
+          overlay.querySelector('.nxt-checkout-cancel').click();
+          if(!cart.some(p=>p.productId==='bac-water-10ml'))addLineToCart(waterProduct,0,1);
+          if(typeof openCart==='function')openCart();
+        });
+      }
       const addressWrap=overlay.querySelector('.nxt-address-fields');
       const pickupNote=overlay.querySelector('.nxt-pickup-note');
       const shippingLabel=overlay.querySelector('#nxtShippingLabel');

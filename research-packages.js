@@ -7,6 +7,8 @@
     { id:'pack-bpc157-tb500', name:'BPC-157 10mg + TB-500 10mg', ids:['bpc157-10','tb500-10'] },
     { id:'pack-cjc-no-dac-ipamorelin', name:'CJC-1295 without DAC 10mg + Ipamorelin 10mg', ids:['cjc1295-no-dac-10','ipamorelin'] },
     { id:'pack-tesamorelin-ipamorelin', name:'Tesamorelin 10mg + Ipamorelin 10mg', ids:['tesamorelin-10','ipamorelin'] },
+    { id:'pack-copper-materials', name:'GHK-Cu 50mg + GHK-Cu 100mg — copper materials', ids:['ghk-cu-50','ghk-cu-100'] },
+    { id:'pack-peptide-materials', name:'BPC-157 10mg + KPV 10mg — peptide materials', ids:['bpc157-10','kpv-10'] },
     { id:'pack-sermorelin-ipamorelin', name:'Sermorelin 10mg + Ipamorelin 10mg', ids:['sermorelin','ipamorelin'] },
   ].map(d=>Object.freeze({...d,ids:Object.freeze(d.ids)})));
 
@@ -18,7 +20,7 @@
         const single=product?.pricing?.find(p=>/^1 Vial\b/i.test(p.label));
         const unitCents=Math.round(Number(single?.price)*100);
         if(!product||!Number.isSafeInteger(unitCents)||unitCents<=0) throw new Error('Missing package component: '+id);
-        return {productId:id,name:product.name,amount:'10mg per vial',quantity:1,unitCents};
+        return {productId:id,name:product.name,amount:product.amount || '10mg per vial',quantity:1,unitCents};
       });
       const singlesCents=components.reduce((sum,c)=>sum+c.unitCents*c.quantity,0);
       const packageCents=Math.round(singlesCents*(100-DISCOUNT_PERCENT)/100);
@@ -26,7 +28,7 @@
       return {
         id:definition.id,name:definition.name+' — research pack',category:'research-packages',
         path:'/research-package-deals.html#'+definition.id,
-        amount:'2 separate vials · 10mg per vial',form:'Separate lyophilized materials',
+        amount:'2 separate vials · amounts listed per component',form:'Separate lyophilized materials',
         aka:'5% package savings · '+contents,shortDesc:contents+'. Separate labeled vials for laboratory procurement.',
         description:contents+'. This package contains one vial of each named material. The price includes 5% savings compared with the current individual single-vial prices. In stock. Review the lot documentation of each component before payment. A shared purchase does not establish compatibility or suitability for combined use. No solvent or administration supplies are included.',
         badge:'In stock · Save 5%',availabilityNote:'In stock · Ready to ship. Dispatch in 1–2 business days after acceptance and payment; transit is additional. Review lot documentation before ordering.',tags:['Separate vials','5% package savings'],protocols:[],benefits:[],sideEffects:[],suggestedCompanions:[],

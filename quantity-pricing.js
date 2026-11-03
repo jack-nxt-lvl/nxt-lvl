@@ -3,13 +3,14 @@
 
   const CATEGORY_LIMITS = Object.freeze({
     'freeze-dried': 10,
+    supplies: 10,
     injectables: 5,
   });
 
   function discountPercentForQuantity(quantity) {
     const qty = Number(quantity);
     if (!Number.isInteger(qty) || qty <= 1) return 0;
-    return qty === 2 ? 2 : Math.min(qty, 10);
+    return qty === 2 ? 2 : qty < 5 ? 5 : qty < 10 ? 8 : 12;
   }
 
   function money(value) {

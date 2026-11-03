@@ -9,22 +9,24 @@ const {buildQuantityPricing} = require('../quantity-pricing');
 const {normalizeOrder} = require('../lib/direct-payment');
 const read = file => fs.readFileSync(path.join(__dirname,'..',file),'utf8');
 const expected = [
- ['pack-bpc157-tb500',23345,22178,1167],
- ['pack-cjc-no-dac-ipamorelin',24149,22942,1207],
- ['pack-tesamorelin-ipamorelin',21735,20648,1087],
- ['pack-sermorelin-ipamorelin',20125,19119,1006],
+ ['pack-bpc157-tb500',24800,23560,1240],
+ ['pack-cjc-no-dac-ipamorelin',21800,20710,1090],
+ ['pack-tesamorelin-ipamorelin',21800,20710,1090],
+ ['pack-sermorelin-ipamorelin',21800,20710,1090],
+ ['pack-copper-materials',17800,16910,890],
+ ['pack-peptide-materials',18800,17860,940],
 ];
 
-test('four package prices are derived from their exact single-vial contents',()=>{
+test('six package prices are derived from their exact single-vial contents',()=>{
  const packages=buildResearchPackages(catalog());
- assert.equal(packages.length,4);
+ assert.equal(packages.length,6);
  for(const [id,singles,total,savings] of expected){
   const p=packages.find(item=>item.id===id);
   assert.equal(p.singlesCents,singles);
   assert.equal(p.packageCents,total);
   assert.equal(p.savingsCents,savings);
   assert.equal(p.components.length,2);
-  assert.ok(p.components.every(c=>c.quantity===1 && c.amount==='10mg per vial'));
+  assert.ok(p.components.every(c=>c.quantity===1 && /per vial/.test(c.amount)));
   assert.equal(p.pricing.length,1);
   assert.equal(p.pricing[0].price,total/100);
   assert.deepEqual(buildQuantityPricing(p,p.category),p.pricing,'quantity tiers must not discount a package again');
@@ -44,16 +46,16 @@ test('trusted checkout ignores spoofed prices and retains package fulfillment co
 
 test('package quantities, mixed carts and fulfillment use discounted totals',()=>{
  const below=normalizeOrder([{key:'pack-bpc157-tb500::0',qty:2}],'overnight');
- assert.equal(below.subtotalCents,44356);
+ assert.equal(below.subtotalCents,47120);
  assert.equal(below.shippingCents,3000);
- assert.equal(below.totalCents,47356);
+ assert.equal(below.totalCents,50120);
  const above=normalizeOrder([{key:'pack-bpc157-tb500::0',qty:2},{key:'bpc157-10::0',qty:1}],'overnight');
- assert.equal(above.subtotalCents,54821);
+ assert.equal(above.subtotalCents,58020);
  assert.equal(above.shippingCents,0);
  for(const mode of ['shipping','overnight','local-delivery','pickup']){
   const order=normalizeOrder([{key:'pack-sermorelin-ipamorelin::0',qty:3}],mode);
-  assert.equal(order.subtotalCents,57357);
-  assert.equal(order.totalCents,57357);
+  assert.equal(order.subtotalCents,62130);
+  assert.equal(order.totalCents,62130);
  }
 });
 
@@ -61,21 +63,21 @@ test('optional 10mL water remains a separately priced line alongside every packa
  for(const [id,,cents] of expected){
   const order=normalizeOrder([{key:id+'::0',qty:1},{key:'bac-water-10ml::0',qty:1,price:0}],'shipping');
   assert.equal(order.normalizedItems[0].unitCents,cents);
-  assert.equal(order.normalizedItems[1].unitCents,1610);
+  assert.equal(order.normalizedItems[1].unitCents,1900);
   assert.equal(order.normalizedItems[1].quantity,1);
-  assert.equal(order.subtotalCents,cents+1610);
-  assert.equal(order.totalCents,cents+1610+1200);
+  assert.equal(order.subtotalCents,cents+1900);
+  assert.equal(order.totalCents,cents+1900+(cents+1900>20000?0:1200));
  }
 });
 
 test('optional water affects the free-fulfillment threshold at its actual price',()=>{
  const items=[{key:'pack-cjc-no-dac-ipamorelin::0',qty:2},{key:'bac-water-10ml::0',qty:1}];
  const below=normalizeOrder(items,'shipping');
- assert.equal(below.subtotalCents,47494);
- assert.equal(below.shippingCents,1200);
+ assert.equal(below.subtotalCents,43320);
+ assert.equal(below.shippingCents,0);
  items[1].qty=2;
  const above=normalizeOrder(items,'shipping');
- assert.equal(above.subtotalCents,49104);
+ assert.equal(above.subtotalCents,45220);
  assert.equal(above.shippingCents,0);
 });
 
@@ -94,7 +96,7 @@ test('browser registration preserves materials, is idempotent and matches truste
  const context={compounds:materials,categories:[{id:'all'}],window:{},document:{}};
  vm.runInNewContext(read('research-packages.js'),context);
  vm.runInNewContext(read('research-packages.js'),context);
- assert.equal(context.compounds.length,35);
+ assert.equal(context.compounds.length,37);
  assert.equal(context.categories.filter(c=>c.id==='research-packages').length,1);
  for(const [id,,cents] of expected){
   const p=context.compounds.find(p=>p.id===id);
@@ -110,9 +112,9 @@ test('browser registration preserves materials, is idempotent and matches truste
 
 test('public deals match server totals and are discoverable without false stock or outcome claims',()=>{
  const html=read('research-package-deals.html');
- assert.equal((html.match(/In stock · Save 5% · 2 separate vials/g)||[]).length,4);
+ assert.equal((html.match(/In stock · Save 5% · 2 separate vials/g)||[]).length,6);
  const choices=[...html.matchAll(/href="\/\?product=([^#]+)#menu" aria-label="Choose [^"]+ for \$(\d+\.\d{2})"/g)];
- assert.equal(choices.length,4);
+ assert.equal(choices.length,6);
  for(const [,id,displayed] of choices){
   assert.equal(Math.round(Number(displayed)*100),normalizeOrder([{key:id+'::0',qty:1}],'pickup').totalCents);
   assert.ok(html.includes('id="'+id+'"'));

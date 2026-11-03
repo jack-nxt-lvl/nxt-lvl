@@ -5,7 +5,7 @@
   {
     "id": "bac-water-10ml",
     "name": "Bacteriostatic Water — 10mL",
-    "category": "freeze-dried",
+    "category": "supplies",
     "amount": "10mL per vial",
     "form": "Preserved water",
     "appearance": "Clear, Colorless Liquid",
@@ -13,15 +13,15 @@
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 16.10
+        "price": 19.0
       },
       {
         "label": "5 Vials",
-        "price": 66.01
+        "price": 87.4
       },
       {
         "label": "10 Vials",
-        "price": 112.70
+        "price": 167.2
       }
     ],
     "aka": "Laboratory research material",

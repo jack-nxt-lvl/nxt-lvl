@@ -3,8 +3,9 @@
   if (typeof module === 'object' && module.exports) module.exports = rates;
   else root.NxtFulfillment = rates;
 })(typeof window !== 'undefined' ? window : this, function () {
-  const VERSION = '2026-10-16-rates';
+  const VERSION = '2026-11-02-pricing';
   const FREE_ABOVE_CENTS = 47500;
+  const STANDARD_FREE_ABOVE_CENTS = 20000;
   const OPTIONS = Object.freeze({
     shipping: Object.freeze({ label: 'Standard Priority Mail', cents: 1200, note: 'Ships in 1–2 business days after acceptance and payment; transit is additional.' }),
     overnight: Object.freeze({ label: 'Overnight shipping', cents: 3000, note: 'Confirm destination, cutoff and dispatch date before payment.' }),
@@ -19,8 +20,8 @@
   function feeCents(value, subtotalCents) {
     const mode = normalizeMode(value);
     if (!Number.isSafeInteger(subtotalCents) || subtotalCents < 0) throw new Error('Invalid merchandise subtotal.');
-    return subtotalCents > FREE_ABOVE_CENTS ? 0 : OPTIONS[mode].cents;
+    return subtotalCents > FREE_ABOVE_CENTS || (mode === 'shipping' && subtotalCents > STANDARD_FREE_ABOVE_CENTS) ? 0 : OPTIONS[mode].cents;
   }
   function label(value) { return OPTIONS[normalizeMode(value)].label; }
-  return Object.freeze({ VERSION, FREE_ABOVE_CENTS, OPTIONS, normalizeMode, feeCents, label });
+  return Object.freeze({ VERSION, FREE_ABOVE_CENTS, STANDARD_FREE_ABOVE_CENTS, OPTIONS, normalizeMode, feeCents, label });
 });

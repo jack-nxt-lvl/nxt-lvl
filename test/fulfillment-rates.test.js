@@ -6,22 +6,22 @@ const { buildStripeCheckoutForm } = require('../lib/hosted-card-link');
 
 test('all four fulfillment methods use the owner rates and the strict free threshold', () => {
   for (const [mode, expected] of Object.entries({shipping:1200,overnight:3000,pickup:0,'local-delivery':2500})) {
-    assert.equal(rates.feeCents(mode, 47499), expected);
-    assert.equal(rates.feeCents(mode, 47500), expected);
+    assert.equal(rates.feeCents(mode, 47499), mode === 'shipping' ? 0 : expected);
+    assert.equal(rates.feeCents(mode, 47500), mode === 'shipping' ? 0 : expected);
     assert.equal(rates.feeCents(mode, 47501), 0);
   }
 });
 
 test('trusted merchandise prices determine the free threshold, not client prices or totals', () => {
-  const items = [{key:'bpc157-10::0',qty:4,price:1000},{key:'bac-water-10ml::0',qty:3,price:1000}];
+  const items = [{key:'bpc157-10::0',qty:4,price:1000},{key:'bac-water-10ml::0',qty:2,price:1000}];
   for (const mode of ['shipping','overnight','local-delivery']) {
     const below = normalizeOrder(items,mode);
-    assert.equal(below.subtotalCents,46690);
-    assert.equal(below.shippingCents,rates.OPTIONS[mode].cents);
-    const above = normalizeOrder([items[0],{...items[1],qty:4}],mode);
-    assert.equal(above.subtotalCents,48300);
+    assert.equal(below.subtotalCents,47400);
+    assert.equal(below.shippingCents,mode==='shipping'?0:rates.OPTIONS[mode].cents);
+    const above = normalizeOrder([items[0],{...items[1],qty:3}],mode);
+    assert.equal(above.subtotalCents,49300);
     assert.equal(above.shippingCents,0);
-    assert.equal(above.totalCents,48300);
+    assert.equal(above.totalCents,49300);
   }
 });
 
@@ -48,8 +48,8 @@ test('hosted invoices identify the selected method and omit waived fees', () => 
 
 test('legacy signed-quote reconciliation retains its old fee while new requests use current rates', () => {
   const items=[{key:'bpc157-10::0',qty:2}];
-  assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,21930);
-  assert.equal(normalizeOrder(items,'shipping').totalCents,22130);
+  assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,22800);
+  assert.equal(normalizeOrder(items,'shipping').totalCents,21800);
   assert.throws(()=>normalizeOrder(items,'overnight','legacy-v1'),/legacy/);
   assert.throws(()=>normalizeOrder(items,'shipping','invented-version'),/version/);
 });

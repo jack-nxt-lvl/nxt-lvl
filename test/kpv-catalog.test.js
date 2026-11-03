@@ -13,15 +13,15 @@ test('KPV uses the selected price and all existing quantity discounts in browser
   assert.equal(matches.length, 1);
   const product = matches[0];
   assert.equal(product.amount, '10mg per vial');
-  assert.equal(product.pricing[0].price, 69.95);
-  const expected = [6995, 13710, 20355, 26861, 33226, 39452, 45537, 51483, 57289, 62955];
+  assert.equal(product.pricing[0].price, 79);
+  const expected = [7900,15484,22515,30020,36340,43608,50876,58144,65412,69520];
   const pricing = buildQuantityPricing(product);
   assert.equal(pricing.length, expected.length);
   expected.forEach((cents, i) => {
     assert.equal(Math.round(pricing[i].price * 100), cents);
     const order = normalizeOrder([{ key: 'kpv-10::' + i, qty: 1, price: 0.01 }], 'shipping');
     assert.equal(order.subtotalCents, cents);
-    assert.equal(order.shippingCents, cents > 47500 ? 0 : 1200);
+    assert.equal(order.shippingCents, cents > 20000 ? 0 : 1200);
     assert.equal(order.normalizedItems[0].name, 'KPV — 10mg');
   });
   assert.throws(() => normalizeOrder([{ key: 'kpv-10::10', qty: 1 }], 'shipping'), /invalid product/);

@@ -5,15 +5,15 @@ const { compounds } = require('../products-data-original.js');
 const { normalizeOrder } = require('../lib/direct-payment.js');
 
 const restoredProducts = [
-  { id: 'hcg-5000', name: 'HCG — 5000 IU', prices: [96.60, 396.06, 676.20] },
-  { id: 'hcg-10000', name: 'HCG — 10,000 IU', prices: [112.70, 462.07, 788.90] },
-  { id: 'semaglutide', name: 'Semaglutide — 10mg', prices: [120.75, 495.08, 845.25] },
-  { id: 'tirzepatide', name: 'Tirzepatide — 10mg', prices: [144.90, 594.09, 1014.30] },
-  { id: 'selank', name: 'Selank — 11mg', prices: [80.49, 329.98, 563.39] },
-  { id: 'semax', name: 'Semax — 11mg', prices: [123.17, 504.98, 862.16] },
-  { id: 'dsip', name: 'DSIP — 10mg', prices: [78.89, 323.45, 552.23] },
-  { id: 'aod-9604', name: 'AOD-9604 — 10mg', prices: [117.53, 481.87, 822.71] },
-  { id: 'igf1-lr3', name: 'IGF-1 LR3 — 1mg', prices: [104.65, 434.70] }
+  { id: 'hcg-5000', name: 'HCG — 5000 IU', prices: [89, 409.4, 783.2] },
+  { id: 'hcg-10000', name: 'HCG — 10,000 IU', prices: [119, 547.4, 1047.2] },
+  { id: 'semaglutide', name: 'Semaglutide — 10mg', prices: [119, 547.4, 1047.2] },
+  { id: 'tirzepatide', name: 'Tirzepatide — 10mg', prices: [139, 639.4, 1223.2] },
+  { id: 'selank', name: 'Selank — 11mg', prices: [79, 363.4, 695.2] },
+  { id: 'semax', name: 'Semax — 11mg', prices: [89, 409.4, 783.2] },
+  { id: 'dsip', name: 'DSIP — 10mg', prices: [89, 409.4, 783.2] },
+  { id: 'aod-9604', name: 'AOD-9604 — 10mg', prices: [109, 501.4, 959.2] },
+  { id: 'igf1-lr3', name: 'IGF-1 LR3 — 1mg', prices: [129, 593.4, 1135.2] }
 ];
 
 test('keeps every restored freeze-dried product in the storefront catalog', () => {

@@ -175,3 +175,12 @@ The owner confirmed Priority Mail $12, overnight $30, free pickup, and same-day 
 `/catalog.html` is the complete, crawlable material directory. `scripts/catalog-paths.json` maps active catalog IDs to their public pages. `scripts/build-catalog-pages.cjs` reads existing product sources and uses the trusted checkout normalizer for all 300 pack prices. It does not create payments or access customer records. The five newer material pages and complete directory are generated in full; older material pages preserve their existing content outside marked shopping sections. Run the build and tests before committing catalog edits. When adding a material, supply an accurate page path and update the sitemap. Do not add unverified availability, purity, reviews, or medical claims to structured data.
 
 Public discovery checks: all sitemap URLs should respond successfully, self-canonicalize, contain one main heading, link internally, and have valid JSON-LD. `/404.html` is intentionally noindex and excluded from the sitemap. Batch reports use a no-store cache exception after the general HTML rule.
+
+
+### Pricing and merchandising — November 2, 2026
+
+Premium single-vial prices have been individually reviewed against public supplier listings. All 31 materials remain available. Quantity pack discounts are 2% for 2 vials, 5% for 3–4, 8% for 5–9 and 12% for 10. Six fixed-content research packages save 5%, without stacking another quantity discount. Copper-material and peptide-material category packs state exact component amounts. No human-use instructions or outcome claims were added.
+
+Standard Priority Mail remains $12 and is free strictly above $200 in merchandise after discounts. Overnight remains $30, local delivery $25, and appointment pickup free. The existing premium fulfillment waiver strictly above $475 remains. Exactly $200 does not qualify for free standard shipping. Buyer and seller costs were not provided, so profitability and conversion gains are unverified.
+
+The optional 10mL water reminder appears for research materials in cart and checkout, shows $19, and never adds water without a click. Checkout returns to the updated cart after adding water so the buyer reviews the new total. The previous trusted catalog and fulfillment version are retained for reconciliation of existing signed quotes. New quotes always use current prices.

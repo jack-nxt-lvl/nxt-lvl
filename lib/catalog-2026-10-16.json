@@ -1,0 +1,1524 @@
+[
+  {
+    "id": "bpc157-10",
+    "name": "BPC-157 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 104.65
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 205.11
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 304.53
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 401.86
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 497.09
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 590.23
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 681.27
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 770.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 857.08
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 941.85
+      }
+    ]
+  },
+  {
+    "id": "tb500-10",
+    "name": "TB-500 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 128.8
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 252.45
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 374.81
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 494.59
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 611.8
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 726.43
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 838.49
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 947.97
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1054.87
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1159.2
+      }
+    ]
+  },
+  {
+    "id": "tb500-bpc157",
+    "name": "TB-500 + BPC-157 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 96.6
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 189.34
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 281.11
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 370.94
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 458.85
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 544.82
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 628.87
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 710.98
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 791.15
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 869.4
+      }
+    ]
+  },
+  {
+    "id": "tesamorelin-10",
+    "name": "Tesamorelin — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 120.75
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 236.67
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 351.38
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 463.68
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 573.56
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 681.03
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 786.08
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 888.72
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 988.94
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1086.75
+      }
+    ]
+  },
+  {
+    "id": "sermorelin",
+    "name": "Sermorelin — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 104.65
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 205.11
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 304.53
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 401.86
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 497.09
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 590.23
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 681.27
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 770.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 857.08
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 941.85
+      }
+    ]
+  },
+  {
+    "id": "ipamorelin",
+    "name": "Ipamorelin — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 96.6
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 189.34
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 281.11
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 370.94
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 458.85
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 544.82
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 628.87
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 710.98
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 791.15
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 869.4
+      }
+    ]
+  },
+  {
+    "id": "mela2-10",
+    "name": "Melanotan-2 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 80.5
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 157.78
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 234.26
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 309.12
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 382.38
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 454.02
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 524.05
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 592.48
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 659.3
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 724.5
+      }
+    ]
+  },
+  {
+    "id": "mela1-10",
+    "name": "Melanotan-1 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 80.5
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 157.78
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 234.26
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 309.12
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 382.38
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 454.02
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 524.05
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 592.48
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 659.3
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 724.5
+      }
+    ]
+  },
+  {
+    "id": "nad-500",
+    "name": "NAD+ — 500mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 128.8
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 252.45
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 374.81
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 494.59
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 611.8
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 726.43
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 838.49
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 947.97
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1054.87
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1159.2
+      }
+    ]
+  },
+  {
+    "id": "ghk-cu-50",
+    "name": "GHK-Cu — 50mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 80.5
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 157.78
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 234.26
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 309.12
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 382.38
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 454.02
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 524.05
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 592.48
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 659.3
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 724.5
+      }
+    ]
+  },
+  {
+    "id": "ghk-cu-100",
+    "name": "GHK-Cu — 100mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 104.65
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 205.11
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 304.53
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 401.86
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 497.09
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 590.23
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 681.27
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 770.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 857.08
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 941.85
+      }
+    ]
+  },
+  {
+    "id": "glow-70",
+    "name": "GLOW — 70mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 136.85
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 268.23
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 398.23
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 525.5
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 650.04
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 771.83
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 890.89
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1007.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1120.8
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1231.65
+      }
+    ]
+  },
+  {
+    "id": "mots-c",
+    "name": "MOTS-c — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 120.75
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 236.67
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 351.38
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 463.68
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 573.56
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 681.03
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 786.08
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 888.72
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 988.94
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1086.75
+      }
+    ]
+  },
+  {
+    "id": "hcg-5000",
+    "name": "HCG — 5000 IU",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 96.6
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 189.34
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 281.11
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 370.94
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 458.85
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 544.82
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 628.87
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 710.98
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 791.15
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 869.4
+      }
+    ]
+  },
+  {
+    "id": "hcg-10000",
+    "name": "HCG — 10,000 IU",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 112.7
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 220.89
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 327.96
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 432.77
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 535.32
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 635.63
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 733.68
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 829.47
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 923.01
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1014.3
+      }
+    ]
+  },
+  {
+    "id": "semaglutide",
+    "name": "Semaglutide — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 120.75
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 236.67
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 351.38
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 463.68
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 573.56
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 681.03
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 786.08
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 888.72
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 988.94
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1086.75
+      }
+    ]
+  },
+  {
+    "id": "tirzepatide",
+    "name": "Tirzepatide — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 144.9
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 284
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 421.66
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 556.42
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 688.28
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 817.24
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 943.3
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1066.46
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1186.73
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1304.1
+      }
+    ]
+  },
+  {
+    "id": "retatrutide-10",
+    "name": "Retatrutide — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 177.1
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 347.12
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 515.36
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 680.06
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 841.22
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 998.84
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 1152.92
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1303.46
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1450.45
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1593.9
+      }
+    ]
+  },
+  {
+    "id": "retatrutide-20",
+    "name": "Retatrutide — 20mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 257.6
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 504.9
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 749.62
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 989.18
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 1223.6
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 1452.86
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 1676.98
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1895.94
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 2109.74
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 2318.4
+      }
+    ]
+  },
+  {
+    "id": "selank",
+    "name": "Selank — 11mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 80.49
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 157.76
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 234.23
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 309.08
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 382.33
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 453.96
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 523.99
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 592.41
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 659.21
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 724.41
+      }
+    ]
+  },
+  {
+    "id": "semax",
+    "name": "Semax — 11mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 123.17
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 241.41
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 358.42
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 472.97
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 585.06
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 694.68
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 801.84
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 906.53
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1008.76
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1108.53
+      }
+    ]
+  },
+  {
+    "id": "dsip",
+    "name": "DSIP — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 78.89
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 154.62
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 229.57
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 302.94
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 374.73
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 444.94
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 513.57
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 580.63
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 646.11
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 710.01
+      }
+    ]
+  },
+  {
+    "id": "aod-9604",
+    "name": "AOD-9604 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 117.53
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 230.36
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 342.01
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 451.32
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 558.27
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 662.87
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 765.12
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 865.02
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 962.57
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1057.77
+      }
+    ]
+  },
+  {
+    "id": "igf1-lr3",
+    "name": "IGF-1 LR3 — 1mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 104.65
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 205.11
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 304.53
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 401.86
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 497.09
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 590.23
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 681.27
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 770.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 857.08
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 941.85
+      }
+    ]
+  },
+  {
+    "id": "slu-pp-332-10",
+    "name": "SLU-PP-332 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 136.85
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 268.23
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 398.23
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 525.5
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 650.04
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 771.83
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 890.89
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1007.22
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1120.8
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1231.65
+      }
+    ]
+  },
+  {
+    "id": "cjc1295-dac-10",
+    "name": "CJC-1295 with DAC — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 144.89
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 283.98
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 421.63
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 556.38
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 688.23
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 817.18
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 943.23
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1066.39
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1186.65
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1304.01
+      }
+    ]
+  },
+  {
+    "id": "cjc1295-no-dac-10",
+    "name": "CJC-1295 without DAC — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 144.89
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 283.98
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 421.63
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 556.38
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 688.23
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 817.18
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 943.23
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 1066.39
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1186.65
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1304.01
+      }
+    ]
+  },
+  {
+    "id": "pt141-10",
+    "name": "PT-141 — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 72.45
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 142
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 210.83
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 278.21
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 344.14
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 408.62
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 471.65
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 533.23
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 593.37
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 652.05
+      }
+    ]
+  },
+  {
+    "id": "bac-water-10ml",
+    "name": "Bacteriostatic Water — 10mL",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 16.1
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 31.56
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 46.85
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 61.82
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 76.47
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 90.8
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 104.81
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 118.5
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 131.86
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 144.9
+      }
+    ]
+  },
+  {
+    "id": "glutathione-1500",
+    "name": "Glutathione — 1.5g",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 127.19
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 249.29
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 370.12
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 488.41
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 604.15
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 717.35
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 828.01
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 936.12
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 1041.69
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 1144.71
+      }
+    ]
+  },
+  {
+    "id": "kpv-10",
+    "name": "KPV — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 69.95
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 137.1
+      },
+      {
+        "label": "3 Vials · Save 3%",
+        "price": 203.55
+      },
+      {
+        "label": "4 Vials · Save 4%",
+        "price": 268.61
+      },
+      {
+        "label": "5 Vials · Save 5%",
+        "price": 332.26
+      },
+      {
+        "label": "6 Vials · Save 6%",
+        "price": 394.52
+      },
+      {
+        "label": "7 Vials · Save 7%",
+        "price": 455.37
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 514.83
+      },
+      {
+        "label": "9 Vials · Save 9%",
+        "price": 572.89
+      },
+      {
+        "label": "10 Vials · Save 10%",
+        "price": 629.55
+      }
+    ]
+  },
+  {
+    "id": "pack-bpc157-tb500",
+    "name": "BPC-157 10mg + TB-500 10mg — research pack",
+    "pricing": [
+      {
+        "label": "1 Package · 2 separate vials · Save 5%",
+        "price": 221.78
+      }
+    ],
+    "components": [
+      {
+        "productId": "bpc157-10",
+        "name": "BPC-157 — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      },
+      {
+        "productId": "tb500-10",
+        "name": "TB-500 — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "pack-cjc-no-dac-ipamorelin",
+    "name": "CJC-1295 without DAC 10mg + Ipamorelin 10mg — research pack",
+    "pricing": [
+      {
+        "label": "1 Package · 2 separate vials · Save 5%",
+        "price": 229.42
+      }
+    ],
+    "components": [
+      {
+        "productId": "cjc1295-no-dac-10",
+        "name": "CJC-1295 without DAC — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      },
+      {
+        "productId": "ipamorelin",
+        "name": "Ipamorelin — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "pack-tesamorelin-ipamorelin",
+    "name": "Tesamorelin 10mg + Ipamorelin 10mg — research pack",
+    "pricing": [
+      {
+        "label": "1 Package · 2 separate vials · Save 5%",
+        "price": 206.48
+      }
+    ],
+    "components": [
+      {
+        "productId": "tesamorelin-10",
+        "name": "Tesamorelin — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      },
+      {
+        "productId": "ipamorelin",
+        "name": "Ipamorelin — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "pack-sermorelin-ipamorelin",
+    "name": "Sermorelin 10mg + Ipamorelin 10mg — research pack",
+    "pricing": [
+      {
+        "label": "1 Package · 2 separate vials · Save 5%",
+        "price": 191.19
+      }
+    ],
+    "components": [
+      {
+        "productId": "sermorelin",
+        "name": "Sermorelin — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      },
+      {
+        "productId": "ipamorelin",
+        "name": "Ipamorelin — 10mg",
+        "amount": "10mg per vial",
+        "quantity": 1
+      }
+    ]
+  }
+]

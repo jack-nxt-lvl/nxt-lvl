@@ -68,12 +68,12 @@ test('builds hosted checkout from trusted totals and leaves eligible methods to 
   assert.equal(form.has('payment_method_types[0]'), false);
   assert.match(form.get('integration_identifier'), /^nxt_hosted_checkout_[a-z]{8}$/);
   assert.equal(form.get('customer_email'), customer.email);
-  assert.equal(form.get('line_items[0][price_data][unit_amount]'), '10465');
+  assert.equal(form.get('line_items[0][price_data][unit_amount]'), '10900');
   assert.equal(form.get('line_items[0][quantity]'), '2');
-  assert.equal(form.get('line_items[1][price_data][unit_amount]'), '1200');
+  assert.equal(form.has('line_items[1][price_data][unit_amount]'), false);
   assert.match(form.get('success_url'), /card_payment=success/);
   assert.equal(form.get('metadata[source]'), 'nxt_hosted_card_link');
-  assert.equal(order.totalCents, 22130);
+  assert.equal(order.totalCents, 21800);
 });
 
 test('shows email delivery only when the hosted provider, webhook, ledger, and sender are configured', () => {
@@ -91,7 +91,7 @@ test('public checkout offers crypto without exposing card collection or an appro
  assert.match(source,/Pay now with/);
  assert.match(source,/researchConsent/);
  assert.doesNotMatch(source,/id="nxtResearchCode"|cardNumber|cvc|expiryMonth|payment-element/);
- assert.match(source,/direct-wallet-checkout\.js\?v=20261101-usdt-audit-2/);
+ assert.match(source,/direct-wallet-checkout\.js\?v=20261102-pricing/);
  assert.ok(source.indexOf("src:'/lib/paybis-funding.js") < source.indexOf("src:'/direct-wallet-checkout.js"));
 });
 

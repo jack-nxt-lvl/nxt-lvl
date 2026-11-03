@@ -5,8 +5,20 @@
 
   function render(items, materials) {
     document.getElementById('packageSupplyReminder')?.remove();
+    document.getElementById('standardShippingProgress')?.remove();
+    const subtotalCents = items.reduce((sum,item)=>sum+Math.round(Number(item.price)*100)*Number(item.qty),0);
+    if (items.length && Number.isSafeInteger(subtotalCents)) {
+      const progress=document.createElement('p');
+      progress.id='standardShippingProgress';
+      progress.className='package-supply-reminder';
+      progress.setAttribute('role','status');
+      progress.textContent=subtotalCents>20000
+        ? 'Your cart qualifies for free standard U.S. shipping.'
+        : 'Add $'+((20001-subtotalCents)/100).toFixed(2)+' in eligible materials for free standard U.S. shipping. Calculated after discounts.';
+      document.getElementById('cartItems')?.appendChild(progress);
+    }
     const hasPackage = items.some(item => Number(item.qty) > 0 &&
-      materials.some(product => product.id === item.productId && product.category === 'research-packages'));
+      materials.some(product => product.id === item.productId && product.id !== WATER_ID && ['research-packages','freeze-dried'].includes(product.category)));
     if (!hasPackage) return;
     const product = materials.find(item => item.id === WATER_ID);
     const optionIndex = product?.pricing?.findIndex(option => /^1 Vial\b/i.test(option.label));
@@ -25,7 +37,7 @@
     } else {
       box.innerHTML = `<p class="package-supply-label">Optional · sold separately</p>
         <h4>Need 10mL bacteriostatic water?</h4>
-        <p>It is not included in your research package. Add only if your laboratory requires it.</p>
+        <p>Sold separately from research materials. Add only if your laboratory requires it.</p>
         <button type="button" id="addPackageWater">Add 1 × 10mL vial · $${option.price.toFixed(2)}</button>
         <p class="package-supply-note">Package savings apply to the package only. Review suitability and lot documentation separately.</p>`;
     }
