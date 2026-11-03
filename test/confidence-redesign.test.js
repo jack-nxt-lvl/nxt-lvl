@@ -41,6 +41,6 @@ test('homepage catalog and Paybis scripts remain connected after the visual chan
   assert.match(html, /data-nxt-paybis-funding="1"/);
   assert.match(html, /lib\/paybis-funding\.js\?v=20260825-paybis-match-1/);
   assert.match(html, /direct-wallet-checkout\.js\?v=20261102-pricing/);
-  assert.match(html, /customer-checkout-upgrade\.js\?v=20261102-pricing/);
+  assert.match(html, /customer-checkout-upgrade\.js\?v=20261102-conversion/);
 });
 

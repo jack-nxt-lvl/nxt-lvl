@@ -184,3 +184,20 @@ Premium single-vial prices have been individually reviewed against public suppli
 Standard Priority Mail remains $12 and is free strictly above $200 in merchandise after discounts. Overnight remains $30, local delivery $25, and appointment pickup free. The existing premium fulfillment waiver strictly above $475 remains. Exactly $200 does not qualify for free standard shipping. Buyer and seller costs were not provided, so profitability and conversion gains are unverified.
 
 The optional 10mL water reminder appears for research materials in cart and checkout, shows $19, and never adds water without a click. Checkout returns to the updated cart after adding water so the buyer reviews the new total. The previous trusted catalog and fulfillment version are retained for reconciliation of existing signed quotes. New quotes always use current prices.
+
+### SEO and product-page purchasing (2026-11-02)
+
+`npm run build` generates product metadata, Product/Offer/Breadcrumb structured data,
+three collection pages, the research purchasing guide and the XML/image sitemap
+from the trusted catalog. Update catalog data and rebuild; do not hand-edit generated
+prices. The sitemap intentionally omits `lastmod` rather than inventing update dates.
+
+Product-page Add to cart stores only product IDs and quantities under the existing
+`nxtCartV1` key, then opens the storefront cart. Server checkout still determines
+prices and fulfillment charges. If browser storage is unavailable, the native GET
+form retains the chosen product and pack for review in the storefront.
+
+Cards and Apple Pay are not activated by this change. The forthcoming merchant
+provider needs its actual integration documentation, approved account configuration
+and verified payment callbacks before enabling a new payment option. Existing
+payment verification, research eligibility and quote recovery remain in place.

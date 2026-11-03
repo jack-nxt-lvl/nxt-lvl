@@ -182,7 +182,7 @@
       const overlay=document.createElement('div');
       overlay.className='nxt-checkout-overlay';
       overlay.innerHTML=`<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="researchReviewTitle">
-        <div class="nxt-checkout-kicker">Step 1 of 2 · Your details</div>
+        <div class="nxt-checkout-kicker">Guest checkout · No account needed</div><ol class="nxt-checkout-progress" aria-label="Checkout progress"><li>1. Cart</li><li aria-current="step">2. Delivery &amp; details</li><li>3. Payment</li></ol>
         <h2 id="researchReviewTitle">Shipping &amp; order details</h2>
         <div class="nxt-checkout-intro">Enter your order information, then choose BTC, ETH, or USDT. Your payment screen shows the exact amount, network and receiving address. Research purchasers only. <a href="/how-to-order.html" target="_blank" rel="noopener">How to order &amp; pay</a>.</div>
         <div class="nxt-fulfillment-grid" role="group" aria-label="Shipping or delivery method">
@@ -318,9 +318,15 @@
 
   function bind(){
     const btn=document.getElementById('cartCheckoutBtn');if(!btn||btn.dataset.nxtDirectWallet==='1')return;
-    btn.textContent='Pay now · USDT / BTC / ETH →';btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
+    btn.textContent='Continue to checkout →';btn.dataset.nxtDirectWallet='1';btn.removeAttribute('onclick');btn.onclick=null;btn.addEventListener('click',runCheckout,true);
   }
   setupCartPersistence();bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
+  const reviewUrl=new URL(window.location.href);
+  if(reviewUrl.searchParams.get('cart')==='review'){
+    reviewUrl.searchParams.delete('cart');
+    window.history.replaceState(null,'',reviewUrl.pathname+reviewUrl.search+reviewUrl.hash);
+    if(typeof openCart==='function')openCart();
+  }
 })();
 
 
