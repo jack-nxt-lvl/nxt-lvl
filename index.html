@@ -238,6 +238,7 @@
 
     /* test comment */
     /* NAV */
+    .mobile-chat-shortcut { display: none; }
     nav {
       position: fixed;
       top: 0;
@@ -2540,6 +2541,7 @@
       <a href="#" class="logo">
         <div class="logo-icon">N</div>NXT <span class="accent">LVL</span>
       </a>
+      <button type="button" class="mobile-chat-shortcut" aria-controls="aiChatPanel" onclick="toggleAiChat(true)">Ask AI</button>
       <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
         onclick="const menu=document.querySelector('nav ul');const open=menu.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')"><span></span><span></span><span></span></button>
       <ul>
@@ -3745,7 +3747,7 @@
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261102-pricing"></script>
   <script src="customer-checkout-upgrade.js?v=20261102-conversion"></script>
   <script src="ai-cart-bridge.js?v=20260822-4"></script>
-  <script src="mobile-app-upgrade.js?v=20261102-home-about"></script>
+  <script src="mobile-app-upgrade.js?v=20261107-mobile-header"></script>
 <aside class="local-footer" aria-label="Research customer support"><a href="/south-florida-research.html">Miami / Fort Lauderdale local delivery</a> · <a href="tel:+17542907210">754-290-7210</a> · <a href="sms:+17542907210">Text</a> · <a href="https://wa.me/17542907210">WhatsApp</a></aside><div class="research-policy-links"><a href="/research-eligibility.html">Purchaser eligibility</a><a href="/ordering-policy.html">Ordering &amp; support</a><a href="/ordering-policy.html#refunds">Returns &amp; refunds</a><a href="/privacy.html">Privacy</a></div></body>
 
 </html>

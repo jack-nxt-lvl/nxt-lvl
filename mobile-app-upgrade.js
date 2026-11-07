@@ -5,13 +5,10 @@
   const style = document.createElement('style');
   style.id = 'nxt-mobile-app-styles';
   style.textContent = `
-    .nxt-mobile-tabbar{display:none}
-
     @media(max-width:768px){
       :root{
         --nxt-mobile-safe-top:env(safe-area-inset-top,0px);
         --nxt-mobile-safe-bottom:env(safe-area-inset-bottom,0px);
-        --nxt-mobile-tab-height:68px;
         --nxt-mobile-viewport-top:0px;
         --nxt-mobile-viewport-height:100dvh;
       }
@@ -27,7 +24,7 @@
         width:100%;
         min-width:0;
         overflow-x:clip!important;
-        padding-bottom:calc(var(--nxt-mobile-tab-height) + 18px + var(--nxt-mobile-safe-bottom))!important;
+        padding-bottom:var(--nxt-mobile-safe-bottom)!important;
         overscroll-behavior-x:none;
       }
       body.nxt-mobile-layer-open{overflow:hidden!important}
@@ -38,20 +35,38 @@
       button,a{-webkit-tap-highlight-color:transparent}
       input,textarea,select{font-size:16px!important}
 
-      nav#mainNav{
-        top:0!important;
+      body.miami-site nav#mainNav{
+        position:sticky;
+        top:0;
+        height:auto;
         padding:var(--nxt-mobile-safe-top) 12px 0!important;
-        background:rgba(6,5,11,.91)!important;
-        border-bottom:1px solid rgba(196,181,253,.12)!important;
-        box-shadow:0 10px 34px rgba(0,0,0,.22)!important;
+        background:#0b100e!important;
+        backdrop-filter:none!important;
+        -webkit-backdrop-filter:none!important;
+        transition:none;
       }
+      body.miami-home .home-intro{--intro-top:36px}
+      nav#mainNav .mobile-chat-shortcut{
+        display:block;
+        margin-left:auto;
+        min-height:44px;
+        padding:0 12px;
+        white-space:nowrap;
+        color:#edf5f3;
+        background:#14201f;
+        border:1px solid #304034;
+        border-radius:7px;
+        font:600 12px Inter,Arial,sans-serif;
+        cursor:pointer;
+      }
+      nav#mainNav .cart-toggle{margin-left:0}
       nav#mainNav .nav-inner{height:60px!important;gap:8px!important}
       nav#mainNav .logo{min-width:0;font-size:.94rem!important;letter-spacing:1.6px!important;gap:4px!important}
       nav#mainNav .logo-icon{width:41px!important;height:34px!important;flex-basis:41px!important}
       nav#mainNav .cart-toggle,
       nav#mainNav .nav-toggle{width:42px!important;height:42px!important;flex:0 0 42px;border-radius:13px!important}
-      nav#mainNav ul.open{
-        top:calc(60px + var(--nxt-mobile-safe-top))!important;
+      body.miami-site nav#mainNav ul.open{
+        top:100%!important;
         max-height:calc(100dvh - 60px - var(--nxt-mobile-safe-top));
         overflow:auto;
         padding:12px 12px calc(18px + var(--nxt-mobile-safe-bottom))!important;
@@ -118,50 +133,6 @@
       #filterBar.filter-bar::-webkit-scrollbar{display:none}
       #filterBar .filter-btn{flex:0 0 auto!important;min-height:40px!important;scroll-snap-align:start;border-radius:11px!important}
 
-      .nxt-mobile-tabbar{
-        position:fixed;
-        left:10px;
-        right:10px;
-        bottom:calc(8px + var(--nxt-mobile-safe-bottom));
-        z-index:1900;
-        display:grid;
-        grid-template-columns:repeat(4,minmax(0,1fr));
-        height:var(--nxt-mobile-tab-height);
-        padding:6px;
-        border:1px solid rgba(196,181,253,.18);
-        border-radius:21px;
-        background:rgba(12,10,18,.91);
-        box-shadow:0 18px 55px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.055);
-        backdrop-filter:blur(24px) saturate(150%);
-        -webkit-backdrop-filter:blur(24px) saturate(150%);
-        transform:translateY(0);
-        opacity:1;
-        transition:transform .22s ease,opacity .18s ease;
-      }
-      .nxt-mobile-tabbar a,.nxt-mobile-tabbar button{
-        position:relative;
-        min-width:0;
-        border:0;
-        border-radius:15px;
-        background:transparent;
-        color:#8f8b9e;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        gap:3px;
-        text-decoration:none;
-        font:800 8px/1 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-        letter-spacing:.35px;
-        cursor:pointer;
-      }
-      .nxt-mobile-tabbar svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .nxt-mobile-tabbar a.active,.nxt-mobile-tabbar button.active{background:linear-gradient(145deg,rgba(124,58,237,.24),rgba(91,33,182,.11));color:#eee9ff}
-      .nxt-mobile-tabbar a.active:before,.nxt-mobile-tabbar button.active:before{content:'';position:absolute;top:2px;width:22px;height:2px;border-radius:9px;background:#a78bfa;box-shadow:0 0 10px #8b5cf6}
-      .nxt-mobile-cart-badge{position:absolute;top:3px;left:calc(50% + 7px);display:grid;place-items:center;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#8b5cf6;color:#fff;font-size:8px;box-shadow:0 4px 12px rgba(124,58,237,.45)}
-      .nxt-mobile-cart-badge[hidden]{display:none}
-      body.nxt-mobile-layer-open .nxt-mobile-tabbar{transform:translateY(calc(100% + 24px));opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-
       .ai-chat-toggle{display:none!important}
       .ai-chat-panel{
         inset:auto 8px auto 8px!important;
@@ -210,7 +181,7 @@
       body.nxt-ai-keyboard-open .ai-chat-send{height:46px!important}
       body.nxt-ai-keyboard-open .ai-chat-send{flex-basis:46px;width:46px!important}
 
-      .premium-toast{bottom:calc(var(--nxt-mobile-tab-height) + 22px + var(--nxt-mobile-safe-bottom))!important;max-width:calc(100% - 28px)!important;text-align:center!important}
+      .premium-toast{bottom:calc(16px + var(--nxt-mobile-safe-bottom))!important;max-width:calc(100% - 28px)!important;text-align:center!important}
 
       .cart-drawer{
         width:100dvw!important;
@@ -342,7 +313,7 @@
       .nxt-wallet-actions a,.nxt-wallet-actions button{min-height:50px!important}
       .nxt-wallet-verify input{font-size:16px!important;height:50px!important}
       .nxt-wallet-verify button{min-height:46px!important}
-      .nxt-wallet-resume{right:10px!important;bottom:calc(var(--nxt-mobile-tab-height) + 20px + var(--nxt-mobile-safe-bottom))!important;max-width:calc(100% - 20px)!important}
+      .nxt-wallet-resume{right:10px!important;bottom:calc(16px + var(--nxt-mobile-safe-bottom))!important;max-width:calc(100% - 20px)!important}
 
       .nxt-swaps-drawer{width:100dvw!important;height:100dvh!important;border-left:0!important}
       .nxt-swaps-header{padding:calc(10px + var(--nxt-mobile-safe-top)) 12px 10px!important}
@@ -360,7 +331,6 @@
       .hero-badge{font-size:.49rem!important}
       .protocols-grid{grid-template-columns:1fr 1fr!important}
       .protocol-card{padding:14px 10px!important}
-      .nxt-mobile-tabbar{left:7px;right:7px}
       .nxt-wallet-funding-intro{padding:10px!important}
       .nxt-wallet-funding-intro-head{gap:8px!important}
       .nxt-wallet-funding-intro-icon{width:34px!important;height:34px!important;flex-basis:34px!important}
@@ -372,36 +342,9 @@
       .crypto-assurance{display:none!important}
     }
 
-    @media(prefers-reduced-motion:reduce){
-      .nxt-mobile-tabbar{transition:none!important}
-    }
   `;
   document.head.appendChild(style);
 
-  const hero = document.getElementById('home') || document.querySelector('.hero');
-  if (hero && !hero.id) hero.id = 'home';
-
-  const tabbar = document.createElement('div');
-  tabbar.className = 'nxt-mobile-tabbar';
-  tabbar.setAttribute('role', 'navigation');
-  tabbar.setAttribute('aria-label', 'Mobile navigation');
-  tabbar.innerHTML = `
-    <a href="#home" data-mobile-tab="home" class="active" aria-label="Home">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M9 21v-7h6v7"/></svg><span>Home</span>
-    </a>
-    <a href="#menu" data-mobile-tab="menu" aria-label="Shop products">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16l-1.2 13H5.2z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg><span>Shop</span>
-    </a>
-    <button type="button" data-mobile-action="ai" aria-label="Open NXT LVL AI assistant">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 3v-3H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z"/><path d="M8 10h8M8 13h5"/></svg><span>Ask AI</span>
-    </button>
-    <button type="button" data-mobile-action="cart" aria-label="Open cart">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M2.5 3h3l2.1 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L21 7H6.3"/></svg><span>Cart</span><b class="nxt-mobile-cart-badge" hidden>0</b>
-    </button>`;
-  document.body.appendChild(tabbar);
-
-  const cartBadge = tabbar.querySelector('.nxt-mobile-cart-badge');
-  const sourceCartBadge = document.getElementById('cartCount');
   const aiChatPanel = document.getElementById('aiChatPanel');
   const aiChatInput = document.getElementById('aiChatInput');
   const aiChatMessages = document.getElementById('aiChatMessages');
@@ -417,7 +360,10 @@
     mobileViewportFrame = 0;
     const root = document.documentElement;
 
-    if (window.innerWidth > 768) {
+    const chatOpen = Boolean(aiChatPanel?.classList.contains('open'));
+    if (window.innerWidth > 768 || !chatOpen) {
+      if (!chatOpen) mobileViewportCeiling = window.visualViewport?.height || window.innerHeight;
+      if (lastViewportHeight < 0) return;
       root.style.removeProperty('--nxt-mobile-viewport-top');
       root.style.removeProperty('--nxt-mobile-viewport-height');
       document.body.classList.remove('nxt-ai-keyboard-open');
@@ -430,7 +376,6 @@
     const viewport = window.visualViewport;
     const viewportTop = Math.max(0, viewport?.offsetTop || 0);
     const viewportHeight = Math.max(1, viewport?.height || window.innerHeight);
-    const chatOpen = Boolean(aiChatPanel?.classList.contains('open'));
     const inputFocused = document.activeElement === aiChatInput;
 
     if (Math.abs(viewportTop - lastViewportTop) > .5) {
@@ -442,22 +387,18 @@
       lastViewportHeight = viewportHeight;
     }
 
-    if (!chatOpen) {
-      mobileViewportCeiling = viewportHeight;
-    } else if (!inputFocused) {
+    if (!inputFocused) {
       mobileViewportCeiling = Math.max(mobileViewportCeiling, viewportHeight);
     }
 
-    const keyboardOpen = chatOpen && (
-      inputFocused || viewportHeight < mobileViewportCeiling - 80
-    );
+    const keyboardOpen = inputFocused || viewportHeight < mobileViewportCeiling - 80;
     if (keyboardOpen !== lastKeyboardOpen) {
       document.body.classList.toggle('nxt-ai-keyboard-open', keyboardOpen);
       lastKeyboardOpen = keyboardOpen;
     }
 
     const messageScrollHeight = aiChatMessages?.scrollHeight || 0;
-    if (chatOpen && keyboardOpen && aiChatMessages && messageScrollHeight !== lastMessageScrollHeight) {
+    if (keyboardOpen && aiChatMessages && messageScrollHeight !== lastMessageScrollHeight) {
       aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
       lastMessageScrollHeight = messageScrollHeight;
     }
@@ -468,21 +409,12 @@
     mobileViewportFrame = requestAnimationFrame(syncMobileVisualViewport);
   }
 
-  function syncCartBadge() {
-    const count = Math.max(0, Number.parseInt(sourceCartBadge?.textContent || '0', 10) || 0);
-    cartBadge.textContent = count > 99 ? '99+' : String(count);
-    cartBadge.hidden = count === 0;
-  }
-
   function syncLayerState() {
     layerStateFrame = 0;
     const layerOpen = Boolean(document.querySelector(
       '.cart-overlay.active,.modal-overlay.active,.ai-chat-panel.open,.nxt-checkout-overlay,.nxt-wallet-overlay,.nxt-wallet-chooser,.nxt-wallet-loading,.nxt-swaps-layer.open'
     ));
     document.body.classList.toggle('nxt-mobile-layer-open', layerOpen);
-    if (!aiChatPanel?.classList.contains('open')) {
-      document.body.classList.remove('nxt-ai-keyboard-open');
-    }
     scheduleMobileViewportSync();
   }
 
@@ -491,42 +423,6 @@
     layerStateFrame = requestAnimationFrame(syncLayerState);
   }
 
-  function setActiveTab(id) {
-    tabbar.querySelectorAll('[data-mobile-tab]').forEach((item) => {
-      item.classList.toggle('active', item.dataset.mobileTab === id);
-    });
-  }
-
-  tabbar.querySelector('[data-mobile-action="ai"]').addEventListener('click', () => {
-    if (typeof window.toggleAiChat === 'function') window.toggleAiChat(true);
-    syncLayerState();
-  });
-  tabbar.querySelector('[data-mobile-action="cart"]').addEventListener('click', () => {
-    if (typeof window.openCart === 'function') window.openCart();
-    syncLayerState();
-  });
-  tabbar.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      setActiveTab(link.dataset.mobileTab);
-      const menu = document.querySelector('nav#mainNav ul.open');
-      const toggle = document.querySelector('nav#mainNav .nav-toggle');
-      menu?.classList.remove('open');
-      toggle?.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  if ('IntersectionObserver' in window) {
-    const sections = [['home', hero], ['menu', document.getElementById('menu')]];
-    const sectionObserver = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible?.target?.id) setActiveTab(visible.target.id);
-    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0, .15, .35] });
-    sections.forEach(([, section]) => { if (section) sectionObserver.observe(section); });
-  }
-
-  if (sourceCartBadge) {
-    new MutationObserver(syncCartBadge).observe(sourceCartBadge, { childList: true, characterData: true, subtree: true, attributes: true });
-  }
   aiChatInput?.addEventListener('focus', scheduleMobileViewportSync);
   aiChatInput?.addEventListener('blur', () => setTimeout(scheduleMobileViewportSync, 0));
   window.visualViewport?.addEventListener('resize', scheduleMobileViewportSync, { passive: true });
@@ -538,7 +434,6 @@
   });
   new MutationObserver(scheduleLayerStateSync).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
   document.addEventListener('click', scheduleLayerStateSync, true);
-  syncCartBadge();
   syncLayerState();
   syncMobileVisualViewport();
 })();
