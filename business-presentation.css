@@ -1,8 +1,8 @@
 /* Compact storefront introduction and verified company information. */
 .home-intro,.home-business{position:relative;z-index:1}
 .home-intro{
-  --intro-skyline:url('/assets/miami-skyline-night.webp');
-  --intro-shade:linear-gradient(90deg,rgba(5,14,20,.68),rgba(5,14,20,.24) 43%,rgba(5,14,20,.67) 66%,rgba(5,14,20,.48));
+  --intro-skyline:url('/assets/miami-vice-skyline.webp');
+  --intro-shade:linear-gradient(90deg,rgba(18,7,32,.66),rgba(18,7,32,.24) 41%,rgba(13,8,30,.65) 65%,rgba(13,8,30,.32));
   --intro-gutter:max(64px,calc((100% - 1312px) / 2));
   display:grid;
   grid-template-rows:1fr auto;
@@ -94,8 +94,8 @@ body.miami-home.catalog-pro.storefront-focused .filter-btn{min-height:40px;paddi
 @media(max-width:900px){.home-intro{--intro-top:110px}.home-intro-inner{gap:30px}.home-intro h1{font-size:42px}.home-intro-copy>p{font-size:14px}.home-intro-actions{gap:12px;font-size:12px}.home-service-line{font-size:11px;gap:12px}.home-catalog-tools{gap:12px}.home-sort-slot label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.home-business{gap:30px}.about-two-columns{gap:30px}}
 @media(max-width:760px){
  body.miami-home .home-intro{
-   --intro-skyline:url('/assets/miami-skyline-night-mobile.webp');
-   --intro-shade:linear-gradient(90deg,rgba(5,14,20,.71),rgba(5,14,20,.44) 75%,rgba(5,14,20,.30));
+   --intro-skyline:url('/assets/miami-vice-skyline-mobile.webp');
+   --intro-shade:linear-gradient(90deg,rgba(15,6,29,.76),rgba(15,6,29,.53) 63%,rgba(15,6,29,.29));
    --intro-top:102px;
    --intro-gutter:20px;
    min-height:clamp(580px,80svh,720px);
