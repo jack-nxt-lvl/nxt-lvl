@@ -4,7 +4,10 @@
   --intro-skyline:url('/assets/miami-skyline-night.webp');
   --intro-shade:linear-gradient(90deg,rgba(5,14,20,.68),rgba(5,14,20,.24) 43%,rgba(5,14,20,.67) 66%,rgba(5,14,20,.48));
   --intro-gutter:max(64px,calc((100% - 1312px) / 2));
+  display:grid;
+  grid-template-rows:1fr auto;
   width:100%;
+  min-height:clamp(560px,74svh,800px);
   padding:var(--intro-top,126px) var(--intro-gutter) 0!important;
   background-color:#080e10;
   background-image:linear-gradient(0deg,rgba(8,14,16,.96),transparent 32%),var(--intro-shade),var(--intro-skyline);
@@ -12,7 +15,7 @@
   background-size:cover;
   background-repeat:no-repeat;
 }
-.home-intro-inner{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:72px;padding-bottom:30px}
+.home-intro-inner{align-self:center;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:72px;padding-bottom:30px}
 .home-kicker{font-size:10px!important;font-weight:650;letter-spacing:.14em;color:#bddf8a!important;margin:0 0 16px!important;line-height:1.6}
 .home-intro h1{font-size:clamp(38px,4vw,60px);line-height:1.04;letter-spacing:-.055em;font-weight:550;color:#f4f6f1;margin:0}
 .home-intro h1 span{color:#b6e66b}
@@ -95,7 +98,8 @@ body.miami-home.catalog-pro.storefront-focused .filter-btn{min-height:40px;paddi
    --intro-shade:linear-gradient(90deg,rgba(5,14,20,.71),rgba(5,14,20,.44) 75%,rgba(5,14,20,.30));
    --intro-top:102px;
    --intro-gutter:20px;
-   background-position:66% center;
+   min-height:clamp(580px,80svh,720px);
+   background-position:70% center;
  }
 }
 @media(max-width:640px){
