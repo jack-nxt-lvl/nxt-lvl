@@ -1,16 +1,7 @@
-function normalizeCatalogSearch(value) {
-  return String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, ' ').trim().toLowerCase();
-}
-
-function matchesCatalogProduct(product, query, requestedId) {
-  if (!product) return false;
-  if (requestedId) return product.id === requestedId;
-  const needle = normalizeCatalogSearch(query);
-  const haystack = normalizeCatalogSearch([product.name, product.aka, product.category, product.amount, product.shortDesc, ...(product.tags || [])].join(' '));
-  return !needle || haystack.includes(needle) || haystack.replace(/ /g, '').includes(needle.replace(/ /g, ''));
-}
-
-if (typeof module !== 'undefined' && module.exports) module.exports = {normalizeCatalogSearch, matchesCatalogProduct};
+const catalogMatcher = typeof module === 'object' && module.exports
+  ? require('./catalog-matcher')
+  : window.NxtCatalogMatcher;
+if (typeof module === 'object' && module.exports) module.exports = catalogMatcher;
 
 (function () {
   'use strict';
@@ -170,7 +161,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
   if (grid) grid.appendChild(empty);
 
   function normalize(value) {
-    return normalizeCatalogSearch(value);
+    return catalogMatcher.normalizeCatalogSearch(value);
   }
 
   function productForCard(card) {
@@ -241,7 +232,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = {normalize
 
     cards.forEach((card) => {
       const product = productForCard(card);
-      const matches = product ? matchesCatalogProduct(product, query, exactProduct) : !exactProduct && normalize(card.textContent).includes(query);
+      const matches = product ? catalogMatcher.matchesCatalogProduct(product, query, exactProduct) : !exactProduct && catalogMatcher.matchesTerms(catalogMatcher.indexText(card.textContent), query);
       if (matches) matched += 1;
       const shown = matches && (query || expanded || !showAll || visible < 6);
       card.hidden = !shown;

@@ -82,3 +82,12 @@ body.miami-home .native-pack-select:focus-visible{outline:2px solid #82dfd1;outl
 body.miami-site.product-detail .purchase-heading .eyebrow{margin:0 0 8px!important;padding:0!important;font-size:10px!important;letter-spacing:1.5px!important}
 body.miami-site.product-detail .purchase-heading h2{margin:0!important}
 body.miami-site.product-detail .purchase-heading>a{margin:0!important}
+
+.directory-search-row{display:flex;gap:8px;align-items:stretch}
+.directory-search-row input{flex:1}
+.directory-search-row button{min-height:44px;padding:0 16px;border:1px solid #607d76;border-radius:8px;background:#17251d;color:#def0df;font:inherit;cursor:pointer}
+.directory-search-row button:focus-visible,.directory-browse summary:focus-visible{outline:3px solid #80ded0;outline-offset:3px}
+.directory-browse{border-block:1px solid #34483b;padding:0 2px}
+.directory-browse summary{padding:14px 0;color:#dbe9d7;font-weight:600;cursor:pointer}
+.directory-browse[open]{padding-bottom:12px}
+.directory-browse p a{display:inline-block;padding-block:8px}

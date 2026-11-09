@@ -51,6 +51,23 @@ test('product links distinguish a material from blends and typed search tolerate
  assert.equal(matchesCatalogProduct(bpc,'',null),true);
 });
 
+test('catalog search distinguishes vial sizes and accepts size-first and unhyphenated names', () => {
+ const {matchesCatalogProduct} = require('../catalog-search-quantity');
+ const products = catalog();
+ const find = query => products.filter(p => matchesCatalogProduct(p, query)).map(p => p.id);
+ for (const query of ['50 mg GHK-Cu', 'ghkcu 50mg', 'GHK Cu 50', '50 mg ghk']) {
+  assert.deepEqual(find(query), ['ghk-cu-50'], query);
+ }
+ assert.deepEqual(find('GHK-Cu 100mg'), ['ghk-cu-100']);
+ assert.deepEqual(find('5 mg GHK-Cu'), []);
+ assert.deepEqual(find('CJC with DAC'), ['cjc1295-dac-10']);
+ assert.deepEqual(find('CJC no DAC'), ['cjc1295-no-dac-10']);
+ assert.deepEqual(find('10,000 IU HCG'), ['hcg-10000']);
+ assert.deepEqual(find('1.5 g glutathione'), ['glutathione-1500']);
+ assert.deepEqual(find('unlisted material'), []);
+ assert.equal(find('').length, products.length);
+});
+
 test('material pages have one price panel and no human-use offer or fabricated proof',()=>{
  for(const p of catalog()){
   const html=read(p.path.slice(1));
