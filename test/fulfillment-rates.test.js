@@ -16,12 +16,12 @@ test('trusted merchandise prices determine the free threshold, not client prices
   const items = [{key:'bpc157-10::0',qty:4,price:1000},{key:'bac-water-10ml::0',qty:2,price:1000}];
   for (const mode of ['shipping','overnight','local-delivery']) {
     const below = normalizeOrder(items,mode);
-    assert.equal(below.subtotalCents,47400);
+    assert.equal(below.subtotalCents,46000);
     assert.equal(below.shippingCents,mode==='shipping'?0:rates.OPTIONS[mode].cents);
-    const above = normalizeOrder([items[0],{...items[1],qty:3}],mode);
-    assert.equal(above.subtotalCents,49300);
+    const above = normalizeOrder([items[0],{...items[1],qty:4}],mode);
+    assert.equal(above.subtotalCents,48400);
     assert.equal(above.shippingCents,0);
-    assert.equal(above.totalCents,49300);
+    assert.equal(above.totalCents,48400);
   }
 });
 

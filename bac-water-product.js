@@ -13,15 +13,15 @@
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 19.0
+        "price": 12.0
       },
       {
         "label": "5 Vials",
-        "price": 87.4
+        "price": 55.2
       },
       {
         "label": "10 Vials",
-        "price": 167.2
+        "price": 105.6
       }
     ],
     "aka": "Laboratory research material",

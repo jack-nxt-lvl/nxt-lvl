@@ -66,21 +66,21 @@ test('optional 10mL water remains a separately priced line alongside every packa
  for(const [id,,cents] of expected){
   const order=normalizeOrder([{key:id+'::0',qty:1},{key:'bac-water-10ml::0',qty:1,price:0}],'shipping');
   assert.equal(order.normalizedItems[0].unitCents,cents);
-  assert.equal(order.normalizedItems[1].unitCents,1900);
+  assert.equal(order.normalizedItems[1].unitCents,1200);
   assert.equal(order.normalizedItems[1].quantity,1);
-  assert.equal(order.subtotalCents,cents+1900);
-  assert.equal(order.totalCents,cents+1900+(cents+1900>20000?0:1200));
+  assert.equal(order.subtotalCents,cents+1200);
+  assert.equal(order.totalCents,cents+1200+(cents+1200>20000?0:1200));
  }
 });
 
 test('optional water affects the free-fulfillment threshold at its actual price',()=>{
  const items=[{key:'pack-cjc-no-dac-ipamorelin::0',qty:2},{key:'bac-water-10ml::0',qty:1}];
  const below=normalizeOrder(items,'shipping');
- assert.equal(below.subtotalCents,43320);
+ assert.equal(below.subtotalCents,42620);
  assert.equal(below.shippingCents,0);
  items[1].qty=2;
  const above=normalizeOrder(items,'shipping');
- assert.equal(above.subtotalCents,45220);
+ assert.equal(above.subtotalCents,43820);
  assert.equal(above.shippingCents,0);
 });
 

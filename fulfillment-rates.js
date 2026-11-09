@@ -3,7 +3,7 @@
   if (typeof module === 'object' && module.exports) module.exports = rates;
   else root.NxtFulfillment = rates;
 })(typeof window !== 'undefined' ? window : this, function () {
-  const VERSION = '2026-11-02-pricing';
+  const VERSION = '2026-11-09-water';
   const FREE_ABOVE_CENTS = 47500;
   const STANDARD_FREE_ABOVE_CENTS = 20000;
   const OPTIONS = Object.freeze({

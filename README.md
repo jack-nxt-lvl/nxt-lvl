@@ -183,7 +183,7 @@ Premium single-vial prices have been individually reviewed against public suppli
 
 Standard Priority Mail remains $12 and is free strictly above $200 in merchandise after discounts. Overnight remains $30, local delivery $25, and appointment pickup free. The existing premium fulfillment waiver strictly above $475 remains. Exactly $200 does not qualify for free standard shipping. Buyer and seller costs were not provided, so profitability and conversion gains are unverified.
 
-The optional 10mL water reminder appears for research materials in cart and checkout, shows $19, and never adds water without a click. Checkout returns to the updated cart after adding water so the buyer reviews the new total. The previous trusted catalog and fulfillment version are retained for reconciliation of existing signed quotes. New quotes always use current prices.
+The optional 10mL water reminder appears for research materials in cart and checkout, shows the current single-vial price, and never adds water without a click. Checkout returns to the updated cart after adding water so the buyer reviews the new total. The previous trusted catalog and fulfillment version are retained for reconciliation of existing signed quotes. New quotes always use current prices.
 
 ### SEO and product-page purchasing (2026-11-02)
 
