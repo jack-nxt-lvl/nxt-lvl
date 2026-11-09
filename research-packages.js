@@ -10,6 +10,9 @@
     { id:'pack-copper-materials', name:'GHK-Cu 50mg + GHK-Cu 100mg — copper materials', ids:['ghk-cu-50','ghk-cu-100'] },
     { id:'pack-peptide-materials', name:'BPC-157 10mg + KPV 10mg — peptide materials', ids:['bpc157-10','kpv-10'] },
     { id:'pack-sermorelin-ipamorelin', name:'Sermorelin 10mg + Ipamorelin 10mg', ids:['sermorelin','ipamorelin'] },
+    { id:'pack-ghk-cu-kpv', name:'GHK-Cu 50mg + KPV 10mg', ids:['ghk-cu-50','kpv-10'] },
+    { id:'pack-aod-mots-c', name:'AOD-9604 10mg + MOTS-c 10mg', ids:['aod-9604','mots-c'] },
+    { id:'pack-nad-glutathione', name:'NAD+ 500mg + Glutathione 1.5g', ids:['nad-500','glutathione-1500'] },
   ].map(d=>Object.freeze({...d,ids:Object.freeze(d.ids)})));
 
   function buildResearchPackages(materials) {

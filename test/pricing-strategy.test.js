@@ -30,8 +30,8 @@ test('all 310 material pack choices agree between browser pricing, generated pag
   }
  }
 });
-test('six research packages preserve exact component amounts and never stack quantity discounts',()=>{
- const packs=buildResearchPackages(catalog());assert.equal(packs.length,6);
+test('research packages preserve exact component amounts and never stack quantity discounts',()=>{
+ const packs=buildResearchPackages(catalog());
  const copper=packs.find(p=>p.id==='pack-copper-materials');
  assert.deepEqual(copper.components.map(c=>c.amount),['50mg per vial','100mg per vial']);
  for(const p of packs){

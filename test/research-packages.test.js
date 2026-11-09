@@ -15,18 +15,21 @@ const expected = [
  ['pack-sermorelin-ipamorelin',21800,20710,1090],
  ['pack-copper-materials',17800,16910,890],
  ['pack-peptide-materials',18800,17860,940],
+ ['pack-ghk-cu-kpv',14800,14060,740],
+ ['pack-aod-mots-c',23800,22610,1190],
+ ['pack-nad-glutathione',23800,22610,1190],
 ];
 
-test('six package prices are derived from their exact single-vial contents',()=>{
+test('package prices are derived from their exact single-vial contents',()=>{
  const packages=buildResearchPackages(catalog());
- assert.equal(packages.length,6);
+ assert.equal(packages.length,expected.length);
  for(const [id,singles,total,savings] of expected){
   const p=packages.find(item=>item.id===id);
   assert.equal(p.singlesCents,singles);
   assert.equal(p.packageCents,total);
   assert.equal(p.savingsCents,savings);
   assert.equal(p.components.length,2);
-  assert.ok(p.components.every(c=>c.quantity===1 && /per vial/.test(c.amount)));
+  assert.ok(p.components.every(c=>c.quantity===1 && /per (?:10mL )?vial/.test(c.amount)));
   assert.equal(p.pricing.length,1);
   assert.equal(p.pricing[0].price,total/100);
   assert.deepEqual(buildQuantityPricing(p,p.category),p.pricing,'quantity tiers must not discount a package again');
@@ -93,16 +96,19 @@ test('package calculations follow changed source prices and reject missing compo
 
 test('browser registration preserves materials, is idempotent and matches trusted prices',()=>{
  const materials=catalog();
+ const singleMaterialCount=materials.length;
  const context={compounds:materials,categories:[{id:'all'}],window:{},document:{}};
  vm.runInNewContext(read('research-packages.js'),context);
  vm.runInNewContext(read('research-packages.js'),context);
- assert.equal(context.compounds.length,37);
+ assert.equal(context.compounds.length,singleMaterialCount+expected.length);
  assert.equal(context.categories.filter(c=>c.id==='research-packages').length,1);
  for(const [id,,cents] of expected){
   const p=context.compounds.find(p=>p.id===id);
   assert.match(p.badge,/In stock/);
   assert.equal(p.pricing[0].price,cents/100);
-  assert.equal(normalizeOrder([{key:id+'::0',qty:1}],'pickup').totalCents,cents);
+  const order=normalizeOrder([{key:id+'::0',qty:1}],'pickup');
+  assert.equal(order.totalCents,cents);
+  assert.deepEqual(order.normalizedItems[0].components.map(c=>[c.productId,c.amount]),Array.from(p.components,c=>[c.productId,c.amount]));
  }
  const home=read('index.html');
  assert.ok(home.indexOf('src="quantity-pricing.js')<home.indexOf('src="research-packages.js'));
@@ -112,9 +118,9 @@ test('browser registration preserves materials, is idempotent and matches truste
 
 test('public deals match server totals and are discoverable without false stock or outcome claims',()=>{
  const html=read('research-package-deals.html');
- assert.equal((html.match(/In stock · Save 5% · 2 separate vials/g)||[]).length,6);
+ assert.equal((html.match(/In stock · Save 5% · 2 separate vials/g)||[]).length,expected.length);
  const choices=[...html.matchAll(/href="\/\?product=([^#]+)#menu" aria-label="Choose [^"]+ for \$(\d+\.\d{2})"/g)];
- assert.equal(choices.length,6);
+ assert.equal(choices.length,expected.length);
  for(const [,id,displayed] of choices){
   assert.equal(Math.round(Number(displayed)*100),normalizeOrder([{key:id+'::0',qty:1}],'pickup').totalCents);
   assert.ok(html.includes('id="'+id+'"'));
