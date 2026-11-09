@@ -161,6 +161,11 @@
       "source": "/reconstitution-water.html",
       "destination": "/research/bacteriostatic-water-10ml.html",
       "permanent": true
+    },
+    {
+      "source": "/go/display",
+      "destination": "/south-florida-research.html?utm_source=local_display&utm_medium=qr&utm_campaign=south_florida",
+      "permanent": false
     }
   ],
   "buildCommand": "node scripts/build-catalog-pages.cjs",
