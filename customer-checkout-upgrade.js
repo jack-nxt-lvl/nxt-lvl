@@ -98,7 +98,7 @@
 
   async function ensureDirectWallet(){
     await loadCheckoutDependency({
-      src:'/direct-wallet-checkout.js?v=20261102-pricing',
+      src:'/direct-wallet-checkout.js?v=20261109-email-offer',
       selector:'script[data-nxt-direct-wallet],script[src*="direct-wallet-checkout.js"]',
       marker:'data-nxt-direct-wallet',
       ready:()=>typeof window.startDirectWalletCheckout==='function',
@@ -155,7 +155,7 @@
 
   async function requestCardLink(details){
     const id=requestId();
-    const options={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:id,items:compactCart(),fulfillment:details.fulfillment,customer:details.customer,researchApprovalCode:details.researchApprovalCode,channel:details.linkChannel,smsConsent:details.smsConsent===true})};
+    const options={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:id,items:compactCart(),fulfillment:details.fulfillment,customer:details.customer,promoCode:details.promoCode,researchApprovalCode:details.researchApprovalCode,channel:details.linkChannel,smsConsent:details.smsConsent===true})};
     let response;
     try{response=await fetch('/api/create-card-payment-link',options);}catch(_){response=await fetch('/api/create-card-payment-link',options);}
     let data=await response.json().catch(()=>({}));
@@ -178,7 +178,9 @@
       let paymentAsset=['USDT','BTC','ETH'].includes(draft.paymentAsset)?draft.paymentAsset:'USDT';
       let linkChannel=cardConfig.both?'both':cardConfig.email?'email':'sms';
       const base=subtotal();
-      const feeFor=mode=>rates.feeCents(mode,Math.round(base*100))/100;
+      let applied = null;
+      const netCents=()=>applied ? applied.discountedSubtotalCents : Math.round(base*100);
+      const feeFor=mode=>rates.feeCents(mode,netCents())/100;
       const overlay=document.createElement('div');
       overlay.className='nxt-checkout-overlay';
       overlay.innerHTML=`<div class="nxt-checkout-card" role="dialog" aria-modal="true" aria-labelledby="researchReviewTitle">
@@ -191,7 +193,8 @@
         <div class="nxt-field-grid"><input id="nxtName" class="wide" autocomplete="name" placeholder="Full name *"><input id="nxtEmail" type="email" inputmode="email" enterkeyhint="next" autocomplete="email" placeholder="Email *"><input id="nxtPhone" type="tel" inputmode="tel" enterkeyhint="next" autocomplete="tel" placeholder="Phone number *"></div>
         <div class="nxt-address-fields"><div class="nxt-field-grid" style="margin-top:8px"><input id="nxtAddress" class="wide" autocomplete="street-address" placeholder="Street address *"><input id="nxtUnit" autocomplete="address-line2" placeholder="Apt / Unit"><input id="nxtCity" autocomplete="address-level2" placeholder="City *"><input id="nxtState" autocomplete="address-level1" autocapitalize="characters" maxlength="2" placeholder="U.S. state code (FL, NY…) *"><input id="nxtZip" autocomplete="postal-code" inputmode="numeric" maxlength="10" placeholder="U.S. ZIP code *"></div></div>
         <div class="nxt-pickup-note">Provide your address for the order record, including pickup. Confirm local availability, pickup location, collector and appointment with support before payment or travel.</div>
-        <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$${feeFor(fulfillment).toFixed(2)}</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+feeFor(fulfillment)).toFixed(2)}</span></div><div class="nxt-no-tax">Amounts are in USD. Confirm fulfillment and any applicable tax with support before payment. This checkout does not calculate sales tax.</div></div>
+        <div class="nxt-coupon"><label for="nxtPromo">Discount code</label><div class="coupon-controls"><input id="nxtPromo" type="text" maxlength="24" autocapitalize="characters" spellcheck="false" autocomplete="off" placeholder="Code from your email"><button type="button" id="nxtPromoApply">Apply</button></div><p class="coupon-status" role="status"></p></div>
+        <div class="nxt-order-summary"><div class="nxt-summary-row"><span>Subtotal</span><span>$${base.toFixed(2)}</span></div><div class="nxt-summary-row"><span>Email discount (10%)</span><span id="nxtSavings"></span></div><div class="nxt-summary-row"><span id="nxtShippingLabel">Shipping</span><span id="nxtShipping">$${feeFor(fulfillment).toFixed(2)}</span></div><div class="nxt-summary-row total"><span>Total</span><span id="nxtTotal">$${(base+feeFor(fulfillment)).toFixed(2)}</span></div><div class="nxt-no-tax">Amounts are in USD. Confirm fulfillment and any applicable tax with support before payment. This checkout does not calculate sales tax.</div></div>
         <div class="nxt-payment-choice"><label for="nxtPaymentAsset"><strong>Pay directly to our wallet</strong></label><select id="nxtPaymentAsset" aria-describedby="nxtAssetNote"><option value="USDT">USDT · Ethereum (ERC-20)</option><option value="BTC">Bitcoin · Bitcoin Mainnet</option><option value="ETH">Ethereum · Ethereum Mainnet</option></select><p id="nxtAssetNote" class="nxt-checkout-intro">Next: your exact amount, receiving address and QR code. Your wallet asks you to confirm before sending.</p></div>
         <div class="nxt-checkout-intro nxt-final-sale"><strong>All sales final once an order is placed.</strong> No change-of-mind cancellations, returns, exchanges or refunds. Applicable legal rights remain. <a href="/ordering-policy.html#refunds" target="_blank" rel="noopener">Read the final-sale policy and required exceptions</a>.</div>
         <label class="nxt-research-attestation"><input id="nxtResearchAttestation" type="checkbox"><span>I am authorized to purchase these materials for legitimate laboratory research. They will not be used for human or veterinary consumption, administration, diagnosis or treatment, or supplied for personal use. I understand the final-sale policy and have read the <a href="/research-eligibility.html" target="_blank" rel="noopener">eligibility rules</a>, <a href="/ordering-policy.html" target="_blank" rel="noopener">ordering information</a> and <a href="/privacy.html" target="_blank" rel="noopener">privacy notice</a>.</span></label><div class="nxt-checkout-error" role="alert"></div>
@@ -230,8 +233,12 @@
       };
       const refresh=()=>{
         const fee=feeFor(fulfillment);
+        const savings=overlay.querySelector('#nxtSavings');
+        savings.parentElement.hidden=!applied;
+        savings.textContent=applied?'−$'+(applied.discountCents/100).toFixed(2):'';
+        overlay.querySelectorAll('[data-mode] .price').forEach(price=>{const amount=feeFor(price.closest('[data-mode]').dataset.mode);price.textContent=amount?'$'+amount.toFixed(2):'Free';});
         addressWrap.classList.remove('hidden');pickupNote.classList.toggle('show',fulfillment==='pickup');
-        shippingLabel.textContent=rates.label(fulfillment);shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(base+fee).toFixed(2);
+        shippingLabel.textContent=rates.label(fulfillment);shippingEl.textContent='$'+fee.toFixed(2);totalEl.textContent='$'+(netCents()/100+fee).toFixed(2);
         overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>{const active=btn.dataset.mode===fulfillment;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});
         overlay.querySelectorAll('.nxt-payment-method').forEach(btn=>btn.classList.toggle('active',btn.dataset.payment===paymentMethod));
         overlay.querySelectorAll('.nxt-link-channel').forEach(btn=>btn.classList.toggle('active',btn.dataset.channel===linkChannel));
@@ -239,13 +246,43 @@
         smsConsent?.closest('.nxt-link-consent')?.classList.toggle('show',paymentMethod==='card-link'&&(linkChannel==='sms'||linkChannel==='both'));
         continueButton.textContent='Pay now with '+paymentAsset+' →';
       };
+      const promo=overlay.querySelector('#nxtPromo');
+      const email=overlay.querySelector('#nxtEmail');
+      const promoStatus=overlay.querySelector('.coupon-status');
+      const applyButton=overlay.querySelector('#nxtPromoApply');
+      let revision=0;
+      function resetOffer() {
+        revision++;applied=null;promoStatus.textContent='';applyButton.disabled=false;refresh();
+      }
+      promo.addEventListener('input',resetOffer);
+      email.addEventListener('input',resetOffer);
+      async function applyOffer() {
+        const code=promo.value.trim().toUpperCase();
+        if(!code){resetOffer();return true;}
+        const address=email.value.trim().toLowerCase();
+        if(applied?.code===code && applied.email===address)return true;
+        if(!address||!email.validity.valid){promoStatus.textContent='Enter the email address that received the code.';email.focus();return false;}
+        const ticket=++revision;applyButton.disabled=true;promoStatus.textContent='Checking code…';
+        try {
+          const response=await fetch('/api/email-offer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'apply',code,email:address,items:compactCart(),fulfillment}),signal:AbortSignal.timeout(15000)});
+          const result=await response.json();
+          if(ticket!==revision||!overlay.isConnected)return false;
+          if(!response.ok || !Number.isSafeInteger(result.discountCents) || !Number.isSafeInteger(result.discountedSubtotalCents))throw new Error(result.error||'Could not apply the code.');
+          applied={code,email:address,...result};promoStatus.textContent='10% discount applied.';refresh();return true;
+        } catch(err) {
+          if(ticket===revision){applied=null;promoStatus.textContent=err.name==='TypeError'||err.name==='TimeoutError'?'Could not check the code. Please try again.':err.message;refresh();}
+          return false;
+        } finally {if(ticket===revision)applyButton.disabled=false;}
+      }
+      applyButton.onclick=applyOffer;
+      promo.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();applyOffer();}});
       const assetSelect=overlay.querySelector('#nxtPaymentAsset');assetSelect.value=paymentAsset;assetSelect.onchange=()=>{paymentAsset=assetSelect.value;refresh();saveDraft();};
       overlay.querySelectorAll('.nxt-fulfillment').forEach(btn=>btn.onclick=()=>{fulfillment=btn.dataset.mode;refresh();saveDraft();});
       overlay.querySelectorAll('.nxt-payment-method').forEach(btn=>btn.onclick=()=>{paymentMethod=btn.dataset.payment;errorEl.classList.remove('show');refresh();});
       overlay.querySelectorAll('.nxt-link-channel').forEach(btn=>btn.onclick=()=>{linkChannel=btn.dataset.channel;errorEl.classList.remove('show');refresh();});
       overlay.querySelectorAll('input').forEach(input=>input.addEventListener('input',saveDraft));
       overlay.querySelector('.nxt-checkout-cancel').onclick=()=>{overlay.remove();resolve(null);};
-      overlay.querySelector('.nxt-checkout-continue').onclick=()=>{
+      overlay.querySelector('.nxt-checkout-continue').onclick=async()=>{
         const val=s=>(overlay.querySelector(s)?.value||'').trim();
         const customer={name:val('#nxtName'),email:val('#nxtEmail'),phone:val('#nxtPhone'),address:val('#nxtAddress'),unit:val('#nxtUnit'),city:val('#nxtCity'),state:val('#nxtState'),zip:val('#nxtZip')};
         overlay.querySelectorAll('[aria-invalid]').forEach(el=>el.removeAttribute('aria-invalid'));
@@ -261,9 +298,10 @@
         customer.state=customer.state.toUpperCase();
         if(!regions.includes(customer.state)){showFieldError('Enter a two-letter U.S. state or territory code, such as FL.','#nxtState');return;}
         if(!/^\d{5}(?:-\d{4})?$/.test(customer.zip)){showFieldError('Enter a valid U.S. ZIP code, such as 33137.','#nxtZip');return;}
+        if(promo.value.trim() && !applied){await applyOffer();return;}
         const shipping=feeFor(fulfillment);
         writeCheckoutDraft({fulfillment,paymentAsset,customer});
-        overlay.remove();resolve({fulfillment,shipping,total:base+shipping,customer,researchConsent,paymentMethod,paymentAsset,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
+        overlay.remove();resolve({fulfillment,shipping,total:netCents()/100+shipping,promoCode:applied?.code,customer,researchConsent,paymentMethod,paymentAsset,linkChannel,smsConsent:Boolean(smsConsent?.checked)});
       };
       const previousFocus=document.activeElement;
       overlay.querySelectorAll('.nxt-field-grid > input').forEach(input=>{const label=document.createElement('label');label.className=input.classList.contains('wide')?'wide':'';label.textContent=input.placeholder;input.before(label);label.appendChild(input);});

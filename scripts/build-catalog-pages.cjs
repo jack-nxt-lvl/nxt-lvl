@@ -138,6 +138,11 @@ function build() {
  output.set('research-purchasing-guide.html',seo.purchasingGuide(products,layout));
  output.set(seo.vialComparisonPath.slice(1),seo.vialComparison(products,layout));
  output.set('about.html',seo.aboutPage(layout));
+ const offerAssets='<link rel="stylesheet" href="/email-offer.css?v=1"><script src="/email-offer.js?v=1" defer></script>';
+ for (const [file, html] of output) {
+   if (file==='about.html' || file==='research-purchasing-guide.html') continue;
+   output.set(file,html.replace(offerAssets,'').replace('</head>',offerAssets+'</head>'));
+ }
  output.set('sitemap.xml',seo.sitemap(output,root,products));
  return output;
 }

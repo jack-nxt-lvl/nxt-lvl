@@ -1,3 +1,4 @@
+const { priceForEmail } = require('../lib/email-offer');
 const fulfillmentRates = require('../fulfillment-rates');
 const { applyCors, cleanCustomer, json, normalizeOrder } = require('../lib/direct-payment');
 const { createApplication } = require('../lib/research-access');
@@ -13,8 +14,9 @@ module.exports = async (req, res) => {
   try {
     const body = req.body || {};
     if (JSON.stringify(body).length > 16000) return json(res, 413, { error: 'Request too large.' });
-    const order = normalizeOrder(body.items, body.fulfillment);
+    const baseOrder = normalizeOrder(body.items, body.fulfillment);
     const customer = cleanCustomer(body.customer, 'shipping'); // organization address required for pickup, too
+    const order = await priceForEmail(baseOrder, customer.email, body.promoCode);
     const record = await createApplication({ req, body, order, customer });
     let notified = false;
     try {

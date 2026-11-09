@@ -1,0 +1,23 @@
+dialog.nxt-email-offer{box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(420px,calc(100% - 28px));max-height:calc(100dvh - 36px);overflow:auto;padding:32px;border:1px solid #546d50;border-radius:16px;background:#101b16;color:#eff5eb;font:16px/1.5 Inter,Arial,sans-serif;box-shadow:0 20px 84px #0009;text-align:left}
+.nxt-email-offer::backdrop{background:#06100bbe}
+.nxt-email-offer .offer-brand{margin:0 36px 14px 0;color:#b6e66b;font-size:11px;font-weight:700;letter-spacing:.13em}
+dialog.nxt-email-offer h2{margin:0 0 10px;color:#f2faed;font:650 clamp(28px,7vw,39px)/1.07 Inter,Arial,sans-serif;letter-spacing:-.045em}
+.nxt-email-offer p{margin:0 0 16px;color:#c6d7c9}
+.nxt-email-offer .offer-close{position:absolute;right:9px;top:9px;width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:#e0ebdd;font:28px/1 Arial;cursor:pointer}
+.nxt-email-offer label{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+.nxt-email-offer input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #678167;border-radius:7px;background:#0b1410;color:white;font:16px/1.4 Inter,Arial,sans-serif}
+.nxt-email-offer .offer-submit{width:100%;min-height:46px;padding:10px 16px;margin:10px 0;border:0;border-radius:7px;background:#b6e66b;color:#112012;font-weight:700;font-size:16px;cursor:pointer}
+.nxt-email-offer small{display:block;color:#b7c8ba;font-size:12px;line-height:1.5}
+.nxt-email-offer .offer-status{margin:12px 0 0}
+.nxt-email-offer .offer-status:empty{display:none}
+.nxt-email-offer a{color:#cef397;text-decoration:underline}
+.nxt-email-offer :focus-visible,.offer-trigger:focus-visible{outline:3px solid #cdf795;outline-offset:3px}
+footer .offer-trigger{display:inline-block;min-height:44px;border:1px solid #667f61;padding:8px 16px;margin:8px 0;border-radius:7px;background:#152219;color:#d9edce;font:600 14px/1.4 Inter,Arial,sans-serif;cursor:pointer}
+.nxt-coupon{margin:14px 0;padding:12px;border:1px solid #435743;border-radius:8px}
+.nxt-coupon label{display:block;font-size:14px;font-weight:650;margin-bottom:5px}
+.nxt-coupon .coupon-controls{display:flex;gap:8px}
+.nxt-coupon input,.nxt-coupon button{box-sizing:border-box;min-height:44px;border-radius:6px;border:1px solid #647a62;background:#111c16;color:#e7f1e2;padding:8px 12px;font:inherit}
+.nxt-coupon input{min-width:0;flex:1;font-size:16px}
+.nxt-coupon button{cursor:pointer;color:#d4f49e}
+.nxt-coupon .coupon-status{margin:4px 0 0;font-size:13px}
+.nxt-coupon .coupon-status:empty,.nxt-summary-row[hidden]{display:none!important}

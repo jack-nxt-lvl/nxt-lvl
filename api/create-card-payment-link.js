@@ -1,3 +1,4 @@
+const { priceForEmail } = require('../lib/email-offer');
 const { requireApproval } = require('../lib/research-access');
 const { applyCors, cleanCustomer, json, normalizeOrder, randomOrderId } = require('../lib/direct-payment');
 const {
@@ -37,8 +38,9 @@ module.exports = async function handler(req, res) {
       return json(res, 400, { error: 'Consent is required before sending a payment link by text.' });
     }
 
-    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
-    const customer = cleanCustomer(req.body && req.body.customer, order.mode);
+    const baseOrder = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
+    const customer = cleanCustomer(req.body && req.body.customer, baseOrder.mode);
+    const order = await priceForEmail(baseOrder, customer.email, req.body.promoCode);
     const approval = await requireApproval(req.body || {}, order, customer, 'card');
     if (channel === 'sms' || channel === 'both') customer.phone = normalizePhone(customer.phone);
     const requestId = approval.reference.slice(3);

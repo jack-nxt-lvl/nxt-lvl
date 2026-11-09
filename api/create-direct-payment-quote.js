@@ -1,3 +1,4 @@
+const { priceForEmail } = require('../lib/email-offer');
 const cryptoAccess = require('../lib/crypto-checkout-access');
 const fulfillmentRates = require('../fulfillment-rates');
 const QRCode = require('qrcode');
@@ -32,8 +33,9 @@ module.exports = async function handler(req, res) {
     const config = ASSETS[asset];
     if (!config) return json(res, 400, { error: 'Choose BTC, ETH, or USDT.' });
 
-    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
-    const customer = cleanCustomer(req.body && req.body.customer, order.mode);
+    const baseOrder = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment);
+    const customer = cleanCustomer(req.body && req.body.customer, baseOrder.mode);
+    const order = await priceForEmail(baseOrder, customer.email, req.body.promoCode);
     const acknowledgment = await cryptoAccess.authorize(req, customer);
     const [usdPrice, localization] = await Promise.all([
       fetchUsdPrice(asset),
@@ -53,6 +55,7 @@ module.exports = async function handler(req, res) {
     if (!amount) throw new PaymentLedgerError('Unable to reserve a unique payment amount. Please retry checkout.');
     const payload = {
       v: 1,
+      ...(order.offerVersion ? {offerVersion:order.offerVersion} : {}),
       fulfillmentPricingVersion: fulfillmentRates.VERSION,
       researchPolicyVersion: acknowledgment.policyVersion,
       researchAcknowledgedAt: acknowledgment.acknowledgedAt,

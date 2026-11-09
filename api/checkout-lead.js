@@ -1,3 +1,4 @@
+const { discountedOrder } = require('../lib/email-offer');
 const fulfillmentRates = require('../fulfillment-rates');
 const { escapeHtml, sendEmail } = require('../lib/email');
 const { ASSETS, applyCors, cleanCustomer, customerDigest, json, normalizeOrder, verifyQuote } = require('../lib/direct-payment');
@@ -14,7 +15,7 @@ module.exports = async (req, res) => {
 
   try {
     const quote = verifyQuote(req.body && req.body.quoteToken);
-    const order = normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment, quote.fulfillmentPricingVersion || 'legacy-v1');
+    const order = discountedOrder(normalizeOrder(req.body && req.body.items, req.body && req.body.fulfillment, quote.fulfillmentPricingVersion || 'legacy-v1'), quote.offerVersion);
     const customer = cleanCustomer(req.body && req.body.customer, order.mode);
     if (order.itemDigest !== quote.itemDigest || order.totalCents !== quote.totalCents || order.mode !== quote.fulfillment) {
       return json(res, 400, { error: 'The checkout details no longer match this payment quote.' });
@@ -41,7 +42,7 @@ module.exports = async (req, res) => {
         <strong>Selected payment:</strong> ${escapeHtml(quote.asset)} on ${escapeHtml(ASSETS[quote.asset].network)}<br>
         <strong>Fulfillment:</strong> ${escapeHtml(fulfillmentRates.label(mode))}<br>
         <strong>Fulfillment fee:</strong> $${shippingAmount}<br>
-        <strong>Cart total:</strong> $${total}</p>
+        ${order.discountCents ? '<strong>Email discount (10%):</strong> −$' + (order.discountCents / 100).toFixed(2) + '<br>' : ''}<strong>Cart total:</strong> $${total}</p>
         <h3>Customer</h3>
         <p>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}<br>${escapeHtml(customer.phone)}</p>
         <h3>${escapeHtml(fulfillmentRates.label(mode))}</h3>

@@ -347,7 +347,7 @@
     loading.innerHTML = `<div class="nxt-wallet-loadbox" role="status"><h3>Preparing your ${escapeHtml(asset)} payment…</h3><p>Getting the exact amount and payment details.</p></div>`;
     document.body.appendChild(loading);
     try {
-      const {response,data:quote} = await request('/api/create-direct-payment-quote',{asset,researchConsent:context.details.researchConsent,fulfillment:context.details.fulfillment,customer:context.details.customer,items:context.items,locale:navigator.languages?.[0] || navigator.language || 'en-US'});
+      const {response,data:quote} = await request('/api/create-direct-payment-quote',{asset,promoCode:context.details.promoCode,researchConsent:context.details.researchConsent,fulfillment:context.details.fulfillment,customer:context.details.customer,items:context.items,locale:navigator.languages?.[0] || navigator.language || 'en-US'});
       if (!response.ok) throw new Error(quote.error || 'Could not prepare payment. Please try again.');
       if (quote.asset !== asset || !quote.quoteToken || !quote.address || !quote.paymentUri || !Number.isFinite(Number(quote.expiresAt))) throw new Error('Payment details could not be verified. Please try again.');
       renderPayment(quote,context);
