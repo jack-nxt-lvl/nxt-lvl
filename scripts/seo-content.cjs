@@ -14,6 +14,58 @@ const categories = [
 ];
 const hubLinks = current => `<div class="catalog-hubs" aria-label="Browse collections">${[{path:'/catalog.html',name:'All products'},...categories,{path:'/research-package-deals.html',name:'Research packages'}].map(c=>`<a href="${c.path}"${c.path===current?' aria-current="page"':''}>${c.name}</a>`).join('')}</div>`;
 const breadcrumbs = (name, url, parent = {name:'Research catalog',path:'/catalog.html'}) => ({'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:origin+'/'},{'@type':'ListItem',position:2,name:parent.name,item:origin+parent.path},{'@type':'ListItem',position:3,name,item:origin+url}]});
+const vialComparisonPath = '/ghk-cu-vial-comparison.html';
+
+function vialComparison(products, {head, nav, footer}) {
+  const sizes = ['ghk-cu-50', 'ghk-cu-100'].map(id => {
+    const product = products.find(p => p.id === id);
+    const amount = product?.amount.match(/^(\d+)\s*mg per vial$/i);
+    if (!amount) throw new Error('Check the catalog label for ' + id);
+    return {product, mg:Number(amount[1])};
+  });
+  const [small, large] = sizes;
+  const title = 'GHK-Cu 50 mg vs. 100 mg | Research Vial Prices | NXT LVL';
+  const description = 'Compare GHK-Cu 50 mg and 100 mg research vials by price per vial, price per labeled milligram and pack totals for the same amount of material.';
+  const page = origin + vialComparisonPath;
+  const image = origin + images.url(small.product.id, 960);
+  const graph = [
+    {'@type':'WebPage','@id':page+'#page',url:page,name:title,description,image,about:sizes.map(({product}) => ({'@id':origin+product.path+'#product'}))},
+    breadcrumbs('GHK-Cu vial comparison', vialComparisonPath)
+  ];
+  const header = head(title,description,vialComparisonPath,graph)
+    .replaceAll(origin+'/assets/miami-skyline-night.webp', image)
+    .replace('Miami skyline at dusk — NXT LVL Research', 'GHK-Cu 50 mg research vial and box')
+    .replace('</head>', '<link rel="stylesheet" href="/vial-comparison.css?v=1"></head>');
+  const cards = sizes.map(({product, mg}) => {
+    const price = product.options[0].cents;
+    return `<article class="vial-option"><a class="vial-photo" href="${product.path}" aria-label="View GHK-Cu ${mg} mg">${images.image(product,{sizes:'(max-width: 540px) 120px, 210px',eager:true})}</a><div><h2>${mg} mg vial</h2><p class="vial-price">${money(price)}</p><p>${money(price/mg)} per labeled mg</p><a class="vial-link" href="${product.path}#purchaseTitle">View ${mg} mg pack prices</a></div></article>`;
+  }).join('');
+  function pack(size, totalMg) {
+    const quantity = totalMg / size.mg;
+    const option = size.product.options.find(item => item.quantity === quantity);
+    if (!option) throw new Error('Missing GHK-Cu pack for ' + totalMg + ' mg');
+    return option;
+  }
+  const rows = [1, 2, 5].map(count => {
+    const total = large.mg * count;
+    const cells = sizes.map(size => {
+      const option = pack(size,total);
+      return `<td><strong>${money(option.cents)}</strong><span>${option.quantity} ${option.quantity === 1 ? 'vial' : 'vials'}</span></td>`;
+    }).join('');
+    return `<tr><th scope="row">${total} mg</th>${cells}</tr>`;
+  }).join('');
+  const pair = pack(small,large.mg);
+  const single = pack(large,large.mg);
+  return header+`<body class="miami-site catalog-pro vial-comparison"><main class="wrap" id="main-content">${nav}
+    <header class="vial-intro"><p class="eyebrow">Laboratory purchasing guide</p><h1>GHK-Cu 50 mg vs. 100 mg</h1>
+    <p class="lead">For ${large.mg} mg of labeled material, one ${large.mg} mg vial costs <strong>${money(single.cents)}</strong>. A pack of ${pair.quantity} separately labeled ${small.mg} mg vials costs <strong>${money(pair.cents)}</strong> after the quantity discount.</p></header>
+    <div class="vial-options">${cards}</div>
+    <section class="vial-totals" aria-labelledby="totals-title"><h2 id="totals-title">Compare equal amounts</h2>
+    <table><caption>Merchandise totals in USD, including pack discounts. Shipping and tax are separate.</caption><thead><tr><th scope="col">Total labeled amount</th><th scope="col">${small.mg} mg vials</th><th scope="col">${large.mg} mg vials</th></tr></thead><tbody>${rows}</tbody></table></section>
+    <section class="vial-docs"><h2>Check the lot before choosing a size</h2><p>The label gives the amount per vial. For either size, ask for the lot number and its certificate of analysis to review identity and purity. If your laboratory requires several vials from one lot, confirm that before ordering.</p><p><a href="/coa.html">Request a lot report</a> · <a href="/shipping-and-payments.html">Shipping fees and timing</a> · <a href="/south-florida-research.html">Miami and Fort Lauderdale fulfillment</a></p></section>
+    ${footer}</main></body></html>`;
+}
+
 function enhanceProduct(html, p) {
   const parent = categories.find(group => group.select(p));
   const label = p.name.replace(' — ',' ').replace(/(\d)(mg|mL|IU)\b/gi,'$1 $2');
@@ -40,7 +92,9 @@ function enhanceProduct(html, p) {
   html = html.replace(/<section class="section(?: catalog-detail-actions)?">[\s\S]*?<\/section>/g,'');
   html = html.replace(/<section><h2>Handling and material review<\/h2>[\s\S]*?<\/section>/g,'');
   html = html.replace('<!-- product-visual:end -->','<!-- product-visual:end --><!-- research-jumps:start --><nav class="research-jumps" aria-label="On this product page"><a href="#purchaseTitle">Quantity &amp; price</a><a href="#research-overview">Research reference</a><a href="#docsTitle">Lot documentation</a></nav><!-- research-jumps:end -->');
-  const specs = `<!-- material-specs:start --><section class="product-docs" aria-labelledby="materialSpecs"><h2 id="materialSpecs">Material &amp; purchase details</h2><dl class="product-specs"><div><dt>Catalog reference</dt><dd>${esc(p.id)}</dd></div><div><dt>Labeled amount</dt><dd>${esc(p.amount)}</dd></div><div><dt>Supplied format</dt><dd>${esc(p.form)}</dd></div><div><dt>Single-vial price</dt><dd>${money(p.options[0].cents)} USD</dd></div><div><dt>Quantity options</dt><dd>1–10 vials; select a pack for quantity savings</dd></div><div><dt>Documentation</dt><dd><a href="/coa.html">Request the report for the offered lot</a></dd></div></dl><p>Labeled amounts describe the supplied material, not a dose. Compare vial count, total pack price and the report for each lot. <a href="/research-purchasing-guide.html">Read the research purchasing guide ↗</a></p>${hubLinks(null)}</section><!-- material-specs:end -->`;
+  const sizeLink = ['ghk-cu-50','ghk-cu-100'].includes(p.id)
+    ? `<p><a href="${vialComparisonPath}">Compare GHK-Cu 50 mg and 100 mg vial prices</a></p>` : '';
+  const specs = `<!-- material-specs:start --><section class="product-docs" aria-labelledby="materialSpecs"><h2 id="materialSpecs">Material &amp; purchase details</h2>${sizeLink}<dl class="product-specs"><div><dt>Catalog reference</dt><dd>${esc(p.id)}</dd></div><div><dt>Labeled amount</dt><dd>${esc(p.amount)}</dd></div><div><dt>Supplied format</dt><dd>${esc(p.form)}</dd></div><div><dt>Single-vial price</dt><dd>${money(p.options[0].cents)} USD</dd></div><div><dt>Quantity options</dt><dd>1–10 vials; select a pack for quantity savings</dd></div><div><dt>Documentation</dt><dd><a href="/coa.html">Request the report for the offered lot</a></dd></div></dl><p>Labeled amounts describe the supplied material, not a dose. Compare vial count, total pack price and the report for each lot. <a href="/research-purchasing-guide.html">Read the research purchasing guide ↗</a></p>${hubLinks(null)}</section><!-- material-specs:end -->`;
   return html.replace('<!-- catalog-purchase:end -->','<!-- catalog-purchase:end -->'+research.render(p)+specs);
 }
 function collectionPages(products,{head,nav,footer}) {
@@ -88,4 +142,4 @@ function aboutPage({head,nav,footer}) {
  <section class="about-section" aria-labelledby="aboutDeliveryTitle"><h2 id="aboutDeliveryTitle">Online across the U.S. Local in South Florida.</h2><p>Standard U.S. shipping is $12, with free standard shipping when the merchandise total is over $200 after discounts. Dispatch is normally 1–2 business days after acceptance and payment; carrier transit time is additional.</p><p>Confirmed South Florida delivery is $25, and pickup is free by appointment. We do not operate a walk-in storefront. Check the delivery areas, available methods and full terms before arranging an order.</p><div class="about-link-row"><a href="/shipping-and-payments.html">Shipping &amp; payment details ↗</a><a href="/south-florida-research.html">Local delivery &amp; pickup ↗</a><a href="/how-to-order.html">How to order ↗</a></div></section>
  ${footer}</main></body></html>`;
 }
-module.exports={enhanceProduct,collectionPages,purchasingGuide,sitemap,hubLinks,aboutPage};
+module.exports={vialComparison,vialComparisonPath,enhanceProduct,collectionPages,purchasingGuide,sitemap,hubLinks,aboutPage};

@@ -1,0 +1,23 @@
+.vial-comparison .wrap{max-width:1080px;margin-inline:auto;padding:clamp(16px,4vw,44px)}
+.vial-comparison .vial-intro{padding:clamp(18px,3vw,32px) 0}
+.vial-comparison .vial-intro h1{max-width:none;font-size:clamp(2.25rem,6vw,4.3rem);line-height:1.04;letter-spacing:-.045em;margin:.35em 0}
+.vial-comparison .vial-intro .lead{max-width:70ch;color:#c4cfc7;margin:0}
+.vial-comparison .vial-intro strong{color:#f2f6ee}
+.vial-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.vial-option{display:grid;align-items:center;grid-template-columns:minmax(90px,.9fr) minmax(0,1fr);border:1px solid #3a4b3d;border-radius:12px;overflow:hidden;background:#152019}
+.vial-option>div{padding:16px 16px 16px 0}
+.vial-option .vial-photo{display:block;margin:12px;overflow:hidden;border-radius:8px}
+.vial-option .vial-photo img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+.vial-comparison .vial-option h2{margin:0;font-size:1.15rem}
+.vial-comparison .vial-option p{margin:5px 0;color:#bbcabd;font-size:.88rem}
+.vial-comparison .vial-option .vial-price{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:650;color:#f1f6ef;line-height:1.15}
+.vial-comparison .vial-link{display:inline-flex;align-items:center;min-height:44px;color:#b6e66b;font-weight:600;text-underline-offset:4px;font-size:.88rem}
+.vial-comparison :is(.vial-totals,.vial-docs){padding:clamp(22px,4vw,38px) 0 0}
+.vial-totals table{width:100%;border-collapse:collapse;text-align:left;font-variant-numeric:tabular-nums}
+.vial-totals caption{text-align:left;color:#b9c8bc;padding:0 0 14px;font-size:.9rem}
+.vial-totals :is(th,td){padding:12px 10px;border-bottom:1px solid #344638;vertical-align:middle}
+.vial-totals thead{background:#19271e}
+.vial-totals td span{display:block;font-size:.82rem;color:#bdc9bf}
+.vial-docs p{max-width:78ch}
+.vial-comparison :is(.vial-option,.vial-docs) a:focus-visible{outline:3px solid #dcf7a9;outline-offset:3px}
+@media(max-width:680px){.vial-options{grid-template-columns:1fr}.vial-option{grid-template-columns:minmax(92px,30%) 1fr}.vial-option .vial-photo{max-width:148px}.vial-comparison .vial-intro h1{font-size:clamp(2rem,8vw,3rem)}.vial-totals :is(th,td){padding:10px 7px}}
