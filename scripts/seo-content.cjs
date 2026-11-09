@@ -13,9 +13,14 @@ const categories = [
   {path:'/research-supplies.html', title:'Laboratory Supplies & Bacteriostatic Water | NXT LVL', name:'Laboratory research supplies', description:'Compare 10mL bacteriostatic water single-vial and quantity-pack prices. Laboratory research only, sold separately from research materials at NXT LVL.', intro:'Supplies are sold separately from research materials and packages. Check the product composition, labeled volume and lot documentation against your laboratory requirements before ordering.', select:p=>p.category==='supplies'}
 ];
 const hubLinks = current => `<div class="catalog-hubs" aria-label="Browse collections">${[{path:'/catalog.html',name:'All products'},...categories,{path:'/research-package-deals.html',name:'Research packages'}].map(c=>`<a href="${c.path}"${c.path===current?' aria-current="page"':''}>${c.name}</a>`).join('')}</div>`;
-const breadcrumbs = (name, url) => ({'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:origin+'/'},{'@type':'ListItem',position:2,name:'Research catalog',item:origin+'/catalog.html'},{'@type':'ListItem',position:3,name,item:origin+url}]});
+const breadcrumbs = (name, url, parent = {name:'Research catalog',path:'/catalog.html'}) => ({'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:origin+'/'},{'@type':'ListItem',position:2,name:parent.name,item:origin+parent.path},{'@type':'ListItem',position:3,name,item:origin+url}]});
 function enhanceProduct(html, p) {
-  const title = p.name.replace(' — ',' ') + ' Research Vials | NXT LVL';
+  const parent = categories.find(group => group.select(p));
+  const label = p.name.replace(' — ',' ').replace(/(\d)(mg|mL|IU)\b/gi,'$1 $2');
+  const title = label + (p.category === 'supplies' ? ' | Laboratory Supplies' : ' Research Vial') + ' | NXT LVL';
+  const trail = `<p class="crumbs"><a href="/">Home</a> / <a href="${parent.path}">${esc(parent.name)}</a> / ${esc(p.name)}</p>`;
+  html = html.replace(/<(p|div) class="crumbs">[\s\S]*?<\/\1>/g,'');
+  html = html.replace('<!-- product-visual:start -->', () => trail+'<!-- product-visual:start -->');
   const description = research.get(p.id).meta;
   html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>'+esc(title)+'</title>')
     .replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(")/g,(_,a,b)=>a+esc(title)+b)
@@ -24,7 +29,7 @@ function enhanceProduct(html, p) {
   const graph = [
     {'@type':'WebPage','@id':url+'#page',name:title,url,description,isPartOf:{'@id':origin+'/#website'},mainEntity:{'@id':url+'#product'},citation:research.get(p.id).sources.map(key=>research.sources[key][0])},
     {'@type':'Product','@id':url+'#product',name:p.name,description,sku:p.id,url,image:[origin+images.url(p.id,960)],brand:{'@type':'Brand',name:'NXT LVL Research'},category:p.category==='supplies'?'Laboratory research supplies':'Laboratory research materials',additionalProperty:[{'@type':'PropertyValue',name:'Labeled amount per vial',value:p.amount},{'@type':'PropertyValue',name:'Format',value:p.form}],offers:{'@type':'Offer',url,price:(p.options[0].cents/100).toFixed(2),priceCurrency:'USD',itemCondition:'https://schema.org/NewCondition',...(p.badge==='In stock'?{availability:'https://schema.org/InStock'}:{}),seller:{'@id':origin+'/#organization'}}},
-    breadcrumbs(p.name,p.path)
+    breadcrumbs(p.name,p.path,parent)
   ];
   html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g,'');
   html = html.replace('</head>',`<script type="application/ld+json">${json({'@context':'https://schema.org','@graph':graph})}</script></head>`);

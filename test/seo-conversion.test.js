@@ -106,3 +106,34 @@ test('published sample reports are linked only to the matching labeled presentat
  assert.match(read('research/tb-500-bpc-157.html'),/does not specify the mass of each component/);
  assert.match(read('.vercelignore'),/!scripts\/research-content\.cjs/);
 });
+
+test('homepage exposes its featured catalog links and prices before JavaScript runs', () => {
+ const html = read('index.html');
+ const featured = html.match(/<!-- featured-products:start -->([\s\S]*?)<!-- featured-products:end -->/)[1];
+ const cards = [...featured.matchAll(/<article class="compound-card">([\s\S]*?)<\/article>/g)];
+ const products = catalog().slice(0,6);
+ assert.equal(cards.length, products.length);
+ for (const [index, product] of products.entries()) {
+  assert.ok(cards[index][1].includes('href="' + product.path + '"'), product.id);
+  assert.ok(cards[index][1].includes('$' + (product.options[0].cents / 100).toFixed(2)), product.id);
+ }
+});
+
+test('visible product breadcrumbs link to the collection named in structured data', () => {
+ for (const p of catalog()) {
+  const html = read(p.path.slice(1));
+  const trail = html.match(/<p class="crumbs">([\s\S]*?)<\/p>/)[1];
+  const parent = graph(html).find(n => n['@type'] === 'BreadcrumbList').itemListElement[1];
+  assert.ok(trail.includes('href="' + new URL(parent.item).pathname + '">' + parent.name + '</a>'), p.id);
+ }
+});
+
+test('the legacy water listing redirects to the catalog offer and stays out of the sitemap', () => {
+ const source = '/reconstitution-water.html';
+ const destination = '/research/bacteriostatic-water-10ml.html';
+ const rule = JSON.parse(read('vercel.json')).redirects.find(r => r.source === source);
+ assert.equal(rule.destination, destination);
+ assert.equal(rule.permanent, true);
+ assert.ok(!read('sitemap.xml').includes(source));
+ assert.ok(read('sitemap.xml').includes(destination));
+});

@@ -156,6 +156,11 @@
       "source": "/research/semax-10mg.html",
       "destination": "/research/semax-11mg.html",
       "permanent": true
+    },
+    {
+      "source": "/reconstitution-water.html",
+      "destination": "/research/bacteriostatic-water-10ml.html",
+      "permanent": true
     }
   ],
   "buildCommand": "node scripts/build-catalog-pages.cjs",
