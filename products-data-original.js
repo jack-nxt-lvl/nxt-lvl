@@ -307,15 +307,15 @@ const compounds = [
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 149.0
+        "price": 89
       },
       {
         "label": "5 Vials",
-        "price": 685.4
+        "price": 409.4
       },
       {
         "label": "10 Vials",
-        "price": 1311.2
+        "price": 783.2
       }
     ],
     "aka": "Laboratory reference material",
@@ -344,15 +344,15 @@ const compounds = [
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 69.0
+        "price": 49
       },
       {
         "label": "5 Vials",
-        "price": 317.4
+        "price": 225.4
       },
       {
         "label": "10 Vials",
-        "price": 607.2
+        "price": 431.2
       }
     ],
     "aka": "Laboratory reference material",
@@ -381,15 +381,15 @@ const compounds = [
     "pricing": [
       {
         "label": "1 Vial",
-        "price": 109.0
+        "price": 69
       },
       {
         "label": "5 Vials",
-        "price": 501.4
+        "price": 317.4
       },
       {
         "label": "10 Vials",
-        "price": 959.2
+        "price": 607.2
       }
     ],
     "aka": "Laboratory reference material",

@@ -169,7 +169,7 @@
   }
 
   async function collectCheckoutDetails(cardConfig){
-    await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261109-water',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
+    await loadCheckoutDependency({src:'/fulfillment-rates.js?v=20261110-pricing',selector:'script[data-nxt-fulfillment]',marker:'data-nxt-fulfillment',ready:()=>Boolean(window.NxtFulfillment),label:'Fulfillment rates'});
     const rates=window.NxtFulfillment;
     return new Promise(resolve=>{
       const draft=readCheckoutDraft();

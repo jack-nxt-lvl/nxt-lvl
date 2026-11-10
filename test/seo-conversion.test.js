@@ -57,7 +57,7 @@ test('product-page add preserves existing cart and uses only product identity an
  const items=cart.add(storage,'ghk-cu-50',4);
  assert.deepEqual(items,[{productId:'sermorelin',pricingIndex:0,qty:1},{productId:'ghk-cu-50',pricingIndex:4,qty:1}]);
  const order=normalizeOrder(items.map(i=>({key:i.productId+'::'+i.pricingIndex,qty:i.qty})),'shipping');
- assert.equal(order.subtotalCents,43640);
+ assert.equal(order.subtotalCents,34440);
  assert.equal(order.shippingCents,0);
  assert.doesNotMatch(value,/price|total|customer|email/);
  cart.add(storage,'ghk-cu-50',4);

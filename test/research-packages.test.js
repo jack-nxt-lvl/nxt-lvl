@@ -13,11 +13,11 @@ const expected = [
  ['pack-cjc-no-dac-ipamorelin',21800,20710,1090],
  ['pack-tesamorelin-ipamorelin',21800,20710,1090],
  ['pack-sermorelin-ipamorelin',21800,20710,1090],
- ['pack-copper-materials',17800,16910,890],
+ ['pack-copper-materials',11800,11210,590],
  ['pack-peptide-materials',18800,17860,940],
- ['pack-ghk-cu-kpv',14800,14060,740],
+ ['pack-ghk-cu-kpv',12800,12160,640],
  ['pack-aod-mots-c',23800,22610,1190],
- ['pack-nad-glutathione',23800,22610,1190],
+ ['pack-nad-glutathione',14800,14060,740],
 ];
 
 test('package prices are derived from their exact single-vial contents',()=>{

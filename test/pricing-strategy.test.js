@@ -57,3 +57,20 @@ test('previous signed quotes reconcile against previous prices and fulfillment f
  const current=normalizeOrder([{key:'bpc157-10::0',qty:2}],'shipping');
  assert.equal(current.totalCents,21800);assert.notEqual(old.itemDigest,current.itemDigest);
 });
+
+test('revised single, bulk and bundle prices preserve existing signed quotes', () => {
+  for (const [key, before, after] of [
+    ['ghk-cu-50::0', 6900, 4900],
+    ['ghk-cu-100::0', 10900, 6900],
+    ['nad-500::0', 14900, 8900],
+    ['glutathione-1500::0', 8900, 5900],
+    ['ghk-cu-100::9', 95920, 60720],
+    ['pack-nad-glutathione::0', 22610, 14060],
+  ]) {
+    const items = [{key, qty: 1}];
+    assert.equal(normalizeOrder(items, 'pickup').totalCents, after);
+    for (const version of ['2026-11-09-water', '2026-11-02-pricing', 'legacy-v1']) {
+      assert.equal(normalizeOrder(items, 'pickup', version).totalCents, before);
+    }
+  }
+});

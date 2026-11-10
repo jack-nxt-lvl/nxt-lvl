@@ -19,7 +19,7 @@ const supplementalProducts = [
   { id: 'cjc1295-no-dac-10', basePrice: 119 },
   { id: 'pt141-10', basePrice: 69 },
   { id: 'bac-water-10ml', basePrice: 12 },
-  { id: 'glutathione-1500', basePrice: 89 },
+  { id: 'glutathione-1500', basePrice: 59 },
   { id: 'slu-pp-332-10', basePrice: 139 },
 ];
 
