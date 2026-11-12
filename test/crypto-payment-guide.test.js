@@ -7,40 +7,31 @@ const root = join(__dirname, '..');
 const homepage = readFileSync(join(root, 'index.html'), 'utf8');
 const guide = readFileSync(join(root, 'shipping-and-payments.html'), 'utf8');
 const checkout = readFileSync(join(root, 'direct-wallet-checkout.js'), 'utf8');
-const navCleanup = readFileSync(join(root, 'nav-cleanup.js'), 'utf8');
+const orderHelp = readFileSync(join(root, 'how-to-order.html'), 'utf8');
 
-test('homepage exposes direct crypto instructions with research-use restrictions', () => {
-  assert.match(homepage, /id="crypto-guide"/);
-  assert.match(homepage, /Never used crypto before\?/);
-  assert.match(homepage, /Why checkout uses crypto|Why direct crypto checkout/i);
-  assert.match(homepage, /I already have crypto/);
-  assert.match(homepage, /Buy it directly with Paybis/);
-  assert.match(homepage, /No private approval code is required for crypto checkout/);
-  assert.doesNotMatch(homepage, /Crypto Discount Available/);
-  assert.match(navCleanup, /BTC · ETH · USDT checkout/);
-  assert.doesNotMatch(navCleanup, /Crypto Payments Accepted|Crypto Discount Available/);
-  assert.match(homepage, /nav-cleanup\.js\?v=20261017-crypto-health/);
-  assert.match(homepage, /crypto-payment-guide\.css\?v=20260824-easy-pay-1/);
-  assert.match(homepage, /direct-wallet-checkout\.js\?v=20261109-email-offer/);
+test('the homepage leads into the catalog and links to payment help', () => {
+  const catalog = homepage.indexOf('id="menu"');
+  const grid = homepage.indexOf('id="compoundGrid"', catalog);
+  const faq = homepage.indexOf('id="buyerFaqTitle"');
+  assert.ok(catalog > 0 && grid > catalog && faq > grid);
+  assert.match(homepage.slice(catalog, faq), /class="compound-card"/);
+  assert.match(homepage.slice(faq), /href="\/how-to-order\.html">payment guide</);
+  assert.doesNotMatch(homepage, /crypto-guide-shell|crypto-payment-guide\.css|Buy it directly with Paybis/i);
+  assert.match(orderHelp, /href="\/shipping-and-payments\.html#obtain"/);
+  assert.match(guide, /id="obtain"/);
 });
 
 test('instructions describe the Paybis purchase and existing-wallet routes', () => {
-  for (const source of [homepage, guide]) {
-    assert.match(source, /Paybis/);
-    assert.match(source, /direct(?:ly)? (?:from|with) (?:your )?(?:existing )?wallet|wallet-to-wallet/i);
-    assert.match(source, /exact (?:crypto )?(?:receive )?amount|exact crypto amount/i);
-    assert.match(source, /provider fees/i);
-    assert.match(source, /Avoid scams/i);
-    assert.match(source, /Paybis is independent from NXT LVL/i);
-    assert.doesNotMatch(source, /\b(?:Swaps|Transak)\b/);
-  }
+  assert.match(guide, /Paybis/);
+  assert.match(guide, /direct(?:ly)? (?:from|with) (?:your )?(?:existing )?wallet|wallet-to-wallet/i);
+  assert.match(guide, /exact (?:crypto )?(?:receive )?amount|exact crypto amount/i);
+  assert.match(guide, /provider fees/i);
+  assert.match(guide, /Avoid scams/i);
+  assert.match(guide, /Paybis is independent from NXT LVL/i);
+  assert.doesNotMatch(guide, /\b(?:Swaps|Transak)\b/);
   assert.doesNotMatch(homepage, /Cash App|MetaMask|Kraken|Coinbase|Strike/);
   assert.match(guide, /Why the exact receive amount matters/);
   assert.match(checkout, /purchase enough to cover your order plus provider and network fees/i);
-
-
-
-
 
   assert.match(checkout, /make sure “You receive” is at least/i);
   assert.doesNotMatch(checkout, /window\.location\.assign\(url\)/);
@@ -83,42 +74,30 @@ test('guide separates speed from fees without promising guaranteed delivery', ()
 });
 
 test('guide makes a precise recommendation without hiding network requirements', () => {
-  for (const source of [homepage, guide]) {
-    assert.match(source, /Best for most first-time customers/i);
-    assert.match(source, /USDT on Ethereum \(ERC-20\)/i);
-    assert.match(source, /Ethereum Mainnet \/ ERC-20\s+only/i);
-    assert.match(source, /Bitcoin Mainnet only/i);
-    assert.match(source, /Ethereum Mainnet only/i);
-    assert.match(source, /fees/i);
-    assert.match(source, /identity (?:checks|verification)/i);
-  }
+  assert.match(guide, /Best for most first-time customers/i);
+  assert.match(guide, /USDT on Ethereum \(ERC-20\)/i);
+  assert.match(guide, /Ethereum Mainnet \/ ERC-20\s+only/i);
+  assert.match(guide, /Bitcoin Mainnet only/i);
+  assert.match(guide, /Ethereum Mainnet only/i);
+  assert.match(guide, /fees/i);
+  assert.match(guide, /identity (?:checks|verification)/i);
 });
 
 test('guide includes safety and finality instructions for beginners', () => {
-  for (const source of [homepage, guide]) {
-    assert.match(source, /recovery phrase or private key/i);
-    assert.match(source, /wrong-network|wrong.network/i);
-    assert.match(source, /irreversible/i);
-    assert.match(source, /send only once|send once/i);
-    assert.match(source, /Awaiting/);
-    assert.match(source, /Detected/);
-    assert.match(source, /Confirming/);
-    assert.match(source, /Confirmed/);
-  }
+  assert.match(guide, /recovery phrase or private key/i);
+  assert.match(guide, /wrong-network|wrong.network/i);
+  assert.match(guide, /irreversible/i);
+  assert.match(guide, /send only once|send once/i);
+  assert.match(guide, /Awaiting/);
+  assert.match(guide, /Detected/);
+  assert.match(guide, /Confirming/);
+  assert.match(guide, /Confirmed/);
 });
 
 test('checkout defaults to USDT without changing BTC or ETH availability', () => {
   const form = readFileSync(join(root, 'customer-checkout-upgrade.js'), 'utf8');
   assert.match(checkout, /preferredAsset = 'USDT'/);
   for (const asset of ['BTC','ETH','USDT']) assert.ok(form.includes('value="'+asset+'"'));
-});
-
-test('homepage keeps advanced crypto detail collapsed behind a simple three-step path', () => {
-  assert.match(homepage, /crypto-guide-quick/);
-  assert.match(homepage, /Choose Buy with Paybis/);
-  assert.match(homepage, /purchase enough USDT to cover the order and fees/i);
-  assert.match(homepage, /<details class="crypto-guide-advanced">/);
-  assert.match(homepage, /Already have crypto or want detailed instructions/);
 });
 
 test('payment copy avoids unsafe guarantees', () => {
