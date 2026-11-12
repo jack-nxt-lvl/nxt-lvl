@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, follow">
+  <title>Visitor entry | NXT LVL Research</title>
+  <link rel="icon" href="/assets/nxt-lvl-mark.png">
+  <link rel="stylesheet" href="/confidence-redesign.css?v=20261016-review">
+  <style>
+    :root { color-scheme: dark; font: 100%/1.5 "Helvetica Neue", Arial, sans-serif; background: #081525; color: #f5f8ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px 16px;
+      background: linear-gradient(130deg, #061322a6, #06101ed4), url("/assets/miami-vice-skyline.webp") center/cover no-repeat !important; }
+    main { width: min(100%, 465px); padding: clamp(24px, 6vw, 40px); background: #0b1929f5;
+      border: 1px solid #466075; border-radius: 18px; box-shadow: 0 24px 90px #01081080; }
+    .brand { margin: 0 0 18px; color: #9cece8; font-size: .81rem; font-weight: 750; letter-spacing: .14em; }
+    h1 { margin: 0 0 24px; font-size: clamp(1.7rem, 6vw, 2.22rem); line-height: 1.12; letter-spacing: -.035em; }
+    fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    legend { padding: 0; font-weight: 650; margin-bottom: 10px; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    label { cursor: pointer; }
+    .choice, .research { display: flex; align-items: center; gap: 10px; border: 1px solid #52667a; border-radius: 8px; padding: 12px 14px; background: #152638; }
+    label:has(:checked) { border-color: #71e4d9; background: #16373e; }
+    label:focus-within, button:focus-visible { outline: 3px solid #9ee8ff; outline-offset: 3px; }
+    input { flex: none; margin: 0; height: 19px; width: 19px; accent-color: #6fe3d6; }
+    .research { align-items: flex-start; margin-top: 18px; }
+    .research input { margin-top: 3px; }
+    .denied { display: none; color: #ffc7ce; margin: 13px 0 0; }
+    form:has(#age-no:checked) .denied { display: block; }
+    button { width: 100%; min-height: 48px; border: 0; margin-top: 22px; padding: 10px; border-radius: 8px;
+      font: inherit; font-weight: 700; background: #79e8dd; color: #062127; cursor: pointer; }
+    button:disabled { background: #314457; color: #c8d3de; cursor: default; }
+    @media (max-width: 600px) {
+      body { background-image: linear-gradient(150deg, #06132295, #06101edb), url("/assets/miami-vice-skyline-mobile.webp") !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="brand">NXT LVL RESEARCH</p>
+    <h1>Confirm your eligibility</h1>
+    <form action="/api/visitor-entry" method="post">
+      <fieldset>
+        <legend>Are you over 21 years old?</legend>
+        <div class="options">
+          <label class="choice"><input id="age-yes" name="age" type="radio" value="yes" required> Yes</label>
+          <label class="choice"><input id="age-no" name="age" type="radio" value="no" aria-describedby="age-message"> No</label>
+        </div>
+      </fieldset>
+      <p class="denied" id="age-message" role="status">You must be over 21 to enter.</p>
+      <label class="research"><input name="research" type="checkbox" value="yes" required>
+        <span>Yes, I confirm that any materials I obtain here are for verified laboratory research use only.</span>
+      </label>
+      <input name="returnTo" type="hidden">
+      <button type="submit">Enter site</button>
+    </form>
+  </main>
+  <script>
+    const form = document.querySelector('form');
+    const enter = form.querySelector('button');
+    function updateEntry() {
+      enter.disabled = form.elements.age.value !== 'yes' || !form.elements.research.checked;
+    }
+    if (location.pathname === '/entry' || location.pathname.startsWith('/entry/')) {
+      form.elements.returnTo.value = (location.pathname.slice('/entry'.length) || '/') + location.search + location.hash;
+    }
+    form.addEventListener('change', updateEntry);
+    window.addEventListener('pageshow', updateEntry);
+    updateEntry();
+  </script>
+</body>
+</html>

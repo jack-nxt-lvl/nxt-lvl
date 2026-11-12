@@ -144,6 +144,31 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/:page((?!entry(?:/|$)|entry\\.html$|api(?:/|$)|_vercel(?:/|$)|\\.well-known(?:/|$))(?:[^.]*|.*\\.(?:html?|pdf)))",
+      "headers": [
+        {
+          "key": "Vary",
+          "value": "Cookie"
+        }
+      ]
+    },
+    {
+      "source": "/:page((?!entry(?:/|$)|entry\\.html$|api(?:/|$)|_vercel(?:/|$)|\\.well-known(?:/|$))(?:[^.]*|.*\\.(?:html?|pdf)))",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "__Host-nxt-entry",
+          "value": "v1"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -166,8 +191,38 @@
       "source": "/go/display",
       "destination": "/south-florida-research.html?utm_source=local_display&utm_medium=qr&utm_campaign=south_florida",
       "permanent": false
+    },
+    {
+      "source": "/",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "__Host-nxt-entry",
+          "value": "v1"
+        }
+      ],
+      "destination": "/entry",
+      "permanent": false
+    },
+    {
+      "source": "/:page((?!entry(?:/|$)|entry\\.html$|api(?:/|$)|_vercel(?:/|$)|\\.well-known(?:/|$))(?:[^.]*|.*\\.(?:html?|pdf)))",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "__Host-nxt-entry",
+          "value": "v1"
+        }
+      ],
+      "destination": "/entry/:page",
+      "permanent": false
     }
   ],
   "buildCommand": "node scripts/build-catalog-pages.cjs",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/entry/:path*",
+      "destination": "/entry.html"
+    }
+  ]
 }
