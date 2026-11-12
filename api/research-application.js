@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     const body = req.body || {};
     if (JSON.stringify(body).length > 16000) return json(res, 413, { error: 'Request too large.' });
     const baseOrder = normalizeOrder(body.items, body.fulfillment);
-    const customer = cleanCustomer(body.customer, 'shipping'); // organization address required for pickup, too
+    const customer = cleanCustomer(body.customer, baseOrder.mode);
     const order = await priceForEmail(baseOrder, customer.email, body.promoCode);
     const record = await createApplication({ req, body, order, customer });
     let notified = false;

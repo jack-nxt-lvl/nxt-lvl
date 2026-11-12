@@ -28,7 +28,7 @@ test('keeps every restored freeze-dried product in the storefront catalog', () =
 
 test('accepts every restored product through trusted server-side checkout pricing', () => {
   for (const expected of restoredProducts) {
-    const order = normalizeOrder([{ key: `${expected.id}::0`, qty: 1 }], 'pickup');
+    const order = normalizeOrder([{ key: `${expected.id}::0`, qty: 1 }], 'shipping');
     assert.equal(order.subtotalCents, Math.round(expected.prices[0] * 100));
     assert.equal(order.normalizedItems[0].productId, expected.id);
   }

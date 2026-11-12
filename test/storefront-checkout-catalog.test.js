@@ -33,7 +33,7 @@ test('every browser-added freeze-dried product has 1 through 10 trusted checkout
 
     assert.equal(pricing.length, 10);
     pricing.forEach((option, pricingIndex) => {
-      const order = normalizeOrder([{ key: `${product.id}::${pricingIndex}`, qty: 1 }], 'pickup');
+      const order = normalizeOrder([{ key: `${product.id}::${pricingIndex}`, qty: 1 }], 'shipping');
       assert.equal(order.normalizedItems[0].productId, product.id);
       assert.equal(order.normalizedItems[0].unitCents, Math.round(option.price * 100));
     });
@@ -41,12 +41,12 @@ test('every browser-added freeze-dried product has 1 through 10 trusted checkout
 });
 
 test('uses modest quantity discounts for freeze-dried products and injectables', () => {
-  const oneBpc = normalizeOrder([{ key: 'bpc157-10::0', qty: 1 }], 'pickup');
-  const tenBpc = normalizeOrder([{ key: 'bpc157-10::9', qty: 1 }], 'pickup');
+  const oneBpc = normalizeOrder([{ key: 'bpc157-10::0', qty: 1 }], 'shipping');
+  const tenBpc = normalizeOrder([{ key: 'bpc157-10::9', qty: 1 }], 'shipping');
   assert.equal(oneBpc.subtotalCents, 10900);
   assert.equal(tenBpc.subtotalCents, 95920);
 
-  assert.throws(() => normalizeOrder([{key:'test-e::0',qty:1}], 'pickup'));
+  assert.throws(() => normalizeOrder([{key:'test-e::0',qty:1}], 'shipping'));
 });
 
 test('loads the visible product search and quantity upgrade after catalog supplements', () => {

@@ -74,6 +74,9 @@ async function sendPaidNotifications(session) {
   const phone = String(customer.phone || session.metadata && session.metadata.customer_phone || 'Not supplied');
   const total = (Number(session.amount_total || 0) / 100).toFixed(2);
   const paymentId = String(session.payment_intent || session.id || '');
+  const mode = session.metadata && session.metadata.fulfillment;
+  const deliveryLabel = mode === 'pickup' || Object.hasOwn(fulfillmentRates.OPTIONS, mode)
+    ? fulfillmentRates.label(mode) : 'fulfillment';
   const merchantHtml = `<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#111;"><h2>CARD PAYMENT CONFIRMED</h2><p><strong>Order:</strong> ${escapeHtml(orderId)}<br><strong>Total:</strong> $${total}<br><strong>Stripe payment:</strong> ${escapeHtml(paymentId)}<br><strong>Customer:</strong> ${escapeHtml(name)}<br><strong>Email:</strong> ${escapeHtml(email)}<br><strong>Phone:</strong> ${escapeHtml(phone)}</p><p style="color:#166534;font-weight:bold;">Payment receipt is not fulfillment approval. Independently check the research approval record, buyer, batch documents, final terms and delivery address before dispatch. Legacy payments without research approval require manual resolution.</p></div>`;
   await sendNotificationOnce({
     to: process.env.ORDER_NOTIFICATION_EMAIL || 'payment@nxtlvl-research.com',
@@ -85,7 +88,7 @@ async function sendPaidNotifications(session) {
     await sendNotificationOnce({
       to: email,
       subject: `Payment received — ${orderId}`,
-      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#111;"><h2>Payment received</h2><p>Hello ${escapeHtml(name)},</p><p>Your hosted card payment of <strong>$${total}</strong> for order <strong>${escapeHtml(orderId)}</strong> was confirmed.</p><p>We will contact you separately regarding ${escapeHtml((fulfillmentRates.OPTIONS[String(session.metadata && session.metadata.fulfillment)] || {}).label || 'fulfillment')}.</p></div>`,
+      html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#111;"><h2>Payment received</h2><p>Hello ${escapeHtml(name)},</p><p>Your hosted card payment of <strong>$${total}</strong> for order <strong>${escapeHtml(orderId)}</strong> was confirmed.</p><p>We will contact you separately regarding ${escapeHtml(deliveryLabel)}.</p></div>`,
       idempotencyKey: `nxt-card-paid-customer-${session.id}`,
     });
   }

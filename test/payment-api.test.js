@@ -33,7 +33,7 @@ test('auto-approves and claims a confirmed Bitcoin overpayment end to end', asyn
   const blockHash = 'e'.repeat(64);
   const orderId = 'NXT-TEST-API-123';
   const items = [{ key: 'bpc157-10::0', qty: 1 }];
-  const order = normalizeOrder(items, 'pickup');
+  const order = normalizeOrder(items, 'pickup', 'legacy-v1');
   const customer = cleanCustomer({
     name: 'Checkout Test', email: 'buyer@example.com', phone: '555-555-0100',
   }, 'pickup');
@@ -123,7 +123,7 @@ test('durably flags only a confirmed Bitcoin payment below 90% for manual review
   const blockHash = '8'.repeat(64);
   const orderId = 'NXT-TEST-REVIEW-789';
   const items = [{ key: 'bpc157-10::0', qty: 1 }];
-  const order = normalizeOrder(items, 'pickup');
+  const order = normalizeOrder(items, 'pickup', 'legacy-v1');
   const customer = cleanCustomer({
     name: 'Checkout Review Test', email: 'buyer@example.com', phone: '555-555-0100',
   }, 'pickup');
@@ -211,7 +211,7 @@ test('requires finalized canonical agreement from the healthy Ethereum RPC quoru
   const blockHash = `0x${'a'.repeat(64)}`;
   const orderId = 'NXT-TEST-USDT-456';
   const items = [{ key: 'bpc157-10::0', qty: 1 }];
-  const order = normalizeOrder(items, 'pickup');
+  const order = normalizeOrder(items, 'pickup', 'legacy-v1');
   const customer = cleanCustomer({
     name: 'Checkout Test', email: 'buyer@example.com', phone: '555-555-0100',
   }, 'pickup');

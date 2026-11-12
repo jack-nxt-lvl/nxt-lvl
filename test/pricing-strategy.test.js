@@ -10,7 +10,6 @@ test('standard shipping is free strictly over $200 after discounts; premium fulf
   assert.equal(rates.feeCents('shipping',cents),cents>20000?0:1200);
   assert.equal(rates.feeCents('overnight',cents),cents>47500?0:3000);
   assert.equal(rates.feeCents('local-delivery',cents),cents>47500?0:2500);
-  assert.equal(rates.feeCents('pickup',cents),0);
  }
  // Shipping is calculated on the discounted total, including optional supplies.
  const singles=normalizeOrder([{key:'bpc157-10::0',qty:1},{key:'kpv-10::0',qty:1},{key:'bac-water-10ml::0',qty:1}],'shipping');
@@ -37,16 +36,16 @@ test('research packages preserve exact component amounts and never stack quantit
  for(const p of packs){
   assert.equal(buildQuantityPricing(p).length,1);
   assert.equal(p.packageCents,Math.round(p.singlesCents*.95));
-  assert.throws(()=>normalizeOrder([{key:p.id+'::1',qty:1}],'pickup'),/invalid/);
+  assert.throws(()=>normalizeOrder([{key:p.id+'::1',qty:1}],'shipping'),/invalid/);
  }
 });
 test('previous signed quotes reconcile against previous prices and fulfillment fees',()=>{
  for (const [index, previousCents, currentCents] of [[0,1900,1200],[4,8740,5520],[9,16720,10560]]) {
   const items=[{key:'bac-water-10ml::'+index,qty:1}];
   const previous=normalizeOrder(items,'pickup','2026-11-02-pricing');
-  const current=normalizeOrder(items,'pickup');
+  const current=normalizeOrder(items,'shipping');
   assert.equal(previous.totalCents,previousCents);
-  assert.equal(current.totalCents,currentCents);
+  assert.equal(current.subtotalCents,currentCents);
   assert.notEqual(previous.itemDigest,current.itemDigest);
  }
  const old=normalizeOrder([{key:'bpc157-10::0',qty:2}],'shipping','2026-10-16-rates');
@@ -68,7 +67,7 @@ test('revised single, bulk and bundle prices preserve existing signed quotes', (
     ['pack-nad-glutathione::0', 22610, 14060],
   ]) {
     const items = [{key, qty: 1}];
-    assert.equal(normalizeOrder(items, 'pickup').totalCents, after);
+    assert.equal(normalizeOrder(items, 'shipping').subtotalCents, after);
     for (const version of ['2026-11-09-water', '2026-11-02-pricing', 'legacy-v1']) {
       assert.equal(normalizeOrder(items, 'pickup', version).totalCents, before);
     }

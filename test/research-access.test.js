@@ -71,8 +71,8 @@ test('missing attestation and organization details fail before persistence',asyn
  const old=global.fetch;global.fetch=()=>{throw new Error('Unexpected network')};
  try{const req=request();req.body.research.attestation=false;const output=res();await apply(req,output);assert.equal(output.code,400);assert.equal(output.body.reference,undefined);}finally{global.fetch=old;}
 });
-test('pickup requests still require a complete organization address',async()=>{
- const req=request({fulfillment:'pickup',customer:{...customer,address:''}});const output=res();await apply(req,output);assert.equal(output.code,400);
+test('delivery requests require a complete organization address',async()=>{
+ const req=request({fulfillment:'local-delivery',customer:{...customer,address:''}});const output=res();await apply(req,output);assert.equal(output.code,400);
 });
 test('application rate limit prevents excess records and notification spam',async()=>{
  await withRedis(async()=>{for(let i=0;i<6;i++){const output=res();await apply(request(),output);assert.equal(output.code,i<5?202:429);}});

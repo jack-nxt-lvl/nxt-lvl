@@ -12,7 +12,7 @@ const removed = ['mk677','rad140','bpc157-tabs','anastrozole','slu332','anavar-2
 test('withdrawn offers cannot be purchased through the trusted server catalog', () => {
  for (const id of removed) {
   assert.equal(compounds.some(p=>p.id===id),false,id);
-  assert.throws(()=>normalizeOrder([{key:id+'::0',qty:1}],'pickup'),undefined,id);
+  assert.throws(()=>normalizeOrder([{key:id+'::0',qty:1}],'shipping'),undefined,id);
  }
 });
 test('published catalog and product modal omit human-use instructions', () => {
@@ -31,23 +31,34 @@ test('AI rejects personal-use requests without invoking a model or suggesting pu
  assert.doesNotMatch(res.body.reply,/retatrutide|checkout|Ready to/);
  assert.equal(chat.isHumanUseRequest([{role:'user',content:'Do you have a batch COA?'}]),false);
 });
+test('public pages and checkout omit pickup while the local delivery inquiry remains available', () => {
+ const root = path.join(__dirname, '..');
+ for (const directory of ['', 'research']) {
+  for (const name of fs.readdirSync(path.join(root, directory)).filter(name => name.endsWith('.html'))) {
+   const file = path.join(directory, name);
+   assert.doesNotMatch(read(file), /pick[\s-]?up/i, file);
+  }
+ }
+ assert.doesNotMatch(read('customer-checkout-upgrade.js'), /pick[\s-]?up/i);
+ assert.match(read('south-florida-research.html'), /id="localInquiry"/);
+});
 test('local inquiry prepares an encoded draft without submitting or sending it', () => {
  let handler;
  const window={location:{href:''}};
- vm.runInNewContext(read('local-research.js'),{window,encodeURIComponent,FormData:class{get(k){return {city:'Miami & 33101',method:'Pickup appointment inquiry'}[k];}},document:{getElementById(){return{addEventListener(event,fn){handler=fn;}};}}});
+ vm.runInNewContext(read('local-research.js'),{window,encodeURIComponent,FormData:class{get(k){return {city:'Miami & 33101'}[k];}},document:{getElementById(){return{addEventListener(event,fn){handler=fn;}};}}});
  handler.call({}, {preventDefault(){}});
  const target=new URL(window.location.href);
  assert.equal(target.origin,'https://wa.me');
  assert.equal(target.pathname,'/17542907210');
  assert.match(target.searchParams.get('text'),/Miami & 33101/);
- assert.match(target.searchParams.get('text'),/Pickup appointment inquiry/);
+ assert.match(target.searchParams.get('text'),/local delivery inquiry/);
 });
 test('local inquiry preserves material details in WhatsApp, text and email drafts', () => {
  for (const channel of ['whatsapp','sms','email']) {
   let handler;
   const field={value:''};
   const window={location:{href:'',search:'?material=GHK-Cu%2050mg'}};
-  const values={city:'Fort Lauderdale & 33315',method:'Local delivery inquiry',organization:'A&B Lab',material:'GHK-Cu 50mg',quantity:'2 vials',channel};
+  const values={city:'Fort Lauderdale & 33315',organization:'A&B Lab',material:'GHK-Cu 50mg',quantity:'2 vials',channel};
   const form={querySelector(){return field;},addEventListener(event,fn){handler=fn;}};
   vm.runInNewContext(read('local-research.js'),{window,URLSearchParams,encodeURIComponent,FormData:class{get(k){return values[k];}},document:{getElementById(){return form;}}});
   assert.equal(field.value,'GHK-Cu 50mg');

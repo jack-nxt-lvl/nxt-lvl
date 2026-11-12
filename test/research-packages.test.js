@@ -55,7 +55,7 @@ test('package quantities, mixed carts and fulfillment use discounted totals',()=
  const above=normalizeOrder([{key:'pack-bpc157-tb500::0',qty:2},{key:'bpc157-10::0',qty:1}],'overnight');
  assert.equal(above.subtotalCents,58020);
  assert.equal(above.shippingCents,0);
- for(const mode of ['shipping','overnight','local-delivery','pickup']){
+ for(const mode of ['shipping','overnight','local-delivery']){
   const order=normalizeOrder([{key:'pack-sermorelin-ipamorelin::0',qty:3}],mode);
   assert.equal(order.subtotalCents,62130);
   assert.equal(order.totalCents,62130);
@@ -106,8 +106,8 @@ test('browser registration preserves materials, is idempotent and matches truste
   const p=context.compounds.find(p=>p.id===id);
   assert.match(p.badge,/In stock/);
   assert.equal(p.pricing[0].price,cents/100);
-  const order=normalizeOrder([{key:id+'::0',qty:1}],'pickup');
-  assert.equal(order.totalCents,cents);
+  const order=normalizeOrder([{key:id+'::0',qty:1}],'shipping');
+  assert.equal(order.subtotalCents,cents);
   assert.deepEqual(order.normalizedItems[0].components.map(c=>[c.productId,c.amount]),Array.from(p.components,c=>[c.productId,c.amount]));
  }
  const home=read('index.html');
@@ -122,7 +122,7 @@ test('public deals match server totals and are discoverable without false stock 
  const choices=[...html.matchAll(/href="\/\?product=([^#]+)#menu" aria-label="Choose [^"]+ for \$(\d+\.\d{2})"/g)];
  assert.equal(choices.length,expected.length);
  for(const [,id,displayed] of choices){
-  assert.equal(Math.round(Number(displayed)*100),normalizeOrder([{key:id+'::0',qty:1}],'pickup').totalCents);
+  assert.equal(Math.round(Number(displayed)*100),normalizeOrder([{key:id+'::0',qty:1}],'shipping').subtotalCents);
   assert.ok(html.includes('id="'+id+'"'));
  }
  for(const file of ['index.html','catalog.html','research-multipacks.html','sitemap.xml'])assert.ok(read(file).includes('research-package-deals.html'),file);

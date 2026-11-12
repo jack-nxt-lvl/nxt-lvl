@@ -243,8 +243,8 @@ test('requires explicit consent before sending a payment link by text', async ()
       body: {
         requestId: '123e4567-e89b-12d3-a456-426614174001',
         items: [{ key: 'bpc157-10::0', qty: 1 }],
-        fulfillment: 'pickup',
-        customer: { name: 'Test', email: 'buyer@example.com', phone: '7542907210' },
+        fulfillment: 'shipping',
+        customer: { name: 'Test', email: 'buyer@example.com', phone: '7542907210', address: '100 Lab Street', city: 'Miami', state: 'FL', zip: '33101' },
         channel: 'sms',
         smsConsent: false,
       },

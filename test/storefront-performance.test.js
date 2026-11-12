@@ -21,7 +21,7 @@ test('catalog dependencies load in the required order and every local asset exis
     'products-data-original.js?v=20261110-pricing',
     'cjc-products.js?v=20261102-pricing',
     'products-data.js?v=20260824-performance-1',
-    'premium-enhancements.js?v=20261102-pricing',
+    'premium-enhancements.js?v=20261112-delivery',
   ];
   let previous = -1;
   for (const source of orderedScripts) {

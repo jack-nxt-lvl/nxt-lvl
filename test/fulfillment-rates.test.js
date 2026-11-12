@@ -4,8 +4,8 @@ const rates = require('../fulfillment-rates');
 const { normalizeOrder, cleanCustomer } = require('../lib/direct-payment');
 const { buildStripeCheckoutForm } = require('../lib/hosted-card-link');
 
-test('all four fulfillment methods use the owner rates and the strict free threshold', () => {
-  for (const [mode, expected] of Object.entries({shipping:1200,overnight:3000,pickup:0,'local-delivery':2500})) {
+test('the available fulfillment methods use the owner rates and the strict free threshold', () => {
+  for (const [mode, expected] of Object.entries({shipping:1200,overnight:3000,'local-delivery':2500})) {
     assert.equal(rates.feeCents(mode, 47499), mode === 'shipping' ? 0 : expected);
     assert.equal(rates.feeCents(mode, 47500), mode === 'shipping' ? 0 : expected);
     assert.equal(rates.feeCents(mode, 47501), 0);
@@ -27,6 +27,9 @@ test('trusted merchandise prices determine the free threshold, not client prices
 
 test('unsupported methods and incomplete delivery addresses cannot create orders', () => {
   assert.throws(()=>normalizeOrder([{key:'bpc157-10::0',qty:1}],'free'),/fulfillment/);
+  assert.equal(Object.hasOwn(rates.OPTIONS, 'pickup'), false);
+  assert.throws(()=>normalizeOrder([{key:'bpc157-10::0',qty:1}],'pickup'),/fulfillment/);
+  assert.throws(()=>rates.feeCents('pickup',50000),/fulfillment/);
   assert.throws(()=>rates.feeCents('__proto__',10000),/fulfillment/);
   const buyer={name:'Test Research Buyer',email:'buyer@lab.example',phone:'5555550100'};
   for (const mode of ['shipping','overnight','local-delivery']) assert.throws(()=>cleanCustomer(buyer,mode),/address/);
@@ -48,6 +51,7 @@ test('hosted invoices identify the selected method and omit waived fees', () => 
 
 test('legacy signed-quote reconciliation retains its old fee while new requests use current rates', () => {
   const items=[{key:'bpc157-10::0',qty:2}];
+  assert.equal(normalizeOrder(items,'pickup','2026-11-10-pricing').shippingCents,0);
   assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,22800);
   assert.equal(normalizeOrder(items,'shipping').totalCents,21800);
   assert.throws(()=>normalizeOrder(items,'overnight','legacy-v1'),/legacy/);

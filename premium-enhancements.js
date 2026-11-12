@@ -74,7 +74,7 @@ if (typeof document !== 'undefined') (() => {
     trustBar.innerHTML = `
       <div class="trust-item"><div class="num">◇</div><div class="label">Batch Documentation</div><div class="trust-sub">Review the report for the supplied lot.</div></div>
       <div class="trust-item"><div class="num">🇺🇸</div><div class="label">USA Company</div><div class="trust-sub">Proudly based in the United States.</div></div>
-      <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm delivery or pickup arrangements.</div></div>
+      <div class="trust-item"><div class="num">↗</div><div class="label">Fulfillment Support</div><div class="trust-sub">Confirm delivery arrangements.</div></div>
       <div class="trust-item"><div class="num">🔒</div><div class="label">Research Use Only</div><div class="trust-sub">Laboratory research eligibility applies.</div></div>`;
   }
 
@@ -87,7 +87,7 @@ if (typeof document !== 'undefined') (() => {
   const disclaimer=document.querySelector('.disclaimer-section');if(disclaimer)disclaimer.id='research-disclaimer';
 
   function steps(active){return `<div class="checkout-steps"><span class="${active>=1?'active':''}"><b>1</b>Information</span><i></i><span class="${active>=2?'active':''}"><b>2</b>Payment</span><i></i><span class="${active>=3?'active':''}"><b>3</b>Confirmation</span></div>`}
-  const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Shipping or Local Pickup')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(1));}else if(text.includes('Choose your payment asset')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Pay directly with')){el.dataset.premiumChecked='1';const target=el.querySelector('.nxt-wallet-head');if(target)target.insertAdjacentHTML('afterend',steps(2));}})});observer.observe(document.body,{childList:true});
+  const observer=new MutationObserver(()=>{document.querySelectorAll('body > div').forEach(el=>{if(el.dataset.premiumChecked)return;const text=el.textContent||'';if(text.includes('Choose your payment asset')){el.dataset.premiumChecked='1';const box=el.firstElementChild;if(box)box.insertAdjacentHTML('afterbegin',steps(2));}else if(text.includes('Pay directly with')){el.dataset.premiumChecked='1';const target=el.querySelector('.nxt-wallet-head');if(target)target.insertAdjacentHTML('afterend',steps(2));}})});observer.observe(document.body,{childList:true});
 
   function upgradeCart(){const footer=document.querySelector('.cart-drawer-footer');if(!footer||footer.querySelector('.premium-cart-fees'))return;const note=footer.querySelector('.cart-note');const box=document.createElement('div');box.className='premium-cart-fees';box.innerHTML='<div><span>Fulfillment options</span><span>USD $0–$30</span></div><div><span>Over $200 after discounts</span><span>Free standard shipping</span></div><div><span>Final charges</span><span>Shown in checkout</span></div><div class="total"><span>Crypto checkout</span><span>🔒</span></div><p>All sales final once an order is placed. Applicable legal rights remain. <a href="/ordering-policy.html#refunds">Final-sale policy</a></p>';note?.insertAdjacentElement('afterend',box)}upgradeCart();
 
