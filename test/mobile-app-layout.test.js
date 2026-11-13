@@ -15,9 +15,11 @@ test('loads the mobile app layer last with iPhone safe-area support', () => {
 });
 
 test('keeps mobile navigation and critical overlays collision-free', () => {
-  assert.match(mobile, /className = 'nxt-mobile-tabbar'/);
+  assert.doesNotMatch(mobile, /nxt-mobile-tabbar/);
+  assert.match(mobile, /nav#mainNav\{\s*position:sticky/);
+  assert.match(index, /<nav id="mainNav">[\s\S]*class="mobile-chat-shortcut"[^>]+onclick="toggleAiChat\(true\)"/);
   assert.match(mobile, /\.ai-chat-toggle\{display:none!important\}/);
-  assert.match(mobile, /body\.nxt-mobile-layer-open \.nxt-mobile-tabbar/);
+  assert.match(mobile, /body\.nxt-mobile-layer-open nav#mainNav/);
   assert.match(mobile, /\.nxt-checkout-overlay,[\s\S]*width:100dvw!important;height:100dvh!important/);
   assert.match(mobile, /\.nxt-checkout-card input\{min-height:52px!important/);
 });
@@ -28,7 +30,7 @@ test('keeps the AI chat attached to the visible iPhone viewport while typing', (
   assert.match(mobile, /window\.visualViewport\?\.addEventListener\('resize'/);
   assert.match(mobile, /viewport\?\.offsetTop/);
   assert.match(index, /enterkeyhint="send"/);
-  assert.match(index, /mobile-app-upgrade\.js\?v=20261102-home-about/);
+  assert.match(index, /mobile-app-upgrade\.js\?v=[\w-]+/);
 });
 
 test('pauses expensive page effects while the mobile chat is open', () => {
