@@ -14,8 +14,13 @@ function returnPath(value) {
 
 module.exports = function visitorEntry(req, res) {
   res.setHeader('Cache-Control', 'private, no-store');
+  res.setHeader('Vary', 'Cookie');
+  if (req.method === 'GET') {
+    const accepted = String(req.headers.cookie || '').split(';').some(value => value.trim() === '__Host-nxt-entry=v1');
+    return res.status(200).json({ accepted });
+  }
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).end();
   }
   if (req.headers['sec-fetch-site'] === 'cross-site') {
@@ -37,6 +42,7 @@ module.exports = function visitorEntry(req, res) {
     } catch { /* A missing or invalid return path leads to the homepage. */ }
   }
   res.setHeader('Set-Cookie', COOKIE);
+  if ((req.headers.accept || '').includes('application/json')) return res.status(200).json({ accepted: true });
   res.setHeader('Location', returnPath(destination));
   return res.status(303).end();
 };

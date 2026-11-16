@@ -1,0 +1,28 @@
+html:has(#nxt-entry[open]) { overflow: hidden; }
+#nxt-entry {
+  position: fixed; inset: 0; z-index: 2147483647; width: 100%; max-width: none;
+  height: 100%; height: 100dvh; max-height: none; margin: 0; padding: 24px 16px;
+  border: 0; overflow: auto; overscroll-behavior: contain; box-sizing: border-box;
+  background: rgb(3 12 22 / 84%); color: #f5f8ff;
+  font: 400 16px/1.5 "Helvetica Neue", Arial, sans-serif;
+}
+#nxt-entry[open] { display: grid; place-items: center; }
+#nxt-entry:not([open]), #nxt-entry [hidden] { display: none !important; }
+#nxt-entry::backdrop { background: transparent; }
+#nxt-entry * { box-sizing: border-box; }
+#nxt-entry .nxt-entry-card { width: min(100%, 465px); padding: clamp(24px, 6vw, 40px); background: #0b1929; border: 1px solid #466075; border-radius: 18px; box-shadow: 0 24px 90px #01081080; }
+#nxt-entry .nxt-entry-brand { margin: 0 0 18px; color: #9cece8; font-size: 13px; font-weight: 750; letter-spacing: .14em; }
+#nxt-entry h2 { margin: 0 0 12px; color: #f5f8ff; font: 700 clamp(27px, 6vw, 35px)/1.12 "Helvetica Neue", Arial, sans-serif; letter-spacing: -.035em; text-transform: none; }
+#nxt-entry-intro { margin: 0 0 24px; color: #c5d1dd; font-size: 14px; }
+#nxt-entry fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+#nxt-entry legend { padding: 0; font-weight: 650; margin-bottom: 10px; }
+#nxt-entry .nxt-entry-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#nxt-entry label { display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px solid #52667a; border-radius: 8px; padding: 12px 14px; background: #152638; color: #f5f8ff; font-size: 16px; letter-spacing: normal; text-transform: none; }
+#nxt-entry label:has(:checked) { border-color: #71e4d9; background: #16373e; }
+#nxt-entry label:focus-within, #nxt-entry button:focus-visible { outline: 3px solid #9ee8ff; outline-offset: 3px; }
+#nxt-entry input:not([type="hidden"]) { flex: none; margin: 0; padding: 0; height: 19px; width: 19px; accent-color: #6fe3d6; appearance: auto; }
+#nxt-entry .nxt-entry-research { align-items: flex-start; margin-top: 18px; }
+#nxt-entry .nxt-entry-research input { margin-top: 3px; }
+#nxt-entry-denied, #nxt-entry .nxt-entry-error { color: #ffc7ce; margin: 13px 0 0; font-size: 14px; }
+#nxt-entry button { width: 100%; min-height: 48px; border: 0; margin-top: 22px; padding: 10px; border-radius: 8px; font: inherit; font-weight: 700; background: #79e8dd; color: #062127; cursor: pointer; }
+#nxt-entry button:disabled { background: #314457; color: #c8d3de; cursor: default; }

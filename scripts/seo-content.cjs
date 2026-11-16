@@ -73,7 +73,7 @@ function enhanceProduct(html, p) {
   const trail = `<p class="crumbs"><a href="/">Home</a> / <a href="${parent.path}">${esc(parent.name)}</a> / ${esc(p.name)}</p>`;
   html = html.replace(/<(p|div) class="crumbs">[\s\S]*?<\/\1>/g,'');
   html = html.replace('<!-- product-visual:start -->', () => trail+'<!-- product-visual:start -->');
-  const description = research.get(p.id).meta;
+  const description = `${label} from ${money(p.options[0].cents)} per vial. Compare quantity prices, specifications and lot documentation. Laboratory research only; U.S. shipping.`;
   html = html.replace(/<title>[\s\S]*?<\/title>/, '<title>'+esc(title)+'</title>')
     .replace(/(<meta (?:property="og:title"|name="twitter:title") content=")[^"]*(")/g,(_,a,b)=>a+esc(title)+b)
     .replace(/(<meta (?:name="description"|property="og:description"|name="twitter:description") content=")[^"]*(")/g,(_,a,b)=>a+esc(description)+b);
