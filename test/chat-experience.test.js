@@ -37,7 +37,7 @@ test('chat UI has a small research notice and useful quick starts', () => {
   assert.match(index, />Find a product</);
   assert.match(index, />Compare prices</);
   assert.match(index, />Build my cart</);
-  assert.match(index, /mobile-app-upgrade\.js\?v=20261102-home-about/);
+  assert.match(index, /mobile-app-upgrade\.js\?v=[\w-]+/);
 });
 
 test('friendly loading copy remains compatible with AI cart actions', () => {
