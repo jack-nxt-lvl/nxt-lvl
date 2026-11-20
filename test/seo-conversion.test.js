@@ -43,7 +43,13 @@ test('the nationwide New Year’s peptide sale is linked and readable in initial
  const html=read('research-peptides.html');
  assert.match(html,/<title>New Year’s Peptide Sale 2027 – 25% Off/);
  assert.match(html,/<h1>New Year’s Peptide Sale<\/h1>/);
- assert.match(html,/all 50 states and Washington, D.C./);
+ const home=read('index.html');
+ assert.match(html,/early start on your lab’s New Year’s research goals/);
+ assert.match(home,/<h1 id="homeTitle">Start your 2027<br><span>research early\.<\/span><\/h1>/);
+ for(const page of [home,html,read('shipping-and-payments.html')]){
+  assert.match(page,/all 50 states/);
+  assert.doesNotMatch(page,/Washington,? D\.?C\.?|and D\.C\./i);
+ }
  assert.match(read('index.html'),/href="\/research-peptides.html">Shop the New Year’s peptide sale/);
 });
 
