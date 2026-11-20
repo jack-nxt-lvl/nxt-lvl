@@ -18,7 +18,18 @@ const expected = [
  ['pack-ghk-cu-kpv',12800,12160,640,7671],
  ['pack-aod-mots-c',23800,22610,1190,11305],
  ['pack-nad-glutathione',14800,14060,740,9144],
+ ['pack-semax-selank',16800,15960,840,7980],
+ ['pack-mots-c-nad',21800,20710,1090,10070],
+ ['pack-cjc-dac-comparison',23800,22610,1190,11685],
+ ['pack-kpv-glutathione',13800,13110,690,8384],
 ];
+
+const comparisonComponents = {
+ 'pack-semax-selank':['semax','selank'],
+ 'pack-mots-c-nad':['mots-c','nad-500'],
+ 'pack-cjc-dac-comparison':['cjc1295-dac-10','cjc1295-no-dac-10'],
+ 'pack-kpv-glutathione':['kpv-10','glutathione-1500'],
+};
 
 test('package prices are derived from their exact single-vial contents',()=>{
  const packages=buildResearchPackages(catalog());
@@ -39,7 +50,7 @@ test('package prices are derived from their exact single-vial contents',()=>{
 test('trusted checkout ignores spoofed prices and retains package fulfillment contents',()=>{
  for(const [id,,cents,,saleCents] of expected){
   const order=normalizeOrder([{key:id+'::0',qty:2,price:0.01,name:'spoof',components:[]}],'shipping');
-  if(id==='pack-mt2-ghk-cu-100') assert.throws(()=>normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale'),/invalid/);
+  if(id==='pack-mt2-ghk-cu-100' || comparisonComponents[id]) assert.throws(()=>normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale'),/invalid/);
   else assert.equal(normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale').subtotalCents,Math.round(cents*.75)*2);
   assert.equal(order.subtotalCents,saleCents*2);
   assert.equal(order.normalizedItems[0].unitCents,saleCents);
@@ -149,4 +160,23 @@ test('changing the bundle and Tirzepatide price preserves already-issued quotes'
  const newBundle=line('pack-mt2-ghk-cu-100');
  assert.deepEqual(newBundle.components.map(c=>[c.productId,c.quantity]),[['mela2-10',1],['ghk-cu-100',1]]);
  assert.equal(newBundle.unitCents,Math.round((line('mela2-10').unitCents+line('ghk-cu-100').unitCents)*.95));
+});
+
+test('each new comparison package shows its rationale and fulfills its named components',()=>{
+ const deals = read('research-package-deals.html');
+ const products = buildResearchPackages(catalog());
+ for (const [id,components] of Object.entries(comparisonComponents)) {
+  const p = products.find(p=>p.id===id);
+  const card = deals.split('id="'+id+'">')[1].split('</article>')[0];
+  assert.ok(p.comparison && card.includes(p.comparison));
+  assert.ok(p.description.includes(p.comparison));
+  const lines = [{key:id+'::0',qty:1}];
+  const order = normalizeOrder(lines,'shipping');
+  assert.deepEqual(order.normalizedItems[0].components.map(c=>c.productId),components);
+  for (const version of ['2026-11-20-mt2-bundle','2026-11-20-market-pricing','2026-11-12-delivery']) {
+   assert.throws(()=>normalizeOrder(lines,'shipping',version),/invalid/);
+  }
+ }
+ const existing = [{key:'pack-mt2-ghk-cu-100::0',qty:1},{key:'tirzepatide::0',qty:1}];
+ assert.deepEqual(normalizeOrder(existing,'shipping'),normalizeOrder(existing,'shipping','2026-11-20-mt2-bundle'));
 });
