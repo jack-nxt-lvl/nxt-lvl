@@ -14,8 +14,8 @@ test('standard shipping is free strictly over $200 after discounts; premium fulf
  // Shipping is calculated on the discounted total, including optional supplies.
  const singles=normalizeOrder([{key:'bpc157-10::0',qty:1},{key:'kpv-10::0',qty:1},{key:'bac-water-10ml::0',qty:1}],'shipping');
  const pack=normalizeOrder([{key:'pack-peptide-materials::0',qty:1,price:208},{key:'bac-water-10ml::0',qty:1}],'shipping');
- assert.equal(singles.subtotalCents,15000);assert.equal(singles.shippingCents,1200);
- assert.equal(pack.subtotalCents,14295);assert.equal(pack.shippingCents,1200);
+ assert.equal(singles.subtotalCents,10800);assert.equal(singles.shippingCents,1200);
+ assert.equal(pack.subtotalCents,10305);assert.equal(pack.shippingCents,1200);
 });
 test('all 310 material pack choices agree between browser pricing, generated pages and trusted checkout',()=>{
  for(const p of catalog()){
@@ -25,7 +25,11 @@ test('all 310 material pack choices agree between browser pricing, generated pag
    const order=normalizeOrder([{key:p.id+'::'+i,qty:1,price:0.01}],'shipping');
    assert.equal(order.subtotalCents,Math.round(options[i].price*100));
    const previous=normalizeOrder([{key:p.id+'::'+i,qty:1}],'shipping','2026-11-12-delivery');
-   assert.equal(order.subtotalCents,Math.round(previous.subtotalCents*0.75),p.id+'::'+i);
+   const originalSale=normalizeOrder([{key:p.id+'::'+i,qty:1}],'shipping','2026-11-20-new-years-sale');
+   assert.equal(originalSale.subtotalCents,Math.round(previous.subtotalCents*0.75),p.id+'::'+i);
+   const quantity=i+1;
+   const tierCents=Math.round(p.options[0].cents*quantity*(100-options[i].discountPercent)/100);
+   assert.equal(order.subtotalCents,Math.min(originalSale.subtotalCents,tierCents),p.id+'::'+i);
    assert.equal(order.subtotalCents,p.options[i].cents);
    assert.equal(options[i].discountPercent,[0,2,5,5,8,8,8,8,8,12][i]);
   }
@@ -56,7 +60,7 @@ test('previous signed quotes reconcile against previous prices and fulfillment f
  assert.equal(oldPack.totalCents,23378);
  assert.equal(oldPack.normalizedItems[0].components[0].amount,'10mg per vial');
  const current=normalizeOrder([{key:'bpc157-10::0',qty:2}],'shipping');
- assert.equal(current.totalCents,17550);assert.notEqual(old.itemDigest,current.itemDigest);
+ assert.equal(current.totalCents,12200);assert.notEqual(old.itemDigest,current.itemDigest);
 });
 
 test('revised single, bulk and bundle prices preserve existing signed quotes', () => {

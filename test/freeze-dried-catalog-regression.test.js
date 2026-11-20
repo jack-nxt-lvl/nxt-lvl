@@ -5,15 +5,15 @@ const { compounds } = require('../products-data-original.js');
 const { normalizeOrder } = require('../lib/direct-payment.js');
 
 const restoredProducts = [
-  { id: 'hcg-5000', name: 'HCG — 5000 IU', prices: [89, 409.4, 783.2] },
-  { id: 'hcg-10000', name: 'HCG — 10,000 IU', prices: [119, 547.4, 1047.2] },
-  { id: 'semaglutide', name: 'Semaglutide — 10mg', prices: [119, 547.4, 1047.2] },
-  { id: 'tirzepatide', name: 'Tirzepatide — 10mg', prices: [139, 639.4, 1223.2] },
-  { id: 'selank', name: 'Selank — 11mg', prices: [79, 363.4, 695.2] },
-  { id: 'semax', name: 'Semax — 11mg', prices: [89, 409.4, 783.2] },
-  { id: 'dsip', name: 'DSIP — 10mg', prices: [89, 409.4, 783.2] },
-  { id: 'aod-9604', name: 'AOD-9604 — 10mg', prices: [109, 501.4, 959.2] },
-  { id: 'igf1-lr3', name: 'IGF-1 LR3 — 1mg', prices: [129, 593.4, 1135.2] }
+  { id: 'hcg-5000', saleCents: 6675, name: 'HCG — 5000 IU', prices: [89, 409.4, 783.2] },
+  { id: 'hcg-10000', saleCents: 8925, name: 'HCG — 10,000 IU', prices: [119, 547.4, 1047.2] },
+  { id: 'semaglutide', saleCents: 6800, name: 'Semaglutide — 10mg', prices: [119, 547.4, 1047.2] },
+  { id: 'tirzepatide', saleCents: 6800, name: 'Tirzepatide — 10mg', prices: [139, 639.4, 1223.2] },
+  { id: 'selank', saleCents: 3900, name: 'Selank — 11mg', prices: [79, 363.4, 695.2] },
+  { id: 'semax', saleCents: 4500, name: 'Semax — 11mg', prices: [89, 409.4, 783.2] },
+  { id: 'dsip', saleCents: 6675, name: 'DSIP — 10mg', prices: [89, 409.4, 783.2] },
+  { id: 'aod-9604', saleCents: 6500, name: 'AOD-9604 — 10mg', prices: [109, 501.4, 959.2] },
+  { id: 'igf1-lr3', saleCents: 7400, name: 'IGF-1 LR3 — 1mg', prices: [129, 593.4, 1135.2] }
 ];
 
 test('keeps every restored freeze-dried product in the storefront catalog', () => {
@@ -29,7 +29,7 @@ test('keeps every restored freeze-dried product in the storefront catalog', () =
 test('accepts every restored product through trusted server-side checkout pricing', () => {
   for (const expected of restoredProducts) {
     const order = normalizeOrder([{ key: `${expected.id}::0`, qty: 1 }], 'shipping');
-    assert.equal(order.subtotalCents, Math.round(expected.prices[0] * 75));
+    assert.equal(order.subtotalCents, expected.saleCents);
     assert.equal(order.normalizedItems[0].productId, expected.id);
   }
 });

@@ -23,19 +23,55 @@
     return Math.round(regularCents * (100 - SALE_PERCENT) / 100);
   }
 
-  // Round the selected pack price once before multiplying cart quantities.
-  function saleProduct(product) {
+  // Automatic single-vial sale prices in cents, before quantity or package savings.
+  const SINGLE_VIAL_MARKDOWNS = Object.freeze({
+    'bpc157-10': 5500,
+    'tb500-10': 6900,
+    'tesamorelin-10': 6400,
+    sermorelin: 5900,
+    ipamorelin: 5400,
+    'mela1-10': 3700,
+    'mela2-10': 3600,
+    'nad-500': 5200,
+    'mots-c': 5400,
+    'retatrutide-10': 7500,
+    'retatrutide-20': 11900,
+    semaglutide: 6800,
+    tirzepatide: 6800,
+    selank: 3900,
+    semax: 4500,
+    'aod-9604': 6500,
+    'igf1-lr3': 7400,
+    'kpv-10': 4400,
+    'cjc1295-dac-10': 5900,
+    'cjc1295-no-dac-10': 6400,
+    'pt141-10': 3900,
+  });
+
+  function saleProduct(product, { applyMarkdowns = true } = {}) {
+    const singlePrices = applyMarkdowns ? SINGLE_VIAL_MARKDOWNS : {};
+    const components = product.components?.map(component => {
+      const regularCents = component.regularCents ?? component.unitCents;
+      const unitCents = Math.min(saleCents(regularCents), singlePrices[component.productId] ?? Infinity);
+      return { ...component, regularCents, unitCents };
+    });
+    const singlesCents = components?.reduce((sum, c) => sum + c.unitCents * c.quantity, 0);
+    const singleCents = singlePrices[product.id];
     const pricing = product.pricing.map(option => {
       const regularPrice = option.regularPrice ?? option.price;
-      return { ...option, regularPrice, price: saleCents(Math.round(regularPrice * 100)) / 100 };
+      let cents = saleCents(Math.round(regularPrice * 100));
+      if (components && applyMarkdowns) {
+        const packageCents = Math.round(singlesCents * (100 - product.discountPercent) / 100);
+        cents = Math.min(cents, packageCents);
+      } else if (singleCents !== undefined) {
+        const quantity = option.quantity ?? parseInt(option.label, 10);
+        const tierCents = Math.round(singleCents * quantity * (100 - discountPercentForQuantity(quantity)) / 100);
+        cents = Math.min(cents, tierCents);
+      }
+      return { ...option, regularPrice, price: cents / 100 };
     });
-    if (!product.components) return { ...product, pricing };
+    if (!components) return { ...product, pricing };
 
-    const components = product.components.map(component => {
-      const regularCents = component.regularCents ?? component.unitCents;
-      return { ...component, regularCents, unitCents: saleCents(regularCents) };
-    });
-    const singlesCents = components.reduce((sum, c) => sum + c.unitCents * c.quantity, 0);
     const packageCents = Math.round(pricing[0].price * 100);
     return { ...product, pricing, components, singlesCents, packageCents, savingsCents: singlesCents - packageCents };
   }

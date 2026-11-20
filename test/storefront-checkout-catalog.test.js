@@ -15,12 +15,12 @@ const storefrontSources = [
 ].map((file) => readFileSync(join(root, file), 'utf8')).join('\n');
 
 const supplementalProducts = [
-  { id: 'cjc1295-dac-10', basePrice: 119 },
-  { id: 'cjc1295-no-dac-10', basePrice: 119 },
-  { id: 'pt141-10', basePrice: 69 },
-  { id: 'bac-water-10ml', basePrice: 12 },
-  { id: 'glutathione-1500', basePrice: 59 },
-  { id: 'slu-pp-332-10', basePrice: 139 },
+  { id: 'cjc1295-dac-10', saleCents: 5900, basePrice: 119 },
+  { id: 'cjc1295-no-dac-10', saleCents: 6400, basePrice: 119 },
+  { id: 'pt141-10', saleCents: 3900, basePrice: 69 },
+  { id: 'bac-water-10ml', saleCents: 900, basePrice: 12 },
+  { id: 'glutathione-1500', saleCents: 4425, basePrice: 59 },
+  { id: 'slu-pp-332-10', saleCents: 10425, basePrice: 139 },
 ];
 
 test('every browser-added freeze-dried product has 1 through 10 trusted checkout options', () => {
@@ -35,7 +35,7 @@ test('every browser-added freeze-dried product has 1 through 10 trusted checkout
     pricing.forEach((option, pricingIndex) => {
       const order = normalizeOrder([{ key: `${product.id}::${pricingIndex}`, qty: 1 }], 'shipping');
       assert.equal(order.normalizedItems[0].productId, product.id);
-      assert.equal(order.normalizedItems[0].unitCents, Math.round(Math.round(option.price * 100) * 0.75));
+      assert.equal(order.normalizedItems[0].unitCents, Math.min(Math.round(Math.round(option.price * 100) * 0.75), Math.round(product.saleCents * option.quantity * (100-option.discountPercent) / 100)));
     });
   }
 });
@@ -43,8 +43,8 @@ test('every browser-added freeze-dried product has 1 through 10 trusted checkout
 test('uses modest quantity discounts for freeze-dried products and injectables', () => {
   const oneBpc = normalizeOrder([{ key: 'bpc157-10::0', qty: 1 }], 'shipping');
   const tenBpc = normalizeOrder([{ key: 'bpc157-10::9', qty: 1 }], 'shipping');
-  assert.equal(oneBpc.subtotalCents, 8175);
-  assert.equal(tenBpc.subtotalCents, 71940);
+  assert.equal(oneBpc.subtotalCents, 5500);
+  assert.equal(tenBpc.subtotalCents, 48400);
 
   assert.throws(() => normalizeOrder([{key:'test-e::0',qty:1}], 'shipping'));
 });
