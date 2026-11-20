@@ -21,7 +21,7 @@
       const components=definition.ids.map(id=>{
         const product=byId.get(id);
         const single=product?.pricing?.find(p=>/^1 Vial\b/i.test(p.label));
-        const unitCents=Math.round(Number(single?.price)*100);
+        const unitCents=Math.round(Number(single?.regularPrice ?? single?.price)*100);
         if(!product||!Number.isSafeInteger(unitCents)||unitCents<=0) throw new Error('Missing package component: '+id);
         return {productId:id,name:product.name,amount:product.amount || '10mg per vial',quantity:1,unitCents};
       });

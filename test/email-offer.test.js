@@ -49,16 +49,16 @@ test('email code is saved, delivered, bound to the address and honored through s
   const items=[{key:'ghk-cu-100::0',qty:3}],fulfillment='shipping';
   const fields={action:'apply',code,email,items,fulfillment};
   const applied=await call(offer,fields);
-  assert.deepEqual(applied.body,{discountCents:2070,discountedSubtotalCents:18630,shippingCents:1200,totalCents:19830});
+  assert.deepEqual(applied.body,{discountCents:1553,discountedSubtotalCents:13972,shippingCents:1200,totalCents:15172});
   assert.equal((await call(offer,{...fields,email:'other@example.test'})).code,400);
   const body={asset:'USDT',items,fulfillment,promoCode:code,customer:{name:'QA Lab',email,phone:'5555550100',address:'1 Lab Way',city:'Miami',state:'FL',zip:'33137'},researchConsent:{attestation:true,policyVersion:'2026-10-17-final-sale'}};
-  const quote=await call(createQuote,body);assert.equal(quote.code,200);assert.equal(quote.body.totalUsd,'198.30');
+  const quote=await call(createQuote,body);assert.equal(quote.code,200);assert.equal(quote.body.totalUsd,'151.72');
   assert.equal(verifyQuote(quote.body.quoteToken).offerVersion,VERSION);
   const [key,record]=Array.from(records)[0];records.set(key,JSON.stringify({...JSON.parse(record),expiresAt:0}));
   assert.equal((await call(offer,fields)).code,400);
   assert.equal((await call(lead,{...body,quoteToken:quote.body.quoteToken})).code,200);
-  assert.match(mail.at(-1).html,/198\.30/);
-  assert.equal((await call(createQuote,{...body,promoCode:undefined,discountCents:10000})).body.totalUsd,'207.00');
+  assert.match(mail.at(-1).html,/151\.72/);
+  assert.equal((await call(createQuote,{...body,promoCode:undefined,discountCents:10000})).body.totalUsd,'167.25');
 });
 
 test('rounded merchandise discounts and hosted-card line totals agree to the cent',()=>{

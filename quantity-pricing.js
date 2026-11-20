@@ -17,6 +17,29 @@
     return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
   }
 
+  const SALE_PERCENT = 25;
+
+  function saleCents(regularCents) {
+    return Math.round(regularCents * (100 - SALE_PERCENT) / 100);
+  }
+
+  // Round the selected pack price once before multiplying cart quantities.
+  function saleProduct(product) {
+    const pricing = product.pricing.map(option => {
+      const regularPrice = option.regularPrice ?? option.price;
+      return { ...option, regularPrice, price: saleCents(Math.round(regularPrice * 100)) / 100 };
+    });
+    if (!product.components) return { ...product, pricing };
+
+    const components = product.components.map(component => {
+      const regularCents = component.regularCents ?? component.unitCents;
+      return { ...component, regularCents, unitCents: saleCents(regularCents) };
+    });
+    const singlesCents = components.reduce((sum, c) => sum + c.unitCents * c.quantity, 0);
+    const packageCents = Math.round(pricing[0].price * 100);
+    return { ...product, pricing, components, singlesCents, packageCents, savingsCents: singlesCents - packageCents };
+  }
+
   function unitNameForProduct(product) {
     const firstLabel = String(product && product.pricing && product.pricing[0] && product.pricing[0].label || '');
     const match = firstLabel.match(/^\s*1\s+([a-z]+)/i);
@@ -34,7 +57,7 @@
     }
 
     const first = product.pricing.find((option) => /^\s*1\b/.test(String(option && option.label || ''))) || product.pricing[0];
-    const basePrice = Number(first && first.price);
+    const basePrice = Number(first && (first.regularPrice ?? first.price));
     if (!Number.isFinite(basePrice) || basePrice <= 0) return product.pricing.slice();
 
     const unit = unitNameForProduct(product);
@@ -55,13 +78,15 @@
       const category = typeof categoryResolver === 'function'
         ? categoryResolver(product)
         : product && product.category;
-      if (CATEGORY_LIMITS[category]) product.pricing = buildQuantityPricing(product, category);
+      Object.assign(product, saleProduct({ ...product, pricing: buildQuantityPricing(product, category) }));
     });
     return products;
   }
 
   const api = Object.freeze({
     CATEGORY_LIMITS,
+    SALE_PERCENT,
+    saleProduct,
     applyQuantityPricing,
     buildQuantityPricing,
     discountPercentForQuantity,

@@ -18,6 +18,9 @@ test('each product has one truthful offer matching the trusted single-vial check
   assert.equal(product.sku,p.id);
   assert.equal(Math.round(Number(product.offers.price)*100),normalizeOrder([{key:p.id+'::0',qty:1}],'shipping').subtotalCents,p.id);
   assert.equal(product.offers.priceCurrency,'USD');
+  const reference = product.offers.priceSpecification;
+  assert.equal(reference.priceType,'https://schema.org/StrikethroughPrice');
+  assert.equal(Math.round(Number(reference.price)*100),normalizeOrder([{key:p.id+'::0',qty:1}],'shipping','2026-11-12-delivery').subtotalCents);
   assert.equal(product.offers.url,'https://www.nxtlvl-research.com'+p.path);
   assert.ok(html.includes(product.offers.price),p.id);
   assert.ok(fs.existsSync(path.join(root,new URL(product.image[0]).pathname.slice(1))),p.id);
@@ -34,6 +37,14 @@ test('category lists describe exactly the products linked on each generated coll
   assert.equal((html.match(/class="directory-card"/g)||[]).length,count,file);
   for(const item of list.itemListElement)assert.ok(html.includes('href="'+new URL(item.url).pathname+'"'),item.name);
  }
+});
+
+test('the nationwide New Year’s peptide sale is linked and readable in initial HTML',()=>{
+ const html=read('research-peptides.html');
+ assert.match(html,/<title>New Year’s Peptide Sale 2027 – 25% Off/);
+ assert.match(html,/<h1>New Year’s Peptide Sale<\/h1>/);
+ assert.match(html,/all 50 states and Washington, D.C./);
+ assert.match(read('index.html'),/href="\/research-peptides.html">Shop the New Year’s peptide sale/);
 });
 
 test('sitemap contains only existing canonical indexable pages and real product images',()=>{
@@ -57,7 +68,7 @@ test('product-page add preserves existing cart and uses only product identity an
  const items=cart.add(storage,'ghk-cu-50',4);
  assert.deepEqual(items,[{productId:'sermorelin',pricingIndex:0,qty:1},{productId:'ghk-cu-50',pricingIndex:4,qty:1}]);
  const order=normalizeOrder(items.map(i=>({key:i.productId+'::'+i.pricingIndex,qty:i.qty})),'shipping');
- assert.equal(order.subtotalCents,34440);
+ assert.equal(order.subtotalCents,25830);
  assert.equal(order.shippingCents,0);
  assert.doesNotMatch(value,/price|total|customer|email/);
  cart.add(storage,'ghk-cu-50',4);

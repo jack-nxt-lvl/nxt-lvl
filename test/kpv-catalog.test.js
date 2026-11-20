@@ -20,8 +20,9 @@ test('KPV uses the selected price and all existing quantity discounts in browser
   expected.forEach((cents, i) => {
     assert.equal(Math.round(pricing[i].price * 100), cents);
     const order = normalizeOrder([{ key: 'kpv-10::' + i, qty: 1, price: 0.01 }], 'shipping');
-    assert.equal(order.subtotalCents, cents);
-    assert.equal(order.shippingCents, cents > 20000 ? 0 : 1200);
+    const saleCents = Math.round(cents * 0.75);
+    assert.equal(order.subtotalCents, saleCents);
+    assert.equal(order.shippingCents, saleCents > 20000 ? 0 : 1200);
     assert.equal(order.normalizedItems[0].name, 'KPV — 10mg');
   });
   assert.throws(() => normalizeOrder([{ key: 'kpv-10::10', qty: 1 }], 'shipping'), /invalid product/);

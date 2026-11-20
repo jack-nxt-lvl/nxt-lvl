@@ -1,6 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-const vm = require('vm');
+const { currentProducts } = require('../lib/direct-payment');
 
 const DEFAULT_MODEL = 'gpt-5-nano';
 const MAX_MESSAGES = 10;
@@ -14,6 +12,7 @@ const BUSINESS_FACTS = [
   'The owner confirms all currently listed materials and research packages are in stock. Do not invent inventory quantities or guaranteed arrival dates. Stock status does not remove purchaser eligibility or local-fulfillment confirmation requirements.',
   'Products are labeled for laboratory research use only and are not for human consumption, medical, veterinary, or diagnostic purposes.',
   'Products are not FDA-approved drugs.',
+  'The New Year’s Sale takes 25% off all products, including supplies, multipacks and packages. Menu prices already include the sale. No code is needed.',
   'Customers can add items to the cart, choose pricing tiers, and review a subtotal.',
   'Order support email confirmed by the owner: payment@nxtlvl-research.com. Published cancellation/refund policy: https://www.nxtlvl-research.com/ordering-policy.html#refunds. It covers future approved card-paid orders; existing orders retain their applicable terms and rights. Pending requests are free to withdraw. Cancellation received before carrier handover or local-delivery dispatch receives a full refund including tax and fulfillment fees, without cancellation/restocking fees. Verified damaged, incorrect or missing items qualify for replacement or refund. Change-of-mind returns after dispatch/handover are not accepted, including unopened materials; applicable defective/nonconforming goods rights remain. Approved refunds are initiated within five business days, or sooner when required, through the original card payment method; bank posting is separate. Never declare a refund approved or sent, or promise an exception: direct the buyer to support with their reference. Separate cryptocurrency terms are still required before that payment channel can reopen.',
   'Fulfillment in USD: standard Priority Mail $12; overnight option $30; same-day local delivery $25. Local pickup is unavailable; do not offer to arrange it. All fulfillment fees are waived when the merchandise subtotal exceeds $475 (strictly above, not equal), including overnight where available. Tax does not count toward the threshold.',
@@ -21,10 +20,7 @@ const BUSINESS_FACTS = [
   'Requests require independent review of organization, purchaser authority, intended research, materials, and fulfillment before payment. Public payment access is paused while business review is completed.',
 ].join('\n');
 
-const WEBSITE_ONLY_EXTRAS = [];
-let cachedCatalog=null;
-function extractCompoundsArray(source){const match=source.match(/const\s+compounds\s*=\s*(\[[\s\S]*?\n\]);/);if(!match||!match[1])throw new Error('Could not locate compounds array');return vm.runInNewContext(`(${match[1]})`,{});}
-function loadCatalog(){if(cachedCatalog)return cachedCatalog;try{const source=fs.readFileSync(path.join(process.cwd(),'products-data-original.js'),'utf8');const compounds=extractCompoundsArray(source);if(!Array.isArray(compounds)||!compounds.length)throw new Error('Compounds array was empty');for(const extra of WEBSITE_ONLY_EXTRAS){if(!compounds.some(p=>p.id===extra.id||p.name===extra.name))compounds.push(extra);}cachedCatalog={compounds};return cachedCatalog;}catch(error){console.error('Catalog load error:',error&&error.message?error.message:error);cachedCatalog={compounds:[...WEBSITE_ONLY_EXTRAS]};return cachedCatalog;}}
+function loadCatalog() { return { compounds: currentProducts() }; }
 function normalizeText(value){return String(value||'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();}
 function scoreProduct(product, question) {
  const words = normalizeText(question).split(/\s+/).filter(t => t.length >= 3);

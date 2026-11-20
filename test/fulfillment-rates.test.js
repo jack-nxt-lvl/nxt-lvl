@@ -13,15 +13,15 @@ test('the available fulfillment methods use the owner rates and the strict free 
 });
 
 test('trusted merchandise prices determine the free threshold, not client prices or totals', () => {
-  const items = [{key:'bpc157-10::0',qty:4,price:1000},{key:'bac-water-10ml::0',qty:2,price:1000}];
+  const items = [{key:'bpc157-10::0',qty:5,price:1000},{key:'bac-water-10ml::0',qty:2,price:1000}];
   for (const mode of ['shipping','overnight','local-delivery']) {
     const below = normalizeOrder(items,mode);
-    assert.equal(below.subtotalCents,46000);
+    assert.equal(below.subtotalCents,42675);
     assert.equal(below.shippingCents,mode==='shipping'?0:rates.OPTIONS[mode].cents);
-    const above = normalizeOrder([items[0],{...items[1],qty:4}],mode);
-    assert.equal(above.subtotalCents,48400);
+    const above = normalizeOrder([items[0],{...items[1],qty:8}],mode);
+    assert.equal(above.subtotalCents,48075);
     assert.equal(above.shippingCents,0);
-    assert.equal(above.totalCents,48400);
+    assert.equal(above.totalCents,48075);
   }
 });
 
@@ -53,7 +53,7 @@ test('legacy signed-quote reconciliation retains its old fee while new requests 
   const items=[{key:'bpc157-10::0',qty:2}];
   assert.equal(normalizeOrder(items,'pickup','2026-11-10-pricing').shippingCents,0);
   assert.equal(normalizeOrder(items,'shipping','legacy-v1').totalCents,22800);
-  assert.equal(normalizeOrder(items,'shipping').totalCents,21800);
+  assert.equal(normalizeOrder(items,'shipping').totalCents,17550);
   assert.throws(()=>normalizeOrder(items,'overnight','legacy-v1'),/legacy/);
   assert.throws(()=>normalizeOrder(items,'shipping','invented-version'),/version/);
 });
