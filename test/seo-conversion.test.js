@@ -154,3 +154,34 @@ test('the legacy water listing redirects to the catalog offer and stays out of t
  assert.ok(!read('sitemap.xml').includes(source));
  assert.ok(read('sitemap.xml').includes(destination));
 });
+
+test('Best Deals links the largest percentage markdowns to their own checkout-backed prices', () => {
+ const {currentProducts} = require('../lib/direct-payment');
+ const {compareDeals} = require('../quantity-pricing');
+ const home = read('index.html');
+ const shelf = home.split('<!-- best-deals:start -->')[1].split('<!-- best-deals:end -->')[0];
+ const cards = [...shelf.matchAll(/<a class="best-deal" href="([^"]+)">([\s\S]*?)<\/a>/g)];
+ const expected = currentProducts().sort((a,b) => {
+   const relativePrice = p => p.pricing[0].price / p.pricing[0].regularPrice;
+   return relativePrice(a) - relativePrice(b) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+ });
+ assert.deepEqual(currentProducts().sort(compareDeals).map(p=>p.id), expected.map(p=>p.id));
+ assert.equal(cards.length, 3);
+ const paths = require('../scripts/catalog-paths.json');
+ cards.forEach(([,url,body],index) => {
+   const p=expected[index], option=p.pricing[0];
+   assert.equal(url,paths[p.id] ? paths[p.id]+'#purchaseTitle' : p.path);
+   const order=normalizeOrder([{key:p.id+'::0',qty:1}],'shipping');
+   assert.ok(body.includes('<b>$'+(order.subtotalCents/100).toFixed(2)+'</b>'));
+   assert.ok(body.includes('Save $'+(option.regularPrice-option.price).toFixed(2)));
+ });
+ assert.match(read('catalog-search-quantity.js'),/value="deals">Biggest discount/);
+ for(const file of ['index.html','catalog.html','research-peptides.html']){
+   const html=read(file);
+   assert.match(html,/href="[^"]*#best-deals">Best Deals/);
+   assert.match(html,/href="\/about.html#manufacturing">Manufactured in the USA/);
+   assert.match(html,/href="\/coa.html#reports-title">Select samples tested by BTLabs in Florida, USA/);
+ }
+ assert.match(read('about.html'),/id="manufacturing"/);
+ assert.match(read('coa.html'),/id="reports-title"/);
+});

@@ -141,7 +141,7 @@ if (typeof module === 'object' && module.exports) module.exports = catalogMatche
 
   const sorting = document.createElement('div');
   sorting.className = 'pro-sort';
-  sorting.innerHTML = '<label for="catalogSort">Sort products</label><select id="catalogSort"><option value="featured">Featured</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
+  sorting.innerHTML = '<label for="catalogSort">Sort products</label><select id="catalogSort"><option value="featured">Featured</option><option value="deals">Biggest discount</option><option value="name">Name: A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select>';
   const sortSlot = document.querySelector('.home-sort-slot');
   if (sortSlot) sortSlot.appendChild(sorting);
   else document.getElementById('filterBar')?.insertAdjacentElement('afterend', sorting);
@@ -294,6 +294,15 @@ if (typeof module === 'object' && module.exports) module.exports = catalogMatche
       });
     }).observe(grid, { childList: true });
   }
+
+  // Deferred product scripts can register additional vials after the first grid render.
+  document.addEventListener('DOMContentLoaded', () => {
+    const lateProducts = compounds.filter(product => product.pricing[0]?.regularPrice == null);
+    if (!lateProducts.length) return;
+    pricingApi.applyQuantityPricing(lateProducts);
+    renderGrid(input.value ? 'all' : selectedCategory());
+    applySearch();
+  }, { once: true });
 
   loadRequestedProduct();
 })();

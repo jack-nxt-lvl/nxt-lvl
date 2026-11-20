@@ -2528,7 +2528,7 @@
 <link rel="stylesheet" href="/conversion-experience.css?v=20261102-references">
   <link rel="stylesheet" href="/storefront-pro.css?v=20261020-miami-restored-1">
 <link rel="stylesheet" href="/business-presentation.css?v=20261112-catalog">
-<link rel="stylesheet" href="/email-offer.css?v=1"><script src="/email-offer.js?v=1" defer></script><!-- visitor-entry-assets:start --><link rel="stylesheet" href="/visitor-entry.css?v=20261116"><script src="/visitor-entry.js?v=20261116" defer></script><!-- visitor-entry-assets:end --></head>
+<link rel="stylesheet" href="/catalog-deals.css?v=1"><link rel="stylesheet" href="/email-offer.css?v=1"><script src="/email-offer.js?v=1" defer></script><!-- visitor-entry-assets:start --><link rel="stylesheet" href="/visitor-entry.css?v=20261116"><script src="/visitor-entry.js?v=20261116" defer></script><!-- visitor-entry-assets:end --></head>
 
 <body class="miami-site miami-home catalog-pro storefront-focused"><!-- visitor-entry:start -->
 <dialog id="nxt-entry" open aria-labelledby="nxt-entry-title" aria-describedby="nxt-entry-intro" data-nosnippet>
@@ -2565,7 +2565,7 @@
       <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
         onclick="const menu=document.querySelector('nav ul');const open=menu.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')"><span></span><span></span><span></span></button>
       <ul>
-        <li><a href="#menu">Products</a></li>
+        <li><a href="#best-deals">Best Deals</a></li>
         <li><a href="/about.html">About</a></li>
         <li><a href="/coa.html">Lab reports</a></li>
         <li><a href="/handbook.pdf" target="_blank" rel="noopener" aria-label="Handbook (PDF, opens in a new tab)">Handbook</a></li>
@@ -2590,9 +2590,10 @@
       <p class="home-kicker">New Year’s Sale · 25% off or more on every product</p>
       <h1 id="homeTitle">Start your 2027<br><span>research early.</span></h1>
       <p class="home-intro-lead">Stock your lab for the new year with at least 25% off research peptides, multipacks, bundles and supplies. Sale prices apply automatically. We ship to eligible labs in all 50 states.</p>
+      <!-- catalog-origin:start --><div class="catalog-provenance" role="group" aria-label="Product origin and testing"><a href="/about.html#manufacturing">Manufactured in the USA</a><a href="/about.html#aboutBusinessTitle">U.S. company</a><a href="/coa.html#reports-title">Select samples tested by BTLabs in Florida, USA ↗</a></div><!-- catalog-origin:end -->
       <div class="home-intro-actions">
         <a class="home-primary" href="/research-peptides.html">Shop the New Year’s peptide sale</a>
-        <a class="home-secondary" href="/coa.html">View sample reports</a>
+        <a class="home-secondary" href="#best-deals">See best deals</a>
       </div>
       <p class="home-use-note">For laboratory research only. Not for human or veterinary use.</p>
     </div>
@@ -2604,6 +2605,7 @@
   </section>
   <!-- COMPOUND MENU -->
   <section id="menu">
+    <!-- best-deals:start --><section id="best-deals" class="home-best-deals" aria-labelledby="bestDealsTitle"><h2 id="bestDealsTitle">Best Deals</h2><p>Our largest percentage discounts on a single vial or package.</p><div class="best-deal-grid"><a class="best-deal" href="/research/mots-c.html#purchaseTitle"><img class="product-packshot" src="/assets/products/mots-c-480-v1.webp" srcset="/assets/products/mots-c-480-v1.webp 480w, /assets/products/mots-c-960-v1.webp 960w" sizes="76px" width="960" height="960" alt="NXT LVL MOTS-c — 10mg box and vial — product mockup" loading="lazy" decoding="async"><span class="deal-details"><span class="deal-discount">58% off</span><strong>MOTS-c — 10mg</strong><span class="deal-prices"><s aria-label="Regular price">$129.00</s> <b>$54.00</b></span><small>Save $75.00 per vial</small></span></a><a class="best-deal" href="/research/tirzepatide-10mg.html#purchaseTitle"><img class="product-packshot" src="/assets/products/tirzepatide-480-v1.webp" srcset="/assets/products/tirzepatide-480-v1.webp 480w, /assets/products/tirzepatide-960-v1.webp 960w" sizes="76px" width="960" height="960" alt="NXT LVL Tirzepatide — 10mg box and vial — product mockup" loading="lazy" decoding="async"><span class="deal-details"><span class="deal-discount">51% off</span><strong>Tirzepatide — 10mg</strong><span class="deal-prices"><s aria-label="Regular price">$139.00</s> <b>$68.00</b></span><small>Save $71.00 per vial</small></span></a><a class="best-deal" href="/research/selank-11mg.html#purchaseTitle"><img class="product-packshot" src="/assets/products/selank-480-v1.webp" srcset="/assets/products/selank-480-v1.webp 480w, /assets/products/selank-960-v1.webp 960w" sizes="76px" width="960" height="960" alt="NXT LVL Selank — 11mg box and vial — product mockup" loading="lazy" decoding="async"><span class="deal-details"><span class="deal-discount">50% off</span><strong>Selank — 11mg</strong><span class="deal-prices"><s aria-label="Regular price">$79.00</s> <b>$39.00</b></span><small>Save $40.00 per vial</small></span></a></div></section><!-- best-deals:end -->
     <div class="section-header home-catalog-heading"><h2>Research catalog</h2><a href="/catalog.html">View full catalog</a></div>
     <div class="home-catalog-tools"><div class="home-search-slot"></div><div class="home-sort-slot"></div></div>
     <div class="filter-bar" id="filterBar" aria-label="Filter products by category"></div>
@@ -2778,6 +2780,7 @@
       const grid = document.getElementById('compoundGrid');
       const filtered = [...(filter === 'all' ? compounds : compounds.filter(p => p.category === filter))];
       const sort = window.nxtCatalogSort || 'featured';
+      if (sort === 'deals') filtered.sort(window.NxtQuantityPricing.compareDeals);
       if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
       if (sort === 'price-low') filtered.sort((a,b) => a.pricing[0].price - b.pricing[0].price);
       if (sort === 'price-high') filtered.sort((a,b) => b.pricing[0].price - a.pricing[0].price);
@@ -3644,11 +3647,11 @@
   <script src="pt141-product.js?v=20261102-pricing"></script>
   <script src="bac-water-product.js?v=20261109-water"></script>
   <script src="glutathione-product.js?v=20261110-pricing"></script>
-  <script src="quantity-pricing.js?v=20261120-market"></script>
+  <script src="quantity-pricing.js?v=20261120-deals"></script>
   <script src="research-packages.js?v=20261120-sale"></script>
   <script src="package-supply-reminder.js?v=20261102-pricing"></script>
   <script src="catalog-matcher.js?v=20261109"></script>
-  <script src="catalog-search-quantity.js?v=20261109-search"></script>
+  <script src="catalog-search-quantity.js?v=20261120-deals"></script>
   <script data-nxt-paybis-funding="1" src="lib/paybis-funding.js?v=20260825-paybis-match-1"></script>
   <script data-nxt-direct-wallet="1" src="direct-wallet-checkout.js?v=20261109-email-offer"></script>
   <script src="customer-checkout-upgrade.js?v=20261120-market"></script>

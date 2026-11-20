@@ -76,6 +76,15 @@
     return { ...product, pricing, components, singlesCents, packageCents, savingsCents: singlesCents - packageCents };
   }
 
+  // Compare the first purchasable option at its regular and current price.
+  function compareDeals(a, b) {
+    const [left] = a.pricing;
+    const [right] = b.pricing;
+    const leftRatio = left.price / (left.regularPrice ?? left.price);
+    const rightRatio = right.price / (right.regularPrice ?? right.price);
+    return leftRatio - rightRatio || a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+  }
+
   function unitNameForProduct(product) {
     const firstLabel = String(product && product.pricing && product.pricing[0] && product.pricing[0].label || '');
     const match = firstLabel.match(/^\s*1\s+([a-z]+)/i);
@@ -123,6 +132,7 @@
     CATEGORY_LIMITS,
     SALE_PERCENT,
     saleProduct,
+    compareDeals,
     applyQuantityPricing,
     buildQuantityPricing,
     discountPercentForQuantity,

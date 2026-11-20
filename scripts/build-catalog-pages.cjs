@@ -3,9 +3,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const { normalizeOrder } = require('../lib/direct-payment');
+const { normalizeOrder, currentProducts } = require('../lib/direct-payment');
 const { buildResearchPackages } = require('../research-packages');
-const { saleProduct } = require('../quantity-pricing');
+const { saleProduct, compareDeals } = require('../quantity-pricing');
 const rates = require('../fulfillment-rates');
 const productImages = require('../product-images');
 const paths = require('./catalog-paths.json');
@@ -67,7 +67,8 @@ ${research.documents(p)}
 function head(title, description, canonical, graph) {
  return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${origin}${canonical}"><meta property="og:type" content="website"><meta property="og:site_name" content="NXT LVL Research"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${canonical}"><meta property="og:image" content="${origin}/assets/miami-skyline-night.webp"><meta property="og:image:alt" content="Miami skyline at dusk — NXT LVL Research"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="${origin}/assets/miami-skyline-night.webp"><meta name="theme-color" content="#080e10"><link rel="stylesheet" href="/research/research-product-seo.css"><link rel="stylesheet" href="/confidence-redesign.css?v=20261016-review"><link rel="stylesheet" href="/miami-research.css?v=20261017-night-1"><link rel="stylesheet" href="/atelier-layout.css?v=20261017-1"><link rel="stylesheet" href="/catalog-experience.css?v=20261020-1"><link rel="stylesheet" href="/storefront-pro.css?v=20261020-kpv-1"><link rel="stylesheet" href="/conversion-experience.css?v=20261102-references"><script type="application/ld+json">${JSON.stringify({'@context':'https://schema.org','@graph':graph})}</script></head>`;
 }
-const nav = `<a class="catalog-skip" href="#main-content">Skip to content</a><nav aria-label="Main navigation"><a class="brand" href="/">NXT <span>LVL</span></a><a href="/catalog.html">All products</a><a href="/shipping-and-payments.html">U.S. shipping</a><a href="/how-to-order.html">How to order</a><a href="/handbook.pdf" target="_blank" rel="noopener" aria-label="Handbook (PDF, opens in a new tab)">Handbook</a><a href="/about.html">About &amp; support</a><a href="/?cart=review">View cart</a></nav>`;
+const originLinks = `<div class="catalog-provenance" role="group" aria-label="Product origin and testing"><a href="/about.html#manufacturing">Manufactured in the USA</a><a href="/about.html#aboutBusinessTitle">U.S. company</a><a href="/coa.html#reports-title">Select samples tested by BTLabs in Florida, USA ↗</a></div>`;
+const nav = `<a class="catalog-skip" href="#main-content">Skip to content</a><nav aria-label="Main navigation"><a class="brand" href="/">NXT <span>LVL</span></a><a href="/#best-deals">Best Deals</a><a href="/catalog.html">All products</a><a href="/shipping-and-payments.html">U.S. shipping</a><a href="/how-to-order.html">How to order</a><a href="/handbook.pdf" target="_blank" rel="noopener" aria-label="Handbook (PDF, opens in a new tab)">Handbook</a><a href="/about.html">About &amp; support</a><a href="/?cart=review">View cart</a></nav>`;
 const footer = `<footer class="catalog-footer"><strong>NXT LVL Research</strong><p>Operated by BLUE LIGHT VENTURES LLC · South Florida.</p><p>Laboratory research only. Not for human consumption, medical, veterinary or diagnostic use.</p><div><a href="tel:+17542907210">754-290-7210</a><a href="sms:+17542907210">Text us</a><a href="https://wa.me/17542907210">WhatsApp</a><a href="mailto:payment@nxtlvl-research.com">Email support</a></div><div><a href="/about.html">About NXT LVL</a><a href="/about.html#support">Contact &amp; support</a><a href="/ordering-policy.html">Ordering policy</a><a href="/ordering-policy.html#refunds">Returns &amp; refunds</a><a href="/privacy.html">Privacy</a><a href="/research-purchasing-guide.html">Research purchasing guide</a><a href="/south-florida-research.html">Research peptides in Florida</a></div></footer>`;
 function newProduct(p) {
  const desc = p.seoDescription || `${p.name}: ${p.amount}, ${p.form.toLowerCase()}. Compare pack pricing, review lot documentation and confirm U.S. or South Florida delivery.`;
@@ -77,9 +78,20 @@ function newProduct(p) {
 function directory(products) {
  const sorted = [...products].sort((a,b)=>a.name.localeCompare(b.name));
  const graph = [{'@type':'CollectionPage',name:'Research material catalog',url:origin+'/catalog.html',isPartOf:{'@id':origin+'/#website'}},{'@type':'ItemList',name:'NXT LVL Research materials',numberOfItems:products.length,itemListElement:sorted.map((p,i)=>({'@type':'ListItem',position:i+1,name:p.name,url:origin+p.path}))}];
- return head('Research Catalog & Pack Pricing | NXT LVL Research','Browse research materials by name, vial size and format. Compare pack prices and lot reports, with nationwide shipping to eligible laboratories in all 50 states.','/catalog.html',graph).replace('/catalog-experience.css?v=20261020-1','/catalog-experience.css?v=20261109-search')+`<body class="miami-site catalog-directory catalog-pro"><main class="wrap" id="main-content">${nav}<h1>Research peptides<br>&amp; laboratory supplies.</h1><p class="lead">Browse ${products.length} research products by name and vial size. Get an early start on your lab’s 2027 goals with the <a href="/research-peptides.html">New Year’s peptide sale</a>. Every product and pack is at least 25% off automatically.</p>
+ return head('Research Catalog & Pack Pricing | NXT LVL Research','Browse research materials by name, vial size and format. Compare pack prices and lot reports, with nationwide shipping to eligible laboratories in all 50 states.','/catalog.html',graph).replace('/catalog-experience.css?v=20261020-1','/catalog-experience.css?v=20261109-search')+`<body class="miami-site catalog-directory catalog-pro"><main class="wrap" id="main-content">${nav}<h1>Research peptides<br>&amp; laboratory supplies.</h1>${originLinks}<p class="lead">Browse ${products.length} research products by name and vial size. Get an early start on your lab’s 2027 goals with the <a href="/research-peptides.html">New Year’s peptide sale</a>. Every product and pack is at least 25% off automatically.</p>
 <div class="directory-search" hidden role="search" aria-label="Catalog"><label for="directorySearch">Search products</label><div class="directory-search-row"><input type="search" id="directorySearch" placeholder="Try GHK-Cu 50 mg" autocomplete="off" enterkeyhint="search" aria-controls="directoryResults"><button id="directoryClear" type="button" hidden>Clear</button></div><p id="directoryCount" role="status" aria-live="polite" aria-atomic="true">${products.length} products</p></div>
 <details class="directory-browse"><summary>Browse collections &amp; buying guides</summary>${seo.hubLinks('/catalog.html')}<p><a href="/research-compounds.html">Compare research material categories</a> · <a href="${seo.vialComparisonPath}">GHK-Cu 50 mg vs. 100 mg prices</a> · <a href="/research-multipacks.html">Compare 3, 5 and 10-vial multipacks</a> · <a href="/research-package-deals.html">Two-product package deals</a> · <a href="/research-eligibility.html">Purchaser requirements</a></p></details><div class="directory-grid" id="directoryResults">${sorted.map(p=>`<article class="directory-card" data-search="${esc(productText(p))}"><a class="pro-card-image" href="${p.path}" aria-label="View ${esc(p.name)}">${productImages.image(p)}</a><p class="eyebrow">${esc(p.form)}</p><h2><a href="${p.path}">${esc(p.name)}</a></h2><p>${esc(p.amount)}</p>${p.badge ? `<p class="eyebrow">${esc(p.badge)}</p>` : ''}<div class="directory-card-bottom"><span>From <strong>${money(p.options[0].cents)}</strong> / vial</span><a href="${p.path}" aria-label="View ${esc(p.name)} pack options">View options ↗</a></div></article>`).join('')}</div><p id="directoryEmpty" hidden>No matching products. Try the compound name or labeled amount, or <a href="sms:+17542907210">text us for help</a>.</p><section class="product-docs"><h2>Ready to order?</h2><p>Review the <a href="/coa.html">batch reports</a>, choose a product and quantity, then add your selection to the cart. <a href="/how-to-order.html">Our ordering guide</a> explains the checkout steps and current payment options. For local delivery, <a href="/south-florida-research.html#local-inquiry">confirm your delivery address</a> before payment.</p></section>${footer}</main><script src="/catalog-matcher.js?v=20261109" defer></script><script src="/catalog-directory.js?v=20261109-search" defer></script></body></html>`;
+}
+function bestDeals() {
+ const cards = currentProducts().sort(compareDeals).slice(0,3).map(product => {
+   const option = product.pricing[0];
+   const regular = Math.round(option.regularPrice * 100);
+   const sale = Math.round(option.price * 100);
+   const savings = regular - sale;
+   const url = paths[product.id] ? paths[product.id] + '#purchaseTitle' : product.path;
+   return `<a class="best-deal" href="${esc(url)}">${productImages.image(product,{sizes:'76px'})}<span class="deal-details"><span class="deal-discount">${Math.floor(savings * 100 / regular)}% off</span><strong>${esc(product.name)}</strong><span class="deal-prices"><s aria-label="Regular price">${money(regular)}</s> <b>${money(sale)}</b></span><small>Save ${money(savings)} per ${product.components ? 'package' : 'vial'}</small></span></a>`;
+ });
+ return `<section id="best-deals" class="home-best-deals" aria-labelledby="bestDealsTitle"><h2 id="bestDealsTitle">Best Deals</h2><p>Our largest percentage discounts on a single vial or package.</p><div class="best-deal-grid">${cards.join('')}</div></section>`;
 }
 function featuredProductCard(p) {
   return `<article class="compound-card">
@@ -120,6 +132,8 @@ function build() {
  output.set('research-multipacks.html',multipacks(products));
  output.set('research-package-deals.html',packageDeals(products));
  let home = read('index.html').replace(/const researchPagePaths = \{[\s\S]*?\};/, 'const researchPagePaths = '+JSON.stringify(paths,null,2)+';');
+ home = home.replace(/<!-- catalog-origin:start -->[\s\S]*?<!-- catalog-origin:end -->/, () => '<!-- catalog-origin:start -->'+originLinks+'<!-- catalog-origin:end -->');
+ home = home.replace(/<!-- best-deals:start -->[\s\S]*?<!-- best-deals:end -->/, () => '<!-- best-deals:start -->'+bestDeals()+'<!-- best-deals:end -->');
  const featured = products.slice(0,6).map(featuredProductCard).join('\n');
  home = home.replace(/(<!-- featured-products:start -->)[\s\S]*?(<!-- featured-products:end -->)/, (_, start, end) => start+'\n'+featured+'\n'+end);
  output.set('index.html',home);
@@ -138,11 +152,15 @@ function build() {
   html=html.replace(/<aside class="local-footer"[\s\S]*?<\/aside>/,'');
   output.set(file,seo.enhanceProduct(html,p));
  }
- const layout={head,nav,footer};
+ const layout={head,nav,footer,originLinks};
  for(const [file,html] of seo.collectionPages(products,layout))output.set(file,html);
  output.set('research-purchasing-guide.html',seo.purchasingGuide(products,layout));
  output.set(seo.vialComparisonPath.slice(1),seo.vialComparison(products,layout));
  output.set('about.html',seo.aboutPage(layout));
+ const dealsStyle='<link rel="stylesheet" href="/catalog-deals.css?v=1">';
+ for(const [file, html] of output) {
+   if(html.includes('class="catalog-provenance"')) output.set(file,html.replace(dealsStyle,'').replace('</head>',dealsStyle+'</head>'));
+ }
  const offerAssets='<link rel="stylesheet" href="/email-offer.css?v=1"><script src="/email-offer.js?v=1" defer></script>';
  for (const [file, html] of output) {
    if (file==='about.html' || file==='research-purchasing-guide.html') continue;
