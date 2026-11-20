@@ -7,7 +7,7 @@
     { id:'pack-bpc157-tb500', name:'BPC-157 10mg + TB-500 10mg', ids:['bpc157-10','tb500-10'] },
     { id:'pack-cjc-no-dac-ipamorelin', name:'CJC-1295 without DAC 10mg + Ipamorelin 10mg', ids:['cjc1295-no-dac-10','ipamorelin'] },
     { id:'pack-tesamorelin-ipamorelin', name:'Tesamorelin 10mg + Ipamorelin 10mg', ids:['tesamorelin-10','ipamorelin'] },
-    { id:'pack-copper-materials', name:'GHK-Cu 50mg + GHK-Cu 100mg — copper materials', ids:['ghk-cu-50','ghk-cu-100'] },
+    { id:'pack-mt2-ghk-cu-100', name:'Melanotan-2 (MT2) 10mg + GHK-Cu 100mg', ids:['mela2-10','ghk-cu-100'] },
     { id:'pack-peptide-materials', name:'BPC-157 10mg + KPV 10mg — peptide materials', ids:['bpc157-10','kpv-10'] },
     { id:'pack-sermorelin-ipamorelin', name:'Sermorelin 10mg + Ipamorelin 10mg', ids:['sermorelin','ipamorelin'] },
     { id:'pack-ghk-cu-kpv', name:'GHK-Cu 50mg + KPV 10mg', ids:['ghk-cu-50','kpv-10'] },

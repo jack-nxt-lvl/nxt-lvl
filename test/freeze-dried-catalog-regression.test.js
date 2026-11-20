@@ -8,7 +8,7 @@ const restoredProducts = [
   { id: 'hcg-5000', saleCents: 6675, name: 'HCG — 5000 IU', prices: [89, 409.4, 783.2] },
   { id: 'hcg-10000', saleCents: 8925, name: 'HCG — 10,000 IU', prices: [119, 547.4, 1047.2] },
   { id: 'semaglutide', saleCents: 6800, name: 'Semaglutide — 10mg', prices: [119, 547.4, 1047.2] },
-  { id: 'tirzepatide', saleCents: 6800, name: 'Tirzepatide — 10mg', prices: [139, 639.4, 1223.2] },
+  { id: 'tirzepatide', saleCents: 9000, name: 'Tirzepatide — 10mg', prices: [139, 639.4, 1223.2] },
   { id: 'selank', saleCents: 3900, name: 'Selank — 11mg', prices: [79, 363.4, 695.2] },
   { id: 'semax', saleCents: 4500, name: 'Semax — 11mg', prices: [89, 409.4, 783.2] },
   { id: 'dsip', saleCents: 6675, name: 'DSIP — 10mg', prices: [89, 409.4, 783.2] },

@@ -37,8 +37,8 @@ test('all 310 material pack choices agree between browser pricing, generated pag
 });
 test('research packages preserve exact component amounts and never stack quantity discounts',()=>{
  const packs=buildResearchPackages(catalog());
- const copper=packs.find(p=>p.id==='pack-copper-materials');
- assert.deepEqual(copper.components.map(c=>c.amount),['50mg per vial','100mg per vial']);
+ const mt2=packs.find(p=>p.id==='pack-mt2-ghk-cu-100');
+ assert.deepEqual(mt2.components.map(c=>[c.productId,c.amount]),[['mela2-10','10mg per vial'],['ghk-cu-100','100mg per vial']]);
  for(const p of packs){
   assert.equal(buildQuantityPricing(p).length,1);
   assert.equal(p.packageCents,Math.round(p.singlesCents*.95));

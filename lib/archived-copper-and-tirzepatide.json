@@ -1,0 +1,75 @@
+{
+  "copperPackage": {
+    "id": "pack-copper-materials",
+    "name": "GHK-Cu 50mg + GHK-Cu 100mg — copper materials — research pack",
+    "discountPercent": 5,
+    "components": [
+      {
+        "productId": "ghk-cu-50",
+        "name": "GHK-Cu — 50mg",
+        "amount": "50mg per vial",
+        "quantity": 1,
+        "unitCents": 4900
+      },
+      {
+        "productId": "ghk-cu-100",
+        "name": "GHK-Cu — 100mg",
+        "amount": "100mg per vial",
+        "quantity": 1,
+        "unitCents": 6900
+      }
+    ],
+    "pricing": [
+      {
+        "label": "1 Package · 2 separate vials · Save 5%",
+        "price": 112.1
+      }
+    ]
+  },
+  "tirzepatide": {
+    "id": "tirzepatide",
+    "name": "Tirzepatide — 10mg",
+    "pricing": [
+      {
+        "label": "1 Vial",
+        "price": 68
+      },
+      {
+        "label": "2 Vials · Save 2%",
+        "price": 133.28
+      },
+      {
+        "label": "3 Vials · Save 5%",
+        "price": 193.8
+      },
+      {
+        "label": "4 Vials · Save 5%",
+        "price": 258.4
+      },
+      {
+        "label": "5 Vials · Save 8%",
+        "price": 312.8
+      },
+      {
+        "label": "6 Vials · Save 8%",
+        "price": 375.36
+      },
+      {
+        "label": "7 Vials · Save 8%",
+        "price": 437.92
+      },
+      {
+        "label": "8 Vials · Save 8%",
+        "price": 500.48
+      },
+      {
+        "label": "9 Vials · Save 8%",
+        "price": 563.04
+      },
+      {
+        "label": "10 Vials · Save 12%",
+        "price": 598.4
+      }
+    ]
+  }
+}

@@ -37,7 +37,7 @@
     'retatrutide-10': 7500,
     'retatrutide-20': 11900,
     semaglutide: 6800,
-    tirzepatide: 6800,
+    tirzepatide: 9000,
     selank: 3900,
     semax: 4500,
     'aod-9604': 6500,

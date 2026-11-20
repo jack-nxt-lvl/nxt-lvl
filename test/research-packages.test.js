@@ -13,7 +13,7 @@ const expected = [
  ['pack-cjc-no-dac-ipamorelin',21800,20710,1090,11210],
  ['pack-tesamorelin-ipamorelin',21800,20710,1090,11210],
  ['pack-sermorelin-ipamorelin',21800,20710,1090,10735],
- ['pack-copper-materials',11800,11210,590,8408],
+ ['pack-mt2-ghk-cu-100',13800,13110,690,8336],
  ['pack-peptide-materials',18800,17860,940,9405],
  ['pack-ghk-cu-kpv',12800,12160,640,7671],
  ['pack-aod-mots-c',23800,22610,1190,11305],
@@ -39,7 +39,8 @@ test('package prices are derived from their exact single-vial contents',()=>{
 test('trusted checkout ignores spoofed prices and retains package fulfillment contents',()=>{
  for(const [id,,cents,,saleCents] of expected){
   const order=normalizeOrder([{key:id+'::0',qty:2,price:0.01,name:'spoof',components:[]}],'shipping');
-  assert.equal(normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale').subtotalCents,Math.round(cents*.75)*2);
+  if(id==='pack-mt2-ghk-cu-100') assert.throws(()=>normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale'),/invalid/);
+  else assert.equal(normalizeOrder([{key:id+'::0',qty:2}],'shipping','2026-11-20-new-years-sale').subtotalCents,Math.round(cents*.75)*2);
   assert.equal(order.subtotalCents,saleCents*2);
   assert.equal(order.normalizedItems[0].unitCents,saleCents);
   assert.equal(order.normalizedItems[0].components.length,2);
@@ -76,13 +77,13 @@ test('optional 10mL water remains a separately priced line alongside every packa
 });
 
 test('optional water affects the free-fulfillment threshold at its actual price',()=>{
- const items=[{key:'pack-copper-materials::0',qty:2},{key:'bac-water-10ml::0',qty:1}];
+ const items=[{key:'pack-mt2-ghk-cu-100::0',qty:2},{key:'bac-water-10ml::0',qty:1}];
  const below=normalizeOrder(items,'shipping');
- assert.equal(below.subtotalCents,17716);
+ assert.equal(below.subtotalCents,17572);
  assert.equal(below.shippingCents,1200);
  items[1].qty=4;
  const above=normalizeOrder(items,'shipping');
- assert.equal(above.subtotalCents,20416);
+ assert.equal(above.subtotalCents,20272);
  assert.equal(above.shippingCents,0);
 });
 
@@ -133,4 +134,19 @@ test('public deals match server totals and are discoverable without false stock 
  assert.match(html,/after discounts/);
  assert.match(html,/does not stack/);
  assert.doesNotMatch(html,/aggregateRating|reviewCount|"availability"|guaranteed results|weight.loss|recovery stack|anti.aging/i);
+});
+
+test('changing the bundle and Tirzepatide price preserves already-issued quotes',()=>{
+ const line=(key,version)=>normalizeOrder([{key:key+'::0',qty:1}],'shipping',version).normalizedItems[0];
+ const oldMarket='2026-11-20-market-pricing';
+ assert.equal(line('tirzepatide',oldMarket).unitCents,6800);
+ assert.equal(line('tirzepatide').unitCents,9000);
+ const oldBundle=line('pack-copper-materials',oldMarket);
+ assert.equal(oldBundle.unitCents,8408);
+ assert.deepEqual(oldBundle.components.map(c=>c.productId),['ghk-cu-50','ghk-cu-100']);
+ assert.throws(()=>line('pack-copper-materials'),/invalid/);
+ assert.throws(()=>line('pack-mt2-ghk-cu-100',oldMarket),/invalid/);
+ const newBundle=line('pack-mt2-ghk-cu-100');
+ assert.deepEqual(newBundle.components.map(c=>[c.productId,c.quantity]),[['mela2-10',1],['ghk-cu-100',1]]);
+ assert.equal(newBundle.unitCents,Math.round((line('mela2-10').unitCents+line('ghk-cu-100').unitCents)*.95));
 });
