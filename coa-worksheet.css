@@ -1,0 +1,11 @@
+#lot-inquiry { scroll-margin-top: 6rem; }
+.coa-inquiry { display: grid; gap: .4rem; max-width: 30rem; margin: 1.25rem 0; }
+.coa-inquiry[hidden] { display: none; }
+.coa-inquiry label { font-weight: 650; }
+.coa-inquiry input, .coa-inquiry select {
+  width: 100%; min-height: 44px; margin-bottom: .6rem; padding: .65rem .8rem;
+  border: 1px solid #739693; border-radius: .5rem; background: #101e22;
+  color: #eff7f6; font: inherit;
+}
+.coa-inquiry button { justify-self: start; cursor: pointer; font: inherit; }
+.coa-inquiry small { font-size: .9rem; line-height: 1.5; }

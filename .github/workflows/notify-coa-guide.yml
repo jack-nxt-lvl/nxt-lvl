@@ -1,0 +1,56 @@
+name: Notify search engines about the COA worksheet
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'how-to-review-a-coa.html'
+      - 'assets/coa/coa-review-worksheet.pdf'
+      - 'assets/coa/coa-worksheet-preview.jpg'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Submit the published guide to IndexNow
+        shell: python
+        run: |
+          import json
+          import os
+          from pathlib import Path
+          import time
+          from urllib.error import URLError
+          from urllib.request import Request, urlopen
+
+          host = 'www.nxtlvl-research.com'
+          page = 'how-to-review-a-coa.html'
+          url = f'https://{host}/{page}'
+          key = Path('c518201a12d0a69402d0748a4650d21f.txt').read_text().strip()
+          expected = Path(page).read_bytes()
+          # A push can arrive before the production domain serves the new guide.
+          for attempt in range(14):
+              try:
+                  with urlopen(url + '?revision=' + os.environ['GITHUB_SHA'], timeout=10) as response:
+                      if response.read() == expected:
+                          break
+              except URLError:
+                  pass
+              time.sleep(7)
+          else:
+              raise SystemExit('Production has not served this revision. No URL submitted.')
+
+          payload = {'host': host, 'key': key, 'urlList': [url]}
+          request = Request('https://api.indexnow.org/indexnow',
+                            data=json.dumps(payload).encode(),
+                            headers={'Content-Type': 'application/json; charset=utf-8'})
+          with urlopen(request, timeout=20) as response:
+              if response.status not in (200, 202):
+                  raise SystemExit(f'IndexNow returned HTTP {response.status}')
+              print(f'IndexNow returned HTTP {response.status} for {url}')
