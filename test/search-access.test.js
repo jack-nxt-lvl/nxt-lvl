@@ -38,3 +38,21 @@ test('product search descriptions and schema use the current single-vial price',
     assert.equal(Number(product.offers.price)*100, p.options[0].cents, p.id);
   }
 });
+
+test('national shipping guide lists U.S. destinations and publishes the standard checkout rate at the free-shipping boundary', () => {
+  const rates = require('../fulfillment-rates');
+  const html = build().get('shipping-and-payments.html');
+  const selector = html.match(/<select id="shipping-state"[^>]*>([\s\S]*?)<\/select>/)[1];
+  const states = new Set([...selector.matchAll(/<option>([^<]+)<\/option>/g)].map(match => match[1]));
+  assert.equal(states.size, 51);
+  for (const name of ['Alaska', 'Hawaii', 'District of Columbia']) assert.ok(states.has(name));
+  const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
+  const conditions = graph.find(node => node['@type'] === 'Organization').hasShippingService.shippingConditions;
+  for (const cents of [0, rates.STANDARD_FREE_ABOVE_CENTS, rates.STANDARD_FREE_ABOVE_CENTS + 1]) {
+    const matches = conditions.filter(({orderValue}) => cents >= Math.round(orderValue.minValue * 100)
+      && (orderValue.maxValue === undefined || cents <= Math.round(orderValue.maxValue * 100)));
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].shippingDestination.addressCountry, 'US');
+    assert.equal(Math.round(matches[0].shippingRate.value * 100), rates.feeCents('shipping', cents));
+  }
+});
