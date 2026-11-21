@@ -1,5 +1,6 @@
 // Private operator tool. Excluded from deployment. Never run approval without independent evidence.
 const fs = require('node:fs');
+const { discountedOrder } = require('../lib/email-offer');
 const crypto = require('node:crypto');
 const { redisCommand } = require('../lib/payment-ledger');
 const { PREFIX, POLICY_VERSION, RECORD_TTL, hash, key, readApplication } = require('../lib/research-access');
@@ -24,7 +25,7 @@ async function main() {
   for (const field of ['reviewer', 'organizationEvidence', 'purchaserAuthorization', 'intendedUseEvidence', 'addressVerification', 'productEligibility', 'batchDocumentation', 'fulfillmentTerms', 'refundTerms', 'taxReview']) {
     if (typeof evidence[field] !== 'string' || evidence[field].trim().length < 15) throw new Error('Document independent review: ' + field);
   }
-  const order = normalizeOrder(record.items, record.fulfillment);
+  const order = discountedOrder(normalizeOrder(record.items, record.fulfillment), record.offerVersion);
   const customer = cleanCustomer(record.customer, 'shipping');
   if (order.itemDigest !== record.itemDigest || order.totalCents !== record.totalCents || customerDigest(customer) !== record.customerDigest) throw new Error('Request changed; obtain a new request.');
   const code = crypto.randomBytes(32).toString('hex');

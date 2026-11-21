@@ -18,6 +18,9 @@
     },
     "api/research-application.js": {
       "maxDuration": 30
+    },
+    "api/plaid-ach.js": {
+      "maxDuration": 60
     }
   },
   "headers": [
