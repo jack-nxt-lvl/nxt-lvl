@@ -37,6 +37,7 @@
     .nxt-checkout-actions{display:grid;grid-template-columns:1fr 1.7fr;gap:9px;margin-top:17px}.nxt-checkout-actions button{min-height:50px;border-radius:11px;border:0;font-weight:850;cursor:pointer}.nxt-checkout-cancel{background:#242431;color:#aaa}.nxt-checkout-continue{background:linear-gradient(100deg,#7c3aed,#9f55ff 55%,#6d28d9);color:#fff}.nxt-checkout-error{display:none;color:#fca5a5;font-size:10px;margin-top:10px}.nxt-checkout-error.show{display:block}
     .nxt-link-status-card{text-align:center}.nxt-link-status-icon{width:58px;height:58px;margin:0 auto 15px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#2563eb,#7c3aed);font-size:27px;box-shadow:0 15px 40px rgba(37,99,235,.28)}.nxt-link-status-card h2{margin-bottom:8px}.nxt-link-status-card p{color:#a9a9b7;font-size:12px;line-height:1.6}.nxt-link-status-card .nxt-link-order{margin:16px 0;padding:13px;border:1px solid rgba(167,139,250,.20);border-radius:11px;background:rgba(124,58,237,.07);color:#e9e2ff;font-size:11px}.nxt-link-status-card button{width:100%;min-height:50px;margin-top:15px;border:0;border-radius:11px;background:linear-gradient(100deg,#7c3aed,#9f55ff);color:#fff;font-weight:900;cursor:pointer}
     .nxt-checkout-overlay,.nxt-checkout-card,.nxt-checkout-card input{box-sizing:border-box}.nxt-checkout-card{max-height:calc(100dvh - 36px);overscroll-behavior:contain}.nxt-field-grid>*{min-width:0}
+    .nxt-bank-payment-recovery{position:fixed;left:16px;bottom:max(16px,env(safe-area-inset-bottom));z-index:9990;max-width:calc(100vw - 32px);min-height:44px;padding:12px 16px;border:1px solid #a78bfa;border-radius:999px;background:#20172f;color:#fff;font-family:inherit;font-size:14px;font-weight:650;box-shadow:0 6px 24px rgba(0,0,0,.4);cursor:pointer}.nxt-bank-payment-recovery:focus-visible{outline:3px solid #b9f5cf;outline-offset:3px}
     @media(max-width:620px){.nxt-checkout-overlay{padding:10px}.nxt-checkout-card{padding:22px 16px;max-height:calc(100dvh - 20px)}.nxt-checkout-card h2{font-size:24px}.nxt-checkout-card input,.nxt-checkout-card textarea{font-size:16px}.nxt-checkout-intro,.nxt-checkout-card label{font-size:14px}.nxt-checkout-error{font-size:13px}.nxt-field-grid{grid-template-columns:1fr;gap:12px}.nxt-field-grid .wide{grid-column:auto}.nxt-payment-methods{grid-template-columns:1fr 1fr}.nxt-payment-method{min-height:96px}.nxt-link-channels{grid-template-columns:repeat(3,1fr)}.nxt-link-channel{font-size:11px}}
   `;
   document.head.appendChild(style);
@@ -108,7 +109,7 @@
   }
 
   function loadBankCheckout(){
-    return loadCheckoutDependency({src:'/plaid-checkout.js?v=1',selector:'script[data-nxt-ach]',marker:'data-nxt-ach',ready:()=>Boolean(window.NxtPlaidCheckout),label:'Bank checkout'});
+    return loadCheckoutDependency({src:'/plaid-checkout.js?v=20261120-recovery',selector:'script[data-nxt-ach]',marker:'data-nxt-ach',ready:()=>Boolean(window.NxtPlaidCheckout),label:'Bank checkout'});
   }
 
   function loadCardLinkConfig(){
@@ -393,6 +394,14 @@
     reviewUrl.searchParams.delete('ach_return');
     window.history.replaceState(null,'',reviewUrl.pathname+reviewUrl.search+reviewUrl.hash);
     loadBankCheckout().then(()=>window.NxtPlaidCheckout.showStatus()).catch(()=>alert('Contact support with your bank payment order number.'));
+  } else {
+    // Recover existing payments independently of the new-payment feature gate.
+    try{
+      const saved=JSON.parse(sessionStorage.getItem('nxtPlaidOrderV1'));
+      if(saved && /^NXT-[A-Z0-9]+-[A-F0-9]{6}$/.test(saved.orderId || '') && typeof saved.receipt==='string' && /^[a-f0-9]{64}$/.test(saved.receipt)){
+        loadBankCheckout().catch(()=>{});
+      }
+    }catch(_){}
   }
   if(reviewUrl.searchParams.get('cart')==='review'){
     reviewUrl.searchParams.delete('cart');

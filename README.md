@@ -215,3 +215,24 @@ Use Plaid Transfer as the originator for one-time U.S. bank debits. Disclose the
 3. Store `PLAID_CLIENT_ID`, `PLAID_SECRET`, and `PLAID_ENV` in Vercel for the matching environment. Previews use sandbox only, production uses production only. Keep the order ledger and Resend configured. Set `RESEARCH_COMMERCE_ENABLED=true` for the existing reviewed-order workflow and `PLAID_ACH_ENABLED=true` when ready. Redeploy after environment changes.
 4. In a sandbox preview, submit a research review, approve it through the existing private operator workflow and return to the exact cart using the approval code. Test personal (WEB) and business (CCD) selections with the corresponding account holder. Complete a sandbox bank payment. Use Plaid Sandbox Transfer simulation and fire a transfer webhook for posted, settled, funds available and returned states. Confirm totals, notifications and duplicate delivery handling.
 5. Customers authorize an exact amount in Plaid. The return screen looks up the intent and transfer server-side. Pending, posted and settled orders remain on hold. A funds-available notification prompts fulfillment review, and a later return prompts a hold. If delivery fails, replay the Transfer events notification in Plaid. Keep the webhook credentials and ledger available for returns even if new bank checkouts are disabled. Confirm test receipts and webhook delivery before enabling production.
+
+### Production verification still required
+
+The deployed feature is inactive until its account and server prerequisites are
+configured. A Mercury account's Plaid connection does not establish a Plaid
+Transfer contract, approved processing limits, or the intended funding account.
+Confirm that the selected/default Plaid funding account is the intended account.
+Store API secrets directly in Vercel; never commit them or send them in chat.
+
+Reconciliation currently runs inside the signed webhook handler and sends order
+notifications before responding. Plaid expects a response within 10 seconds and
+retries failed delivery for up to 24 hours. Before enabling unattended production
+processing, test realistic webhook latency and bursts in sandbox, and establish
+a reliable catch-up process for missed events. There is no independent scheduled
+reconciliation worker in this version. Do not interpret passing mocked tests as
+verification of external authorization, webhook delivery, or settlement.
+
+Official setup and operating requirements:
+[Transfer application](https://plaid.com/docs/transfer/application/),
+[Transfer UI](https://plaid.com/docs/transfer/using-transfer-ui/), and
+[webhook delivery](https://plaid.com/docs/api/webhooks/).

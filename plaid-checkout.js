@@ -1,6 +1,7 @@
 (function () {
   'use strict';
   const savedKey='nxtPlaidOrderV1';
+  let starting=false;
   const labels={
     awaiting_authorization:'Awaiting bank authorization', processing:'Bank payment processing',
     pending:'Bank payment pending', posted:'Bank payment submitted', settled:'Settled · awaiting funds availability',
@@ -11,6 +12,22 @@
     const data=await response.json();
     if(!response.ok)throw new Error(data.error || 'Unable to check your bank payment.');
     return data;
+  }
+  function validReceipt(value) {
+    return value && typeof value==='object' && /^NXT-[A-Z0-9]+-[A-F0-9]{6}$/.test(value.orderId || '')
+      && typeof value.receipt==='string' && /^[a-f0-9]{64}$/.test(value.receipt)
+      ? {orderId:value.orderId,receipt:value.receipt} : null;
+  }
+  function readReceipt() {
+    try {return validReceipt(JSON.parse(sessionStorage.getItem(savedKey)));}catch{return null;}
+  }
+  function recoveryControl() {
+    if(!readReceipt() || document.getElementById('nxtBankPaymentRecovery'))return;
+    const button=document.createElement('button');
+    button.id='nxtBankPaymentRecovery';button.type='button';button.className='nxt-bank-payment-recovery';
+    button.textContent='Check bank payment';
+    button.onclick=()=>showStatus();
+    document.body.appendChild(button);
   }
   function panel(title,message) {
     const overlay=document.createElement('div');
@@ -25,8 +42,7 @@
     return overlay;
   }
   async function showStatus() {
-    let saved;
-    try {saved=JSON.parse(sessionStorage.getItem(savedKey));}catch{}
+    const saved=readReceipt();
     if(!saved){panel('Bank payment status','For your payment status, check your email or contact NXT LVL with your order number.');return;}
     const view=panel('Checking bank payment','Order '+saved.orderId);
     const message=view.querySelector('p');
@@ -49,9 +65,17 @@
     await check();
   }
   async function start(details,items) {
+    if(starting)return;
+    starting=true;
+    const progress=panel(details.achReview?'Submitting research request':'Preparing secure bank payment',details.achReview
+      ? 'Saving your request for review. No payment is being taken.'
+      : 'Preparing your order for Plaid. You will review and authorize the bank payment on Plaid’s secure website.');
+    progress.querySelector('button').disabled=true;
+    try {
     const common={items,fulfillment:details.fulfillment,customer:details.customer,promoCode:details.promoCode};
     if(details.achReview) {
       const result=await post('/api/research-application',{...common,research:details.achReview});
+      progress.remove();
       panel('Research review requested',result.message+' Reference '+result.reference+'.');
       return;
     }
@@ -59,9 +83,15 @@
     sessionStorage.setItem('nxtAchStorageCheck','1');sessionStorage.removeItem('nxtAchStorageCheck');
     const data=await post('/api/plaid-ach',{...common,action:'start',researchApprovalCode:details.researchApprovalCode,
       accountClass:details.accountClass,researchConsent:details.researchConsent,confirmedTotalCents:Math.round(details.total*100)});
-    sessionStorage.setItem(savedKey,JSON.stringify({orderId:data.orderId,receipt:data.receipt}));
+    const saved=validReceipt(data);
+    if(!saved)throw new Error('The bank-payment receipt could not be verified. Contact support before retrying.');
+    sessionStorage.setItem(savedKey,JSON.stringify(saved));
+    recoveryControl();
     if(data.url){window.location.assign(data.url);return;}
+    progress.remove();
     await showStatus();
+    } finally {progress.remove();starting=false;}
   }
   window.NxtPlaidCheckout={start,showStatus};
+  recoveryControl();
 })();
