@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
+    "api/create-ach-payment.js": {
+      "maxDuration": 60
+    },
+    "api/ach-payment-status.js": {
+      "maxDuration": 30
+    },
     "api/create-direct-payment-quote.js": {
       "maxDuration": 30
     },

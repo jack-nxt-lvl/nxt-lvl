@@ -67,6 +67,19 @@ application never receives or stores wallet private keys. The checkout requires:
   `UPSTASH_REDIS_REST_*` names): required. Checkout fails closed without the
 durable ledger.
 
+## Mercury-hosted ACH payments
+
+The checkout includes a conditional **Pay by bank (ACH)** option. It creates an
+order-specific Mercury invoice and sends the buyer to Mercury's hosted page,
+where Plaid links the bank and Mercury obtains debit authorization. The Mercury
+integration screen's Plaid connection does not enable this feature by itself.
+
+ACH remains hidden until its explicit activation flags, server credentials,
+destination account, signing secret, research-commerce approval, and durable
+ledger are configured. Existing crypto checkout remains available according to
+its own configuration. Read [Mercury ACH setup](docs/mercury-ach.md) before
+activation; this implementation has no automatic fulfillment or invoice emails.
+
 ## Separate hosted card-payment links
 
 The customer-information screen can also offer **Send me a card link**. This
